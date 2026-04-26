@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Magic 지표 — 모임터</title>
+    <link rel="stylesheet" href="../assets/common.css" />
+    <link rel="stylesheet" href="boards.css" />
+    <link rel="stylesheet" href="../assets/site-ux.css" />
+    <meta name="api-base" content="https://happyinvests.com" />
+  </head>
+  <body class="board-body">
+    <header class="site-header" role="banner">
+      <div class="ci-wrap">
+        <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="280" height="140" alt="" />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </header>
+    <nav class="site-nav" aria-label="주요 메뉴">
+      <a href="../index.html">메인</a>
+      <a href="../guide/index.html">가이드</a>
+      <a href="../downloads/index.html">다운로드</a>
+      <a href="../registration/index.html">가입·등록</a>
+      <a href="../verify/index.html">본인인증</a>
+      <a href="../billing/index.html">구독·결제</a>
+      <a href="../events/index.html">이벤트</a>
+      <a href="../membership/index.html">회원혜택</a>
+      <a href="../reflection/index.html">실전후기</a>
+      <a href="../contact/index.html">문의</a>
+      <a href="../boards/index.html">모임터</a>
+      <a href="../boards/index.html?board=event_promo_shoutout">추천·홍보</a>
+      <a href="../legal/index.html">약관·정책</a>
+      <a href="../admin/index.html">관리자</a>
+      <a href="../integrations/index.html">연동</a>
+    </nav>
+    <div class="wrap board-page-wrap">
+      <header class="board-hero" aria-labelledby="board-hero-title">
+        <div class="board-hero__glow" aria-hidden="true"></div>
+        <p class="board-hero__eyebrow">
+          <span class="board-hero__pulse" aria-hidden="true"></span>
+          Community · 실시간 연동
+        </p>
+        <h1 class="page-title board-hero__title" id="board-hero-title">모임터</h1>
+        <p class="board-lead board-hero__lead">
+          읽고, 남기고, 서로 답하는 공간이에요. 서두르지 않아도 괜찮습니다.
+        </p>
+      </header>
+
+      <details class="board-tech-hint">
+        <summary>연결 정보 (개발·점검용)</summary>
+        <p class="board-api-hint">
+          서버 주소 <span id="api-base-label">https://happyinvests.com</span>
+        </p>
+      </details>
+
+      <div class="board-auth-strip">
+        <label class="board-auth-strip__field"
+          >로그인 이메일
+          <input type="email" id="board-email" class="board-auth-strip__input" placeholder="나의 이메일"
+        /></label>
+        <label class="board-auth-strip__field"
+          >게시판 권한
+          <select id="board-role" class="board-auth-strip__select" title="게시판 권한을 시험해 볼 때 쓰는 값이에요">
+            <option value="guest">방문 (guest)</option>
+            <option value="free">무료 회원 (free)</option>
+            <option value="trial">체험 (trial)</option>
+            <option value="sub">구독 (sub)</option>
+            <option value="vip">커뮤니티 VIP</option>
+            <option value="admin">운영 (admin)</option>
+          </select>
+        </label>
+        <button type="button" class="btn board-auth-strip__btn board-btn-primary" id="board-auth-save">이대로 적용</button>
+      </div>
+
+      <div class="board-page board-page--modern">
+        <ul class="board-cats" role="tablist" aria-label="모임 구역">
+          <li>
+            <button type="button" role="tab" data-cat="" aria-selected="true" id="cat-all">
+              전체
+              <span class="cat-slug">모든 글</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" role="tab" data-cat="quickview">
+              한눈에 보기
+              <span class="cat-slug">quickview</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" role="tab" data-cat="announcement">
+              공지
+              <span class="cat-slug">announcement</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" role="tab" data-cat="qa">
+              질문과 답변
+              <span class="cat-slug">qa</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" role="tab" data-cat="general">
+              자유 이야기
+              <span class="cat-slug">general</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" role="tab" data-cat="beta">
+              베타 소식
+              <span class="cat-slug">beta</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" role="tab" data-cat="event">
+              이벤트
+              <span class="cat-slug">event</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" role="tab" data-cat="event_1w_free">
+              이벤트 · 7일 무료 체험
+              <span class="cat-slug">무료 체험</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" role="tab" data-cat="event_1m_usd">
+              MagicTrading · $100/mo
+              <span class="cat-slug">event_1m_usd</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" role="tab" data-cat="event_6m_recovery">
+              리커버리 · 2개월
+              <span class="cat-slug">회복 지원</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" role="tab" data-cat="membership">
+              회원 혜택
+              <span class="cat-slug">membership</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" role="tab" data-cat="reflection">
+              실전 이야기
+              <span class="cat-slug">reflection</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" role="tab" data-cat="event_promo_shoutout">
+              책구매·추천·홍보 인증
+              <span class="cat-slug">인증 구역</span>
+            </button>
+          </li>
+        </ul>
+
+        <div class="board-panel">
+          <div class="board-banner" id="board-banner-title">
+            <span class="board-banner__icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M8 7h8"/><path d="M8 11h8"/></svg>
+            </span>
+            <span class="board-banner__text">글 목록 — 전체</span>
+          </div>
+
+          <section id="board-promo-kit" class="board-promo-kit" hidden aria-labelledby="board-promo-kit-title">
+            <h2 id="board-promo-kit-title" class="board-promo-kit__title">홍보용 이미지 카드</h2>
+            <p class="board-promo-kit__lead">
+              좌측 상단에 <strong>회사 CI·상호</strong>와 <strong>Magic 지표 홈</strong> 주소가 들어간 이미지를 만듭니다.
+              <strong>PNG 저장</strong> 후 SNS에 올리거나, <strong>본문에 넣기</strong>로 게시글에 바로 삽입하세요. (브라우저에 따라
+              <strong>이미지 복사</strong>가 되지 않으면 저장 후 캡처·첨부를 이용해 주세요.)
+            </p>
+            <div class="board-promo-kit__grid">
+              <article class="promo-kit-card" data-promo-base="../assets/magicline-chart-nq-example.png">
+                <h3 class="promo-kit-card__h">차트 예시 (매직라인)</h3>
+                <div class="promo-kit-card__preview" aria-hidden="true">
+                  <img class="promo-kit-card__base" src="../assets/magicline-chart-nq-example.png" alt="" />
+                  <div class="promo-kit-card__overlay">
+                    <img class="promo-kit-card__ci" src="../assets/ci-logo.png" alt="" />
+                    <div class="promo-kit-card__brand">
+                      <span class="promo-kit-card__ko">주식회사 행복도담 인베스트</span>
+                      <span class="promo-kit-card__en">Haengbokdodam Invest</span>
+                      <a class="promo-kit-card__link" href="../index.html" target="_blank" rel="noopener">Magic 지표 · 매직라인 홈</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="promo-kit-card__actions">
+                  <button type="button" class="btn btn--small board-btn-primary js-promo-download">PNG 저장</button>
+                  <button type="button" class="btn btn--small js-promo-insert">본문에 넣기</button>
+                  <button type="button" class="btn btn--small btn--ghost js-promo-copy-img">이미지 복사</button>
+                  <button type="button" class="btn btn--small btn--ghost js-promo-copy-url">홈 링크만 복사</button>
+                </div>
+              </article>
+              <article class="promo-kit-card" data-promo-base="../assets/magic-welcome-poster.png">
+                <h3 class="promo-kit-card__h">환영 포스터</h3>
+                <div class="promo-kit-card__preview" aria-hidden="true">
+                  <img class="promo-kit-card__base" src="../assets/magic-welcome-poster.png" alt="" />
+                  <div class="promo-kit-card__overlay">
+                    <img class="promo-kit-card__ci" src="../assets/ci-logo.png" alt="" />
+                    <div class="promo-kit-card__brand">
+                      <span class="promo-kit-card__ko">주식회사 행복도담 인베스트</span>
+                      <span class="promo-kit-card__en">Haengbokdodam Invest</span>
+                      <a class="promo-kit-card__link" href="../index.html" target="_blank" rel="noopener">Magic 지표 · 매직라인 홈</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="promo-kit-card__actions">
+                  <button type="button" class="btn btn--small board-btn-primary js-promo-download">PNG 저장</button>
+                  <button type="button" class="btn btn--small js-promo-insert">본문에 넣기</button>
+                  <button type="button" class="btn btn--small btn--ghost js-promo-copy-img">이미지 복사</button>
+                  <button type="button" class="btn btn--small btn--ghost js-promo-copy-url">홈 링크만 복사</button>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <div class="board-feed">
+            <input
+              type="search"
+              id="board-search"
+              class="board-search"
+              placeholder="제목·내용 검색"
+              aria-label="제목·내용 검색"
+              autocomplete="off"
+            />
+            <div id="board-highlights" class="board-highlights" aria-label="이번 주 많이 본 글"></div>
+            <div class="board-feed__meta" id="board-status">불러오는 중이에요…</div>
+            <ul id="board-list" class="board-rows" aria-live="polite"></ul>
+          </div>
+        </div>
+      </div>
+
+      <details class="board-compose">
+        <summary>새 글 올리기</summary>
+        <div class="form-inner">
+          <p class="board-compose__note">로그인 이메일과 맞는 게시판 권한이면 여기서 글이 올라가요.</p>
+          <div class="form-grid board-compose__grid">
+            <div class="field">
+              <label for="p-title">제목</label>
+              <input type="text" id="p-title" placeholder="짧게 적어 주세요" />
+            </div>
+            <div class="field">
+              <label for="p-author">작성자 (이메일)</label>
+              <input type="text" id="p-author" placeholder="위에서 적은 이메일과 같게" readonly />
+            </div>
+            <div class="field">
+              <label for="p-cat">올릴 곳</label>
+              <select id="p-cat">
+                <option value="quickview">한눈에 보기</option>
+                <option value="announcement">공지</option>
+                <option value="qa">질문과 답변</option>
+                <option value="general" selected>자유 이야기</option>
+                <option value="beta">베타 소식</option>
+                <option value="event">이벤트</option>
+                <option value="event_1w_free">이벤트 · 7일 무료 체험</option>
+                <option value="event_1m_usd">MagicTrading · $100/mo</option>
+                <option value="event_6m_recovery">리커버리 · 2개월</option>
+                <option value="membership">회원 혜택</option>
+                <option value="reflection">실전 이야기</option>
+                <option value="event_promo_shoutout">책구매·추천·홍보 인증</option>
+              </select>
+            </div>
+            <p id="board-promo-compose-hint" class="board-compose__note" hidden>
+              <strong>책 구매인증·친구추천·홍보 인증</strong> — 책 구매인증은 1달 100불 이벤트 플랜 가입 대상 이상(정회원 이상)만 등록할 수 있습니다. 링크를 올릴 수 있으면 링크 하나, 어려우면 캡처 하나만 남겨 주세요.
+              친구추천은 1달 이벤트와 무관하며, 피추천인이 <strong>정규 플랜을 시작하고 최소 1개월 유지</strong>하면 추천 인정 건으로 집계하고,
+              2명 3달 · 3명 5달 · 10명 12달 · 100명 60달 무료쿠폰과 커뮤니티 VIP 선정을 적용합니다.
+            </p>
+            <div class="field">
+              <label for="p-body">내용 (링크·HTML 가능 — 아래에서 이미지 삽입)</label>
+              <div class="board-compose__img-tools">
+                <input type="file" id="p-body-img" accept="image/*" />
+                <button type="button" class="btn btn--small btn--ghost" id="p-body-paste-hint">
+                  이미지 붙여넣기: 이 칸을 누른 뒤 Ctrl+V
+                </button>
+              </div>
+              <textarea id="p-body" placeholder="홍보 게시물 URL을 붙여 넣고, 캡처는 이미지로 넣어 주세요"></textarea>
+            </div>
+
+            <div class="field board-referral" id="board-referral-block">
+              <p class="board-referral__lead">
+                <strong>피추천인 등록</strong> (선택) — 가입하신 분의 TradingView(TRV) 사용자명·MT5 식별자를 남기면 추천 후보로 저장합니다. 둘 중
+                <strong>하나만</strong> 입력해도 됩니다. 피추천인이 정규 플랜을 시작하고 최소 1개월 유지하면 추천 인정 건으로 집계됩니다.
+              </p>
+              <div class="board-referral__grid">
+                <div>
+                  <label for="ref-tv">TRV ID</label>
+                  <input type="text" id="ref-tv" name="ref-tv" maxlength="120" placeholder="예: dodam_trv_user" autocomplete="username" />
+                </div>
+                <div>
+                  <label for="ref-mt5">MT5 피추천</label>
+                  <input type="text" id="ref-mt5" name="ref-mt5" maxlength="120" placeholder="로그인·계정번호 등" autocomplete="off" />
+                </div>
+              </div>
+              <div class="board-referral__actions">
+                <button type="button" class="btn btn-secondary" id="btn-referral-save" disabled>피추천인 DB에 등록</button>
+                <span id="ref-total-hint" class="board-referral__hint" aria-live="polite"></span>
+              </div>
+              <p id="ref-result" class="board-compose__result" role="status"></p>
+            </div>
+
+            <div>
+              <button type="button" class="btn board-compose__submit board-btn-primary" id="btn-post">올리기</button>
+            </div>
+            <p id="post-result" class="board-compose__result"></p>
+          </div>
+        </div>
+      </details>
+    </div>
+    <footer class="site-footer" role="contentinfo">
+      <div class="ci-wrap ci-wrap--footer">
+        <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="220" height="110" alt="" />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </footer>
+    <script src="../assets/site-ux.js"></script>
+    <script src="../assets/magic-auth.js"></script>
+    <script>
+      (function () {
+        var meta = document.querySelector('meta[name="api-base"]');
+        var API = (meta && meta.content) || "https://happyinvests.com";
+        var elLabel = document.getElementById("api-base-label");
+        if (elLabel) elLabel.textContent = API;
+
+        var emailIn = document.getElementById("board-email");
+        var roleIn = document.getElementById("board-role");
+
+        function syncAuthFromInputs() {
+          MagicAuth.set(emailIn.value, roleIn.value);
+        }
+
+        function fillAuthInputs() {
+          var a = MagicAuth.get();
+          emailIn.value = a.email;
+          roleIn.value = a.role;
+        }
+
+        function authGetHeaders() {
+          syncAuthFromInputs();
+          return MagicAuth.headers();
+        }
+
+        function authPostHeaders() {
+          return Object.assign({ "Content-Type": "application/json" }, authGetHeaders());
+        }
+
+        fillAuthInputs();
+
+        var pCatEl = document.getElementById("p-cat");
+        var promoComposeHint = document.getElementById("board-promo-compose-hint");
+        var promoKitEl = document.getElementById("board-promo-kit");
+
+        function getMagicHomePageUrl() {
+          try {
+            if (window.location.protocol === "file:") {
+              return "../index.html";
+            }
+            var loc = window.location;
+            var p = loc.pathname || "";
+            if (/\/boards\//i.test(p)) {
+              return loc.origin + p.replace(/\/boards\/[^/]*$/i, "/index.html");
+            }
+            return loc.origin + "/index.html";
+          } catch (e) {
+            return "../index.html";
+          }
+        }
+
+        function syncPromoUiLinks() {
+          if (!promoKitEl) return;
+          var href = getMagicHomePageUrl();
+          promoKitEl.querySelectorAll(".promo-kit-card__link").forEach(function (a) {
+            a.href = href;
+          });
+        }
+
+        function syncPromoKitVisibility() {
+          if (!promoKitEl) return;
+          var onTab = currentCat === "event_promo_shoutout";
+          var onCat = pCatEl && pCatEl.value === "event_promo_shoutout";
+          promoKitEl.hidden = !(onTab || onCat);
+        }
+
+        function syncPromoComposeHint() {
+          if (!pCatEl || !promoComposeHint) return;
+          promoComposeHint.hidden = pCatEl.value !== "event_promo_shoutout";
+        }
+        if (pCatEl) {
+          pCatEl.addEventListener("change", function () {
+            syncPromoComposeHint();
+            syncPromoKitVisibility();
+          });
+          syncPromoComposeHint();
+        }
+        syncPromoUiLinks();
+
+        var pBodyTa = document.getElementById("p-body");
+        var pBodyImg = document.getElementById("p-body-img");
+        var pBodyPasteHint = document.getElementById("p-body-paste-hint");
+
+        function insertAtCursor(textarea, text) {
+          if (!textarea) return;
+          var start = textarea.selectionStart;
+          var end = textarea.selectionEnd;
+          var v = textarea.value;
+          textarea.value = v.slice(0, start) + text + v.slice(end);
+          var pos = start + text.length;
+          textarea.selectionStart = textarea.selectionEnd = pos;
+          textarea.focus();
+        }
+
+        function uploadBoardImage(file) {
+          var fd = new FormData();
+          fd.append("file", file);
+          return fetch(API + "/api/upload", { method: "POST", body: fd })
+            .then(function (r) {
+              return r.json().then(function (j) {
+                return { ok: r.ok, j: j };
+              });
+            })
+            .then(function (x) {
+              if (!x.ok) throw new Error((x.j && x.j.error) || "upload failed");
+              return x.j.url;
+            });
+        }
+
+        function loadImagePromise(src) {
+          return new Promise(function (resolve, reject) {
+            var img = new Image();
+            img.crossOrigin = "anonymous";
+            img.onload = function () {
+              resolve(img);
+            };
+            img.onerror = function () {
+              reject(new Error("이미지를 불러오지 못했어요."));
+            };
+            img.src = src;
+          });
+        }
+
+        function loadCiForCanvas() {
+          return loadImagePromise("../assets/ci-logo.png").catch(function () {
+            return loadImagePromise("../assets/haengbokdam-company-ci.png");
+          });
+        }
+
+        function promoOverlayPath(ctx, x, y, w, h, r) {
+          var rr = Math.min(r, w / 2, h / 2);
+          ctx.beginPath();
+          if (typeof ctx.roundRect === "function") {
+            ctx.roundRect(x, y, w, h, rr);
+          } else {
+            ctx.moveTo(x + rr, y);
+            ctx.arcTo(x + w, y, x + w, y + h, rr);
+            ctx.arcTo(x + w, y + h, x, y + h, rr);
+            ctx.arcTo(x, y + h, x, y, rr);
+            ctx.arcTo(x, y, x + w, y, rr);
+            ctx.closePath();
+          }
+        }
+
+        function renderPromoPngCanvas(baseSrc) {
+          return loadImagePromise(baseSrc).then(function (base) {
+            return loadCiForCanvas().then(function (ci) {
+              var W = 960;
+              var scale = W / base.width;
+              var H = Math.round(base.height * scale);
+              var canvas = document.createElement("canvas");
+              canvas.width = W;
+              canvas.height = H;
+              var ctx = canvas.getContext("2d");
+              if (!ctx) throw new Error("canvas 를 사용할 수 없어요.");
+              ctx.drawImage(base, 0, 0, W, H);
+              var pad = 14;
+              var boxPad = 12;
+              var maxCiW = 170;
+              var ciScale = Math.min(1, maxCiW / ci.width, 58 / ci.height);
+              var ciW = Math.round(ci.width * ciScale);
+              var ciH = Math.round(ci.height * ciScale);
+              var boxW = Math.min(430, Math.round(W * 0.52));
+              var home = getMagicHomePageUrl();
+              var lineH = 17;
+              var boxH = boxPad * 2 + ciH + 10 + lineH * 4 + 8;
+              ctx.save();
+              ctx.fillStyle = "rgba(255,255,255,0.94)";
+              promoOverlayPath(ctx, pad, pad, boxW, boxH, 12);
+              ctx.fill();
+              ctx.strokeStyle = "rgba(47,111,79,0.38)";
+              ctx.lineWidth = 1;
+              promoOverlayPath(ctx, pad, pad, boxW, boxH, 12);
+              ctx.stroke();
+              ctx.restore();
+              ctx.drawImage(ci, pad + boxPad, pad + boxPad, ciW, ciH);
+              var tx = pad + boxPad;
+              var ty0 = pad + boxPad + ciH + 14;
+              ctx.fillStyle = "#3a3228";
+              ctx.font = "600 14px system-ui,Segoe UI,sans-serif";
+              ctx.fillText("주식회사 행복도담 인베스트", tx, ty0);
+              ctx.fillStyle = "#5c5348";
+              ctx.font = "11px system-ui,Segoe UI,sans-serif";
+              ctx.fillText("Haengbokdodam Invest co.ltd", tx, ty0 + lineH);
+              ctx.fillStyle = "#2f6f4f";
+              ctx.font = "600 13px system-ui,Segoe UI,sans-serif";
+              ctx.fillText("Magic 지표 · 매직라인", tx, ty0 + lineH * 2);
+              ctx.font = "12px ui-monospace,monospace";
+              ctx.fillStyle = "#1a4d6e";
+              var u = home.length > 54 ? home.slice(0, 52) + "…" : home;
+              ctx.fillText(u, tx, ty0 + lineH * 3);
+              return canvas;
+            });
+          });
+        }
+
+        function downloadCanvasPng(canvas, filename) {
+          return new Promise(function (resolve, reject) {
+            canvas.toBlob(
+              function (blob) {
+                if (!blob) {
+                  reject(new Error("PNG 를 만들지 못했어요."));
+                  return;
+                }
+                var a = document.createElement("a");
+                var url = URL.createObjectURL(blob);
+                a.href = url;
+                a.download = filename || "magic-line-promo.png";
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                resolve();
+              },
+              "image/png",
+              0.92
+            );
+          });
+        }
+
+        if (promoKitEl) {
+          promoKitEl.addEventListener("click", function (ev) {
+            var btn = ev.target && ev.target.closest ? ev.target.closest("button") : null;
+            if (!btn || !promoKitEl.contains(btn)) return;
+            var card = btn.closest(".promo-kit-card");
+            if (!card) return;
+            var baseSrc = card.getAttribute("data-promo-base");
+            if (!baseSrc) return;
+            var slug = (baseSrc.split("/").pop() || "promo").replace(/\.[^.]+$/, "");
+
+            if (btn.classList.contains("js-promo-download")) {
+              renderPromoPngCanvas(baseSrc)
+                .then(function (canvas) {
+                  return downloadCanvasPng(canvas, "magic-promo-" + slug + ".png");
+                })
+                .catch(function (err) {
+                  alert(String(err.message || err));
+                });
+              return;
+            }
+
+            if (btn.classList.contains("js-promo-insert")) {
+              if (!pBodyTa) {
+                alert("본문 칸을 찾을 수 없어요. 새 글 올리기를 펼쳐 주세요.");
+                return;
+              }
+              renderPromoPngCanvas(baseSrc)
+                .then(function (canvas) {
+                  return new Promise(function (resolve, reject) {
+                    canvas.toBlob(function (blob) {
+                      if (!blob) {
+                        reject(new Error("PNG 생성 실패"));
+                        return;
+                      }
+                      var file = new File([blob], "magic-promo-" + slug + ".png", { type: "image/png" });
+                      resolve(uploadBoardImage(file));
+                    }, "image/png", 0.92);
+                  });
+                })
+                .then(function (url) {
+                  insertAtCursor(
+                    pBodyTa,
+                    '\n<p><a href="' +
+                      getMagicHomePageUrl() +
+                      '" target="_blank" rel="noopener"><img src="' +
+                      url +
+                      '" alt="Magic 지표 · 행복도담 인베스트" style="max-width:100%;height:auto;border-radius:8px" /></a></p>\n'
+                  );
+                  try {
+                    document.querySelector(".board-compose").open = true;
+                  } catch (e2) {}
+                  alert("본문에 이미지(홈 링크 포함)를 넣었어요. 필요하면 글을 다듬은 뒤 올려 주세요.");
+                })
+                .catch(function (err) {
+                  alert(String(err.message || err));
+                });
+              return;
+            }
+
+            if (btn.classList.contains("js-promo-copy-img")) {
+              renderPromoPngCanvas(baseSrc)
+                .then(function (canvas) {
+                  return new Promise(function (resolve, reject) {
+                    canvas.toBlob(function (blob) {
+                      if (!blob) {
+                        reject(new Error("PNG 생성 실패"));
+                        return;
+                      }
+                      resolve(blob);
+                    }, "image/png", 0.92);
+                  });
+                })
+                .then(function (blob) {
+                  if (navigator.clipboard && window.ClipboardItem) {
+                    return navigator.clipboard.write([
+                      new ClipboardItem({ "image/png": blob }),
+                    ]);
+                  }
+                  throw new Error("이 브라우저는 이미지 복사를 지원하지 않아요. PNG 저장을 이용해 주세요.");
+                })
+                .then(function () {
+                  alert("이미지를 클립보드에 복사했어요. SNS·에디터에 붙여넣기 해 보세요.");
+                })
+                .catch(function (err) {
+                  alert(String(err.message || err));
+                });
+              return;
+            }
+
+            if (btn.classList.contains("js-promo-copy-url")) {
+              var u = getMagicHomePageUrl();
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(u).then(
+                  function () {
+                    alert("홈 주소를 복사했어요: " + u);
+                  },
+                  function () {
+                    prompt("아래 주소를 복사해 주세요.", u);
+                  }
+                );
+              } else {
+                prompt("아래 주소를 복사해 주세요.", u);
+              }
+            }
+          });
+        }
+
+        if (pBodyTa) {
+          pBodyTa.addEventListener("paste", function (e) {
+            var items = e.clipboardData && e.clipboardData.items;
+            if (!items) return;
+            for (var i = 0; i < items.length; i++) {
+              if (items[i].type.indexOf("image") !== -1) {
+                e.preventDefault();
+                var f = items[i].getAsFile();
+                if (!f) return;
+                uploadBoardImage(f)
+                  .then(function (url) {
+                    insertAtCursor(
+                      pBodyTa,
+                      '\n<img src="' +
+                        url +
+                        '" alt="" style="max-width:100%;height:auto;border-radius:6px" />\n'
+                    );
+                  })
+                  .catch(function (err) {
+                    alert(String(err.message || err));
+                  });
+                return;
+              }
+            }
+          });
+        }
+        if (pBodyImg && pBodyTa) {
+          pBodyImg.addEventListener("change", function () {
+            var f = pBodyImg.files && pBodyImg.files[0];
+            if (!f) return;
+            uploadBoardImage(f)
+              .then(function (url) {
+                insertAtCursor(
+                  pBodyTa,
+                  '\n<img src="' + url + '" alt="" style="max-width:100%;height:auto;border-radius:6px" />\n'
+                );
+                pBodyImg.value = "";
+              })
+              .catch(function (err) {
+                alert(String(err.message || err));
+              });
+          });
+        }
+        if (pBodyPasteHint && pBodyTa) {
+          pBodyPasteHint.addEventListener("click", function () {
+            pBodyTa.focus();
+          });
+        }
+
+        var refTv = document.getElementById("ref-tv");
+        var refMt5 = document.getElementById("ref-mt5");
+        var refBtn = document.getElementById("btn-referral-save");
+        var refResult = document.getElementById("ref-result");
+        var refTotalHint = document.getElementById("ref-total-hint");
+
+        function syncReferralButton() {
+          if (!refBtn || !refTv || !refMt5) return;
+          var t = String(refTv.value || "").trim();
+          var m = String(refMt5.value || "").trim();
+          refBtn.disabled = !t && !m;
+        }
+
+        function loadReferralLast() {
+          if (!refTv || !refMt5) return;
+          refResult.textContent = "";
+          fetch(API + "/api/me/referral-last", { cache: "no-store", headers: authGetHeaders() })
+            .then(function (r) {
+              return r.json().then(function (j) {
+                return { ok: r.ok, j: j };
+              });
+            })
+            .then(function (x) {
+              if (!x.ok) {
+                if (refTotalHint) refTotalHint.textContent = "";
+                return;
+              }
+              var j = x.j || {};
+              if (j.tradingview_username) refTv.value = j.tradingview_username;
+              else refTv.value = "";
+              if (j.mt5_login) refMt5.value = j.mt5_login;
+              else refMt5.value = "";
+              if (typeof j.total_count === "number" && refTotalHint) {
+                refTotalHint.textContent =
+                  j.total_count > 0 ? "누적 피추천 등록 " + j.total_count + "건 · 정규 플랜 최소 1개월 유지 시 추천 인정" : "";
+              }
+              syncReferralButton();
+            })
+            .catch(function () {
+              if (refTotalHint) refTotalHint.textContent = "";
+            });
+        }
+
+        if (refTv && refMt5) {
+          refTv.addEventListener("input", syncReferralButton);
+          refMt5.addEventListener("input", syncReferralButton);
+        }
+        if (refBtn) {
+          refBtn.addEventListener("click", function () {
+            if (!refResult || refBtn.disabled) return;
+            refResult.textContent = "등록 중…";
+            var tv = String(refTv.value || "").trim();
+            var mt = String(refMt5.value || "").trim();
+            fetch(API + "/api/me/referrals", {
+              method: "POST",
+              headers: authPostHeaders(),
+              body: JSON.stringify({ tradingview_username: tv, mt5_login: mt }),
+            })
+              .then(function (r) {
+                return r.json().then(function (j) {
+                  return { ok: r.ok, j: j };
+                });
+              })
+              .then(function (x) {
+                if (!x.ok) {
+                  refResult.textContent = x.j && x.j.error ? String(x.j.error) : "등록에 실패했어요.";
+                  return;
+                }
+                refResult.textContent =
+                  "등록했어요. 누적 " + (x.j.total_count != null ? x.j.total_count : "?") + "건이에요.";
+                if (refTotalHint && x.j.total_count != null) {
+                  refTotalHint.textContent = "누적 피추천 등록 " + x.j.total_count + "건 · 정규 플랜 최소 1개월 유지 시 추천 인정";
+                }
+              })
+              .catch(function (e) {
+                refResult.textContent = String(e.message || e);
+              });
+          });
+        }
+
+        document.getElementById("board-auth-save").addEventListener("click", function () {
+          if (window.MagicAuth && typeof window.MagicAuth.syncPreferredLanguageFromProfile === "function") {
+            window.MagicAuth.syncPreferredLanguageFromProfile(API);
+          }
+          loadPosts();
+          loadReferralLast();
+        });
+
+        var currentCat = "";
+        var lastListData = null;
+
+        var bannerTitles = {
+          "": "글 목록 — 전체",
+          quickview: "한눈에 보기",
+          announcement: "공지",
+          qa: "질문과 답변",
+          general: "자유 이야기",
+          beta: "베타 소식",
+          event: "이벤트",
+          event_1w_free: "이벤트 · 7일 무료 체험",
+          event_1m_usd: "MagicTrading · $100/mo",
+          event_6m_recovery: "리커버리 · 2개월",
+          membership: "회원 혜택",
+          reflection: "실전 이야기",
+          event_promo_shoutout: "책구매·추천·홍보 인증",
+        };
+        var catLabels = {
+          quickview: "한눈에 보기",
+          announcement: "공지",
+          qa: "질문과 답변",
+          general: "자유 이야기",
+          beta: "베타 소식",
+          event: "이벤트",
+          event_1w_free: "이벤트 · 7일 무료 체험",
+          event_1m_usd: "MagicTrading · $100/mo",
+          event_6m_recovery: "리커버리 · 2개월",
+          membership: "회원 혜택",
+          reflection: "실전 이야기",
+          event_promo_shoutout: "책구매·추천·홍보 인증",
+        };
+
+        function firstImgSrc(html) {
+          if (!html) return "";
+          var m = String(html).match(/<img[^>]+src=["']([^"']+)["']/i);
+          return m ? m[1] : "";
+        }
+
+        function stripHtmlLite(s) {
+          return String(s || "")
+            .replace(/<[^>]+>/g, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+        }
+
+        function fmtDate(d) {
+          if (!d) return "—";
+          try {
+            var x = new Date(d);
+            if (isNaN(x.getTime())) return "—";
+            return (
+              x.getFullYear() +
+              "." +
+              String(x.getMonth() + 1).padStart(2, "0") +
+              "." +
+              String(x.getDate()).padStart(2, "0")
+            );
+          } catch (e) {
+            return "—";
+          }
+        }
+
+        function excerpt(s, n) {
+          if (!s) return "";
+          s = String(s).replace(/\s+/g, " ").trim();
+          return s.length > n ? s.slice(0, n) + "…" : s;
+        }
+
+        function setActiveTab(cat) {
+          document.querySelectorAll(".board-cats button").forEach(function (btn) {
+            var c = btn.getAttribute("data-cat") || "";
+            var on = c === cat;
+            btn.classList.toggle("is-active", on);
+            btn.setAttribute("aria-selected", on ? "true" : "false");
+          });
+          var b = document.getElementById("board-banner-title");
+          if (b) {
+            var bt = b.querySelector(".board-banner__text");
+            var title = bannerTitles[cat] || "글 목록";
+            if (bt) bt.textContent = title;
+            else b.textContent = title;
+          }
+        }
+
+        function renderHighlights(tv, tc) {
+          var box = document.getElementById("board-highlights");
+          if (!box) return;
+          box.innerHTML = "";
+          tv = tv || [];
+          tc = tc || [];
+          if (tv.length === 0 && tc.length === 0) {
+            box.style.display = "none";
+            return;
+          }
+          box.style.display = "block";
+          function card(p, line) {
+            var d = document.createElement("div");
+            d.className = "board-hl-card";
+            var t = document.createElement("p");
+            t.className = "board-hl-card__title";
+            t.textContent = p.title || "(제목 없음)";
+            var m = document.createElement("p");
+            m.className = "board-hl-card__meta";
+            m.textContent = line;
+            d.appendChild(t);
+            d.appendChild(m);
+            return d;
+          }
+          if (tv.length) {
+            var s = document.createElement("div");
+            s.className = "board-hl-block";
+            s.innerHTML = '<div class="board-hl-label">많이 본 글</div>';
+            var r = document.createElement("div");
+            r.className = "board-hl-row";
+            tv.forEach(function (p) {
+              var v = p.views != null ? p.views : 0;
+              var cc = p.comment_count != null ? p.comment_count : 0;
+              r.appendChild(card(p, "조회 " + v + " · 댓글 " + cc));
+            });
+            s.appendChild(r);
+            box.appendChild(s);
+          }
+          if (tc.length) {
+            var s2 = document.createElement("div");
+            s2.className = "board-hl-block";
+            s2.innerHTML = '<div class="board-hl-label">댓글이 많은 글</div>';
+            var r2 = document.createElement("div");
+            r2.className = "board-hl-row";
+            tc.forEach(function (p) {
+              var v = p.views != null ? p.views : 0;
+              var cc = p.comment_count != null ? p.comment_count : 0;
+              r2.appendChild(card(p, "댓글 " + cc + " · 조회 " + v));
+            });
+            s2.appendChild(r2);
+            box.appendChild(s2);
+          }
+        }
+
+        function openBoardThread(p, threadEl, statsEl, toggleBtn) {
+          var pid = p._id ? String(p._id) : "";
+          if (!pid) return;
+          function setStats(views, cc) {
+            if (statsEl)
+              statsEl.textContent =
+                "조회 " + (views != null ? views : 0) + " · 댓글 " + (cc != null ? cc : 0);
+          }
+          var pView = Promise.resolve();
+          if (!threadEl.dataset.viewSent) {
+            pView = fetch(API + "/api/posts/" + encodeURIComponent(pid) + "/view", {
+              method: "POST",
+              headers: authGetHeaders(),
+            })
+              .then(function (r) {
+                return r.json().then(function (j) {
+                  return { ok: r.ok, j: j };
+                });
+              })
+              .then(function (x) {
+                if (x && x.ok) threadEl.dataset.viewSent = "1";
+                if (x && x.ok && x.j) setStats(x.j.views, x.j.comment_count);
+                return x;
+              });
+          }
+          pView
+            .then(function () {
+              return fetch(API + "/api/posts/" + encodeURIComponent(pid) + "/comments", {
+                headers: authGetHeaders(),
+                cache: "no-store",
+              });
+            })
+            .then(function (r) {
+              return r.json();
+            })
+            .then(function (data) {
+              threadEl.innerHTML = "";
+              var ul = document.createElement("ul");
+              ul.className = "board-thread-list";
+              (data.comments || []).forEach(function (c) {
+                var li = document.createElement("li");
+                li.className = "board-thread-item";
+                li.innerHTML =
+                  '<div class="board-thread-meta">' +
+                  (c.author_id || "") +
+                  " · " +
+                  fmtDate(c.created_at) +
+                  "</div>" +
+                  '<div class="board-thread-body">' +
+                  (c.content || "") +
+                  "</div>";
+                ul.appendChild(li);
+              });
+              threadEl.appendChild(ul);
+              if (data.canComment) {
+                var ta = document.createElement("textarea");
+                ta.className = "board-thread-input";
+                ta.rows = 2;
+                ta.placeholder = "따뜻한 말 한마디";
+                var send = document.createElement("button");
+                send.type = "button";
+                send.className = "btn btn--small";
+                send.textContent = "답 남기기";
+                send.addEventListener("click", function () {
+                  var txt = (ta.value || "").trim();
+                  if (!txt) return;
+                  fetch(API + "/api/posts/" + encodeURIComponent(pid) + "/comments", {
+                    method: "POST",
+                    headers: authPostHeaders(),
+                    body: JSON.stringify({
+                      content: txt,
+                      author_id: MagicAuth.get().email,
+                    }),
+                  })
+                    .then(function (r) {
+                      return r.json().then(function (j) {
+                        return { ok: r.ok, j: j };
+                      });
+                    })
+                    .then(function (x) {
+                      if (!x.ok) {
+                        alert(x.j.error || JSON.stringify(x.j));
+                        return;
+                      }
+                      loadPosts();
+                    });
+                });
+                threadEl.appendChild(ta);
+                threadEl.appendChild(send);
+              } else {
+                var deny = document.createElement("p");
+                deny.className = "board-thread-deny";
+                deny.textContent = "이 구역에는 아직 댓글을 남길 수 없어요. 게시판 권한을 확인해 주세요.";
+                threadEl.appendChild(deny);
+              }
+            })
+            .catch(function (e) {
+              threadEl.innerHTML = "<p class='board-thread-deny'>" + e.message + "</p>";
+            });
+        }
+
+        function applySearchOrPaint() {
+          var data = lastListData;
+          if (!data) return;
+          var status = document.getElementById("board-status");
+          var list = document.getElementById("board-list");
+          var searchIn = document.getElementById("board-search");
+          var q = searchIn ? String(searchIn.value || "").trim().toLowerCase() : "";
+
+          if (data.canRead === false) {
+            status.textContent =
+              (data.message || "이 구역은 아직 열람할 수 없어요") +
+              " (현재 권한: " +
+              (data.role || "") +
+              ")";
+            list.innerHTML = "";
+            renderHighlights([], []);
+            var empty = document.createElement("li");
+            empty.className = "board-empty";
+            empty.textContent = "이 모임은 게시판 권한에 따라 열려 있어요. 가입·권한 안내를 봐 주세요.";
+            list.appendChild(empty);
+            return;
+          }
+
+          renderHighlights(data.highlightTopViews, data.highlightTopComments);
+          var raw = data.posts || [];
+          var posts = q
+            ? raw.filter(function (p) {
+                var hay = ((p.title || "") + " " + (p.content || "")).toLowerCase();
+                return hay.indexOf(q) !== -1;
+              })
+            : raw;
+
+          if (posts.length === 0 && raw.length > 0 && q) {
+            status.textContent = "검색에 맞는 글이 없어요. (이 구역 글 " + raw.length + "개 중)";
+          } else if (posts.length === 0) {
+            status.textContent = "아직 글이 없어요. 첫 이야기를 남겨 보시겠어요?";
+          } else if (q) {
+            status.textContent = "검색 결과 " + posts.length + "개 · 이 구역 전체 " + raw.length + "개";
+          } else {
+            status.textContent = "총 " + posts.length + "개의 글이 있어요";
+          }
+
+          list.innerHTML = "";
+          if (posts.length === 0) {
+            var empty2 = document.createElement("li");
+            empty2.className = "board-empty";
+            empty2.textContent = q
+              ? "다른 검색어를 써 보시거나, 검색창을 비우면 전체 목록이 돌아와요."
+              : "여기는 조용하네요. 아래 ‘새 글 올리기’에서 첫 글을 남겨 주세요.";
+            list.appendChild(empty2);
+            return;
+          }
+
+          posts.forEach(function (p) {
+            var id = p._id ? String(p._id) : "";
+            var li = document.createElement("li");
+            li.className = "board-row";
+            var title = document.createElement("p");
+            title.className = "board-row__title";
+            var a = document.createElement("a");
+            a.href = "#post-" + id;
+            a.textContent = p.title || "(제목 없음)";
+            title.appendChild(a);
+
+            var sub = document.createElement("p");
+            sub.className = "board-row__sub";
+            sub.textContent = excerpt(stripHtmlLite(p.content), 120);
+
+            var stats = document.createElement("p");
+            stats.className = "board-row__stats";
+            stats.textContent =
+              "조회 " +
+              (p.views != null ? p.views : 0) +
+              " · 댓글 " +
+              (p.comment_count != null ? p.comment_count : 0);
+
+            var toggleBtn = document.createElement("button");
+            toggleBtn.type = "button";
+            toggleBtn.className = "btn btn--ghost btn--small";
+            toggleBtn.textContent = "답글 펼치기";
+            var threadEl = document.createElement("div");
+            threadEl.className = "board-thread";
+            threadEl.style.display = "none";
+            var open = false;
+            toggleBtn.addEventListener("click", function () {
+              if (!open) {
+                threadEl.style.display = "block";
+                toggleBtn.textContent = "접기";
+                openBoardThread(p, threadEl, stats, toggleBtn);
+                open = true;
+              } else {
+                threadEl.style.display = "none";
+                threadEl.innerHTML = "";
+                delete threadEl.dataset.viewSent;
+                toggleBtn.textContent = "답글 펼치기";
+                open = false;
+              }
+            });
+
+            var thumb = document.createElement("div");
+            thumb.className = "board-row__thumb";
+            var imgUrl = firstImgSrc(p.content);
+            if (imgUrl) {
+              var im = document.createElement("img");
+              im.src = imgUrl;
+              im.alt = "";
+              im.loading = "lazy";
+              im.decoding = "async";
+              thumb.appendChild(im);
+            } else {
+              thumb.classList.add("board-row__thumb--empty");
+              thumb.setAttribute("aria-hidden", "true");
+            }
+
+            var left = document.createElement("div");
+            left.className = "board-row__main";
+            left.appendChild(title);
+            left.appendChild(sub);
+            left.appendChild(stats);
+            left.appendChild(toggleBtn);
+            left.appendChild(threadEl);
+
+            var side = document.createElement("div");
+            side.className = "board-row__side";
+            side.innerHTML =
+              '<span class="board-row__cat">' +
+              (catLabels[p.category] || p.category || "") +
+              "</span><br />" +
+              fmtDate(p.created_at);
+
+            li.appendChild(thumb);
+            li.appendChild(left);
+            li.appendChild(side);
+            list.appendChild(li);
+          });
+        }
+
+        function loadPosts() {
+          var status = document.getElementById("board-status");
+          var list = document.getElementById("board-list");
+          status.textContent = "불러오는 중이에요…";
+          list.innerHTML = "";
+          lastListData = null;
+          var url = API + "/api/posts";
+          if (currentCat) url += "?category=" + encodeURIComponent(currentCat);
+          var req = window.HappyUX && HappyUX.fetchWithRetry ? HappyUX.fetchWithRetry(url, { cache: "no-store", headers: authGetHeaders() }, 2) : fetch(url, { cache: "no-store", headers: authGetHeaders() });
+          req
+            .then(function (r) {
+              if (!r.ok) throw new Error("HTTP " + r.status);
+              return r.json();
+            })
+            .then(function (data) {
+              lastListData = data;
+              applySearchOrPaint();
+            })
+            .catch(function (e) {
+              status.textContent = "연결이 끊겼어요. 아래 버튼으로 다시 시도해 주세요.";
+              if (window.HappyUX && HappyUX.toast) {
+                HappyUX.toast("글 목록을 불러오지 못했어요.", {
+                  type: "warn",
+                  duration: 0,
+                  action: "다시 시도",
+                  onAction: function () {
+                    loadPosts();
+                  },
+                });
+              }
+            });
+        }
+
+        var boardSearchEl = document.getElementById("board-search");
+        if (boardSearchEl) {
+          boardSearchEl.addEventListener("input", function () {
+            if (lastListData) applySearchOrPaint();
+          });
+        }
+
+        document.querySelectorAll(".board-cats button").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            currentCat = btn.getAttribute("data-cat") || "";
+            setActiveTab(currentCat);
+            if (pCatEl && currentCat) {
+              var opt = pCatEl.querySelector('option[value="' + currentCat + '"]');
+              if (opt) pCatEl.value = currentCat;
+            }
+            syncPromoComposeHint();
+            syncPromoKitVisibility();
+            loadPosts();
+          });
+        });
+
+        document.getElementById("btn-post").addEventListener("click", function () {
+          var out = document.getElementById("post-result");
+          out.textContent = "보내는 중이에요…";
+          syncAuthFromInputs();
+          var uid = MagicAuth.get().email;
+          document.getElementById("p-author").value = uid;
+          var body = {
+            title: document.getElementById("p-title").value,
+            content: document.getElementById("p-body").value,
+            author_id: uid,
+            category: document.getElementById("p-cat").value || "general",
+          };
+          fetch(API + "/api/posts", {
+            method: "POST",
+            headers: authPostHeaders(),
+            body: JSON.stringify(body),
+          })
+            .then(function (r) {
+              return r.json().then(function (j) {
+                return { ok: r.ok, j: j };
+              });
+            })
+            .then(function (x) {
+              if (!x.ok) {
+                out.textContent = "잠시 문제가 있어요: " + (x.j.error || JSON.stringify(x.j));
+                return;
+              }
+              var recovery = x.j && x.j.recovery_payment ? x.j.recovery_payment : null;
+              if (body.category === "event_6m_recovery" && recovery && recovery.required) {
+                out.textContent = "게시글 등록 완료. 2개월 리커버리 쿠폰 처리를 진행합니다…";
+                var nextUrl =
+                  "../billing/index.html?recovery=1&post_id=" +
+                  encodeURIComponent(x.j.insertedId || "");
+                try {
+                  window.location.href = nextUrl;
+                } catch (e) {}
+                return;
+              }
+              out.textContent = "올렸어요. 고마워요!";
+              currentCat = body.category;
+              setActiveTab(currentCat);
+              syncPromoComposeHint();
+              syncPromoKitVisibility();
+              loadPosts();
+            })
+            .catch(function (e) {
+              out.textContent = String(e);
+            });
+        });
+
+        function initialCategoryFromUrl() {
+          var q = "";
+          try {
+            q = new URLSearchParams(window.location.search).get("board") || "";
+          } catch (e) {}
+          q = String(q).trim().toLowerCase();
+          if (!q) {
+            var h = window.location.hash || "";
+            var m = /^#board=([\w-]+)/i.exec(h);
+            if (m) q = String(m[1]).trim().toLowerCase();
+          }
+          if (q === "all" || q === "전체") return "";
+          var ok = new Set([
+            "",
+            "quickview",
+            "announcement",
+            "qa",
+            "general",
+            "beta",
+            "event",
+            "event_1w_free",
+            "event_1m_usd",
+            "event_6m_recovery",
+            "membership",
+            "reflection",
+            "event_promo_shoutout",
+          ]);
+          return ok.has(q) ? q : "";
+        }
+
+        var startCat = initialCategoryFromUrl();
+        setActiveTab(startCat);
+        if (pCatEl && startCat) {
+          var opt0 = pCatEl.querySelector('option[value="' + startCat + '"]');
+          if (opt0) pCatEl.value = startCat;
+        }
+        syncPromoComposeHint();
+        syncPromoKitVisibility();
+        loadPosts();
+        loadReferralLast();
+      })();
+    </script>
+  </body>
+</html>

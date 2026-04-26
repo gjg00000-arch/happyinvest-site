@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>텔레그램 Chat ID 확인 — Magic 지표</title>
+    <meta
+      name="description"
+      content="회원 가입·알림 연동용 텔레그램 숫자 Chat ID 확인 방법. @userinfobot 등 안전한 절차 안내."
+    />
+    <link rel="stylesheet" href="../assets/common.css" />
+    <link rel="stylesheet" href="../assets/site-ux.css" />
+    <link rel="stylesheet" href="../assets/telegram-chat-help.css" />
+  </head>
+  <body>
+    <header class="site-header" role="banner">
+      <div class="ci-wrap">
+        <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="280" height="140" alt="주식회사 행복도담 인베스트 CI" />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </header>
+    <nav class="site-nav" aria-label="주요 메뉴">
+      <a href="../index.html">메인</a>
+      <a href="../guide/index.html">가이드</a>
+      <a href="../downloads/index.html">다운로드</a>
+      <a href="../registration/index.html">가입·등록</a>
+      <a href="../verify/index.html">본인인증</a>
+      <a href="../billing/index.html">구독·결제</a>
+      <a href="../events/index.html">이벤트</a>
+      <a href="../membership/index.html">회원혜택</a>
+      <a href="../reflection/index.html">실전후기</a>
+      <a href="../contact/index.html">문의</a>
+      <a href="../boards/index.html">모임터</a>
+      <a href="../legal/index.html">약관·정책</a>
+      <a href="../admin/index.html">관리자</a>
+      <a href="../integrations/index.html">연동</a>
+    </nav>
+    <div class="wrap legal-prose">
+      <p><a href="../registration/index.html">← 회원 가입으로 돌아가기</a></p>
+      <h1 class="page-title">텔레그램 Chat ID 확인</h1>
+      <p class="lead tg-help-lead">
+        가입 폼의 <strong>텔레그램 Chat ID</strong>란에는 <strong>숫자</strong>만 넣습니다. <code>@username</code> 과는 다른 값이에요. 아래 확인란을
+        체크하면 <strong>방법 보기</strong> 버튼이 켜지고, 누르면 단계별 안내가 펼쳐집니다.
+      </p>
+
+      <div class="tg-help-card">
+        <h2 class="tg-help-card__title">먼저 잠깐만 읽어 주세요</h2>
+        <label class="tg-help-check">
+          <input type="checkbox" id="tg-help-ack" autocomplete="off" />
+          <span
+            >공식·검증된 봇만 사용하고, <strong>비밀번호·API 키는 어떤 봇에도 보내지 않겠습니다.</strong> 제3자 봇은 각자 신뢰 여부를 판단해야
+            합니다.</span
+          >
+        </label>
+        <button type="button" class="btn tg-help-open-btn" id="tg-help-toggle" disabled aria-expanded="false" aria-controls="tg-help-panel">
+          챗 ID 확인 방법 보기
+        </button>
+        <p class="small" style="margin: 0; color: var(--ci-brown-muted)">위 확인란을 체크해야 버튼이 활성화됩니다.</p>
+
+        <div id="tg-help-panel" class="tg-help-panel" hidden role="region" aria-labelledby="tg-help-steps-title">
+          <p id="tg-help-steps-title" class="visually-hidden">단계별 안내</p>
+          <ol class="tg-help-steps">
+            <li>텔레그램 검색창에서 <code>@userinfobot</code>을 검색해 입장합니다.</li>
+            <li>하단의 <strong>[시작]</strong> 버튼을 누르거나 <code>/start</code>를 입력합니다.</li>
+            <li>
+              봇이 즉시 보내는 답장에서 <strong>Id</strong> 항목의 <strong>숫자</strong>를 확인합니다. 이 숫자를
+              <a href="../registration/index.html">회원 가입</a>의 <strong>텔레그램 Chat ID (선택)</strong> 칸에 넣으면 됩니다.
+            </li>
+          </ol>
+          <p class="tg-help-note">Chat ID는 숫자값이며, <code>@username</code>과 다릅니다. 불필요한 공개는 피하세요.</p>
+        </div>
+      </div>
+
+      <p class="tg-help-back">
+        더 넓은 연동 개요는 <a href="../guide/index.html#tg">가이드 · 텔레그램 Chat ID</a>와
+        <a href="../integrations/index.html">연동</a> 페이지를 참고해 주세요.
+      </p>
+    </div>
+    <footer class="site-footer" role="contentinfo">
+      <div class="ci-wrap ci-wrap--footer">
+        <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="220" height="110" alt="주식회사 행복도담 인베스트 CI" />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </footer>
+    <script src="../assets/site-ux.js"></script>
+    <script>
+      (function () {
+        var ack = document.getElementById("tg-help-ack");
+        var btn = document.getElementById("tg-help-toggle");
+        var panel = document.getElementById("tg-help-panel");
+        if (!ack || !btn || !panel) return;
+
+        function syncBtn() {
+          btn.disabled = !ack.checked;
+          if (btn.disabled) {
+            btn.setAttribute("aria-disabled", "true");
+          } else {
+            btn.removeAttribute("aria-disabled");
+          }
+        }
+        ack.addEventListener("change", syncBtn);
+        syncBtn();
+
+        btn.addEventListener("click", function () {
+          if (btn.disabled) return;
+          var open = !panel.hidden;
+          if (open) {
+            panel.hidden = true;
+            btn.setAttribute("aria-expanded", "false");
+            btn.textContent = "챗 ID 확인 방법 보기";
+          } else {
+            panel.hidden = false;
+            btn.setAttribute("aria-expanded", "true");
+            btn.textContent = "안내 접기";
+            try {
+              panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+            } catch (e) {}
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

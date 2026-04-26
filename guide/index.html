@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>User Guide / Documentation — Magic 지표</title>
+    <meta
+      name="description"
+      content="Magic 지표(매직라인) — TradingView, MetaTrader 5, 회원·본인인증, 시그널 웹훅·텔레그램 연동 개요"
+    />
+    <link rel="stylesheet" href="../assets/common.css" />
+    <link rel="stylesheet" href="../assets/site-ux.css" />
+    <link rel="stylesheet" href="../assets/guide-docs.css" />
+  </head>
+  <body>
+    <header class="site-header" role="banner">
+      <div class="ci-wrap">
+        <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="280" height="140" alt="주식회사 행복도담 인베스트 CI" />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </header>
+            <nav class="site-nav" aria-label="주요 메뉴">
+      <a href="../index.html">메인</a>
+      <a href="index.html" aria-current="page">가이드</a>
+      <a href="usage.html">지표 사용</a>
+      <a href="usage-trv.html">TRV</a>
+      <a href="usage-mt5.html">MT5</a>
+      <a href="../downloads/index.html">다운로드</a>
+      <a href="../registration/index.html">가입·등록</a>
+      <a href="../verify/index.html">본인인증</a>
+      <a href="../billing/index.html">구독·결제</a>
+      <a href="../events/index.html">이벤트</a>
+      <a href="../membership/index.html">회원혜택</a>
+      <a href="../reflection/index.html">실전후기</a>
+      <a href="../contact/index.html">문의</a>
+      <a href="../boards/index.html">모임터</a>
+      <a href="../legal/index.html">약관·정책</a>
+      <a href="../admin/index.html">관리자</a>
+      <a href="../integrations/index.html">연동</a>
+    </nav>
+    <div class="wrap">
+      <header class="doc-hero">
+        <p class="doc-hero__eyebrow">User Guide · Documentation</p>
+        <h1 class="doc-hero__title">사용자 가이드</h1>
+        <p class="doc-hero__lead">
+          Magic 지표·매직라인은 <strong>TradingView(TRV, Pine)</strong>와 <strong>MetaTrader 5(.ex5)</strong>를 기준으로 배포됩니다. 아래는 처음 세팅할 때의
+          <strong>순서와 링크</strong>만 모은 문서예요. 세부 스크린샷은 이후에 채워 넣으시면 됩니다.
+        </p>
+      </header>
+
+      <div class="doc-summary-grid" aria-label="바로가기">
+        <a class="doc-summary-card" href="usage.html">
+          <span class="doc-summary-card__k">00</span>
+          <span class="doc-summary-card__t">지표 사용</span>
+          <span class="doc-summary-card__d">읽는 법 · TRV/MT5</span>
+        </a>
+        <a class="doc-summary-card" href="usage-trv.html">
+          <span class="doc-summary-card__k">01</span>
+          <span class="doc-summary-card__t">TRV</span>
+          <span class="doc-summary-card__d">지표 사용(상세)</span>
+        </a>
+        <a class="doc-summary-card" href="usage-mt5.html">
+          <span class="doc-summary-card__k">02</span>
+          <span class="doc-summary-card__t">MT5</span>
+          <span class="doc-summary-card__d">지표 사용(상세)</span>
+        </a>
+        <a class="doc-summary-card" href="#account">
+          <span class="doc-summary-card__k">03</span>
+          <span class="doc-summary-card__t">계정 · 인증</span>
+          <span class="doc-summary-card__d">가입 → 본인확인 → 결제</span>
+        </a>
+        <a class="doc-summary-card" href="#signals">
+          <span class="doc-summary-card__k">04</span>
+          <span class="doc-summary-card__t">시그널 · 연동</span>
+          <span class="doc-summary-card__d">웹훅 개요</span>
+        </a>
+      </div>
+
+      <nav class="doc-toc" aria-label="목차">
+        <h2>목차</h2>
+        <ol>
+          <li><a href="usage.html">지표 사용(허브)</a> — <a href="usage-trv.html">TRV</a> · <a href="usage-mt5.html">MT5</a></li>
+          <li><a href="#overview">이 사이트에서 할 수 있는 것</a></li>
+          <li><a href="#account">회원 가입 · 본인 인증 · 결제</a></li>
+          <li><a href="#tv">TRV에 지표 넣기</a></li>
+          <li><a href="#mt5">MT5 — 파일 설치 · 차트에 붙이기</a></li>
+          <li><a href="#tg">텔레그램 Chat ID</a></li>
+          <li><a href="#signals">시그널 웹훅 (선택)</a></li>
+          <li><a href="#tips">매직라인 운용 팁</a></li>
+          <li><a href="#support">모임터 · 약관 · 문의</a></li>
+        </ol>
+      </nav>
+
+      <article class="doc-section doc-section--soft" id="overview">
+        <h2>이 사이트에서 할 수 있는 것</h2>
+        <p>
+          <strong>가이드·가입·모임터</strong>를 한곳에 모아 두었습니다. 지표는 <strong>수익을 보장하는 상품이 아니라</strong> 차트를 읽는
+          <strong>참고 도구</strong>입니다. 플랜·혜택은 <a href="../events/index.html">이벤트</a>·<a href="../membership/index.html">회원 혜택</a>에서,
+          게시판 권한은 <a href="../legal/access-matrix.html">접근 권한 표</a>를 참고하세요.
+        </p>
+        <div class="doc-pill-row">
+          <span class="doc-pill">TRV</span>
+          <span class="doc-pill">MT5</span>
+          <span class="doc-pill">Telegram</span>
+          <span class="doc-pill">Webhook</span>
+        </div>
+      </article>
+
+      <article class="doc-section" id="account">
+        <h2>회원 가입 · 본인 인증 · 결제</h2>
+        <p>대략적인 순서입니다. 화면은 배포 시점에 따라 달라질 수 있어요.</p>
+        <ol class="doc-steps">
+          <li><a href="../registration/index.html">가입·등록</a>에서 계정을 만듭니다.</li>
+          <li><a href="../verify/index.html">본인 인증</a>으로 계정을 보호합니다. (문자 발신 등은 운영 정책에 따름)</li>
+          <li><a href="../billing/index.html">구독·결제</a>에서 플랜을 선택합니다. 연동 전에는 공지를 따라 주세요.</li>
+          <li>로그인 후 <strong>MT5 계좌 · MQL5 · TRV ID</strong>를 프로필에 연결하면 라이선스·알림 매칭에 쓸 수 있습니다.</li>
+        </ol>
+      </article>
+
+      <article class="doc-section" id="tv">
+        <h2>TRV에 지표 넣기</h2>
+        <p>
+          TV에서는 보통 <strong>초대 링크</strong> 또는 <strong>스크립트 공개</strong> 형태로 지표를 받습니다. 차트 상단 <strong>Indicators</strong>에서 커뮤니티·내 스크립트를 확인하거나, 제공된 링크를 눌러 추가합니다.
+        </p>
+        <ol class="doc-steps">
+          <li>TRV에서 차트를 엽니다.</li>
+          <li>배포 방식에 따라 Pine 스크립트를 추가하거나, 초대 링크를 통해 지표를 불러옵니다.</li>
+          <li>지표 설정(기간·색 등)은 속성 창에서 조정합니다. 플랜에 따라 알림·스크린 수 제한이 있을 수 있습니다.</li>
+        </ol>
+        <p class="small" style="color: var(--ci-brown-muted); margin-top: 0.75rem">
+          MQL5 마켓과 달리 TV는 브라우저·앱 안에서 동작합니다. <strong>mql5.com 로그인 이메일</strong>은 회원 정보에 넣어 두면 나중에 라이선스·문의 매칭에 도움이 됩니다.
+        </p>
+        <div class="figure-placeholder">스크린샷·짧은 GIF 자리: 지표 추가 메뉴</div>
+      </article>
+
+      <article class="doc-section" id="mt5">
+        <h2>MT5 — 파일 받기 · 넣기 · 차트에 붙이기</h2>
+        <p>순서는 <strong>① 파일을 손에 넣고 → ② 터미널이 목록을 읽고 → ③ 차트에 끌어다 놓기</strong>입니다.</p>
+        <ol class="doc-steps">
+          <li>브로커에서 제공하는 MetaTrader 5를 설치합니다.</li>
+          <li>
+            받은 <code>.ex5</code> 파일을 <code>MQL5\Indicators</code> 폴더에 넣습니다. (메뉴 <strong>파일 → 데이터 폴더 열기</strong>로 바로 갈 수 있습니다.)
+          </li>
+          <li>MT5를 한 번 재시작하거나 내비게이터를 새로고침하면, 사용자 지표 목록에 나타납니다.</li>
+          <li>차트에 끌어 놓거나 <strong>삽입 → 지표 → 사용자 지표</strong>에서 선택합니다.</li>
+        </ol>
+        <p class="small" style="color: var(--ci-brown-muted)">
+          원본 <code>.mq5</code>는 보통 배포하지 않고, 컴파일된 <code>.ex5</code>만 쓰는 것이 일반적입니다. 브로커·OS마다 경로 표기가 조금씩 다를 수 있습니다.
+        </p>
+      </article>
+
+      <article class="doc-section" id="tg">
+        <h2>텔레그램 Chat ID 확인</h2>
+        <p>알림·웹훅을 보내려면 <strong>내 채팅 ID</strong>가 필요합니다. 봇과 대화를 시작한 뒤, BotFather로 만든 봇 토큰과 함께 <code>getUpdates</code> 등으로 숫자 ID를 확인하는 방식이 흔합니다.</p>
+        <ol class="doc-steps">
+          <li>안내된 봇을 채팅방에 추가하거나 1:1 대화를 시작합니다.</li>
+          <li>개인 채팅과 그룹·채널은 ID 형식이 다릅니다. 운영 안내에 맞는 쪽으로만 등록해 주세요.</li>
+          <li>ID는 타인에게 불필요하게 노출하지 않는 것이 좋습니다.</li>
+        </ol>
+        <p class="small" style="margin-top: 0.75rem">
+          서버·웹훅 설계 개요는 <a href="../integrations/index.html">연동</a> 페이지를 참고하세요. 국내 SMS 본인인증은 별도 발신번호 등록이 필요합니다 — <a href="../verify/index.html">본인인증</a> 안내와 함께 정리합니다.
+        </p>
+      </article>
+
+      <article class="doc-section doc-section--soft" id="signals">
+        <h2>시그널 웹훅 (선택)</h2>
+        <p>
+          <strong>magic-indicator-api</strong>를 쓰는 경우, TRV·MT5 알림을 HTTP로 받아 로그를 남기고 텔레그램으로 전달할 수 있습니다. 전체 설계는
+          <a href="../integrations/index.html">연동</a>과 API 쪽 README를 참고하세요.
+        </p>
+        <ul class="doc-steps" style="list-style: disc">
+          <li>
+            엔드포인트 예: <code>POST /api/webhooks/signals/tradingview</code>, <code>POST /api/webhooks/signals/mt5</code> — 상태 확인은
+            <code>GET …/api/webhooks/signals/health</code>
+          </li>
+          <li>인증: 헤더 <code>X-Webhook-Secret</code>, <code>Authorization: Bearer …</code>, 또는 쿼리 <code>?secret=</code> (서버 환경변수와 동일 값)</li>
+          <li>본문은 JSON·텍스트 등 raw 수신을 전제로 합니다. 응답의 <code>telegram.*</code> 필드로 전달 결과를 확인합니다.</li>
+        </ul>
+      </article>
+
+      <article class="doc-section" id="tips">
+        <h2>매직라인 운용 팁 (요약)</h2>
+        <p>
+          틱 차트·파생 상품 전제에 가깝게 쓰일 수 있고, <strong>R값</strong>으로 신호 빈도를 조절합니다. 완벽한 지표는 없으니
+          <strong>손절·자금 관리</strong>는 별도로 지켜 주세요. 메인 페이지의 안내 문구도 함께 읽어 주시면 좋습니다.
+        </p>
+        <p class="small" style="color: var(--ci-brown-muted); margin-bottom: 0">
+          <a href="../index.html#magicline-message">메인 — 매직라인을 쓰시기 전에</a>
+        </p>
+      </article>
+
+      <article class="doc-section" id="support">
+        <h2>모임터 · 약관 · 문의</h2>
+        <p>질문·후기·공지는 <a href="../boards/index.html">모임터</a> 구역별로 나뉩니다. 약관·환불·개인정보는 <a href="../legal/index.html">약관·정책</a>, 버그·상담은 <a href="../contact/index.html">문의</a>로 연결해 주세요.</p>
+        <div class="doc-link-grid">
+          <a href="../boards/index.html">모임터</a>
+          <a href="../legal/index.html">약관·정책</a>
+          <a href="../contact/index.html">문의</a>
+          <a href="../reflection/index.html">실전 후기</a>
+        </div>
+      </article>
+
+      <div class="terms-box" style="margin-top: 1.5rem">
+        <strong>구독·라이선스</strong><br />
+        유료 플랜·기간은 <a href="../billing/index.html">구독·결제</a>가 연동된 뒤, 결제·메일·마이페이지 기준으로 확정됩니다. 연동 전에는 이벤트 공지를 따라 주세요.
+      </div>
+    </div>
+    <footer class="site-footer" role="contentinfo">
+      <div class="ci-wrap ci-wrap--footer">
+        <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="220" height="110" alt="" />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </footer>
+    <script src="../assets/site-ux.js"></script>
+  </body>
+</html>

@@ -1,0 +1,268 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="api-base" content="https://happyinvests.com" />
+    <title>Magic 지표 — 연동</title>
+    <link rel="stylesheet" href="../assets/common.css" />
+    <link rel="stylesheet" href="../assets/site-ux.css" />
+    <link rel="stylesheet" href="../registration/registration.css" />
+  </head>
+  <body>
+    <header class="site-header" role="banner">
+      <div class="ci-wrap">
+        <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="280" height="140" alt="주식회사 행복도담 인베스트 CI" />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </header>
+            <nav class="site-nav" aria-label="주요 메뉴">
+      <a href="../index.html">메인</a>
+      <a href="../guide/index.html">가이드</a>
+      <a href="../downloads/index.html">다운로드</a>
+      <a href="../registration/index.html">가입·등록</a>
+      <a href="../verify/index.html">본인인증</a>
+      <a href="../billing/index.html">구독·결제</a>
+      <a href="../events/index.html">이벤트</a>
+      <a href="../membership/index.html">회원혜택</a>
+      <a href="../reflection/index.html">실전후기</a>
+      <a href="../contact/index.html">문의</a>
+      <a href="../boards/index.html">모임터</a>
+      <a href="../legal/index.html">약관·정책</a>
+      <a href="../admin/index.html">관리자</a>
+      <a href="../integrations/index.html">연동</a>
+    </nav>
+    <div class="wrap">
+      <h1 class="page-title">연동 개요</h1>
+      <p class="lead">
+        차트·주문·알림이 각자 다른 제품이라, 여기서는 <strong>어디와 손을 잡는지</strong>와 <strong>라이선스에 쓰는 ID</strong>를 정리합니다. 결제·DB·웹훅이 붙으면 회원 기간·텔레그램 전달이 한꺼번에 맞춰집니다.
+      </p>
+
+      <section id="mt5-binding" class="mt5-binding" aria-labelledby="mt5-binding-title">
+        <h2 id="mt5-binding-title" class="page-title" style="font-size: 1.2rem; margin-top: 1.5rem">TRV·MT5 ID 변경 — 권장 방식</h2>
+        <p class="lead" style="font-size: 0.95rem; margin-top: 0.5rem">
+          TradingView(TRV) 사용자명과 MT5 계좌는 <strong>회원 이메일 기준 프로필</strong>에 저장합니다. 다계정·공유 남용을 줄이기 위해, MT5 운영 정책은
+          <strong>“브로커 선택 입력”</strong>이 아니라 <strong>MT5 계좌(로그인) 번호 + 접속 서버 이름</strong>의 조합을 이메일(회원) 1:1로 등록하는 방식을 권장합니다. EA/인디에서
+          <code>AccountInfoInteger(ACCOUNT_LOGIN)</code> 과 서버 문자열이 이 값과 맞는지 보면, 같은 브로커에 데모·소액을 여러 개
+          키는 경우까지 걸리게 할 수 있습니다. 브로커 1곳으로만 제한하는 방식은 해외·국내 겸용에 불리하므로 기본은 두지
+          않습니다.
+        </p>
+        <ul class="doc-steps" style="margin: 0.75rem 0 1rem; padding-left: 1.25rem">
+          <li>TRV는 프로필의 사용자명만 입력합니다. 앞의 <code>@</code>는 서버에서 제거해 저장합니다.</li>
+          <li>MT5 → <strong>도구 → 옵션 → 서버</strong> 또는 터미널 하단·<strong>Navigator → 계정</strong>에서 <strong>계좌 번호</strong>와 <strong>서버</strong>를 확인합니다.</li>
+          <li>아래에서 로그인 이메일(회원)을 맞춘 뒤, TRV 사용자명 또는 MT5 계좌 번호(숫자)+서버를 입력하고 <strong>저장</strong>합니다. 가입
+            시 <a href="../registration/index.html">가입·등록</a>에 넣은 값과 같습니다.
+          </li>
+          <li>MT5는 브로커명 단독 기준이 아니라 <strong>계좌 번호+서버 1조합</strong> 기준으로 적용됩니다. 이 조합은 라이선스 확인·중복 체험·공유 방지를 위해 서버에 저장되며, 기본적으로 회원 이메일당 1조합 기준으로 운영합니다.</li>
+          <li>이미 다른 회원이 쓰는 (번호+서버) 조합은 서버가 거절합니다. 브로커/실계좌를 바꾸면
+            <a href="../contact/index.html">문의</a>로 이전(운영이 허용할 때)할 수 있습니다.
+          </li>
+          <li>변경 저장 후 TRV 초대 스크립트·MT5 라이선스 반영은 운영 확인이 필요할 수 있습니다. 저장 성공 메시지를 캡처해 문의에 남기면 처리 추적이 쉽습니다.</li>
+        </ul>
+
+        <div class="mt5-binding__auth card-like" style="max-width: 40rem; padding: 1rem 1.1rem; margin-bottom: 1rem; border: 1px solid rgba(74, 53, 40, 0.15); border-radius: 8px; background: rgba(255, 255, 255, 0.6)">
+          <p class="small" style="margin: 0 0 0.6rem; color: var(--ci-brown-muted)">
+            API는 헤더 <code>X-User-Id</code> = 회원 이메일을 사용합니다. <a href="../boards/index.html">모임터</a>에서 이메일을 넣고 적용한 것과 같습니다.
+          </p>
+          <div class="reg-field" style="margin-bottom: 0.65rem">
+            <label for="int-email">로그인 이메일</label>
+            <input type="email" id="int-email" autocomplete="email" style="max-width: 22rem" />
+          </div>
+          <div class="reg-field" style="margin-bottom: 0.65rem">
+            <label for="int-role">게시판 권한(표시, 선택)</label>
+            <input type="text" id="int-role" placeholder="free / sub …" style="max-width: 10rem" />
+          </div>
+          <button type="button" class="btn" id="int-apply-auth" style="margin-top: 0.25rem">이 이메일로 API 식별 적용</button>
+        </div>
+
+        <div class="mt5-binding__form card-like" style="max-width: 40rem; padding: 1rem 1.1rem; border: 1px solid rgba(74, 53, 40, 0.15); border-radius: 8px; background: rgba(255, 255, 255, 0.6)">
+          <div class="reg-field" style="margin-bottom: 0.75rem">
+            <label for="int-tv-username">TRV 사용자명</label>
+            <input type="text" id="int-tv-username" maxlength="120" placeholder="@ 또는 사용자명" style="max-width: 22rem" />
+            <p class="reg-hint" style="margin: 0.35rem 0 0; font-size: 0.88rem">
+              비우면 TRV 사용자명을 해제합니다. 유료 플랜·초대 스크립트 권한 반영은 운영 확인 후 처리될 수 있습니다.
+            </p>
+          </div>
+          <div class="reg-field reg-field--row" style="display: flex; flex-wrap: wrap; gap: 0.75rem 1rem; align-items: flex-end">
+            <div>
+              <label for="int-mt5-login">MT5 계좌 번호(숫자)</label>
+              <input type="text" id="int-mt5-login" inputmode="numeric" maxlength="80" placeholder="12345678" style="min-width: 9rem" />
+            </div>
+            <div style="flex: 1; min-width: 12rem">
+              <label for="int-mt5-server">MT5 서버</label>
+              <input type="text" id="int-mt5-server" maxlength="120" placeholder="BrokerName-Live" />
+            </div>
+          </div>
+          <p class="reg-hint" style="margin: 0.4rem 0 0.75rem; font-size: 0.88rem">MT5는 계좌 번호와 서버를 둘 다 입력해야 합니다. 둘 다 비우면 MT5 등록을 해제합니다.</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center">
+            <button type="button" class="btn" id="int-load">서버에서 불러오기</button>
+            <button type="button" class="btn" id="int-save">저장 (PATCH /api/me/profile)</button>
+            <span id="int-api-hint" class="small" style="color: var(--ci-brown-muted)"></span>
+          </div>
+          <p id="int-msg" class="reg-alert" style="margin-top: 0.75rem" role="status" aria-live="polite" hidden></p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="page-title" style="font-size: 1.1rem">주소·게시판 (SEO)</h2>
+        <p class="small" style="color: var(--ci-brown-muted)">
+          게시판 경로는 영문 슬러그를 쓰면 알림·봇·검색이 편합니다. 예: <code>/boards/announcement</code>, <code>/boards/qa</code> — 한글 제목은 화면에만 써도 됩니다.
+        </p>
+      </section>
+
+      <div class="integration-grid">
+        <div class="integration-card">
+          <h3>TRV</h3>
+          <p>알림·웹훅 URL, Pine 연동 범위. 시그널 발생 시 서버 또는 텔레그램으로 전달하는 흐름을 여기에 정리합니다.</p>
+        </div>
+        <div class="integration-card">
+          <h3>MetaTrader 5</h3>
+          <p>
+            <strong>계좌 번호+서버 1조합</strong> 1:1 등록(위) · EA/인디 배포, 터미널 호환, 브로커 정책(스프레드·거래시간)은 상품·가이드에 따릅니다.
+          </p>
+        </div>
+        <div class="integration-card">
+          <h3>Webhook</h3>
+          <p>TRV 알림 → 서버 URL. 본문에 회원 식별 토큰을 넣고, 서버가 유효기간을 본 뒤 텔레그램으로만 넘기는 식으로 설계합니다.</p>
+        </div>
+        <div class="integration-card">
+          <h3>Telegram</h3>
+          <p>봇 토큰·채팅 ID·메시지 포맷. <a href="../guide/index.html#tg">가이드 — Chat ID</a>와 연계합니다.</p>
+        </div>
+      </div>
+    </div>
+    <footer class="site-footer" role="contentinfo">
+      <div class="ci-wrap ci-wrap--footer">
+        <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="220" height="110" alt="" />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </footer>
+    <script src="../assets/site-ux.js"></script>
+    <script src="../assets/magic-auth.js"></script>
+    <script>
+      (function () {
+        var meta = document.querySelector('meta[name="api-base"]');
+        var API = (meta && meta.content) || "https://happyinvests.com";
+        var intEmail = document.getElementById("int-email");
+        var intRole = document.getElementById("int-role");
+        var intTv = document.getElementById("int-tv-username");
+        var intMt5 = document.getElementById("int-mt5-login");
+        var intSrv = document.getElementById("int-mt5-server");
+        var intLoad = document.getElementById("int-load");
+        var intSave = document.getElementById("int-save");
+        var intApply = document.getElementById("int-apply-auth");
+        var intMsg = document.getElementById("int-msg");
+        var intApiHint = document.getElementById("int-api-hint");
+
+        if (intApiHint) intApiHint.textContent = "API: " + API;
+
+        function authHeaders() {
+          if (intEmail && intRole) {
+            window.MagicAuth.set(intEmail.value.trim() || "guest@local", (intRole.value || "free").trim() || "guest");
+          }
+          return Object.assign({}, window.MagicAuth.headers());
+        }
+        function authPost() {
+          return Object.assign({ "Content-Type": "application/json" }, authHeaders());
+        }
+        function showMsg(t, isErr) {
+          if (!intMsg) return;
+          intMsg.hidden = !t;
+          intMsg.textContent = t || "";
+          intMsg.className = "reg-alert" + (isErr ? " reg-alert--error" : " reg-alert--ok");
+        }
+        if (intEmail && intRole) {
+          var a = window.MagicAuth.get();
+          intEmail.value = a.email !== "guest@local" ? a.email : "";
+          intRole.value = a.role && a.role !== "guest" ? a.role : "free";
+        }
+        if (intApply) {
+          intApply.addEventListener("click", function () {
+            authHeaders();
+            if (window.MagicAuth && typeof window.MagicAuth.syncPreferredLanguageFromProfile === "function") {
+              window.MagicAuth.syncPreferredLanguageFromProfile(API);
+            }
+            showMsg("이 이메일·게시판 권한으로 X-User-Id 가 적용되었습니다. 아래에서 불러오기/저장을 누르세요.", false);
+          });
+        }
+        if (intLoad) {
+          intLoad.addEventListener("click", function () {
+            showMsg("불러오는 중…", false);
+            fetch(API + "/api/me/profile", { headers: authHeaders() })
+              .then(function (r) {
+                return r.json().then(function (j) {
+                  return { ok: r.ok, j: j };
+                });
+              })
+              .then(function (x) {
+                if (!x.ok) {
+                  showMsg(x.j && x.j.error ? x.j.error : "불러오기 실패", true);
+                  return;
+                }
+                var u = x.j && x.j.user;
+                if (!u) {
+                  showMsg("데이터가 없습니다.", true);
+                  return;
+                }
+                if (window.MagicAuth && typeof window.MagicAuth.applyPreferredLanguage === "function") {
+                  window.MagicAuth.applyPreferredLanguage(u.preferred_language);
+                }
+                if (intTv) intTv.value = u.tv_username != null ? String(u.tv_username) : "";
+                if (intMt5) intMt5.value = u.mt5_login != null ? String(u.mt5_login) : "";
+                if (intSrv) intSrv.value = u.mt5_server != null ? String(u.mt5_server) : "";
+                showMsg("서버에 저장된 TRV·MT5 값을 표시했습니다.", false);
+              })
+              .catch(function (e) {
+                showMsg(String(e.message || e), true);
+              });
+          });
+        }
+        if (intSave) {
+          intSave.addEventListener("click", function () {
+            var login = intMt5 ? String(intMt5.value || "").trim() : "";
+            var srv = intSrv ? String(intSrv.value || "").trim() : "";
+            var tv = intTv ? String(intTv.value || "").trim() : "";
+            var body = { tv_username: tv, mt5_login: login, mt5_server: srv };
+            showMsg("저장 중…", false);
+            fetch(API + "/api/me/profile", {
+              method: "PATCH",
+              headers: authPost(),
+              body: JSON.stringify(body),
+            })
+              .then(function (r) {
+                return r.json().then(function (j) {
+                  return { ok: r.ok, j: j };
+                });
+              })
+              .then(function (x) {
+                if (!x.ok) {
+                  showMsg(x.j && x.j.error ? x.j.error : "저장 실패", true);
+                  return;
+                }
+                var u = x.j && x.j.user ? x.j.user : {};
+                var tvSaved = u.tv_username || "미등록";
+                var mt5Saved = u.mt5_login && u.mt5_server ? u.mt5_login + " / " + u.mt5_server : "미등록";
+                showMsg(
+                  "변경 요청이 저장되었습니다. TRV: " +
+                    tvSaved +
+                    " · MT5: " +
+                    mt5Saved +
+                    " (동일 MT5 계좌+서버는 다른 이메일에 중복될 수 없습니다. 운영 권한 반영이 필요한 경우 문의로 이어서 처리합니다.)",
+                  false
+                );
+              })
+              .catch(function (e) {
+                showMsg(String(e.message || e), true);
+              });
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>

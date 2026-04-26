@@ -1,0 +1,153 @@
+.registration-wrap {
+  max-width: 640px;
+}
+
+.reg-api-hint {
+  font-size: 0.85rem;
+  color: var(--ci-brown-muted, #6b5344);
+  margin: 0 0 1rem;
+}
+
+.reg-alert {
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border: 1px solid var(--ci-green, #2f6f4f);
+  background: var(--ci-green-soft, #e8f0eb);
+  color: #1a1a1a;
+}
+
+.reg-alert--error {
+  border-color: var(--ci-salmon, #c75b4a);
+  background: var(--ci-salmon-soft, #f5e8e5);
+}
+
+.reg-alert--ok {
+  border-color: var(--ci-green, #2f6f4f);
+}
+
+.reg-form {
+  margin: 1.25rem 0 2rem;
+}
+
+.reg-fieldset {
+  border: 1px solid rgba(74, 53, 40, 0.2);
+  border-radius: 10px;
+  padding: 1.1rem 1.15rem 1.25rem;
+  margin: 0 0 1.25rem;
+  background: #fff;
+}
+
+.reg-legend {
+  padding: 0 0.35rem;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--ci-brown, #4a3528);
+}
+
+.reg-field-hint {
+  margin: 0.35rem 0 1rem;
+  font-size: 0.9rem;
+  color: var(--ci-brown-muted, #6b5344);
+}
+
+.reg-field {
+  margin-bottom: 1rem;
+}
+
+.reg-field label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  font-size: 0.95rem;
+}
+
+.reg-field input[type="text"],
+.reg-field input[type="email"],
+.reg-field input[type="password"],
+.reg-field input[type="tel"],
+.reg-field select {
+  width: 100%;
+  max-width: 100%;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid rgba(74, 53, 40, 0.35);
+  border-radius: 6px;
+  font: inherit;
+}
+
+.reg-field input:focus {
+  outline: 2px solid var(--ci-green, #2f6f4f);
+  outline-offset: 1px;
+}
+
+.reg-hint {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--ci-brown-muted, #6b5344);
+  margin-top: 0.25rem;
+}
+
+.reg-field--row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem 1rem;
+}
+
+@media (max-width: 520px) {
+  .reg-field--row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.reg-checks {
+  margin-top: 0.5rem;
+}
+
+.reg-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.65rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.reg-check input {
+  margin-top: 0.2rem;
+  flex-shrink: 0;
+}
+
+.reg-actions {
+  margin-top: 0.5rem;
+}
+
+.reg-submit {
+  appearance: none;
+  border: none;
+  background: var(--ci-green, #2f6f4f);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  min-width: 160px;
+}
+
+.reg-submit:hover:not(:disabled) {
+  filter: brightness(1.05);
+}
+
+.reg-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.reg-after {
+  margin-top: 2rem;
+}
+
+.reg-after h2 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}

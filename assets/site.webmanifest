@@ -1,0 +1,18 @@
+{
+  "name": "Magic 지표 — 행복도담 인베스트",
+  "short_name": "Magic 지표",
+  "description": "Magic 지표 가이드, 가입, 모임터",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f6f3ef",
+  "theme_color": "#2f6f4f",
+  "lang": "ko",
+  "icons": [
+    {
+      "src": "haengbokdam-company-ci.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

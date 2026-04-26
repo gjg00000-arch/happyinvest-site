@@ -1,0 +1,156 @@
+/* guide/index.html — User Guide / Documentation */
+
+.doc-hero {
+  margin: 0 0 1.25rem;
+  padding: 1.35rem 1.25rem 1.4rem;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #f8faf7 0%, #eef6f0 38%, #fff9f4 100%);
+  border: 1px solid rgba(47, 111, 79, 0.18);
+  box-shadow: 0 8px 28px rgba(47, 111, 79, 0.07);
+}
+
+.doc-hero__eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #5a7d66;
+}
+
+.doc-hero__title {
+  margin: 0 0 0.45rem;
+  font-size: clamp(1.35rem, 3.5vw, 1.65rem);
+  font-weight: 800;
+  color: var(--ci-brown);
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+}
+
+.doc-hero__lead {
+  margin: 0;
+  font-size: 0.98rem;
+  color: var(--ci-brown-muted);
+  line-height: 1.55;
+  max-width: 40rem;
+}
+
+.doc-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+  gap: 0.65rem;
+  margin: 0 0 1.35rem;
+}
+
+.doc-summary-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  background: #fff;
+  border: 1px solid rgba(74, 53, 40, 0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.doc-summary-card:hover {
+  border-color: rgba(47, 111, 79, 0.45);
+  box-shadow: 0 4px 16px rgba(47, 111, 79, 0.1);
+  transform: translateY(-1px);
+}
+
+.doc-summary-card__k {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--ci-green);
+  text-transform: uppercase;
+}
+
+.doc-summary-card__t {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--ci-brown);
+}
+
+.doc-summary-card__d {
+  font-size: 0.78rem;
+  color: var(--ci-brown-muted);
+  line-height: 1.35;
+}
+
+.doc-section--soft {
+  background: linear-gradient(180deg, #fffef9 0%, #fff 55%);
+  border: 1px solid rgba(74, 53, 40, 0.08);
+}
+
+.doc-pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.65rem 0 0;
+}
+
+.doc-pill {
+  display: inline-block;
+  padding: 0.25rem 0.55rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 999px;
+  background: rgba(232, 240, 235, 0.9);
+  color: #3d5a47;
+  border: 1px solid rgba(47, 111, 79, 0.15);
+}
+
+.doc-link-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-top: 0.75rem;
+}
+
+.doc-link-grid a {
+  font-weight: 600;
+}
+
+html[data-theme="dark"] .doc-hero {
+  background: linear-gradient(145deg, #1a2228 0%, #1c2620 45%, #252018 100%);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+html[data-theme="dark"] .doc-hero__eyebrow {
+  color: #8dae9a;
+}
+html[data-theme="dark"] .doc-hero__title {
+  color: #f0e6dc;
+}
+html[data-theme="dark"] .doc-hero__lead {
+  color: #8b949e;
+}
+html[data-theme="dark"] .doc-summary-card {
+  background: #161b22;
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #e6edf3;
+}
+html[data-theme="dark"] .doc-summary-card:hover {
+  border-color: rgba(63, 185, 80, 0.45);
+}
+html[data-theme="dark"] .doc-summary-card__t {
+  color: #e6edf3;
+}
+html[data-theme="dark"] .doc-summary-card__d {
+  color: #8b949e;
+}
+html[data-theme="dark"] .doc-section--soft {
+  background: linear-gradient(180deg, #161b22 0%, #0d1117 60%);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+html[data-theme="dark"] .doc-pill {
+  background: rgba(46, 111, 79, 0.25);
+  color: #c6e4d4;
+  border-color: rgba(255, 255, 255, 0.1);
+}

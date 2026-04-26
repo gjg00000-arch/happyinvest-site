@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="api-base" content="https://happyinvests.com" />
+    <title>Magic 지표 — 메인</title>
+    <meta name="description" content="Magic 지표 가이드·가입·모임터 — 주식회사 행복도담 인베스트" />
+    <meta property="og:title" content="Magic 지표 — 행복도담 인베스트" />
+    <meta property="og:description" content="Magic 지표 가이드·가입·모임터" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="assets/haengbokdam-company-ci.png" data-relative="1" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="manifest" href="assets/site.webmanifest" />
+    <link rel="stylesheet" href="assets/common.css" />
+    <link rel="stylesheet" href="assets/board-embed.css" />
+    <link rel="stylesheet" href="assets/site-ux.css" />
+    <link rel="stylesheet" href="assets/home-philosophy.css" />
+  </head>
+  <body>
+    <div class="main-top-banner">
+      <img
+        class="main-top-banner__img"
+        src="assets/main-top-banner.png"
+        alt="주식회사 행복도담 인베스트"
+      />
+    </div>
+    <header class="site-header" role="banner">
+      <div class="ci-wrap">
+        <img
+          class="ci-logo-img"
+          src="assets/haengbokdam-company-ci.png"
+          width="280"
+          height="140"
+          alt="주식회사 행복도담 인베스트 CI"
+        />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </header>
+            <nav class="site-nav" aria-label="주요 메뉴">
+      <a href="index.html">메인</a>
+      <a href="guide/index.html">가이드</a>
+      <a href="guide/usage.html">지표 사용</a>
+      <a href="guide/usage-trv.html">TRV</a>
+      <a href="guide/usage-mt5.html">MT5</a>
+      <a href="downloads/index.html">다운로드</a>
+      <a href="registration/index.html">가입·등록</a>
+      <a href="verify/index.html">본인인증</a>
+      <a href="billing/index.html">구독·결제</a>
+      <a href="events/index.html">이벤트</a>
+      <a href="membership/index.html">회원혜택</a>
+      <a href="reflection/index.html">실전후기</a>
+      <a href="contact/index.html">문의</a>
+      <a href="boards/index.html">모임터</a>
+      <a href="boards/index.html?board=event_promo_shoutout">추천·홍보</a>
+      <a href="legal/index.html">약관·정책</a>
+      <a href="admin/index.html">관리자</a>
+      <a href="integrations/index.html">연동</a>
+    </nav>
+    <div class="wrap">
+      <!-- 관리자가 저장한 HTML이 있으면 API에서 주입(없으면 숨김). 드래그 편집기 아님·마크업 직접 입력. -->
+      <div id="cms-home-slot" class="cms-home-slot" hidden></div>
+      <header>
+        <h1 class="page-title" data-i18n="indexTitle">Magic 지표 · 매직라인</h1>
+        <p class="lead" id="index-lead">
+          차트 위에서 흐름을 조금 더 읽기 쉽게 돕는 지표입니다. TradingView(TRV)와 MetaTrader 5를 함께 쓰는 분들을 위해, 가이드·이벤트·커뮤니티를 한곳에 모았습니다. 투자 권유나 수익 보장이 아니라,
+          <strong>판단을 돕는 참고 도구</strong>라는 점만 기억해 주세요.
+        </p>
+        <p class="small" style="margin-top: 0.65rem; color: var(--ci-brown-muted)">
+          가입 정책: <strong>이메일(아이디) + 휴대폰 SMS 6자리 코드 인증 완료</strong> 시에만 회원가입이 완료됩니다.
+          <strong>정규 플랜(regular_default)</strong>은 가입 단계에서 <strong>Google OTP</strong>를 추가로 확인합니다.
+          휴대폰 인증은 링크 클릭이 아니라 <strong>코드 입력 방식</strong>만 사용합니다.
+        </p>
+      </header>
+
+      <figure class="ml-welcome-poster" aria-label="개인 투자자를 환영하는 포스터 일러스트">
+        <img
+          class="ml-welcome-poster__img"
+          src="assets/magic-welcome-poster.png"
+          width="1024"
+          height="558"
+          loading="lazy"
+          decoding="async"
+          alt="포스터: 부자는 NO, 헐벗은 개미는 WELCOME. 개미가 KOSPI·나스닥·환율 줄 위를 걷고 해가 뜨는 일러스트"
+        />
+      </figure>
+
+      <section class="ml-manifesto" id="magicline-message" aria-labelledby="mlm-h2">
+        <div class="ml-manifesto__head">
+          <h2 class="ml-manifesto__title" id="mlm-h2">매직라인을 쓰시기 전에</h2>
+          <p class="ml-manifesto__lead">
+            완벽한 지표는 없다고 믿습니다. 다만 차트 앞에 서실 때 조금 덜 헷갈리도록, <strong>선 하나의 동료</strong>가 되어 주고 싶었어요.
+            <strong>손절·자금 관리·스스로와의 약속</strong>이 함께할 때 이 도구도 오래 의지할 수 있습니다.
+          </p>
+        </div>
+
+        <figure class="ml-chart-figure">
+          <img
+            class="ml-chart-figure__img"
+            src="assets/magicline-chart-nq-example.png"
+            width="970"
+            height="1024"
+            loading="lazy"
+            decoding="async"
+            alt="나스닥 100 E-mini 선물 차트 예시. 매수·매도·청산 표시가 있는 다크 테마 화면"
+          />
+          <div class="ml-chart-signal-card" aria-label="MagicTrading 데이터 요약">
+            <span class="ml-chart-signal-card__label">LIVE STRUCTURE</span>
+            <strong>Magic R · Flow Scan</strong>
+            <small>Risk first · Signal second</small>
+          </div>
+          <figcaption class="ml-chart-figure__cap">
+            활용 예시(나스닥 100 선물 · 5분). 실제 신호는 <strong>종목·틱·R값</strong>마다 달라집니다.
+          </figcaption>
+        </figure>
+
+        <div class="ml-manifesto__body">
+          <h3 class="ml-subh">이런 분께 읽히면 좋겠어요</h3>
+          <p>
+            이미 여유 있게 잘하고 계시다면, 굳이 여기까지 읽지 않으셔도 괜찮아요. 마음이 바쁘거나, 같은 자리를 맴돌 때 잠깐 쉬어 가듯 읽어 주세요.
+            오늘은 규칙을 지키기 어렵다면, 그것도 괜찮습니다. 다음 번으로 넘기셔도 됩니다.
+          </p>
+
+          <h3 class="ml-subh">세 가지만 기억해 주세요</h3>
+          <ul class="ml-simple-list">
+            <li>욕심은 조금 내려놓기 — 천천히 해도 됩니다.</li>
+            <li>정한 룰은 오늘만큼은 지키기 — <strong>손절</strong>도 그 안에 두면 좋아요.</li>
+            <li>시간은 당신 편이 될 수도 있어요 — 인내가 곧 방패입니다.</li>
+          </ul>
+
+          <h3 class="ml-subh">매직라인은 이런 마음으로 만들었어요</h3>
+          <p>
+            오랜 실전과 수정을 거듭한 <strong>보조 지표</strong>입니다. 안전마진, 평균으로의 회귀, 가격이 머무는 구간을 읽는 생각을 염두에 두었어요.
+            가격에 맞춰 숨 쉬듯 움직이며, <strong>R값</strong>으로 간격을 조절합니다. <strong>틱 차트</strong>와 <strong>선물·옵션</strong>처럼 양방향 매매를 상정했습니다.
+            한 방을 약속하기보다, 반복 가능한 판단 기준을 차트 위에 남기는 방향으로 만들었습니다.
+          </p>
+          <div class="ml-principles" aria-label="MagicTrading 투자 원칙">
+            <article class="ml-principle-card">
+              <span>Margin of Safety</span>
+              <strong>안전마진</strong>
+              <p>무리한 확신보다 손실 폭을 먼저 줄입니다.</p>
+            </article>
+            <article class="ml-principle-card">
+              <span>Mean Reversion</span>
+              <strong>평균회귀</strong>
+              <p>과열과 이탈 뒤 가격이 돌아오는 힘을 봅니다.</p>
+            </article>
+            <article class="ml-principle-card">
+              <span>Reference Shift</span>
+              <strong>준거점 이동</strong>
+              <p>시장이 새 기준선을 만드는 순간을 추적합니다.</p>
+            </article>
+          </div>
+          <p class="ml-soft-note">
+            “그냥 밴드 아닌가요?”라고 하시면 — 선만 덧붙인 그림이 전부는 아니에요. 진입과 청산을 생각할 때 <strong>흐름을 한눈에</strong> 두기 위한 쪽에 가깝습니다. 마지막 선택은 언제나 본인 손안에 있습니다.
+          </p>
+        </div>
+
+        <details class="ml-details">
+          <summary>조금 더 읽기 · 제작자의 말과 책</summary>
+          <div class="ml-details__body">
+            <p>
+              1990년대 국내 시장을 거치며 저도 여러 번 넘어졌습니다. 지표만으로는 부족했고, <strong>마음·자금·손절</strong>이 같이 걸어와야 한다는 걸 천천히 배웠어요. 시장은 매일 새롭고, 완벽한 답은 없습니다.
+            </p>
+            <p>마음 다잡기에 도움이 된 책들이에요. (번역 제목은 출판사마다 달라질 수 있어요.)</p>
+            <ul class="ml-details__books">
+              <li>벤저민 그레이엄 — 『지적 투자자』</li>
+              <li>안드레 코스톨라니 — 『증권시장의 심리』 등</li>
+              <li>대니얼 카너먼 — 『생각에 관한 생각』</li>
+              <li>마크 더글라스 — 『트레이딩 인 더 존』</li>
+            </ul>
+            <p>
+              결제·회원은 <a href="billing/index.html">구독·결제</a>, 편한 연락은 <a href="contact/index.html">문의</a>나
+              <a href="mailto:happyinvest@happyinvest.com">happyinvest@happyinvest.com</a>으로 주세요.
+            </p>
+          </div>
+        </details>
+
+        <p class="ml-footnote">
+          교육·참고용 글이에요. 수익을 약속하지 않으며, 레버리지 상품은 손실이 클 수 있습니다.
+        </p>
+      </section>
+
+      <section class="home-map home-map--boards" aria-labelledby="home-boards-title">
+        <h2 id="home-boards-title" class="home-map__title">모임터 구역 바로가기</h2>
+        <p class="home-map__lead">
+          구역마다 읽기·쓰기 권한이 다릅니다. 모임터 상단에서 이메일·게시판 권한을 맞춘 뒤 이용해 주세요.
+        </p>
+        <nav class="main-hub main-hub--dense" aria-label="모임터 게시판 구역">
+          <a href="boards/index.html">전체 <small>모든 글·검색</small></a>
+          <a href="boards/index.html?board=quickview">한눈에 보기 <small>요약·스냅샷</small></a>
+          <a href="boards/index.html?board=announcement">공지 <small>운영 알림</small></a>
+          <a href="boards/index.html?board=qa">질문과 답변 <small>Q&amp;A</small></a>
+          <a href="boards/index.html?board=general">자유 이야기 <small>팁·잡담</small></a>
+          <a href="boards/index.html?board=beta">베타 소식 <small>시험·피드백</small></a>
+          <a href="boards/index.html?board=event">이벤트 <small>프로모션</small></a>
+          <a href="boards/index.html?board=membership">회원 혜택 <small>플랜·혜택</small></a>
+          <a href="boards/index.html?board=reflection">실전 이야기 <small>후기·사용 기록</small></a>
+          <a href="boards/index.html?board=event_promo_shoutout">책구매·추천·홍보 인증 <small>링크·캡처</small></a>
+        </nav>
+      </section>
+
+      <section class="home-map" aria-labelledby="home-pages-title">
+        <h2 id="home-pages-title" class="home-map__title">주요 페이지</h2>
+        <nav class="main-hub main-hub--dense" aria-label="사이트 주요 메뉴">
+          <a href="index.html">메인 <small>지금 페이지</small></a>
+          <a href="guide/index.html">가이드 <small>TV · MT5 설치</small></a>
+          <a href="guide/usage.html">지표 사용 <small>읽는 법 · TRV/MT5</small></a>
+          <a href="guide/usage-trv.html">TRV 사용 <small>차트·알림</small></a>
+          <a href="guide/usage-mt5.html">MT5 사용 <small>설치·틱/봉</small></a>
+          <a href="registration/index.html">가입·등록 <small>회원 계정</small></a>
+          <a href="verify/index.html">본인 인증 <small>계정 보호</small></a>
+          <a href="billing/index.html">구독·결제 <small>연동 준비</small></a>
+          <a href="events/index.html">이벤트 <small>체험·요금</small></a>
+          <a href="membership/index.html">회원 혜택 <small>추천 쿠폰</small></a>
+          <a href="reflection/index.html">실전 후기 <small>사용 사례</small></a>
+          <a href="contact/index.html">문의 <small>1:1 · 버그</small></a>
+          <a href="boards/index.html">모임터 홈 <small>전체 구역</small></a>
+          <a href="legal/index.html">약관·정책 <small>이용·환불·개인정보</small></a>
+          <a href="integrations/index.html">연동 <small>웹훅·봇 개요</small></a>
+          <a href="admin/index.html">관리자 <small>운영 보드</small></a>
+        </nav>
+      </section>
+
+      <main>
+        <section id="quick-view" aria-labelledby="qv-heading">
+          <h2 id="qv-heading">퀵 뷰</h2>
+          <p>
+            <strong>매직라인(Magic Line)</strong>은 캔들·추세를 한눈에 정리해 주는 보조 지표입니다. 급한 매매를 부추기기보다, <em>잠깐 멈춰서 볼 수 있는 선</em>을 그어 드리는 쪽에 가깝습니다.
+          </p>
+          <ul class="notice-list">
+            <li>지원 환경: TRV(Pine) · MetaTrader 5(컴파일된 <code>.ex5</code> 배포)</li>
+            <li>지표·MT5 패키지의 <strong>고객용 접근권·운영 조건</strong>은 <a href="downloads/index.html#dl-mt5-title">다운로드</a>에 표로 정리했습니다. <strong>캔들/봉</strong>용과 <a href="downloads/index.html#dl-mt5-tick">틱(Tick) 차트</a>용·기간형 쿠폰 접근은 구역을 나눴습니다. (내부 ID는 표기하지 않습니다.)</li>
+            <li>라이선스: <strong>정규</strong>는 <strong>단일 상품</strong>을 <strong>시장 제한</strong>과 <strong>전 시장(언리미티드)</strong> 둘로만 나눕니다(가격·세부는 <a href="legal/terms-magictrading-regular.html">정규 약관</a>·상담). 이벤트·무료체험은 별 약관입니다.</li>
+            <li>로그인 후 MT5 계좌·MQL5·TRV ID를 연결하면, 라이선스·알림 연동에 쓸 수 있습니다.</li>
+          </ul>
+        </section>
+
+        <section class="magictrading-solution" aria-labelledby="magictrading-title">
+          <div class="magictrading-solution__copy">
+            <span class="magictrading-solution__label">Membership Only</span>
+            <h2 id="magictrading-title">MagicTrading Solution</h2>
+            <p>
+              흔들림이 큰 구간에서 추세·밴드·R값을 함께 보며, 진입보다 먼저 리스크를 확인하도록 설계한 MagicTrading 전용 솔루션입니다.
+            </p>
+          </div>
+          <a class="magictrading-solution__cta" href="contact/index.html">라이선스 상담</a>
+        </section>
+
+        <section class="market-license market-license--all-plans" id="plan-prices" aria-labelledby="plan-prices-title">
+          <div class="market-license__head">
+            <span class="market-license__eyebrow">MagicTrading — 개인(정규) · 조직(비즈니스) 대표가 (USD)</span>
+            <h2 id="plan-prices-title">플랜별 대표가: 정규(Limited / Unlimited)와 비즈니스(20·50 ID) 한눈에</h2>
+            <p>
+              <strong>일반(개인) 정규</strong>는 <strong>Limited $4,999/월</strong>·<strong>Unlimited $19,999/월</strong> 두 가지(티어·등급 없음)입니다. 랜딩
+              <strong>월 $4,999~$29,999</strong>는 같은 정규 라인에서 <strong>상담·부가(지원/옵션/엔터)</strong>로 상한이 열릴 수 있음을 뜻합니다.
+              <strong>비즈(조직)</strong>는 <strong>ID(슬롯) 1개당 $5,000/월</strong>×좌석 수(월 합계)에 <strong>20% 할인</strong>을 적용한
+              <strong>20% 할인가</strong>로 안내합니다(부가·세·환율·최종 조건은 <a href="contact/index.html">상담</a>·계약 우선). 이벤트·<a href="legal/terms-magictrading-free-trial.html">무료체험</a>·
+              <a href="events/index.html">이벤트 요금</a>과 섞이면 &ldquo;지금 쓰는 가격&rdquo;이 다르며, 세부는 <a href="legal/plan-terms-nonrefund.html">약관</a>을 함께 봐 주세요.
+            </p>
+          </div>
+
+          <div class="market-license__chips" aria-label="선택 가능한 시장(정규 쪽 적용 범위 예시)">
+            <span>Stocks</span>
+            <span>Funds</span>
+            <span>Futures</span>
+            <span>Forex</span>
+            <span>Crypto</span>
+            <span>Indices</span>
+            <span>Bonds</span>
+            <span>Economy</span>
+            <span>Options</span>
+          </div>
+
+          <div class="market-license__grid market-license__grid--four" aria-label="정규·비즈니스 월 대표가">
+            <article class="market-license-card">
+              <p class="market-license-card__kicker">개인 정규 — 단일(제한) 시장</p>
+              <h3>Limited</h3>
+              <p class="market-license-card__price">$4,999 <span class="plan-price-suffix">/ 월 (USD)</span></p>
+              <p>미리 정한 <strong>한 시장(또는 제한 시장 묶음)</strong>에만 지표·접근권이 적용됩니다. (세부·상담·계약)</p>
+            </article>
+            <article class="market-license-card market-license-card--featured">
+              <p class="market-license-card__kicker">개인 정규 — 전 시장</p>
+              <h3>Unlimited</h3>
+              <p class="market-license-card__price">$19,999 <span class="plan-price-suffix">/ 월 (USD)</span></p>
+              <p>지표·MagicTrading <strong>정규</strong>에서 취급하는 <strong>전 시장(언리미티드)</strong> 적용입니다. (세부·상담·계약)</p>
+            </article>
+            <article class="market-license-card market-license-card--business">
+              <p class="market-license-card__kicker">비즈니스 스탠다드 (조직)</p>
+              <h3>20 ID</h3>
+              <p class="market-license-card__price">$5,000 × 20 = $100,000 <span class="business-price-sub">(월 합계·정가)</span></p>
+              <p class="market-license-card__discount">
+                <strong>20% 할인가: $80,000</strong> <span class="business-price-per">/ 월 (USD)</span>
+              </p>
+              <p>슬롯 <strong>20개</strong>·안내용 예시 금액입니다.</p>
+            </article>
+            <article class="market-license-card market-license-card--business">
+              <p class="market-license-card__kicker">비즈니스 엔터프라이즈 (조직)</p>
+              <h3>50 ID</h3>
+              <p class="market-license-card__price">$5,000 × 50 = $250,000 <span class="business-price-sub">(월 합계·정가)</span></p>
+              <p class="market-license-card__discount">
+                <strong>20% 할인가: $200,000</strong> <span class="business-price-per">/ 월 (USD)</span>
+              </p>
+              <p>슬롯 <strong>50개</strong>·안내용 예시 금액입니다.</p>
+            </article>
+          </div>
+
+          <p class="market-license__note">
+            <strong>납부:</strong> 1개월(1회 청구)을 넘는 <strong>연·분기·다월 일시 선납</strong>이나 &ldquo;년회원&rdquo; 형태는 <strong>지원하지 않고</strong>,
+            <strong>월 1회 납부</strong>만 합니다(개인·조직 <strong>자금·도산</strong> 등에 <strong>배려</strong> — §<a href="legal/terms-magictrading-regular.html">정규 특약</a>·<a href="billing/index.html#monthly-billing">구독</a>).
+            Multi·VIP·배수 티어는 <strong>개인 정규</strong>에서 운용하지 않습니다. <strong>USD 29,999</strong> 전후는 정규 2가지 밖(상담·부가/조직) 상한 <strong>예</strong>로만 이해하시면 됩니다.
+            비즈니스 쪽 비할인 합계는 <strong>$100,000</strong>·<strong>$250,000</strong>/월(USD)이며, 표시한 금액은 <strong>20%를 뺀 할인가</strong>입니다. 공유·재판매 금지, TRV/MT5·
+            <a href="legal/terms-magictrading-regular.html">정규 약관</a>·<a href="legal/plan-terms-nonrefund.html#sec-business">총괄(엔터프라이즈·조직)</a>·<strong>MT5 우선</strong> 식별 등에 따릅니다.
+          </p>
+        </section>
+
+        <section id="announcement" aria-label="공지">
+          <p class="small" style="margin-bottom: 0.75rem; color: var(--ci-brown-muted)">
+            서비스 공지·업데이트는 아래 모임터에 올립니다. 중요한 소식은 여기서 먼저 확인해 주세요.
+          </p>
+          <div
+            data-magic-board
+            data-category="announcement"
+            data-title="공지"
+          ></div>
+        </section>
+
+        <section id="discussion" aria-label="General Discussion">
+          <p class="small" style="margin-bottom: 0.75rem; color: var(--ci-brown-muted)">
+            자유로운 의견·팁을 나누는 공간입니다. 모임터 상단에서 이메일·게시판 권한을 맞춰 주세요.
+          </p>
+          <div
+            data-magic-board
+            data-category="general"
+            data-title="자유 이야기"
+          ></div>
+        </section>
+
+        <section id="beta" aria-label="Beta Tester&apos;s Board">
+          <div
+            data-magic-board
+            data-category="beta"
+            data-title="베타 소식"
+          ></div>
+        </section>
+
+        <section class="home-qa-bottom" id="qa" aria-labelledby="qa-heading">
+          <h2 id="qa-heading" class="home-qa-bottom__h2">Q&amp;A</h2>
+          <p class="home-qa-bottom__intro">
+            자주 묻는 질문을 짧게 모아 두었습니다(누구나 읽기). <a href="boards/index.html">모임터 · 질문과 답변</a> 탭은
+            <a href="legal/access-matrix.html">무료 회원 이상</a>만 읽고 쓸 수 있습니다.
+          </p>
+
+          <p class="home-qa-bottom__punch">
+            말(호가)은 속일 수 있어도, 발자국(체결)은 못 속인다.
+          </p>
+          <ul class="home-qa-bottom__pitches" aria-label="틱 차트를 강조하는 한 줄들">
+            <li>시계로 보는 차트(분봉)보다, 발자국으로 보는 차트(틱)가 진짜 힘을 보여준다.</li>
+            <li>틱차트는 시간의 그림이 아니라, 돈이 움직인 흔적이다.</li>
+          </ul>
+
+          <details class="home-qa-bottom__featured" open>
+            <summary class="home-qa-bottom__q">이거 그냥 볼린저밴드 / 엔벨로프 아닌가요?</summary>
+            <div class="home-qa-bottom__a">
+              <p>
+                아닙니다. 볼밴·엔벨이 &lsquo;구간&rsquo;을 보여 주는 도구라면, 매직라인은 &lsquo;청산 기준&rsquo;을 주는 실행 도구에 가깝습니다. 매직라인의 핵심은
+                극단 진입 뒤 회귀 구간을 수확하고, 기준선 근방에서 탐욕을 끊는 데 있습니다.
+              </p>
+            </div>
+          </details>
+
+          <ul class="qa-list home-qa-bottom__list">
+            <li><strong>Q.</strong> 체험·프로모션이 있나요? → <a href="events/index.html">이벤트</a> (TRV·MT5 조건이 다릅니다)</li>
+            <li>
+              <strong>Q.</strong> 지표를 어떻게 쓰나요? → <a href="guide/usage.html">지표 사용(허브)</a> ·
+              <a href="guide/usage-trv.html">TRV 상세</a> · <a href="guide/usage-mt5.html">MT5 상세</a>
+            </li>
+            <li><strong>Q.</strong> TRV에 어떻게 붙이나요? → <a href="guide/usage-trv.html">지표 사용 · TRV</a> / <a href="guide/index.html#tv">가이드 · 설치</a></li>
+            <li><strong>Q.</strong> MT5에는 파일을 어디에 넣나요? → <a href="guide/usage-mt5.html">지표 사용 · MT5</a> / <a href="guide/index.html#mt5">가이드 · 설치</a></li>
+            <li><strong>Q.</strong> 결제는 언제 되나요? → <a href="billing/index.html">구독·결제</a> (연동 준비 중일 수 있음)</li>
+          </ul>
+        </section>
+      </main>
+    </div>
+    <footer class="site-footer" role="contentinfo">
+      <div class="ci-wrap ci-wrap--footer">
+        <img class="ci-logo-img" src="assets/haengbokdam-company-ci.png" width="220" height="110" alt="" />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </footer>
+    <script src="assets/magic-auth.js"></script>
+    <script src="assets/site-ux.js"></script>
+    <script src="assets/board-embed.js"></script>
+    <script>
+      (function () {
+        var m = document.querySelector('meta[name="api-base"]');
+        var API = m && m.content ? String(m.content).replace(/\/$/, "") : "";
+        if (!API) return;
+        fetch(API + "/api/site/page-content?path=" + encodeURIComponent("index.html"))
+          .then(function (r) {
+            return r.ok ? r.json() : null;
+          })
+          .then(function (d) {
+            if (!d || !d.custom_html || !String(d.custom_html).trim()) return;
+            var el = document.getElementById("cms-home-slot");
+            if (!el) return;
+            el.innerHTML = d.custom_html;
+            el.removeAttribute("hidden");
+          })
+          .catch(function () {});
+      })();
+    </script>
+  </body>
+</html>

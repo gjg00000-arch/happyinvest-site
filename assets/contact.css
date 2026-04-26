@@ -1,0 +1,88 @@
+/* 문의 · 버그 */
+.contact-lead-note {
+  font-size: 0.88rem;
+  color: #5c4d3f;
+  margin-bottom: 1rem;
+}
+
+.contact-form {
+  max-width: 560px;
+}
+
+.contact-hint {
+  font-size: 0.78rem;
+  color: #8a7b6c;
+  margin: 0.25rem 0 0.5rem;
+}
+
+#bug-public-row {
+  display: none;
+}
+
+.contact-auto-box {
+  display: none;
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid #c5d4c0;
+  border-radius: 8px;
+  background: #f4faf4;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.contact-auto-box.is-visible {
+  display: block;
+}
+
+.contact-mail-warn {
+  font-size: 0.78rem;
+  color: #a06030;
+  margin-top: 0.5rem;
+}
+
+.contact-bugs-section {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5ddd3;
+}
+
+.contact-bugs-section h2 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.contact-bug-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.contact-bug-item {
+  padding: 0.65rem 0.75rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #e5ddd3;
+  border-radius: 8px;
+  background: #fffefb;
+  font-size: 0.82rem;
+}
+
+.contact-bug-item strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: #2a2218;
+}
+
+.contact-bug-meta {
+  font-size: 0.72rem;
+  color: #9a8b7a;
+  margin-bottom: 0.35rem;
+}
+
+.contact-bug-reply {
+  font-size: 0.78rem;
+  color: #2f6f4f;
+  margin-top: 0.35rem;
+  padding-top: 0.35rem;
+  border-top: 1px dashed #e0ddd6;
+}

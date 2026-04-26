@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>지표 사용 — MetaTrader 5 — Magic 지표</title>
+    <meta
+      name="description"
+      content="Magic 지표 — MetaTrader 5에 .ex5를 설치하고, 캔들·틱에 맞게 쓰고, 계좌+서버 연동을 맞추는 절차"
+    />
+    <link rel="stylesheet" href="../assets/common.css" />
+    <link rel="stylesheet" href="../assets/site-ux.css" />
+    <link rel="stylesheet" href="../assets/guide-docs.css" />
+  </head>
+  <body>
+    <header class="site-header" role="banner">
+      <div class="ci-wrap">
+        <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="280" height="140" alt="주식회사 행복도담 인베스트 CI" />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </header>
+    <nav class="site-nav" aria-label="주요 메뉴">
+      <a href="../index.html">메인</a>
+      <a href="index.html">가이드</a>
+      <a href="usage.html">지표 사용</a>
+      <a href="usage-trv.html">TRV</a>
+      <a href="usage-mt5.html" aria-current="page">MT5</a>
+      <a href="../downloads/index.html">다운로드</a>
+      <a href="../registration/index.html">가입·등록</a>
+      <a href="../verify/index.html">본인인증</a>
+      <a href="../billing/index.html">구독·결제</a>
+      <a href="../events/index.html">이벤트</a>
+      <a href="../membership/index.html">회원혜택</a>
+      <a href="../reflection/index.html">실전후기</a>
+      <a href="../contact/index.html">문의</a>
+      <a href="../boards/index.html">모임터</a>
+      <a href="../legal/index.html">약관·정책</a>
+      <a href="../admin/index.html">관리자</a>
+      <a href="../integrations/index.html">연동</a>
+    </nav>
+    <div class="wrap">
+      <header class="doc-hero">
+        <p class="doc-hero__eyebrow">MetaTrader 5</p>
+        <h1 class="doc-hero__title">지표 사용 — MT5</h1>
+        <p class="doc-hero__lead">
+          <code>.ex5</code> 를 터미널이 읽는 폴더에 넣고, <strong>캔들·봉</strong>용과 <strong>틱</strong>용 빌드를 섞지 않게 쓰는 것이 첫걸음입니다. TRV(브라우저)만
+          쓰시는 경우는 <a href="usage-trv.html">지표 사용 — TradingView</a>를 보세요.
+        </p>
+      </header>
+
+      <nav class="doc-toc" aria-label="목차">
+        <h2>목차</h2>
+        <ol>
+          <li><a href="#install">파일 설치</a></li>
+          <li><a href="#candle-tick">캔들용 vs 틱용</a></li>
+          <li><a href="#bind">라이선스(계좌+서버)</a></li>
+          <li><a href="#read">읽는 기본(공통)</a></li>
+        </ol>
+      </nav>
+
+      <article class="doc-section" id="install">
+        <h2>파일 설치</h2>
+        <ol class="doc-steps">
+          <li>브로커 제공 MT5를 설치합니다.</li>
+          <li>배포받은 <code>.ex5</code>를 <code>MQL5\Indicators</code> (또는 운영 안내 경로)에 둡니다. <strong>파일 → 데이터 폴더 열기</strong>로 이동할 수 있어요.</li>
+          <li>터미널을 재시작하거나 <strong>내비게이터</strong>를 새로고침한 뒤, <strong>사용자 지표</strong>에 나타나는지 확인합니다.</li>
+          <li>차트에 끌어다 놓거나 <strong>삽입 → 지표 → 사용자 지표</strong>에서 선택합니다.</li>
+        </ol>
+        <p class="small" style="margin-top: 0.6rem">
+          자세한 경로는 <a href="index.html#mt5">가이드 · MT5</a>, 제품 표는 <a href="../downloads/index.html">다운로드</a>입니다.
+        </p>
+      </article>
+
+      <article class="doc-section doc-section--soft" id="candle-tick">
+        <h2>캔들용 vs 틱용</h2>
+        <p>
+          다운로드 안내에 <strong>일반(캔들·봉)</strong>과 <strong>Tick</strong>이 나뉘어 있으면, <strong>틱 전용</strong>은 틱 차트/틱봇 환경에 맞게 써야
+          읽기가 흐트러지지 않습니다. M1·M5 등 <strong>봉 주기</strong>를 먼저 정한 뒤 지표를 겁니다.
+        </p>
+        <p class="small" style="color: var(--ci-brown-muted); margin: 0.5rem 0 0; margin-bottom: 0">
+          틱 차트용 빌드 구분: <a href="../downloads/index.html#dl-mt5-tick">다운로드 · Tick</a>과 모임터 공지를 함께 보세요.
+        </p>
+      </article>
+
+      <article class="doc-section" id="bind">
+        <h2>라이선스(계좌+서버)</h2>
+        <p>
+          운영 정책이 <strong>MT5 계좌 번호+서버 1조합</strong> 기준이라면, 회원·연동에 입력한 조합이 서버·라이선스와 맞아야 합니다. 변경·오류는
+          <a href="../integrations/index.html#mt5-binding">연동 — MT5</a>와 문의로 연결합니다. 브로커명만으로는 식별하지 않는 경우가 많습니다.
+        </p>
+      </article>
+
+      <article class="doc-section doc-section--soft" id="read">
+        <h2>읽는 기본(공통)</h2>
+        <p>지표는 <strong>수익을 보장하지 않는 참고선</strong>으로 쓰는 것이 전제입니다.</p>
+        <ol class="doc-steps">
+          <li>한 화면에 지표·오브젝트를 과하게 쌓지 않고, <strong>한두 심볼·한 타임프레임</strong>부터 익혀 갑니다.</li>
+          <li>뉴스·갭·유동성이 무너지는 구간은 <strong>체크리스트</strong>를 따로 둡니다.</li>
+        </ol>
+        <p class="small" style="margin: 0.6rem 0 0; color: var(--ci-brown-muted)">
+          메인의 안내: <a href="../index.html#magicline-message">매직라인을 쓰시기 전에</a>
+        </p>
+      </article>
+
+      <div class="terms-box" style="margin-top: 1.5rem">
+        <strong>다음</strong><br />
+        <a href="usage-trv.html">TRV 사용 안내</a> ·
+        <a href="usage.html">지표 사용(허브)</a> ·
+        <a href="../downloads/index.html">다운로드</a>
+      </div>
+    </div>
+    <footer class="site-footer" role="contentinfo">
+      <div class="ci-wrap ci-wrap--footer">
+        <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="220" height="110" alt="" />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </footer>
+    <script src="../assets/site-ux.js"></script>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+magic-indicator-site/
+├── index.html                 메인 (퀵뷰·공지·Q&A·자유·베타 섹션 자리)
+├── guide/index.html           사용자 가이드 · 문서
+├── guide/usage.html           지표 사용 허브(TRV/MT5 선택)
+├── guide/usage-trv.html      지표 사용 — TradingView
+├── guide/usage-mt5.html      지표 사용 — MetaTrader 5
+├── downloads/index.html       지표 다운로드 (TradingView · MT5)
+├── registration/index.html    가입 · 이벤트 참여 게시판
+├── telegram-chat-id/index.html  텔레그램 Chat ID 확인(가입 연동용 단계 안내)
+├── billing/index.html         구독 · 결제 (Whop/Stripe 등 연동 예정)
+├── events/index.html          이벤트 보드
+├── membership/index.html      회원 전용 혜택 (추천 마일스톤)
+├── reflection/index.html      실전 후기 · 사용 기록
+├── contact/index.html         문의 · 버그 제보
+├── admin/index.html           관리자 (회원·매출·이탈 등)
+└── integrations/index.html    트레이딩뷰 · MT5 · 웹훅 · 텔레그램 연동 개요

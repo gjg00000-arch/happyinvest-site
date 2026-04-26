@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Magic 지표 — 본인 인증</title>
+    <link rel="stylesheet" href="../assets/common.css" />
+    <link rel="stylesheet" href="../assets/site-ux.css" />
+  </head>
+  <body>
+    <header class="site-header" role="banner">
+      <div class="ci-wrap">
+        <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="280" height="140" alt="주식회사 행복도담 인베스트 CI" />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </header>
+        <nav class="site-nav" aria-label="주요 메뉴">
+      <a href="../index.html">메인</a>
+      <a href="../guide/index.html">가이드</a>
+      <a href="../downloads/index.html">다운로드</a>
+      <a href="../registration/index.html">가입·등록</a>
+      <a href="../verify/index.html">본인인증</a>
+      <a href="../billing/index.html">구독·결제</a>
+      <a href="../events/index.html">이벤트</a>
+      <a href="../membership/index.html">회원혜택</a>
+      <a href="../reflection/index.html">실전후기</a>
+      <a href="../contact/index.html">문의</a>
+      <a href="../boards/index.html">모임터</a>
+      <a href="../legal/index.html">약관·정책</a>
+      <a href="../admin/index.html">관리자</a>
+      <a href="../integrations/index.html">연동</a>
+    </nav>
+    <div class="wrap">
+      <ol class="flow-steps" aria-label="가입 절차">
+        <li class="is-done"><span>1</span> 가입</li>
+        <li class="is-current"><span>2</span> 본인인증</li>
+        <li><span>3</span> 결제</li>
+      </ol>
+      <h1 class="page-title">보안 · 본인 인증</h1>
+      <p class="lead">
+        스팸·다중 계정을 줄이고, 비밀번호 찾기 같은 중요한 연락을 드리기 위해 휴대폰·텔레그램 등으로 본인을 확인하는 단계를 둘 수 있습니다. 아래는 화면 예시이며, 실제 문자·봇 연동은 준비가 되면 켜집니다.
+      </p>
+
+      <div class="verify-shell">
+        <div class="mock-tabs" aria-hidden="true">
+          <span>Main</span>
+          <span>Contacts</span>
+          <span>Privacy</span>
+          <span class="is-active">Security</span>
+          <span>Notifications</span>
+        </div>
+
+        <p class="verify-msg">
+          프로필 관련 중요 정보를 변경합니다. 보안을 위해 인증 코드를 전송합니다.<br />
+          등록된 번호: <code>+82 10****6145</code> (예시)
+        </p>
+
+        <p class="dummy small">수신 방법: SMS(국내 발신번호 사전 등록 필요) 또는 텔레그램 봇(비용 절감용으로 우선 검토).</p>
+
+        <div class="radio-group" role="radiogroup" aria-label="인증 코드 수신 방법">
+          <label class="radio-row">
+            <input type="radio" name="deliver" value="sms" />
+            <span>문자 메시지 (SMS)</span>
+          </label>
+          <label class="radio-row">
+            <input type="radio" name="deliver" value="tg" checked />
+            <span>Telegram Bot</span>
+          </label>
+        </div>
+
+        <div class="alert-banner" role="status">Code has been successfully sent to you.</div>
+
+        <div class="code-row">
+          <input type="text" inputmode="numeric" maxlength="6" placeholder="6자리 코드" aria-label="인증 코드" disabled />
+          <button type="button" class="btn" disabled>Confirm</button>
+          <button type="button" class="btn btn-secondary" disabled>Cancel</button>
+        </div>
+        <p class="resend">Resend code in 61 sec. (목업)</p>
+      </div>
+
+      <section style="margin-top: 2rem">
+        <h2 class="page-title" style="font-size: 1.1rem">구현 시 참고 (기획안)</h2>
+        <ul class="notice-list dummy small">
+          <li>코드 6자리, 재전송 쿨다운 60초, 일일 요청·시도 횟수 제한</li>
+          <li>DB: <code>phone_e164</code>, <code>phone_verified_at</code>, 실패 카운트 등</li>
+          <li>스팸 방지·기기/IP 제한은 서버 정책으로 추가</li>
+        </ul>
+      </section>
+    </div>
+    <footer class="site-footer" role="contentinfo">
+      <div class="ci-wrap ci-wrap--footer">
+        <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="220" height="110" alt="" />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </footer>
+    <script src="../assets/site-ux.js"></script>
+  </body>
+</html>

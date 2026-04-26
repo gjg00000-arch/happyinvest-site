@@ -1,0 +1,341 @@
+/* downloads/index.html — TradingView 상단 · MT5 하단 */
+
+.dl-page-lead {
+  margin-bottom: 1.5rem;
+  color: var(--ci-brown-muted);
+}
+
+/* 상단: 정규·비즈니스 통합 대표가 */
+.dl-all-prices {
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.1rem 1.15rem;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #fffef9 0%, #f4faf6 100%);
+  border: 1px solid rgba(47, 111, 79, 0.18);
+  box-shadow: 0 4px 16px rgba(47, 111, 79, 0.06);
+}
+
+.dl-all-prices__title {
+  margin: 0 0 0.4rem;
+  font-size: 1.1rem;
+  color: var(--ci-brown);
+}
+
+.dl-all-prices__lead {
+  margin: 0 0 0.75rem;
+  font-size: 0.88rem;
+  color: var(--ci-brown-muted);
+  line-height: 1.55;
+}
+
+.dl-all-prices__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.dl-all-prices__table th,
+.dl-all-prices__table td {
+  border: 1px solid rgba(74, 53, 40, 0.15);
+  padding: 0.5rem 0.55rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.dl-all-prices__table thead th {
+  background: rgba(47, 111, 79, 0.08);
+  color: var(--ci-brown);
+  font-weight: 800;
+}
+
+.dl-all-prices__table tbody td:nth-child(3) {
+  min-width: 12rem;
+}
+
+/* 목업 느낌: 좌측 라벨(피치) + 우측 플랫폼 헤더 */
+.dl-mockup {
+  display: grid;
+  grid-template-columns: minmax(0, 160px) minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  grid-template-areas:
+    "label tv"
+    "empty mt5";
+  gap: 0;
+  border: 2px solid #2a5f9e;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  max-width: 520px;
+  box-shadow: 0 6px 20px rgba(42, 95, 158, 0.12);
+}
+
+.dl-mockup__label {
+  grid-area: label;
+  background: linear-gradient(180deg, #ffe8d4 0%, #ffd9bc 100%);
+  color: #1a5cb3;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1rem 0.75rem;
+  border-right: 2px solid #2a5f9e;
+}
+
+.dl-mockup__cell {
+  padding: 0.75rem 1rem;
+  background: #fff;
+  color: #1a5cb3;
+  font-weight: 600;
+}
+
+.dl-mockup__cell--tv {
+  grid-area: tv;
+  border-bottom: 1px solid rgba(42, 95, 158, 0.25);
+}
+
+.dl-mockup__cell--empty {
+  grid-area: empty;
+  background: #fafafa;
+  min-height: 2.25rem;
+  border-right: 1px solid rgba(42, 95, 158, 0.2);
+}
+
+.dl-mockup__cell--mt5 {
+  grid-area: mt5;
+}
+
+@media (max-width: 480px) {
+  .dl-mockup {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: "label" "tv" "empty" "mt5";
+  }
+  .dl-mockup__label {
+    border-right: none;
+    border-bottom: 2px solid #2a5f9e;
+  }
+  .dl-mockup__cell--tv {
+    border-bottom: 1px solid rgba(42, 95, 158, 0.25);
+  }
+  .dl-mockup__cell--empty {
+    border-right: none;
+    min-height: 1.25rem;
+  }
+}
+
+.dl-platform {
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid rgba(74, 53, 40, 0.12);
+  box-shadow: 0 4px 18px rgba(47, 111, 79, 0.07);
+  padding: 1.15rem 1.2rem 1.35rem;
+  margin-bottom: 1.35rem;
+}
+
+.dl-platform__title {
+  margin: 0 0 0.35rem;
+  font-size: 1.2rem;
+  color: #1a5cb3;
+  letter-spacing: -0.02em;
+}
+
+.dl-platform__sub {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  color: var(--ci-brown-muted);
+}
+
+.dl-plan {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed rgba(74, 53, 40, 0.15);
+}
+
+.dl-plan:first-of-type {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+.dl-plan__name {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  color: var(--ci-brown);
+}
+
+.dl-plan__price {
+  margin: 0 0 0.65rem;
+  font-size: 0.88rem;
+  color: var(--ci-brown-muted);
+}
+
+.dl-matrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  margin-bottom: 0.75rem;
+}
+
+.dl-matrix th,
+.dl-matrix td {
+  border: 1px solid rgba(74, 53, 40, 0.12);
+  padding: 0.35rem 0.45rem;
+  text-align: center;
+}
+
+.dl-matrix th {
+  background: var(--ci-green-soft);
+  color: var(--ci-brown);
+  font-weight: 600;
+}
+
+.dl-matrix td:first-child {
+  text-align: left;
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: var(--ci-brown);
+}
+
+.dl-matrix .o {
+  color: var(--ci-green);
+  font-weight: 700;
+}
+
+.dl-matrix .x {
+  color: #999;
+}
+
+.dl-matrix tr:nth-child(2) td,
+.dl-matrix tr:nth-child(3) td,
+.dl-matrix tr:nth-child(4) td {
+  background: rgba(255, 248, 220, 0.45);
+}
+
+.dl-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dl-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(74, 53, 40, 0.08);
+}
+
+.dl-list li:last-child {
+  border-bottom: none;
+}
+
+.dl-list .dl-name {
+  flex: 1 1 12rem;
+  font-size: 0.9rem;
+  word-break: break-word;
+  color: var(--ci-brown);
+}
+
+.dl-eadtable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  margin-top: 0.35rem;
+  margin-bottom: 0.25rem;
+}
+
+.dl-eadtable th,
+.dl-eadtable td {
+  border: 1px solid rgba(74, 53, 40, 0.12);
+  padding: 0.45rem 0.5rem;
+  vertical-align: middle;
+}
+
+.dl-eadtable thead th {
+  background: var(--ci-green-soft);
+  color: var(--ci-brown);
+  font-weight: 600;
+  text-align: left;
+}
+
+.dl-eadtable thead th:nth-child(2) {
+  text-align: right;
+  width: 6rem;
+}
+
+.dl-eadtable thead th:nth-child(3) {
+  text-align: center;
+  width: 7.5rem;
+}
+
+.dl-eadtable tbody td:nth-child(2) {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.dl-eadtable tbody td:nth-child(3) {
+  text-align: center;
+}
+
+.dl-ead__hint {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--ci-brown-muted);
+  margin-top: 0.15rem;
+}
+
+.dl-eadh3 {
+  margin: 1.15rem 0 0.45rem;
+  font-size: 1.02rem;
+  color: #1a5cb3;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.dl-eadh3:first-of-type {
+  margin-top: 0.25rem;
+}
+
+.dl-ead__more {
+  margin: 0.9rem 0 0.15rem;
+  font-size: 0.86rem;
+  color: var(--ci-brown-muted);
+  line-height: 1.45;
+}
+
+.dl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid rgba(26, 92, 179, 0.35);
+  background: linear-gradient(180deg, #f0f7ff 0%, #e2eefc 100%);
+  color: #154a9e;
+  white-space: nowrap;
+}
+
+.dl-btn:hover {
+  border-color: #1a5cb3;
+  background: #dbeafe;
+}
+
+.dl-note {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  background: var(--ci-salmon-soft);
+  border: 1px solid rgba(199, 91, 74, 0.2);
+  font-size: 0.88rem;
+  color: var(--ci-brown);
+}

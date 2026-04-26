@@ -1,0 +1,1005 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="api-base" content="https://happyinvests.com" />
+    <title>Magic 지표 — 구독·결제</title>
+    <link rel="stylesheet" href="../assets/common.css" />
+    <link rel="stylesheet" href="../assets/site-ux.css" />
+  </head>
+  <body>
+    <header class="site-header" role="banner">
+      <div class="ci-wrap">
+        <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="280" height="140" alt="주식회사 행복도담 인베스트 CI" />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </header>
+            <nav class="site-nav" aria-label="주요 메뉴">
+      <a href="../index.html">메인</a>
+      <a href="../guide/index.html">가이드</a>
+      <a href="../downloads/index.html">다운로드</a>
+      <a href="../registration/index.html">가입·등록</a>
+      <a href="../verify/index.html">본인인증</a>
+      <a href="../billing/index.html">구독·결제</a>
+      <a href="../events/index.html">이벤트</a>
+      <a href="../membership/index.html">회원혜택</a>
+      <a href="../reflection/index.html">실전후기</a>
+      <a href="../contact/index.html">문의</a>
+      <a href="../boards/index.html">모임터</a>
+      <a href="../boards/index.html?board=event_promo_shoutout">추천·홍보</a>
+      <a href="../legal/index.html">약관·정책</a>
+      <a href="../admin/index.html">관리자</a>
+      <a href="../integrations/index.html">연동</a>
+    </nav>
+    <div class="wrap">
+      <ol class="flow-steps" aria-label="가입 절차">
+        <li class="is-done"><span>1</span> 가입</li>
+        <li class="is-done"><span>2</span> 본인인증</li>
+        <li class="is-current"><span>3</span> 결제</li>
+      </ol>
+      <h1 class="page-title">MagicTrading · 결제</h1>
+      <p class="lead">
+        MagicTrading은 단일 전략 상품입니다. Stripe 등 결제 수단은 <strong>신청·승인 절차</strong>가 끝나야 연동할 수 있습니다.
+        지금은 뼈대와 약관·고지를 먼저 정리합니다.
+      </p>
+      <div id="monthly-billing" class="nrf-box" style="border-left: 3px solid rgba(155, 228, 184, 0.55)">
+        <strong>월 납부만 — 1개월을 넘는 기간에 대한 일시(연·분기·다월) 선납·&ldquo;년회원&rdquo; 없음</strong>
+        <p class="en">We do not process payments for a charge period longer than one month. No annual-prepay or &ldquo;year membership&rdquo; product.</p>
+        <p style="margin: 0.5rem 0 0; font-size: 0.82rem; line-height: 1.55; color: #dfe3e6">
+          회사는 <strong>1개월(1회 청구)을 초과</strong>하는 구간에 대해 <strong>한 번에 선납·징수</strong>하는 결제(연 1회 일시·분기·다월
+          약정·&ldquo;년회원&rdquo; 등)를 <strong>지원·판매하지 않습니다</strong>. <strong>정규·비즈(조직)</strong> 모두, 원칙
+          <strong>월 1회 납부(월 정산)</strong>만 취급합니다. <strong>개인·법인(조직)</strong>이 <strong>유동성, 도산·정리, 자금·상대(연결) 리스크</strong>에
+          처할 수 있음을 감안한 <strong>배려</strong>이며, 상대에게 장기 일괄 납을 전가하지 않는 운영입니다. 프로모
+          <strong>쿠폰</strong>으로 <strong>이용(접근) 기간</strong>이 늘어나는 것(무료/할인)은 <strong>이 납부 정책</strong>과
+          <strong>별도</strong>로 안내됩니다(§<a href="../legal/terms-magictrading-regular.html" style="color: #8fd4ff">정규 특약</a>·
+          <a href="../legal/plan-terms-nonrefund.html" style="color: #8fd4ff">총괄</a>).
+        </p>
+      </div>
+
+      <div class="status-banner" role="status">
+        <strong>현재 상태</strong> — 결제 시스템 연동은 <strong>승인 대기 중</strong>입니다. 카드 입력창이 열리기 전까지는 이 페이지에서 결제되지 않습니다. 요금·체험 조건은 <a href="../events/index.html">이벤트·요금</a>을 참고해 주세요.
+      </div>
+
+      <div class="pay-grid">
+        <div class="pay-card">
+          <strong>Stripe</strong>
+          <span>카드·구독 빌링 (국제) — 웹훅으로 회원 기간 반영 예정</span>
+        </div>
+        <div class="pay-card">
+          <strong>Coinbase Commerce</strong>
+          <span>암호화폐 결제 — 일회성·정책 확정 후 선택</span>
+        </div>
+        <div class="pay-card">
+          <strong>크몽 등 국내 채널</strong>
+          <span>국내 사용자용 — 법·표현 검토 후 연동</span>
+        </div>
+      </div>
+
+      <div class="pay-cta-row">
+        <button type="button" class="fake-pay-btn" disabled aria-disabled="true">결제하기 (승인·연동 후 활성화)</button>
+      </div>
+
+      <section id="wire-transfer" class="pay-wire-section" aria-labelledby="wire-h2" style="margin-top: 1.15rem; padding: 0.9rem 1rem; border-radius: 12px; border: 1px solid rgba(74, 53, 40, 0.14); background: #fffef9">
+        <h2 id="wire-h2" style="font-size: 1.05rem; margin: 0 0 0.4rem; color: var(--ci-brown)">계좌이체·해외 송금(당사 수취)</h2>
+        <p class="small" style="margin: 0 0 0.55rem; color: var(--ci-brown-muted); line-height: 1.5">
+          카드·PG 외 <strong>은행 이체(원화) 또는 SWIFT(외화)</strong>로 납부(비즈니스·고액·별도 견적 등)할 때, 아래 <strong>KEB Hana
+          Bank(하나은행)</strong> 수취 정보를 씁니다. <strong>국내</strong>는 <strong>은행명(한글) + 계좌번호(통장)</strong>를 알려드리는 것으로
+          충분할 수 있고, <strong>해외</strong>는 SWIFT·영문 주소·지점 등을 함께 확인해 주세요. 수수료·환율은 은행·경로에 따릅니다. 예금주는
+          상담·인보이스의 법인명과 일치시켜 주세요(통상 <strong>주식회사 행복도담 인베스트</strong>).
+        </p>
+        <div style="overflow-x: auto" role="region" aria-label="KEB Hana Bank 수취">
+          <table class="data-table" style="font-size: 0.86rem; margin: 0.4rem 0 0.35rem">
+            <tbody>
+              <tr>
+                <th scope="row" style="width: 7.5rem">은행(한글)</th>
+                <td>하나은행 (KEB 하나은행)</td>
+              </tr>
+              <tr>
+                <th scope="row">계좌번호</th>
+                <td><code>444-910014-96138</code></td>
+              </tr>
+              <tr>
+                <th scope="row">Bank name</th>
+                <td>KEB Hana Bank</td>
+              </tr>
+              <tr>
+                <th scope="row">Branch</th>
+                <td>Singjungdong-yeok</td>
+              </tr>
+              <tr>
+                <th scope="row">SWIFT / BIC</th>
+                <td><code>KOEXKRSE</code></td>
+              </tr>
+              <tr>
+                <th scope="row">Bank address</th>
+                <td>284, Gilju-ro, Wonmi-gu, Bucheon-si, Gyeonggi-do, Republic of Korea</td>
+              </tr>
+              <tr>
+                <th scope="row">Bank telephone</th>
+                <td>032-341-1111</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="small" style="margin: 0.35rem 0 0; color: var(--ci-brown-muted)">
+          전문·세부(예: 원화/외화, 입금자 표기)는 <a href="../legal/refund.html#sec-company-bank">환불 정책(당사 입금·송금)</a>의 동일
+          표와 같이 쓰면 됩니다.
+        </p>
+      </section>
+
+      <section
+        id="recovery-checkout"
+        class="coupon-redeem-section"
+        aria-labelledby="recovery-h2"
+        style="display: none; margin-top: 1rem"
+      >
+        <h2 id="recovery-h2">2month recovery access 처리</h2>
+        <p class="lead" style="font-size: 0.95rem; margin-bottom: 0.6rem">
+          리커버리는 <strong>1달 이벤트 플랜 기가입자</strong>만 계정당 1회 신청할 수 있으며, 대상 게시글 확인 후 <strong>2개월 이용 쿠폰</strong>을 발급·반영합니다.
+          수익·원금 회복을 보장하지 않으며, 쿠폰은 환불불가이고 최초 교환 계정에 귀속되며 양도할 수 없습니다.
+        </p>
+        <p id="recovery-post-line" class="small" style="margin: 0 0 0.55rem; color: var(--ci-brown-muted)"></p>
+        <div class="coupon-redeem-row">
+          <input
+            type="text"
+            id="recovery-payment-ref"
+            class="coupon-redeem-input"
+            maxlength="120"
+            placeholder="운영 메모 (선택, 예: REC-20260422-001)"
+            autocomplete="off"
+          />
+          <button type="button" class="btn" id="recovery-complete-btn">2개월 리커버리 쿠폰 반영</button>
+        </div>
+        <p id="recovery-result" class="small" role="status" style="margin-top: 0.5rem"></p>
+      </section>
+
+      <section
+        id="signup-checkout"
+        class="coupon-redeem-section"
+        aria-labelledby="signup-h2"
+        style="display: none; margin-top: 1rem"
+      >
+        <h2 id="signup-h2">가입 플랜 결제</h2>
+        <p class="lead" style="font-size: 0.95rem; margin-bottom: 0.6rem">
+          가입 단계에서 고른 MagicTrading 접근권을 활성화합니다. 7일 무료 체험은 홈페이지 회원가입 없이 TradingView(TRV) ID 또는 MT5 계좌 번호+서버 1조합만으로 신청할 수 있습니다.
+          결제 연동은 1달 이벤트 참여자부터 시작합니다.
+        </p>
+        <p id="signup-plan-line" class="small" style="margin: 0 0 0.55rem; color: var(--ci-brown-muted)"></p>
+        <div id="signup-free-trial-wrap" style="display: none; margin-bottom: 0.75rem">
+          <p class="small" style="margin: 0 0 0.45rem; color: var(--ci-brown-muted)">
+            둘 중 하나만 입력하세요. TRV ID 또는 MT5 계좌 번호+서버 조건이 맞으면 7일 무료 체험을 바로 등록합니다.
+            회원가입 없이 신청한 분은 비회원 체험 신청자로 보며, TRV와 MT5 체험은 각각 1회 신청할 수 있습니다.
+            MT5 체험·라이선스는 브로커명 단독 기준이 아니라 입력한 <strong>계좌 번호+서버 1조합</strong> 기준으로 적용됩니다. 즉 MT5 로그인 계좌 번호와 서버명을 묶어 같은 조합인지 확인합니다.
+          </p>
+          <div class="coupon-redeem-row" style="margin-bottom: 0.5rem">
+            <input
+              type="text"
+              id="signup-trial-tr-id"
+              class="coupon-redeem-input"
+              maxlength="120"
+              placeholder="TRV ID"
+              autocomplete="username"
+            />
+          </div>
+          <div class="coupon-redeem-row">
+            <input
+              type="text"
+              id="signup-trial-mt5-login"
+              class="coupon-redeem-input"
+              maxlength="80"
+              inputmode="numeric"
+              placeholder="MT5 계좌 번호"
+              autocomplete="off"
+            />
+            <input
+              type="text"
+              id="signup-trial-mt5-server"
+              class="coupon-redeem-input"
+              maxlength="120"
+              placeholder="MT5 서버"
+              autocomplete="off"
+            />
+          </div>
+        </div>
+        <div id="signup-regular-tier-wrap" class="coupon-redeem-row" style="display: none; margin-bottom: 0.5rem">
+          <label for="signup-regular-tier" style="min-width: 9rem; font-size: 0.9rem">정규 접근권</label>
+          <select id="signup-regular-tier" class="coupon-redeem-input" style="max-width: 20rem">
+            <option value="reg_magictrading" selected>MagicTrading · USD 100 / month</option>
+          </select>
+        </div>
+        <div id="signup-platform-wrap" class="coupon-redeem-row" style="display: none; margin-bottom: 0.5rem">
+          <label for="signup-platform" style="min-width: 9rem; font-size: 0.9rem">이벤트 구분</label>
+          <select id="signup-platform" class="coupon-redeem-input" style="max-width: 20rem">
+            <option value="trv" selected>TRV 1달 이벤트</option>
+            <option value="mt5">MT5 1달 이벤트</option>
+          </select>
+          <span class="small" style="color: var(--ci-brown-muted)">TRV와 MT5는 각각 1회 신청 가능</span>
+        </div>
+        <div class="coupon-redeem-row" style="margin-bottom: 0.5rem">
+          <label for="signup-provider" style="min-width: 9rem; font-size: 0.9rem">결제 공급자</label>
+          <select id="signup-provider" class="coupon-redeem-input" style="max-width: 20rem">
+            <option value="manual" selected>임시 수동 처리 (승인 전)</option>
+            <option value="stripe">Stripe</option>
+            <option value="paypal">PayPal</option>
+            <option value="coinbase">Coinbase</option>
+          </select>
+        </div>
+        <div class="coupon-redeem-row">
+          <input
+            type="text"
+            id="signup-payment-ref"
+            class="coupon-redeem-input"
+            maxlength="120"
+            placeholder="결제 참조번호 (무료 체험은 비워도 됨)"
+            autocomplete="off"
+          />
+          <button type="button" class="btn" id="signup-complete-btn">가입 플랜 적용</button>
+        </div>
+        <p id="signup-result" class="small" role="status" style="margin-top: 0.5rem"></p>
+      </section>
+
+      <div class="nrf-box">
+        <strong>환불 고지</strong>
+        <p class="en">Regular plan refunds are accepted on request and calculated pro rata by remaining service days.</p>
+        <p class="en">Event, coupon, trial, and recovery benefits are non-refundable. The 1-month USD 100 event is strictly non-refundable.</p>
+        <p style="margin: 0.5rem 0 0; font-size: 0.82rem; opacity: 0.9">한국어: <strong>정규</strong> 플랜 결제만 이유를 묻지 않고 일할 환불합니다. <strong>1달 100불(USD) 유료 이벤트</strong>·기타 이벤트·쿠폰·무료체험·리커버리는 <strong>환불불가</strong>(1달 100불은 <a href="../legal/refund.html" style="color: #a8c7ff">환불 정책</a>에 <strong>절대 환불 불가</strong>로 별도 명시). 수취·송금 계좌는 <a href="#wire-transfer" style="color: #a8c7ff">위 안내</a>·<a href="../legal/refund.html#sec-company-bank" style="color: #a8c7ff">정책</a>과 동일합니다.</p>
+      </div>
+
+      <section>
+        <h2>상품·플랜</h2>
+        <p>
+          MagicTrading 정식 접근권, 비회원 7일 무료 체험, 1달 100불 이벤트, 2개월 리커버리 접근권은 <a href="../events/index.html">이벤트·요금</a> 페이지에 정리했습니다.
+          구독 만료일·플랜은 결제 연동 후 DB와 동기화되는 것을 목표로 합니다.
+        </p>
+      </section>
+
+      <div class="terms-box">
+        <strong>구독 약관 핵심 고지</strong>
+        <ul class="notice-list">
+          <li>정규 플랜 환불 요청은 <strong>이유 불문 접수</strong>하며, 남은 이용일 기준으로 <strong>USD 일할 계산</strong>합니다. → <a href="../legal/refund.html">Refund Policy</a></li>
+          <li>이벤트·쿠폰·무료체험·리커버리 혜택은 환불불가이며, 쿠폰은 최초 교환 계정에 귀속되고 양도할 수 없습니다.</li>
+        </ul>
+      </div>
+
+      <section class="coupon-redeem-section refund-request-section" aria-labelledby="refund-h2">
+        <h2 id="refund-h2">환불 요청 · USD 송금 정보</h2>
+        <p class="lead" style="font-size: 0.95rem; margin-bottom: 0.75rem">
+          정규 플랜 결제 건만 접수됩니다. 요청 사유는 선택이며, 서버가 현재 정규 플랜의 결제금액·이용기간을 기준으로 남은 날짜를 일할 계산합니다.
+          이벤트·쿠폰·무료체험·리커버리는 환불불가이며, 쿠폰은 최초 교환 계정에 귀속되고 양도할 수 없습니다. 은행·중계은행 수수료와 환율 차이는 실제 송금 과정에서 달라질 수 있습니다.
+        </p>
+        <div class="refund-preview" id="refund-preview-line">로그인 이메일의 정규 플랜 기준으로 일할 환불액을 계산합니다.</div>
+        <div class="refund-form-grid">
+          <label>수취인 영문명 *
+            <input type="text" id="refund-beneficiary-name" maxlength="160" autocomplete="name" />
+          </label>
+          <label>수취인 주소
+            <input type="text" id="refund-beneficiary-address" maxlength="300" autocomplete="street-address" />
+          </label>
+          <label>은행명 *
+            <input type="text" id="refund-bank-name" maxlength="160" />
+          </label>
+          <label>브랜치명 *
+            <input type="text" id="refund-branch-name" maxlength="160" />
+          </label>
+          <label>SWIFT / BIC *
+            <input type="text" id="refund-swift-bic" maxlength="40" style="text-transform: uppercase" />
+          </label>
+          <label>계좌번호 *
+            <input type="text" id="refund-account-number" maxlength="120" />
+          </label>
+          <label>은행 국가 *
+            <input type="text" id="refund-bank-country" maxlength="80" placeholder="예: KR, US, JP" />
+          </label>
+          <label>은행 주소
+            <input type="text" id="refund-bank-address" maxlength="300" />
+          </label>
+          <label>IBAN (해당 시)
+            <input type="text" id="refund-iban" maxlength="80" />
+          </label>
+          <label>Routing / ABA (해당 시)
+            <input type="text" id="refund-routing-number" maxlength="80" />
+          </label>
+          <label>중계은행명 (해당 시)
+            <input type="text" id="refund-intermediary-bank-name" maxlength="160" />
+          </label>
+          <label>중계은행 SWIFT (해당 시)
+            <input type="text" id="refund-intermediary-swift-bic" maxlength="40" style="text-transform: uppercase" />
+          </label>
+          <label>결제금액 USD (기록 없을 때 보조)
+            <input type="number" id="refund-paid-amount-usd" min="0" step="0.01" placeholder="예: 100" />
+          </label>
+          <label>요청 메모 (선택)
+            <input type="text" id="refund-reason" maxlength="500" placeholder="비워도 접수됩니다" />
+          </label>
+        </div>
+        <div class="refund-actions">
+          <button type="button" class="btn" id="refund-submit-btn">일할 계산 후 환불 요청</button>
+        </div>
+        <p id="refund-result" class="small" role="status" style="margin-top: 0.5rem"></p>
+      </section>
+
+      <section class="coupon-redeem-section" aria-labelledby="coupon-h2">
+        <h2 id="coupon-h2">쿠폰 코드 교환</h2>
+        <p class="lead" style="font-size: 0.95rem; margin-bottom: 0.75rem">
+          이메일·텔레그램으로 받은 코드를 아래에 입력하세요. 쿠폰은 언제든지 등록할 수 있고, <strong>현재 마감일 기준 1개월당 31일씩</strong> 연장되며
+          <strong>환불불가</strong>이며 <strong>최초 교환한 계정에만 귀속</strong>됩니다 (양도 불가). 모임터 상단과 같은 이메일·역할이 API에 전달됩니다.
+        </p>
+        <p id="coupon-status-line" class="small" style="color: var(--ci-brown-muted); margin-bottom: 0.65rem"></p>
+        <div class="coupon-redeem-row">
+          <label class="visually-hidden" for="coupon-code-input">쿠폰 코드</label>
+          <input
+            type="text"
+            id="coupon-code-input"
+            class="coupon-redeem-input"
+            maxlength="64"
+            placeholder="예: HB-6M-20260422-000042"
+            spellcheck="false"
+            autocomplete="off"
+          />
+          <button type="button" class="btn" id="coupon-redeem-btn">교환하기</button>
+        </div>
+        <p id="coupon-redeem-result" class="small" role="status" style="margin-top: 0.5rem"></p>
+      </section>
+    </div>
+    <footer class="site-footer" role="contentinfo">
+      <div class="ci-wrap ci-wrap--footer">
+        <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="220" height="110" alt="" />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </footer>
+    <script src="../assets/site-ux.js"></script>
+    <script src="../assets/magic-auth.js"></script>
+    <style>
+      .coupon-redeem-section {
+        margin-top: 1.75rem;
+        padding: 1.1rem 1.15rem 1.25rem;
+        border-radius: 14px;
+        border: 1px solid rgba(47, 111, 79, 0.2);
+        background: linear-gradient(165deg, #fffef9 0%, #f4faf6 100%);
+      }
+      .coupon-redeem-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+      }
+      .coupon-redeem-input {
+        flex: 1 1 14rem;
+        min-width: 0;
+        padding: 0.55rem 0.65rem;
+        border: 1px solid #cfd6e0;
+        border-radius: 8px;
+        font: inherit;
+      }
+      .refund-preview {
+        margin: 0 0 0.75rem;
+        padding: 0.65rem 0.75rem;
+        border-radius: 10px;
+        color: var(--ci-brown-muted);
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(47, 111, 79, 0.14);
+        font-size: 0.88rem;
+        line-height: 1.5;
+      }
+      .refund-form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.7rem;
+      }
+      .refund-form-grid label {
+        display: grid;
+        gap: 0.3rem;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--ci-brown);
+      }
+      .refund-form-grid input {
+        width: 100%;
+        min-width: 0;
+        padding: 0.55rem 0.65rem;
+        border: 1px solid #cfd6e0;
+        border-radius: 8px;
+        font: inherit;
+        font-weight: 400;
+      }
+      .refund-actions {
+        margin-top: 0.85rem;
+      }
+      @media (max-width: 720px) {
+        .refund-form-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+    <script>
+      (function () {
+        var meta = document.querySelector('meta[name="api-base"]');
+        var API = (meta && meta.content) || "https://happyinvests.com";
+        var inp = document.getElementById("coupon-code-input");
+        var btn = document.getElementById("coupon-redeem-btn");
+        var out = document.getElementById("coupon-redeem-result");
+        var st = document.getElementById("coupon-status-line");
+        var recoveryWrap = document.getElementById("recovery-checkout");
+        var recoveryPostLine = document.getElementById("recovery-post-line");
+        var recoveryRef = document.getElementById("recovery-payment-ref");
+        var recoveryBtn = document.getElementById("recovery-complete-btn");
+        var recoveryOut = document.getElementById("recovery-result");
+        var recoveryPostId = "";
+        var signupWrap = document.getElementById("signup-checkout");
+        var signupPlanLine = document.getElementById("signup-plan-line");
+        var signupRef = document.getElementById("signup-payment-ref");
+        var signupBtn = document.getElementById("signup-complete-btn");
+        var signupOut = document.getElementById("signup-result");
+        var signupRegularWrap = document.getElementById("signup-regular-tier-wrap");
+        var signupRegularTier = document.getElementById("signup-regular-tier");
+        var signupPlatformWrap = document.getElementById("signup-platform-wrap");
+        var signupPlatform = document.getElementById("signup-platform");
+        var signupFreeTrialWrap = document.getElementById("signup-free-trial-wrap");
+        var signupTrialTrId = document.getElementById("signup-trial-tr-id");
+        var signupTrialMt5Login = document.getElementById("signup-trial-mt5-login");
+        var signupTrialMt5Server = document.getElementById("signup-trial-mt5-server");
+        var signupProvider = document.getElementById("signup-provider");
+        var signupPlanCode = "";
+        var providerEnabledMap = { stripe: false, paypal: false, coinbase: false, manual: true };
+        var refundPreviewLine = document.getElementById("refund-preview-line");
+        var refundBtn = document.getElementById("refund-submit-btn");
+        var refundOut = document.getElementById("refund-result");
+
+        function authHeaders() {
+          return Object.assign({ "Content-Type": "application/json" }, window.MagicAuth ? MagicAuth.headers() : {});
+        }
+
+        function readHeaders() {
+          return window.MagicAuth ? MagicAuth.headers() : {};
+        }
+
+        function val(id) {
+          var el = document.getElementById(id);
+          return el ? String(el.value || "").trim() : "";
+        }
+
+        function loadRefundPreview() {
+          if (!refundPreviewLine) return;
+          fetch(API + "/api/payments/refund-preview", { cache: "no-store", headers: readHeaders() })
+            .then(function (r) {
+              return r.json().then(function (j) {
+                return { ok: r.ok, j: j };
+              });
+            })
+            .then(function (x) {
+              if (!x.ok) {
+                refundPreviewLine.textContent = x.j.error || "정규 플랜 결제 건만 환불 예상액을 확인할 수 있습니다.";
+                return;
+              }
+              refundPreviewLine.textContent =
+                "예상 환불액: USD " +
+                Number(x.j.refund_amount_usd || 0).toFixed(2) +
+                " / 결제금액 USD " +
+                Number(x.j.paid_amount_usd || 0).toFixed(2) +
+                " · 남은 " +
+                (x.j.remaining_days || 0) +
+                "일 / 전체 " +
+                (x.j.total_days || 0) +
+                "일";
+            })
+            .catch(function () {
+              refundPreviewLine.textContent = "환불 예상액을 불러오지 못했습니다. 정규 플랜만 접수 가능합니다.";
+            });
+        }
+
+        function loadCouponStatus() {
+          if (!st) return;
+          fetch(API + "/api/me/coupon-status", { cache: "no-store", headers: readHeaders() })
+            .then(function (r) {
+              return r.json();
+            })
+            .then(function (j) {
+              var parts = [];
+              if (j.coupon_access_until) {
+                var d = new Date(j.coupon_access_until);
+                parts.push(
+                  "쿠폰 적용 마감일: " +
+                    (isNaN(d.getTime()) ? j.coupon_access_until : d.toLocaleString("ko-KR"))
+                );
+              }
+              var base =
+                parts.length > 0
+                  ? parts.join(" · ")
+                  : "등록된 쿠폰 연장 만료일이 없거나, 아직 교환하지 않았습니다.";
+              st.textContent = base;
+            })
+            .catch(function () {
+              st.textContent = "";
+            });
+        }
+
+        function initRecoveryCheckout() {
+          if (!recoveryWrap) return;
+          var q;
+          try {
+            q = new URLSearchParams(window.location.search);
+          } catch (e) {
+            q = null;
+          }
+          if (!q) return;
+          var on = q.get("recovery");
+          var postId = q.get("post_id");
+          if (!(on === "1" && postId)) return;
+          recoveryPostId = String(postId).trim();
+          if (!recoveryPostId) return;
+          if (recoveryPostLine) recoveryPostLine.textContent = "검증 중…";
+          fetch(
+            API +
+              "/api/payments/recovery6m/context?post_id=" +
+              encodeURIComponent(recoveryPostId),
+            { cache: "no-store", headers: readHeaders() }
+          )
+            .then(function (r) {
+              return r.json().then(function (j) {
+                return { ok: r.ok, j: j };
+              });
+            })
+            .then(function (x) {
+              if (!x.ok) {
+                if (recoveryPostLine) {
+                  recoveryPostLine.textContent = x.j.error || "대상 확인에 실패했습니다.";
+                }
+                return;
+              }
+              if (!(x.j && x.j.eligible)) {
+                recoveryWrap.style.display = "none";
+                if (recoveryOut) {
+                  var reason = x.j && x.j.reason ? String(x.j.reason) : "not_eligible";
+                  if (reason === "already_paid") {
+                    recoveryOut.textContent =
+                      "이미 결제 완료 처리된 리커버리 플랜입니다. 쿠폰: " +
+                      (x.j.coupon_code || "-");
+                  } else if (reason === "requires_1m_event_user") {
+                    recoveryOut.textContent = "리커버리 플랜은 1달 이벤트 플랜 기가입자에게 계정당 1회만 적용됩니다.";
+                  } else if (reason === "recovery_once_per_account") {
+                    recoveryOut.textContent = "이미 리커버리 플랜을 사용한 계정입니다. 쿠폰: " + (x.j.coupon_code || "-");
+                  } else {
+                    recoveryOut.textContent =
+                      "리커버리 플랜 결제창은 대상 사용자에게만 노출됩니다.";
+                  }
+                }
+                return;
+              }
+              recoveryWrap.style.display = "block";
+              if (recoveryPostLine) {
+                recoveryPostLine.textContent =
+                  "대상 게시글 ID: " +
+                  recoveryPostId +
+                  " · 리커버리 쿠폰 기간 2개월";
+              }
+            })
+            .catch(function () {
+              if (recoveryPostLine) {
+                recoveryPostLine.textContent = "대상 확인 중 오류가 발생했습니다.";
+              }
+            });
+        }
+
+        function planLabel(planCode) {
+          if (planCode === "event_1w_free") return "이벤트 · 7일 무료 체험";
+          if (
+            planCode === "event_1m_magictrading" ||
+            planCode === "event_1m_usd" ||
+            planCode === "1m_magictrading" ||
+            planCode === "1m_premium"
+          )
+            return "MagicTrading · 1달 100불 이벤트";
+          if (planCode === "regular_default") return "MagicTrading · 월 $100";
+          return planCode || "";
+        }
+
+        function isPaidSignupPlan(planCode) {
+          return !(
+            planCode === "event_1w_free" ||
+            planCode === "none" ||
+            !planCode
+          );
+        }
+
+        function isOneMonthEventPlan(planCode) {
+          return (
+            planCode === "event_1m_magictrading" ||
+            planCode === "event_1m_usd" ||
+            planCode === "1m_magictrading" ||
+            planCode === "1m_premium"
+          );
+        }
+
+        function initSignupCheckout() {
+          if (!signupWrap) return;
+          var q;
+          try {
+            q = new URLSearchParams(window.location.search);
+          } catch (e) {
+            q = null;
+          }
+          if (!q) return;
+          var on = q.get("signup");
+          var plan = String(q.get("plan") || "").trim();
+          if (!(on === "1" && plan)) return;
+          signupPlanCode = plan;
+          signupWrap.style.display = "block";
+          if (signupPlanLine) {
+            signupPlanLine.textContent = "선택 플랜: " + planLabel(signupPlanCode);
+          }
+          if (signupRegularWrap) {
+            signupRegularWrap.style.display = signupPlanCode === "regular_default" ? "flex" : "none";
+          }
+          if (signupPlatformWrap) {
+            signupPlatformWrap.style.display = isOneMonthEventPlan(signupPlanCode) ? "flex" : "none";
+          }
+          if (signupFreeTrialWrap) {
+            signupFreeTrialWrap.style.display = signupPlanCode === "event_1w_free" ? "block" : "none";
+          }
+          if (signupRef) {
+            signupRef.placeholder = isPaidSignupPlan(signupPlanCode)
+              ? "결제 참조번호를 입력해 주세요"
+              : "무료 체험은 비워도 됩니다";
+          }
+
+          fetch(API + "/api/payments/providers/status", {
+            cache: "no-store",
+            headers: readHeaders(),
+          })
+            .then(function (r) {
+              return r.json();
+            })
+            .then(function (j) {
+              if (!signupPlanLine) return;
+              var badge = [];
+              if (j && j.stripe) {
+                providerEnabledMap.stripe = !!j.stripe.enabled;
+                badge.push("Stripe " + (j.stripe.enabled ? "ON" : "준비중"));
+              }
+              if (j && j.paypal) {
+                providerEnabledMap.paypal = !!j.paypal.enabled;
+                badge.push("PayPal " + (j.paypal.enabled ? "ON" : "준비중"));
+              }
+              if (j && j.coinbase) {
+                providerEnabledMap.coinbase = !!j.coinbase.enabled;
+                badge.push("Coinbase " + (j.coinbase.enabled ? "ON" : "준비중"));
+              }
+              if (badge.length) {
+                signupPlanLine.textContent += " · 결제공급자: " + badge.join(" / ");
+              }
+            })
+            .catch(function () {});
+        }
+
+        if (btn && inp) {
+          btn.addEventListener("click", function () {
+            if (!out) return;
+            var code = String(inp.value || "").trim();
+            if (!code) {
+              out.textContent = "코드를 입력해 주세요.";
+              return;
+            }
+            out.textContent = "처리 중…";
+            fetch(API + "/api/me/redeem-coupon", {
+              method: "POST",
+              headers: authHeaders(),
+              body: JSON.stringify({ code: code }),
+            })
+              .then(function (r) {
+                return r.json().then(function (j) {
+                  return { ok: r.ok, j: j };
+                });
+              })
+              .then(function (x) {
+                if (!x.ok) {
+                  out.textContent = x.j.error || "교환에 실패했습니다.";
+                  return;
+                }
+                var j = x.j;
+                if (j.coupon_kind === "promo_magictrading_1m" || j.coupon_kind === "promo_premium_1m") {
+                  out.textContent =
+                    "MagicTrading 1달(31일) 이벤트 쿠폰 교환 완료. 플랜 " +
+                    (j.dodam_plan_sku || "1m_magictrading") +
+                    " · 계정 기준 마감일 " +
+                    (j.dodam_plan_expires_at
+                      ? new Date(j.dodam_plan_expires_at).toLocaleString("ko-KR")
+                      : "—") +
+                    " (계정당 1회)";
+                } else {
+                  out.textContent =
+                    "교환 완료. 이 쿠폰 적용 종료(이번 건): " +
+                    (j.valid_until ? new Date(j.valid_until).toLocaleString("ko-KR") : "—") +
+                    " · 계정 기준 마감일: " +
+                    (j.coupon_access_until ? new Date(j.coupon_access_until).toLocaleString("ko-KR") : "—");
+                }
+                loadCouponStatus();
+              })
+              .catch(function (e) {
+                out.textContent = String(e.message || e);
+              });
+          });
+        }
+        if (recoveryBtn && recoveryRef) {
+          recoveryBtn.addEventListener("click", function () {
+            if (!recoveryOut) return;
+            if (!recoveryPostId) {
+              recoveryOut.textContent = "대상 게시글 ID가 없어 결제를 진행할 수 없습니다.";
+              return;
+            }
+            var paymentRef = String(recoveryRef.value || "").trim();
+            if (!paymentRef) {
+              paymentRef = "recovery-2m-free";
+            }
+            recoveryOut.textContent = "결제 준비 기록 중…";
+            var prepReqId = "";
+            fetch(API + "/api/payments/prepare-checkout", {
+              method: "POST",
+              headers: authHeaders(),
+              body: JSON.stringify({
+                provider: "manual",
+                plan_code: "event_6m_recovery",
+                amount_usd: 0,
+              }),
+            })
+              .then(function (r) {
+                return r.json().then(function (j) {
+                  return { ok: r.ok, j: j };
+                });
+              })
+              .then(function (prep) {
+                if (prep.ok && prep.j && prep.j.request_id) prepReqId = String(prep.j.request_id);
+                recoveryOut.textContent = "결제 완료 반영 중…";
+                return fetch(API + "/api/payments/recovery6m/complete", {
+                  method: "POST",
+                  headers: authHeaders(),
+                  body: JSON.stringify({
+                    post_id: recoveryPostId,
+                    payment_ref: paymentRef,
+                    payment_request_id: prepReqId || undefined,
+                  }),
+                });
+              })
+              .then(function (r) {
+                return r.json().then(function (j) {
+                  return { ok: r.ok, j: j };
+                });
+              })
+              .then(function (x) {
+                if (!x.ok) {
+                  recoveryOut.textContent = x.j.error || "결제 반영에 실패했습니다.";
+                  return;
+                }
+                var j = x.j || {};
+                var until =
+                  j.redeemed && j.redeemed.coupon_access_until
+                    ? new Date(j.redeemed.coupon_access_until).toLocaleString("ko-KR")
+                    : "확인 필요";
+                recoveryOut.textContent =
+                  "2개월 리커버리 쿠폰 반영 완료 · 쿠폰 " +
+                  (j.coupon_code || "-") +
+                  " · 만료(계정 기준) " +
+                  until;
+                loadCouponStatus();
+              })
+              .catch(function (e) {
+                recoveryOut.textContent = String(e.message || e);
+              });
+          });
+        }
+        if (signupBtn) {
+          signupBtn.addEventListener("click", function () {
+            if (!signupOut) return;
+            if (!signupPlanCode) {
+              signupOut.textContent = "선택된 가입 플랜이 없습니다.";
+              return;
+            }
+            var resolvedPlan =
+              signupPlanCode === "regular_default"
+                ? String((signupRegularTier && signupRegularTier.value) || "reg_magictrading")
+                : signupPlanCode;
+            var provider = String((signupProvider && signupProvider.value) || "manual").toLowerCase();
+            if (provider !== "manual" && !providerEnabledMap[provider]) {
+              signupOut.textContent =
+                provider + " 는 아직 승인/연동 전입니다. 임시 수동 처리로 진행해 주세요.";
+              return;
+            }
+            var paymentRef = String((signupRef && signupRef.value) || "").trim();
+            if (isPaidSignupPlan(resolvedPlan) && !paymentRef) {
+              signupOut.textContent = "유료 플랜은 결제 참조번호를 입력해 주세요.";
+              if (signupRef) signupRef.focus();
+              return;
+            }
+            var amtUsd = (function () {
+              if (resolvedPlan === "event_1w_free") return 0;
+              if (isOneMonthEventPlan(resolvedPlan))
+                return 100;
+              if (resolvedPlan === "reg_magictrading" || resolvedPlan === "reg_premium") return 100;
+              return 0;
+            })();
+            var trialPayload = {};
+            if (resolvedPlan === "event_1w_free") {
+              var trId = String((signupTrialTrId && signupTrialTrId.value) || "").trim();
+              var mt5Login = String((signupTrialMt5Login && signupTrialMt5Login.value) || "").trim();
+              var mt5Server = String((signupTrialMt5Server && signupTrialMt5Server.value) || "").trim();
+              if (!trId && !(mt5Login && mt5Server)) {
+                signupOut.textContent = "7일 무료 체험은 TRV ID 또는 MT5 계좌 번호+서버가 필요합니다.";
+                if (signupTrialTrId) signupTrialTrId.focus();
+                return;
+              }
+              trialPayload.tr_id = trId || undefined;
+              trialPayload.mt5_login = mt5Login || undefined;
+              trialPayload.mt5_server = mt5Server || undefined;
+              signupOut.textContent = "7일 무료 체험 등록 중…";
+              fetch(API + "/api/payments/signup-plan/complete", {
+                method: "POST",
+                headers: authHeaders(),
+                body: JSON.stringify(
+                  Object.assign(
+                    {
+                      plan_code: resolvedPlan,
+                    },
+                    trialPayload
+                  )
+                ),
+              })
+                .then(function (r) {
+                  return r.json().then(function (j) {
+                    return { ok: r.ok, j: j };
+                  });
+                })
+                .then(function (x) {
+                  if (!x.ok) {
+                    signupOut.textContent = x.j.error || "7일 무료 체험 등록에 실패했습니다.";
+                    return;
+                  }
+                  var j = x.j || {};
+                  signupOut.textContent =
+                    "7일 무료 체험 등록 완료 · " +
+                    (j.subject_type === "mt5" ? "MT5" : "TRV") +
+                    " · 만료 " +
+                    (j.expires_at ? new Date(j.expires_at).toLocaleString("ko-KR") : "확인 필요");
+                  loadCouponStatus();
+                })
+                .catch(function (e) {
+                  signupOut.textContent = String(e.message || e);
+                });
+              return;
+            }
+            signupOut.textContent = "결제 준비 기록 중…";
+            var signupPrepId = "";
+            fetch(API + "/api/payments/prepare-checkout", {
+              method: "POST",
+              headers: authHeaders(),
+              body: JSON.stringify({
+                provider: provider,
+                plan_code: resolvedPlan,
+                amount_usd: amtUsd,
+              }),
+            })
+              .then(function (r) {
+                return r.json().then(function (j) {
+                  return { ok: r.ok, j: j };
+                });
+              })
+              .then(function (prep) {
+                if (prep.ok && prep.j && prep.j.request_id) signupPrepId = String(prep.j.request_id);
+                signupOut.textContent = "가입 플랜 적용 중…";
+                return fetch(API + "/api/payments/signup-plan/complete", {
+                  method: "POST",
+                  headers: authHeaders(),
+                  body: JSON.stringify({
+                    plan_code: resolvedPlan,
+                    payment_ref: paymentRef || undefined,
+                    payment_request_id: signupPrepId || undefined,
+                    product_platform: isOneMonthEventPlan(resolvedPlan)
+                      ? String((signupPlatform && signupPlatform.value) || "trv")
+                      : undefined,
+                  }),
+                });
+              })
+              .then(function (r) {
+                return r.json().then(function (j) {
+                  return { ok: r.ok, j: j };
+                });
+              })
+              .then(function (x) {
+                if (!x.ok) {
+                  signupOut.textContent = x.j.error || "가입 플랜 적용에 실패했습니다.";
+                  return;
+                }
+                var j = x.j || {};
+                var until = j.expires_at
+                  ? new Date(j.expires_at).toLocaleString("ko-KR")
+                  : "정규 플랜(만료 별도 관리)";
+                signupOut.textContent =
+                  "적용 완료 · " +
+                  (j.plan_sku || j.plan_code || "-") +
+                  " · 만료 " +
+                  until;
+                loadCouponStatus();
+              })
+              .catch(function (e) {
+                signupOut.textContent = String(e.message || e);
+              });
+          });
+        }
+        if (refundBtn) {
+          refundBtn.addEventListener("click", function () {
+            if (!refundOut) return;
+            var payload = {
+              beneficiary_name: val("refund-beneficiary-name"),
+              beneficiary_address: val("refund-beneficiary-address"),
+              bank_name: val("refund-bank-name"),
+              branch_name: val("refund-branch-name"),
+              swift_bic: val("refund-swift-bic"),
+              account_number: val("refund-account-number"),
+              bank_country: val("refund-bank-country"),
+              bank_address: val("refund-bank-address"),
+              iban: val("refund-iban"),
+              routing_number: val("refund-routing-number"),
+              intermediary_bank_name: val("refund-intermediary-bank-name"),
+              intermediary_swift_bic: val("refund-intermediary-swift-bic"),
+              paid_amount_usd: val("refund-paid-amount-usd"),
+              reason: val("refund-reason"),
+            };
+            var missing = [];
+            [
+              ["beneficiary_name", "수취인 영문명"],
+              ["bank_name", "은행명"],
+              ["branch_name", "브랜치명"],
+              ["swift_bic", "SWIFT/BIC"],
+              ["account_number", "계좌번호"],
+              ["bank_country", "은행 국가"],
+            ].forEach(function (x) {
+              if (!payload[x[0]]) missing.push(x[1]);
+            });
+            if (missing.length) {
+              refundOut.textContent = "필수 정보가 필요합니다: " + missing.join(", ");
+              return;
+            }
+            refundOut.textContent = "환불 요청 접수 중…";
+            fetch(API + "/api/payments/refund-requests", {
+              method: "POST",
+              headers: authHeaders(),
+              body: JSON.stringify(payload),
+            })
+              .then(function (r) {
+                return r.json().then(function (j) {
+                  return { ok: r.ok, j: j };
+                });
+              })
+              .then(function (x) {
+                if (!x.ok) {
+                  refundOut.textContent = x.j.error || "환불 요청 접수에 실패했습니다.";
+                  return;
+                }
+                refundOut.textContent =
+                  "정규 플랜 환불 요청 접수 완료 · 접수번호 " +
+                  (x.j.refund_request_no || "-") +
+                  " · 일할 환불액 USD " +
+                  Number(x.j.refund_amount_usd || 0).toFixed(2) +
+                  " · 남은 " +
+                  (x.j.remaining_days || 0) +
+                  "일";
+                loadRefundPreview();
+              })
+              .catch(function (e) {
+                refundOut.textContent = String(e.message || e);
+              });
+          });
+        }
+        initRecoveryCheckout();
+        initSignupCheckout();
+        loadRefundPreview();
+        loadCouponStatus();
+      })();
+    </script>
+  </body>
+</html>

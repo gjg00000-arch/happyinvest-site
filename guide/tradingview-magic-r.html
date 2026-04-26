@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TradingView — 밴드 폭 r (%) 설정 안내 — Magic 지표</title>
+    <meta
+      name="description"
+      content="TradingView에서 Magic 라인 계열 지표의 밴드 폭 r(%)을 찾아 조절하는 순서. 종목별 대략 값 예시(나스닥·원유)."
+    />
+    <link rel="stylesheet" href="../assets/common.css" />
+    <link rel="stylesheet" href="../assets/site-ux.css" />
+    <link rel="stylesheet" href="../assets/guide-docs.css" />
+    <style>
+      .tv-r-guide__figure {
+        margin: 1rem 0 1.25rem;
+        border-radius: 14px;
+        overflow: hidden;
+        border: 1px solid rgba(47, 111, 79, 0.2);
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+        background: #1a1d24;
+      }
+      .tv-r-guide__figure img {
+        display: block;
+        width: 100%;
+        height: auto;
+        vertical-align: middle;
+      }
+      .tv-r-guide__caption {
+        margin: 0.35rem 0 0;
+        font-size: 0.82rem;
+        color: var(--ci-brown-muted);
+        line-height: 1.5;
+      }
+      .tv-r-examples {
+        margin: 1rem 0;
+        padding: 0.85rem 1rem;
+        border-radius: 12px;
+        background: rgba(47, 111, 79, 0.06);
+        border: 1px dashed rgba(47, 111, 79, 0.28);
+      }
+      .tv-r-examples dt {
+        font-weight: 700;
+        color: var(--ci-green);
+        margin-top: 0.5rem;
+      }
+      .tv-r-examples dt:first-child {
+        margin-top: 0;
+      }
+      .tv-r-examples dd {
+        margin: 0.2rem 0 0;
+        color: var(--ci-brown-muted);
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header" role="banner">
+      <div class="ci-wrap">
+        <img
+          class="ci-logo-img"
+          src="../assets/haengbokdam-company-ci.png"
+          width="280"
+          height="140"
+          alt="주식회사 행복도담 인베스트 CI"
+        />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </header>
+    <nav class="site-nav" aria-label="주요 메뉴">
+      <a href="../index.html">메인</a>
+      <a href="index.html">가이드</a>
+      <a href="../downloads/index.html">다운로드</a>
+      <a href="../registration/index.html">가입·등록</a>
+      <a href="../verify/index.html">본인인증</a>
+      <a href="../billing/index.html">구독·결제</a>
+      <a href="../events/index.html">이벤트</a>
+      <a href="../membership/index.html">회원혜택</a>
+      <a href="../reflection/index.html">실전후기</a>
+      <a href="../contact/index.html">문의</a>
+      <a href="../boards/index.html">모임터</a>
+      <a href="../legal/index.html">약관·정책</a>
+      <a href="../admin/index.html">관리자</a>
+      <a href="../integrations/index.html">연동</a>
+    </nav>
+    <div class="wrap">
+      <header class="doc-hero">
+        <p class="doc-hero__eyebrow">TradingView · Magic Line</p>
+        <h1 class="doc-hero__title">밴드 폭 r (%) — 어디서 바꾸나요?</h1>
+        <p class="doc-hero__lead">
+          종목·봉 간격마다 밴드가 너무 넓거나 좁게 느껴지면, <strong>입력값의 r</strong>을 조금씩 바꿔 보면서 맞추면 됩니다. 아래는
+          <strong>클릭 경로</strong>와 <strong>대략 값 예시</strong>를 한 장으로 정리한 안내예요. (실제 TV 화면 캡처로 바꿔 쓰셔도 됩니다.)
+        </p>
+      </header>
+
+      <p><a href="index.html#tv">← 사용자 가이드 목록으로</a></p>
+
+      <article class="doc-section">
+        <h2>한눈에 보기</h2>
+        <figure class="tv-r-guide__figure">
+          <img
+            src="../assets/guide-tv-magic-r-settings.png"
+            width="1280"
+            height="800"
+            loading="eager"
+            decoding="async"
+            alt="TradingView 스타일 안내: 지표 설정 입력 탭에서 밴드 폭 r 퍼센트를 조절하는 순서와 나스닥·원유 예시 값"
+          />
+        </figure>
+        <p class="tv-r-guide__caption">
+          위 그림은 <strong>교육용 목업</strong>입니다. 사용 중인 Pine 스크립트 이름·메뉴 문구가 다르면, 차트 위에 붙은
+          <strong>해당 지표 이름 옆의 톱니바퀴</strong>를 눌러 같은 식으로 찾아 주세요.
+        </p>
+      </article>
+
+      <article class="doc-section">
+        <h2>클릭 순서 (텍스트)</h2>
+        <ol class="doc-steps">
+          <li>차트 위에 표시된 <strong>지표 이름</strong>을 찾습니다. (예: MagicTrading, Magic Line 등 배포본 이름)</li>
+          <li>이름 오른쪽의 <strong>톱니바퀴(설정)</strong> 아이콘을 누릅니다.</li>
+          <li>
+            창이 뜨면 <strong>입력</strong>(Inputs) 탭으로 가서, <strong>「밴드 폭 r (%)」</strong> 또는 비슷한 이름의 숫자 칸을 찾아 조절합니다.
+          </li>
+          <li><strong>확인</strong>으로 닫은 뒤, 차트 모양이 마음에 들 때까지 소수 단위로만 살짝씩 바꿔 가며 맞춥니다.</li>
+        </ol>
+      </article>
+
+      <article class="doc-section">
+        <h2>대략 값 예시 (참고만)</h2>
+        <p>아래 숫자는 <strong>감으로 맞춘 예시</strong>이며, 봉 주기·브로커 심볼·지표 버전에 따라 달라질 수 있습니다.</p>
+        <dl class="tv-r-examples">
+          <dt>나스닥 100 E-mini 등 (지수 계열)</dt>
+          <dd>예: <strong>0.47</strong> 근처 — 밴드가 너무 넓으면 r을 조금 내리고, 신호가 너무 잦으면 조금 올려 보면 됩니다.</dd>
+          <dt>원유 CL 등 (에너지)</dt>
+          <dd>예: <strong>7</strong>처럼 퍼센트 자체가 크게 나오는 경우도 있습니다. <strong>다른 지표의 R과 단위가 같은지</strong> 설정창 라벨을 한 번 확인해 주세요.</dd>
+        </dl>
+        <p class="small" style="color: var(--ci-brown-muted); margin-top: 0.75rem">
+          레포의 Pine 예시에서는 Magic Line 그룹에 <code>밴드 폭 r (%)</code> 형태로 들어가 있는 경우가 많습니다. 배포 스크립트마다 그룹 이름이 다를 수 있어요.
+        </p>
+      </article>
+
+      <article class="doc-section doc-section--soft">
+        <h2>실제 스크린샷으로 바꾸려면</h2>
+        <p>
+          운영에서 쓰는 TradingView 캡처를 그대로 쓰고 싶다면, 위 일러스트 대신 <code>assets/guide-tv-magic-r-settings.png</code> 파일만
+          같은 이름으로 교체해 주시면 이 페이지에 바로 반영됩니다.
+        </p>
+      </article>
+    </div>
+    <footer class="site-footer" role="contentinfo">
+      <div class="ci-wrap ci-wrap--footer">
+        <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="220" height="110" alt="" />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </footer>
+    <script src="../assets/site-ux.js"></script>
+  </body>
+</html>

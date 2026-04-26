@@ -1,0 +1,368 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="api-base" content="https://happyinvests.com" />
+    <title>Magic 지표 — 관리자 보드</title>
+    <link rel="stylesheet" href="../assets/common.css" />
+    <link rel="stylesheet" href="../assets/admin.css" />
+    <link rel="stylesheet" href="../assets/site-ux.css" />
+  </head>
+  <body>
+    <header class="site-header" role="banner">
+      <div class="ci-wrap">
+        <img
+          class="ci-logo-img"
+          src="../assets/haengbokdam-company-ci.png"
+          width="280"
+          height="140"
+          alt="주식회사 행복도담 인베스트 CI"
+        />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </header>
+    <nav class="site-nav" aria-label="주요 메뉴">
+      <a href="../index.html">메인</a>
+      <a href="../guide/index.html">가이드</a>
+      <a href="../downloads/index.html">다운로드</a>
+      <a href="../registration/index.html">가입·등록</a>
+      <a href="../verify/index.html">본인인증</a>
+      <a href="../billing/index.html">구독·결제</a>
+      <a href="../events/index.html">이벤트</a>
+      <a href="../membership/index.html">회원혜택</a>
+      <a href="../reflection/index.html">실전후기</a>
+      <a href="../contact/index.html">문의</a>
+      <a href="../boards/index.html">모임터</a>
+      <a href="../legal/index.html">약관·정책</a>
+      <a href="../admin/index.html">관리자</a>
+      <a href="../integrations/index.html">연동</a>
+    </nav>
+    <div class="wrap">
+      <h1 class="page-title">관리자 보드</h1>
+      <p class="lead">
+        API(<code>magic-indicator-api</code>)에 로그인하면 회원·사이트 페이지 메타·통계를 관리합니다. 비밀번호는 서버
+        <code>.env</code>에만 두세요(저장소에 커밋 금지).
+      </p>
+
+      <section id="admin-login-section" class="admin-login">
+        <h2>관리자 로그인</h2>
+        <p id="admin-login-err" class="err" style="display: none"></p>
+        <form id="admin-login-form">
+          <label for="admin-email">이메일</label>
+          <input id="admin-email" type="email" autocomplete="username" required />
+          <label for="admin-password">비밀번호</label>
+          <input id="admin-password" type="password" autocomplete="current-password" required />
+          <button type="submit" class="btn">로그인</button>
+        </form>
+      </section>
+
+      <div id="admin-app-section" class="admin-app" style="display: none">
+        <div class="admin-toolbar">
+          <span class="who">로그인: <strong id="admin-who"></strong></span>
+          <button type="button" class="btn btn--ghost btn--small" id="admin-logout">로그아웃</button>
+        </div>
+
+        <div class="admin-tabs" role="tablist">
+          <button type="button" data-tab="dash" class="is-active">대시보드</button>
+          <button type="button" data-tab="users">회원</button>
+          <button type="button" data-tab="post-reviews">게시글 검토</button>
+          <button type="button" data-tab="tickets">문의·티켓</button>
+          <button type="button" data-tab="pages">사이트 페이지</button>
+          <button type="button" data-tab="home">홈 HTML</button>
+          <button type="button" data-tab="coupons">쿠폰</button>
+          <button type="button" data-tab="refunds">환불</button>
+          <button type="button" data-tab="business">비즈니스</button>
+        </div>
+
+        <div class="admin-panel is-visible" data-panel="dash">
+          <h2 class="visually-hidden">대시보드</h2>
+          <div id="admin-stats"></div>
+          <p class="admin-note">
+            게시글·댓글 삭제는 API <code>DELETE /api/admin/posts/:id</code> 로 가능합니다. 목록 연동은 다음 단계에서
+            추가할 수 있습니다.
+          </p>
+        </div>
+
+        <div class="admin-panel" data-panel="users">
+          <h2>회원</h2>
+          <p class="admin-note">역할·정지·메모를 저장하면, 사이트에서 해당 이메일로 접속 시 API가 역할을 덮어씁니다.</p>
+          <div class="admin-form-inline">
+            <label
+              >새 이메일
+              <input type="email" id="new-user-email" placeholder="user@mail.com" />
+            </label>
+            <label
+              >역할
+              <select id="new-user-role">
+                <option value="guest">guest</option>
+                <option value="free">free</option>
+                <option value="trial">trial</option>
+                <option value="sub">sub</option>
+                <option value="vip">vip</option>
+                <option value="admin">admin</option>
+              </select>
+            </label>
+            <button type="button" class="btn" id="admin-add-user">회원 추가</button>
+          </div>
+          <div class="admin-table-wrap">
+            <table class="admin-table" id="admin-users-table">
+              <thead>
+                <tr>
+                  <th>이메일</th>
+                  <th>역할</th>
+                  <th>상태</th>
+                  <th>표시</th>
+                  <th>메모</th>
+                  <th>작업</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="admin-panel" data-panel="tickets">
+          <h2>문의 · 버그 티켓</h2>
+          <p class="admin-note">
+            접수 시 자동응답 문구가 발송됩니다. 여기서 관리자 회신을 저장할 수 있으며, SMTP가 설정된 경우에만
+            회원 이메일로 발송됩니다.
+          </p>
+          <div class="admin-table-wrap">
+            <table class="admin-table" id="admin-tickets-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>이메일</th>
+                  <th>유형</th>
+                  <th>제목</th>
+                  <th>내용 요약</th>
+                  <th>상태</th>
+                  <th>일시</th>
+                  <th>회신</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="admin-panel" data-panel="post-reviews">
+          <h2>게시글 검토 · 운영 쿠폰 자동 발급</h2>
+          <p class="admin-note">
+            게시글 작성 시 기본 상태는 <strong>pending</strong>입니다. 여기서 <strong>검토 완료 + 쿠폰 발급</strong>을 누르면
+            추천·홍보 게시글은 MagicTrading 1달 이벤트 쿠폰, 그 외 운영 검토 건은 1개월 기간형 쿠폰으로 발급됩니다.
+          </p>
+          <div class="admin-form-inline" style="margin-bottom: 0.75rem">
+            <label
+              >상태
+              <select id="post-review-status">
+                <option value="pending">pending(검토 대기)</option>
+                <option value="approved">approved(검토 완료)</option>
+                <option value="all">all(전체)</option>
+              </select>
+            </label>
+            <button type="button" class="btn btn--small" id="post-review-reload">새로고침</button>
+          </div>
+          <div class="admin-table-wrap">
+            <table class="admin-table" id="admin-post-reviews-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>작성자</th>
+                  <th>카테고리</th>
+                  <th>제목</th>
+                  <th>상태</th>
+                  <th>작성일</th>
+                  <th>작업</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="admin-panel" data-panel="home">
+          <h2>메인(index) 추가 HTML</h2>
+          <p class="admin-note">
+            아래 HTML은 <code>index.html</code> 상단(기존 제목 위)에 <strong>추가로 붙습니다</strong>. 드래그로 위치 잡는
+            빌더는 아니고, 마크업·CSS로 직접 배치합니다. 저장 시 서버에서 <code>script</code>·이벤트 속성은 제거됩니다.
+          </p>
+          <div class="admin-form-inline" style="margin-bottom: 0.75rem">
+            <button type="button" class="btn btn--small" id="admin-home-reload">DB에서 불러오기</button>
+            <button type="button" class="btn" id="admin-home-save">저장</button>
+            <button type="button" class="btn btn--ghost btn--small" id="admin-home-preview">미리보기 갱신</button>
+          </div>
+          <div class="admin-home-editor">
+            <textarea id="admin-home-html" spellcheck="false" placeholder="예: &lt;section class='cms-hero'&gt;..."></textarea>
+            <div id="admin-home-preview" class="admin-home-preview" aria-label="미리보기"></div>
+          </div>
+        </div>
+
+        <div class="admin-panel" data-panel="coupons">
+          <h2>이용 쿠폰</h2>
+          <p class="admin-note">
+            기간: <strong>1·2·3·5·6·12·60개월</strong>. 코드 형식은 레포 규칙
+            <code>../../.cursor/rules/coupon-code-numbering.mdc</code> 참고 (자동 채번). 발급 시 이메일·텔레그램(채팅 ID)로 코드를 보낼 수
+            있습니다. <strong>양도 불가</strong> 문구는 발급 본문·DB 필드에 포함되며, 발송 이메일을 넣으면 해당 계정 전용으로 잠깁니다.
+          </p>
+          <div class="admin-form-inline" style="flex-wrap: wrap; gap: 0.65rem; margin-bottom: 1rem">
+            <label
+              >쿠폰 종류
+              <select id="cp-kind">
+                <option value="duration">기간 이용권</option>
+                <option value="promo_magictrading_1m">MagicTrading 1달 이벤트 쿠폰</option>
+              </select>
+            </label>
+            <label id="cp-term-wrap"
+              >기간(월)
+              <select id="cp-term">
+                <option value="1">1개월</option>
+                <option value="2">2개월</option>
+                <option value="3">3개월</option>
+                <option value="5">5개월</option>
+                <option value="6">6개월</option>
+                <option value="12">12개월</option>
+                <option value="60">60개월</option>
+              </select>
+            </label>
+            <label style="min-width: 12rem"
+              >발송 이메일 (선택)
+              <input type="email" id="cp-email" placeholder="수신자@mail.com" />
+            </label>
+            <label style="min-width: 10rem"
+              >텔레그램 chat_id (선택)
+              <input type="text" id="cp-tg" placeholder="숫자 ID" />
+            </label>
+            <label style="flex: 1; min-width: 10rem"
+              >메모 (선택)
+              <input type="text" id="cp-note" placeholder="내부 메모" />
+            </label>
+            <button type="button" class="btn" id="cp-issue">쿠폰 발급</button>
+          </div>
+          <p id="cp-issue-result" class="admin-note" style="min-height: 1.25rem"></p>
+          <div id="admin-coupons-wrap"></div>
+        </div>
+
+        <div class="admin-panel" data-panel="refunds">
+          <h2>환불 요청 · USD 송금</h2>
+          <p class="admin-note">
+            정규 플랜 사용자가 접수한 이유 불문 일할 환불 요청입니다. 이벤트·쿠폰·무료체험·리커버리는 환불불가입니다. 송금 후 참조번호를 입력하고 완료 처리하세요.
+          </p>
+          <div class="admin-form-inline" style="margin-bottom: 0.75rem">
+            <button type="button" class="btn btn--small" id="admin-refunds-reload">새로고침</button>
+          </div>
+          <div id="admin-refunds-wrap"></div>
+        </div>
+
+        <div class="admin-panel" data-panel="business">
+          <h2>비즈니스(조직) · 좌석 ID (TRV / MT5)</h2>
+          <p class="admin-note">
+            <strong>TRV(TradingView)</strong>는 차트·스크립트에 쓰는 <strong>사용자명</strong>을, <strong>MT5</strong>는
+            <strong>계정 로그인(일반적으로 숫자)</strong>과 브로커에서 받은 <strong>서버 이름</strong>을 적습니다(예:
+            <code>MetaQuotes-Demo</code> 등). API는
+            <code>GET/POST /api/admin/business/orgs</code>·<code>PATCH /api/admin/business/orgs/:id/seats/:seatIndex</code>입니다. 좌석
+            저장 시 <code>BUSINESS_SEAT_NOTIFY_EMAIL</code>가 없으면 <code>ADMIN_EMAIL</code>로 변경 알림(SMTP 설정 시)이
+            갑니다.
+          </p>
+
+          <h3 class="admin-subh3">조직 생성</h3>
+          <p class="admin-note" style="margin-top: 0">
+            대표 <code>owner_email</code>은 반드시 이미 <strong>회원(users)</strong>에 있어야 합니다(없으면
+            <strong>회원</strong> 탭에서 먼저 추가).
+          </p>
+          <div class="admin-form-inline" style="flex-wrap: wrap; gap: 0.65rem; margin-bottom: 0.5rem; align-items: flex-end">
+            <label>owner 이메일 <input type="email" id="biz-owner" placeholder="대표@mail.com" style="min-width: 12rem" /></label>
+            <label
+              >plan
+              <select id="biz-plan">
+                <option value="business_standard">business_standard (최대 20석)</option>
+                <option value="business_enterprise">business_enterprise (최대 50석)</option>
+              </select>
+            </label>
+            <label>조직명 <input type="text" id="biz-orgname" placeholder="회사/팀" style="min-width: 10rem" /></label>
+            <label
+              >market_scope
+              <select id="biz-scope">
+                <option value="single_market">single_market</option>
+                <option value="multi_market">multi_market</option>
+                <option value="unlimited">unlimited</option>
+                <option value="vip_unlimited">vip_unlimited</option>
+              </select>
+            </label>
+            <label
+              >billing_mode
+              <select id="biz-bill">
+                <option value="regular">regular</option>
+                <option value="event">event</option>
+              </select>
+            </label>
+            <button type="button" class="btn" id="admin-business-create">조직 생성</button>
+          </div>
+          <p id="admin-business-create-out" class="admin-note" style="min-height: 1.25rem"></p>
+
+          <h3 class="admin-subh3">조직 목록</h3>
+          <div class="admin-form-inline" style="margin-bottom: 0.75rem">
+            <button type="button" class="btn btn--small" id="admin-business-reload">새로고침</button>
+          </div>
+          <div class="admin-table-wrap">
+            <table class="admin-table" id="admin-business-orgs-table">
+              <thead>
+                <tr>
+                  <th>문서id(끝8)</th>
+                  <th>owner</th>
+                  <th>조직명</th>
+                  <th>plan / scope</th>
+                  <th>배정/전체</th>
+                  <th>좌석</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <div id="admin-business-seats-wrap" class="admin-business-seats" style="display: none; margin-top: 1.25rem">
+            <h3 class="admin-subh3" id="admin-business-seats-title">좌석</h3>
+            <div id="admin-business-seats-body"></div>
+          </div>
+        </div>
+
+        <div class="admin-panel" data-panel="pages">
+          <h2>사이트 페이지</h2>
+          <p class="admin-note">
+            정적 HTML 파일을 자동 편집하지는 않습니다. 내비·노출용 메타(제목·순서·숨김)를 DB에 저장해 두고, 이후
+            프론트에서 불러 쓰도록 확장할 수 있습니다. 메인 본문 블록은 <strong>홈 HTML</strong> 탭을 사용하세요.
+          </p>
+          <div class="admin-table-wrap">
+            <table class="admin-table" id="admin-pages-table">
+              <thead>
+                <tr>
+                  <th>경로</th>
+                  <th>제목</th>
+                  <th>순서</th>
+                  <th>노출</th>
+                  <th>저장</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="site-footer" role="contentinfo">
+      <div class="ci-wrap ci-wrap--footer">
+        <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="220" height="110" alt="" />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </footer>
+    <script src="../assets/site-ux.js"></script>
+    <script src="../assets/admin-app.js"></script>
+  </body>
+</html>
