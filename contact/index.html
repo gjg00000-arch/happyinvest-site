@@ -4,6 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="api-base" content="https://happyinvests.com" />
+    <meta name="description" content="Magic 지표 고객·기술 문의 — 버그 신고 및 티켓 접수 안내." />
+    <link rel="canonical" href="https://happyinvests.com/contact/index.html" />
+    <meta property="og:title" content="Magic 지표 — 문의" />
+    <meta property="og:description" content="Magic 지표 고객·기술 문의 및 버그 접수." />
+    <meta property="og:url" content="https://happyinvests.com/contact/index.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://happyinvests.com/assets/haengbokdam-company-ci.png" />
+    <meta name="twitter:card" content="summary_large_image" />
     <title>Magic 지표 — 문의</title>
     <link rel="stylesheet" href="../assets/common.css" />
     <link rel="stylesheet" href="../assets/site-ux.css" />
@@ -28,6 +36,9 @@
     <nav class="site-nav" aria-label="주요 메뉴">
       <a href="../index.html">메인</a>
       <a href="../guide/index.html">가이드</a>
+      <a href="../guide/usage.html">지표 사용</a>
+      <a href="../guide/usage-trv.html">TRV</a>
+      <a href="../guide/usage-mt5.html">MT5</a>
       <a href="../downloads/index.html">다운로드</a>
       <a href="../registration/index.html">가입·등록</a>
       <a href="../verify/index.html">본인인증</a>
@@ -35,18 +46,19 @@
       <a href="../events/index.html">이벤트</a>
       <a href="../membership/index.html">회원혜택</a>
       <a href="../reflection/index.html">실전후기</a>
-      <a href="../contact/index.html">문의</a>
+      <a href="../contact/index.html" aria-current="page">문의</a>
       <a href="../boards/index.html">모임터</a>
+      <a href="../boards/index.html?board=event_promo_shoutout">추천·홍보</a>
       <a href="../legal/index.html">약관·정책</a>
       <a href="../admin/index.html">관리자</a>
       <a href="../integrations/index.html">연동</a>
     </nav>
-    <div class="wrap">
+    <main class="wrap" id="main-content">
       <h1 class="page-title">문의 · 버그 제보</h1>
       <p class="lead contact-lead-note">
-        유형을 선택하면 <strong>즉시 자동응답</strong> 문구가 표시되고, 서버에 SMTP가 설정된 경우
-        <strong>회원 이메일로도 동일 안내</strong>가 발송됩니다. 버그는 기본적으로 요약이 공개되며, 비공개를 원하시면
-        체크를 해제하세요.
+        유형을 고르시면 화면에 <strong>자동 응답</strong> 문구가 먼저 뜨고, 서버에서 메일(SMTP)이 켜져 있을 때는
+        <strong>남기신 이메일</strong>로도 같은 안내를 보내 드려요. 버그 제보는 기본으로 요약이 모임터에 열릴 수 있고, 비공개로만 남기고 싶다면
+        폼에서 그에 맞게 선택해 주세요.
       </p>
       <p id="mail-configured-hint" class="contact-hint"></p>
 
@@ -100,7 +112,7 @@
         <p class="contact-hint">버그 유형으로 공개 접수된 건의 요약입니다. 관리자가 짧게 회신하면 여기에 일부 표시됩니다.</p>
         <ul id="contact-bug-list" class="contact-bug-list"></ul>
       </section>
-    </div>
+    </main>
     <footer class="site-footer" role="contentinfo">
       <div class="ci-wrap ci-wrap--footer">
         <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="220" height="110" alt="" />

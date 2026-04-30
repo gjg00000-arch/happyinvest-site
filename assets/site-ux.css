@@ -14,9 +14,14 @@
   text-decoration: none;
 }
 .skip-link:focus {
-  left: 0.5rem;
   outline: 3px solid #fff;
   outline-offset: 2px;
+}
+.skip-link:focus:not(:focus-visible) {
+  left: -9999px;
+}
+.skip-link:focus-visible {
+  left: 0.5rem;
 }
 
 /* 상단 보조 툴바 (테마·언어) */
@@ -26,7 +31,8 @@
   align-items: center;
   justify-content: flex-end;
   gap: 0.5rem;
-  padding: 0.35rem 1rem 0.5rem;
+  padding: calc(0.35rem + env(safe-area-inset-top, 0px)) calc(1rem + env(safe-area-inset-right, 0px)) 0.5rem
+    calc(1rem + env(safe-area-inset-left, 0px));
   background: rgba(255, 255, 255, 0.92);
   border-bottom: 1px solid rgba(74, 53, 40, 0.12);
 }
@@ -54,6 +60,8 @@ html[data-theme="dark"] .ux-chrome-bar {
   background: #fff;
   color: var(--ci-brown, #4a3528);
   cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), filter 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 html[data-theme="dark"] .ux-chrome-btn {
   background: #21262d;
@@ -62,9 +70,26 @@ html[data-theme="dark"] .ux-chrome-btn {
 }
 .ux-chrome-btn:hover {
   filter: brightness(0.97);
+  transform: translateY(-1px);
 }
 html[data-theme="dark"] .ux-chrome-btn:hover {
   filter: brightness(1.08);
+}
+@media (prefers-reduced-motion: reduce) {
+  .ux-chrome-btn {
+    transition: none;
+  }
+  .ux-chrome-btn:hover {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.22s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
 }
 
 /* 언어 선택 (지구본 + 드롭다운) */
@@ -292,8 +317,9 @@ html[data-theme="dark"] {
   color-scheme: dark;
 }
 html[data-theme="dark"] body {
-  background: #0d1117;
-  color: #e6edf3;
+  /* 완전 검정(#000) 대신 깊은 그레이 — 시선 피로·프로 핀테크 무드 */
+  background: #0b0b0b;
+  color: #e8edf3;
 }
 html[data-theme="dark"] .site-header {
   background: linear-gradient(180deg, #161b22 0%, #21262d 100%);
@@ -344,9 +370,11 @@ html[data-theme="dark"] .integration-card,
 html[data-theme="dark"] .tier-card,
 html[data-theme="dark"] .stat-card,
 html[data-theme="dark"] .radio-row {
-  background: #161b22;
-  border-color: rgba(255, 255, 255, 0.09);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.26);
+  background: rgba(22, 27, 34, 0.58);
+  backdrop-filter: saturate(155%) blur(14px);
+  -webkit-backdrop-filter: saturate(155%) blur(14px);
+  border-color: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 14px 48px rgba(0, 0, 0, 0.42);
 }
 html[data-theme="dark"] section h2,
 html[data-theme="dark"] .home-map__title,
@@ -469,6 +497,37 @@ html[data-theme="dark"] .ml-details__body {
 }
 html[data-theme="dark"] .ml-footnote {
   color: #8b949e;
+}
+
+html[data-theme="dark"] .layout-home-policy {
+  background: rgba(22, 27, 34, 0.72) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+  color: #b9b4a8 !important;
+}
+
+html[data-theme="dark"] .layout-home-snapshot {
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  background:
+    radial-gradient(circle at 12% -10%, rgba(155, 228, 184, 0.1), transparent 42%),
+    linear-gradient(168deg, #161b22, #1a222c) !important;
+  box-shadow: 0 12px 38px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+html[data-theme="dark"] .layout-home-snapshot__title {
+  color: #f0e6dc !important;
+}
+
+html[data-theme="dark"] .layout-home-snapshot__lead {
+  color: #8b949e !important;
+}
+
+html[data-theme="dark"] .layout-home-snapshot__list {
+  color: #c9d1d9 !important;
+}
+
+html[data-theme="dark"] .layout-home .main-top-banner::after {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.12) 0%, rgba(22, 27, 34, 0.35) 100%);
 }
 
 /* 터치 영역: 내비 링크 */

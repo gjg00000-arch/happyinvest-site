@@ -22,6 +22,9 @@
     <nav class="site-nav" aria-label="주요 메뉴">
       <a href="../index.html">메인</a>
       <a href="../guide/index.html">가이드</a>
+      <a href="../guide/usage.html">지표 사용</a>
+      <a href="../guide/usage-trv.html">TRV</a>
+      <a href="../guide/usage-mt5.html">MT5</a>
       <a href="../downloads/index.html">다운로드</a>
       <a href="../registration/index.html">가입·등록</a>
       <a href="../verify/index.html">본인인증</a>
@@ -30,7 +33,7 @@
       <a href="../membership/index.html">회원혜택</a>
       <a href="../reflection/index.html">실전후기</a>
       <a href="../contact/index.html">문의</a>
-      <a href="../boards/index.html">모임터</a>
+      <a href="index.html" aria-current="page">모임터</a>
       <a href="../boards/index.html?board=event_promo_shoutout">추천·홍보</a>
       <a href="../legal/index.html">약관·정책</a>
       <a href="../admin/index.html">관리자</a>
@@ -96,6 +99,18 @@
             </button>
           </li>
           <li>
+            <button type="button" role="tab" data-cat="market_analysis">
+              시황 분석
+              <span class="cat-slug">market_analysis</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" role="tab" data-cat="head_daily_report">
+              본부 데일리
+              <span class="cat-slug">head_daily_report</span>
+            </button>
+          </li>
+          <li>
             <button type="button" role="tab" data-cat="qa">
               질문과 답변
               <span class="cat-slug">qa</span>
@@ -127,7 +142,7 @@
           </li>
           <li>
             <button type="button" role="tab" data-cat="event_1m_usd">
-              MagicTrading · $100/mo
+              MagicTrading · Whop/MQL 1개월 이벤트
               <span class="cat-slug">event_1m_usd</span>
             </button>
           </li>
@@ -250,12 +265,14 @@
               <select id="p-cat">
                 <option value="quickview">한눈에 보기</option>
                 <option value="announcement">공지</option>
+                <option value="market_analysis">시황 분석</option>
+                <option value="head_daily_report">본부 데일리 업무보고</option>
                 <option value="qa">질문과 답변</option>
                 <option value="general" selected>자유 이야기</option>
                 <option value="beta">베타 소식</option>
                 <option value="event">이벤트</option>
                 <option value="event_1w_free">이벤트 · 7일 무료 체험</option>
-                <option value="event_1m_usd">MagicTrading · $100/mo</option>
+                <option value="event_1m_usd">MagicTrading · 1개월 이벤트</option>
                 <option value="event_6m_recovery">리커버리 · 2개월</option>
                 <option value="membership">회원 혜택</option>
                 <option value="reflection">실전 이야기</option>
@@ -263,7 +280,7 @@
               </select>
             </div>
             <p id="board-promo-compose-hint" class="board-compose__note" hidden>
-              <strong>책 구매인증·친구추천·홍보 인증</strong> — 책 구매인증은 1달 100불 이벤트 플랜 가입 대상 이상(정회원 이상)만 등록할 수 있습니다. 링크를 올릴 수 있으면 링크 하나, 어려우면 캡처 하나만 남겨 주세요.
+              <strong>책 구매인증·친구추천·홍보 인증</strong> — 책 구매인증은 가입·본인인증이 완료되고, 1개월 이벤트 플랜 대상이 된 회원만 등록할 수 있습니다. 링크를 올릴 수 있으면 링크 하나, 어려우면 캡처 하나만 남겨 주세요.
               친구추천은 1달 이벤트와 무관하며, 피추천인이 <strong>정규 플랜을 시작하고 최소 1개월 유지</strong>하면 추천 인정 건으로 집계하고,
               2명 3달 · 3명 5달 · 10명 12달 · 100명 60달 무료쿠폰과 커뮤니티 VIP 선정을 적용합니다.
             </p>
@@ -790,12 +807,14 @@
           "": "글 목록 — 전체",
           quickview: "한눈에 보기",
           announcement: "공지",
+          market_analysis: "시황 분석",
+          head_daily_report: "본부 데일리 업무보고",
           qa: "질문과 답변",
           general: "자유 이야기",
           beta: "베타 소식",
           event: "이벤트",
           event_1w_free: "이벤트 · 7일 무료 체험",
-          event_1m_usd: "MagicTrading · $100/mo",
+          event_1m_usd: "MagicTrading · 1개월 이벤트",
           event_6m_recovery: "리커버리 · 2개월",
           membership: "회원 혜택",
           reflection: "실전 이야기",
@@ -804,12 +823,14 @@
         var catLabels = {
           quickview: "한눈에 보기",
           announcement: "공지",
+          market_analysis: "시황 분석",
+          head_daily_report: "본부 데일리 업무보고",
           qa: "질문과 답변",
           general: "자유 이야기",
           beta: "베타 소식",
           event: "이벤트",
           event_1w_free: "이벤트 · 7일 무료 체험",
-          event_1m_usd: "MagicTrading · $100/mo",
+          event_1m_usd: "MagicTrading · 1개월 이벤트",
           event_6m_recovery: "리커버리 · 2개월",
           membership: "회원 혜택",
           reflection: "실전 이야기",
@@ -1280,6 +1301,8 @@
             "",
             "quickview",
             "announcement",
+            "market_analysis",
+            "head_daily_report",
             "qa",
             "general",
             "beta",

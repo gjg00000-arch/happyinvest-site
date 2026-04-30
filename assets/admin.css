@@ -188,6 +188,36 @@
   margin: 0 0 1rem;
 }
 
+.admin-monitor-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  align-items: center;
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+}
+
+.admin-monitor-nav a {
+  color: #1e5a3a;
+  font-weight: 600;
+}
+
+.admin-monitor h2 {
+  font-size: 1.1rem;
+  margin: 1.25rem 0 0.5rem;
+  color: #2f3d32;
+}
+
+.admin-monitor .cohort-table {
+  min-width: 28rem;
+}
+
+.admin-monitor .cohort-table td.num,
+.admin-monitor .cohort-table th.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
 .admin-form-inline {
   display: flex;
   flex-wrap: wrap;
@@ -303,4 +333,90 @@
   content: "미리보기(저장 전 로컬 반영)";
   color: #998;
   font-size: 0.82rem;
+}
+
+/* 플랜 모니터 만료 잔여 일수 강조 */
+.monitor-exp-wrap.monitor-expiry--ok {
+  color: inherit;
+}
+.monitor-exp-wrap.monitor-expiry--warn {
+  color: #b35c00;
+}
+.monitor-exp-wrap.monitor-expiry--soon {
+  color: #a3271e;
+  font-weight: 650;
+}
+.monitor-exp-wrap.monitor-expiry--past {
+  color: #666;
+  opacity: 0.9;
+}
+.monitor-expiry-days {
+  font-size: 0.68rem;
+  font-weight: normal;
+  opacity: 0.95;
+}
+
+html[data-theme="dark"] .monitor-exp-wrap.monitor-expiry--warn {
+  color: #e6a23c;
+}
+html[data-theme="dark"] .monitor-exp-wrap.monitor-expiry--soon {
+  color: #f56c6c;
+}
+
+/* 대시보드: bug 티켓 SLA(48h) 미종료 초과 알림 — 접근성: 과도 깜빡임 회피 */
+@keyframes admin-sla-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(179, 42, 40, 0.28);
+    border-color: #d4b8a8;
+  }
+  50% {
+    opacity: 0.97;
+    box-shadow: 0 0 14px 1px rgba(179, 42, 40, 0.22);
+    border-color: #c49a82;
+  }
+}
+
+.admin-sla-alert {
+  margin: 0 0 1rem;
+  padding: 0.65rem 0.85rem;
+  border: 2px solid #c49a82;
+  border-radius: 8px;
+  background: linear-gradient(165deg, #fff8f4 0%, #fdeee8 100%);
+  color: #3d2a22;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  animation: admin-sla-pulse 1.85s ease-in-out infinite;
+}
+
+.admin-sla-alert strong {
+  color: #8b2e2a;
+  margin-right: 0.35rem;
+}
+
+.admin-sla-alert code {
+  font-size: 0.78rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-sla-alert {
+    animation: none;
+  }
+}
+
+html[data-theme="dark"] .admin-sla-alert {
+  border-color: #8f4f4f;
+  background: rgba(110, 40, 38, 0.22);
+  color: #f5e9e7;
+}
+
+html[data-theme="dark"] .admin-sla-alert strong {
+  color: #ffb4a9;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme="dark"] .admin-sla-alert {
+    box-shadow: none;
+  }
 }

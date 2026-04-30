@@ -4,6 +4,9 @@
 (function () {
   var THEME_KEY = "happyinvest-theme";
   var LANG_KEY = "happyinvest-lang";
+  /** 상태 표시줄·PWA — 라이트/다크 브랜드 톤 (manifest theme_color 와 균형) */
+  var META_THEME_LIGHT = "#2f6f4f";
+  var META_THEME_DARK = "#0d1117";
 
   function toast(msg, opts) {
     opts = opts || {};
@@ -72,9 +75,47 @@
     return go();
   }
 
+  function syncThemeColorMeta() {
+    var dark = document.documentElement.getAttribute("data-theme") === "dark";
+    var color = dark ? META_THEME_DARK : META_THEME_LIGHT;
+    var m = document.querySelector('meta[name="theme-color"]');
+    if (!m) {
+      m = document.createElement("meta");
+      m.setAttribute("name", "theme-color");
+      document.head.appendChild(m);
+    }
+    m.setAttribute("content", color);
+    var ap = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+    if (!ap) {
+      ap = document.createElement("meta");
+      ap.setAttribute("name", "apple-mobile-web-app-status-bar-style");
+      document.head.appendChild(ap);
+    }
+    ap.setAttribute("content", dark ? "black-translucent" : "default");
+  }
+
   function applyTheme(isDark) {
     if (isDark) document.documentElement.setAttribute("data-theme", "dark");
     else document.documentElement.removeAttribute("data-theme");
+    syncThemeColorMeta();
+  }
+
+  function initHeadReferrer() {
+    if (document.querySelector('meta[name="referrer"]')) return;
+    var meta = document.createElement("meta");
+    meta.setAttribute("name", "referrer");
+    meta.setAttribute("content", "strict-origin-when-cross-origin");
+    var h = document.head;
+    if (h && h.firstChild) h.insertBefore(meta, h.firstChild);
+    else if (h) h.appendChild(meta);
+  }
+
+  function enhanceViewportMeta() {
+    var v = document.querySelector('meta[name="viewport"]');
+    if (!v) return;
+    var c = v.getAttribute("content") || "";
+    if (c.indexOf("viewport-fit") >= 0) return;
+    v.setAttribute("content", c.replace(/\s*$/, "") + ", viewport-fit=cover");
   }
 
   function initTheme() {
@@ -459,19 +500,30 @@
     nav.parentNode.insertBefore(bar, nav.nextSibling);
 
     document.getElementById("ux-btn-theme").addEventListener("click", function () {
-      var nextDark = toggleTheme();
-      var lg = getUiLang();
-      var m = I18N[lg] || I18N.ko;
-      toast(
-        nextDark
-          ? lg === "ko"
-            ? "다크 모드예요."
-            : m.theme + ": dark"
-          : lg === "ko"
-            ? "라이트 모드예요."
-            : m.theme + ": light",
-        { duration: 2200 }
-      );
+      var reduced =
+        window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      function doToggleAndToast() {
+        var nextDark = toggleTheme();
+        var lg = getUiLang();
+        var m = I18N[lg] || I18N.ko;
+        toast(
+          nextDark
+            ? lg === "ko"
+              ? "다크 모드예요."
+              : m.theme + ": dark"
+            : lg === "ko"
+              ? "라이트 모드예요."
+              : m.theme + ": light",
+          { duration: 2200 }
+        );
+      }
+
+      if (document.startViewTransition && !reduced) {
+        document.startViewTransition(function () {
+          doToggleAndToast();
+        });
+      } else doToggleAndToast();
     });
 
     var root = document.getElementById("ux-lang-root");
@@ -515,6 +567,8 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
+    initHeadReferrer();
+    enhanceViewportMeta();
     initSkipLink();
     initTheme();
     initChromeBar();

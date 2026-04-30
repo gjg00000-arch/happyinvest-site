@@ -7,7 +7,7 @@ magic-indicator-site/
 ├── downloads/index.html       지표 다운로드 (TradingView · MT5)
 ├── registration/index.html    가입 · 이벤트 참여 게시판
 ├── telegram-chat-id/index.html  텔레그램 Chat ID 확인(가입 연동용 단계 안내)
-├── billing/index.html         구독 · 결제 (Whop/Stripe 등 연동 예정)
+├── billing/index.html         구독 · 결제 (Airwallex 등 PG 연동)
 ├── events/index.html          이벤트 보드
 ├── membership/index.html      회원 전용 혜택 (추천 마일스톤)
 ├── reflection/index.html      실전 후기 · 사용 기록

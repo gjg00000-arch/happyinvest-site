@@ -1,3 +1,11 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.css");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+html {
+  /* 스크롤바 표시로 인한 레이아웃 흔들림 완화 */
+  scrollbar-gutter: stable;
+}
+
 *,
 *::before,
 *::after {
@@ -5,6 +13,8 @@
 }
 
 :root {
+  /* 브라우저 기본 폼·스크롤바가 라이트/다크 설정과 맞도록 */
+  color-scheme: light;
   --ci-green: #2f6f4f;
   --ci-green-deep: #214f39;
   --ci-green-soft: #e8f0eb;
@@ -15,13 +25,18 @@
   --ci-brown: #4a3528;
   --ci-brown-muted: #6b5344;
   --ci-bg: #f7f6f3;
+  /* Typography-first · 핀테크 레퍼런스용 스택 — 굴림/돋움 미사용 */
+  --font-sans: "Pretendard Variable", Pretendard, Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    sans-serif;
+  --ease-fin: cubic-bezier(0.4, 0, 0.2, 1);
+  accent-color: var(--ci-green);
 }
 
 body {
   margin: 0;
-  font-family: "Pretendard Variable", Pretendard, "Apple SD Gothic Neo", sans-serif;
+  font-family: var(--font-sans);
   color: var(--ci-ink);
-  line-height: 1.68;
+  line-height: 1.72;
   background: var(--ci-bg);
   min-height: 100vh;
   display: flex;
@@ -34,10 +49,16 @@ a {
   color: var(--ci-green);
   text-underline-offset: 0.18em;
   text-decoration-thickness: 0.08em;
+  transition: color 0.2s var(--ease-fin), opacity 0.2s var(--ease-fin);
 }
 
 a:hover {
   color: var(--ci-salmon);
+}
+
+:is(a, button, input:not([type="hidden"]), textarea, select):focus-visible {
+  outline: 2px solid var(--ci-green-deep);
+  outline-offset: 2px;
 }
 
 strong,
@@ -167,6 +188,7 @@ code {
   font-size: 0.88rem;
   font-weight: 760;
   letter-spacing: -0.015em;
+  transition: color 0.2s var(--ease-fin), transform 0.2s var(--ease-fin);
 }
 
 .site-nav a:hover {
@@ -174,13 +196,19 @@ code {
   text-decoration: underline;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  .site-nav a:hover {
+    transform: translateY(-0.06rem);
+  }
+}
+
 /* ——— 본문 ——— */
 .wrap {
   flex: 1;
-  max-width: 900px;
+  max-width: 920px;
   width: 100%;
   margin: 0 auto;
-  padding: 1.25rem 1rem 2rem;
+  padding: clamp(1.5rem, 5vw, 2.85rem) clamp(1rem, 4vw, 2.25rem) clamp(2.5rem, 6vw, 4rem);
 }
 
 .hero-img {
@@ -202,12 +230,12 @@ small.dummy {
 }
 
 section {
-  margin-bottom: 1.5rem;
-  padding: 1.08rem 1.12rem;
-  background: #fff;
-  border-radius: 14px;
-  border: 1px solid rgba(47, 111, 79, 0.1);
-  box-shadow: 0 7px 24px rgba(47, 111, 79, 0.045);
+  margin-bottom: clamp(2rem, 5vw, 3rem);
+  padding: clamp(1.25rem, 3.2vw, 2rem) clamp(1.15rem, 3vw, 1.95rem);
+  background: rgba(255, 255, 255, 0.94);
+  border-radius: 16px;
+  border: 1px solid rgba(47, 111, 79, 0.07);
+  box-shadow: 0 10px 40px rgba(26, 40, 32, 0.06), 0 2px 8px rgba(47, 111, 79, 0.04);
 }
 
 section h2 {
@@ -226,6 +254,7 @@ section h2 {
   font-weight: 900;
   color: var(--ci-brown);
   letter-spacing: -0.055em;
+  text-wrap: balance;
 }
 
 .page-title::after {
@@ -241,8 +270,8 @@ section h2 {
 .lead {
   font-size: clamp(1.02rem, 2.8vw, 1.14rem);
   color: #3b342e;
-  margin: 0 0 1.08rem;
-  line-height: 1.72;
+  margin: 0 0 clamp(1.35rem, 4vw, 2.1rem);
+  line-height: 1.75;
   font-weight: 500;
 }
 
@@ -253,7 +282,7 @@ section h2 {
 
 /* 메인: 페이지·모임터 맵 */
 .home-map {
-  margin: 1.35rem 0 0.25rem;
+  margin: clamp(1.85rem, 5vw, 3rem) 0 0.45rem;
 }
 .home-map__title {
   margin: 0 0 0.35rem;
@@ -292,20 +321,21 @@ section h2 {
   display: block;
   padding: 0.85rem 1rem;
   background: linear-gradient(160deg, #f4faf6 0%, var(--ci-green-soft) 100%);
-  border: 1px solid rgba(47, 111, 79, 0.25);
+  border: 1px solid rgba(47, 111, 79, 0.18);
   border-radius: 12px;
   color: var(--ci-brown);
   font-weight: 850;
   text-decoration: none;
   font-size: 0.92rem;
   box-shadow: 0 6px 18px rgba(47, 111, 79, 0.045);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  transition: transform 0.2s var(--ease-fin), box-shadow 0.2s var(--ease-fin), border-color 0.2s var(--ease-fin),
+    filter 0.2s var(--ease-fin);
 }
 .main-hub a:hover {
   background: #dce8e0;
   border-color: var(--ci-green);
-  transform: translateY(-1px);
-  box-shadow: 0 10px 24px rgba(47, 111, 79, 0.1);
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 12px 28px rgba(47, 111, 79, 0.12);
 }
 .main-hub small {
   display: block;
@@ -386,6 +416,112 @@ section h2 {
   margin-bottom: 0.5rem;
   font-size: 1.02rem;
   font-weight: 900;
+}
+
+/* 구독·결제: PayPal / 직접 송금 이원 */
+.pay-dual {
+  margin: 1.1rem 0 0.5rem;
+}
+.pay-dual > h2:first-of-type {
+  font-size: 1.12rem;
+  margin: 0 0 0.6rem;
+  color: var(--ci-brown, #3d2f28);
+  font-weight: 900;
+}
+.pay-dual__intro {
+  margin: 0 0 0.75rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--ci-brown-muted, #4a4038);
+}
+.pay-dual__procedure {
+  margin: 0 0 1rem;
+  padding-left: 1.2rem;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--ci-brown-muted, #4a4038);
+}
+.pay-dual__procedure li {
+  margin-bottom: 0.35rem;
+}
+.pay-dual__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.15rem;
+  align-items: start;
+}
+@media (min-width: 880px) {
+  .pay-dual__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.pay-dual__panel {
+  border: 1px solid rgba(47, 111, 79, 0.22);
+  border-radius: 14px;
+  padding: 1rem 1.1rem 1.05rem;
+  background: linear-gradient(175deg, #fffef9 0%, #f8faf7 100%);
+  box-shadow: 0 8px 24px rgba(47, 111, 79, 0.06);
+}
+.pay-dual__panel h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+  color: var(--ci-brown, #3d2f28);
+  font-weight: 900;
+}
+.pay-dual__panel .pay-dual__eyebrow {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ci-green, #2f6f4f);
+  margin: 0 0 0.2rem;
+}
+.currency-chipbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.35rem 0 0.6rem;
+}
+button.currency-chip {
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 0.38rem 0.55rem;
+  border-radius: 8px;
+  border: 1px solid #cfd3db;
+  background: #eeeff2;
+  color: #2a2a2e;
+  cursor: pointer;
+  line-height: 1.2;
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+button.currency-chip:hover {
+  border-color: #a8aeb8;
+  background: #e4e6ea;
+}
+button.currency-chip[aria-pressed="true"] {
+  border-color: #6b4c9a;
+  background: #f0e8fa;
+  color: #2d1f40;
+  box-shadow: 0 0 0 1px rgba(107, 76, 154, 0.35);
+}
+.d-currency-panel {
+  display: none;
+  margin-top: 0.45rem;
+  padding: 0.65rem 0.7rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(74, 53, 40, 0.1);
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+.d-currency-panel.is-on {
+  display: block;
+}
+.d-currency-panel .data-table {
+  font-size: 0.84rem;
+  margin: 0.4rem 0 0.2rem;
 }
 .terms-box {
   margin-top: 1.5rem;
@@ -535,12 +671,18 @@ section h2 {
   font-size: 0.95rem;
   letter-spacing: -0.02em;
   box-shadow: 0 8px 18px rgba(47, 111, 79, 0.18);
-  transition: transform 0.15s ease, filter 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.2s var(--ease-fin), filter 0.2s var(--ease-fin), box-shadow 0.2s var(--ease-fin),
+    opacity 0.2s var(--ease-fin);
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
 }
 .btn:hover {
-  filter: brightness(1.05);
-  transform: translateY(-1px);
-  box-shadow: 0 11px 22px rgba(47, 111, 79, 0.22);
+  filter: brightness(1.06);
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 12px 26px rgba(47, 111, 79, 0.24);
 }
 
 /* 관리자: 대시보드 틀 */
@@ -613,7 +755,7 @@ section h2 {
   color: #666;
 }
 
-/* 결제 직전 — Stripe/Coinbase 권고 문구 */
+/* 결제 직전 — Airwallex/Coinbase 권고 문구 */
 .nrf-box {
   margin: 1.25rem 0;
   padding: 1rem 1.15rem;

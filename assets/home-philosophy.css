@@ -1,14 +1,106 @@
-/* 메인(index) — 매직라인 메시지 (심플·따뜻한 톤) */
+/**
+ * 메인 전용 스타일 (index 만 로드) — Editorial / restrained fintech
+ * 차분한 뉴트럴베이스 · 브랜드 그린/살몬 · 부드러운 글래스 계열 표면
+ */
+.layout-home {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.layout-home-main {
+  position: relative;
+}
+
+.layout-home-main > header .page-title {
+  font-weight: 950;
+  letter-spacing: -0.058em;
+  color: var(--ci-brown);
+}
+
+.layout-home-main .lead {
+  color: rgba(47, 40, 35, 0.92);
+  font-size: clamp(1.03rem, 2.75vw, 1.22rem);
+  line-height: 1.76;
+}
+
+.layout-home-policy {
+  margin-top: 0.85rem;
+  padding: 0.75rem 1rem;
+  border-radius: 14px;
+  color: var(--ci-brown-muted) !important;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(47, 111, 79, 0.13);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    0 4px 20px rgba(47, 111, 79, 0.05);
+  line-height: 1.65;
+}
+
+/* 상단 배너: 살짝만 대비 살린 이미지 + 하단 헤더와 이어지는 무드 */
+.layout-home .main-top-banner {
+  position: relative;
+  overflow: clip;
+}
+
+.layout-home .main-top-banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(7, 10, 9, 0.04) 0%, rgba(251, 252, 250, 0.45) 100%);
+}
+
+.layout-home .main-top-banner__img {
+  filter: contrast(1.03) saturate(1.06);
+}
+
+/* 서비스 스냅샷 — 카드 표면 통일 */
+.layout-home-snapshot {
+  margin: 1rem 0 1.3rem !important;
+  padding: 1rem 1.12rem !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(74, 53, 40, 0.09) !important;
+  background:
+    radial-gradient(circle at 12% -10%, rgba(155, 228, 184, 0.16), transparent 42%),
+    linear-gradient(168deg, rgba(255, 254, 250, 0.98), rgba(244, 250, 246, 0.94)) !important;
+  box-shadow: 0 10px 36px rgba(47, 111, 79, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.72);
+}
+
+.layout-home-snapshot__title {
+  margin: 0 0 0.5rem !important;
+  font-size: 1.02rem !important;
+  letter-spacing: -0.035em !important;
+  font-weight: 900 !important;
+  color: var(--ci-brown) !important;
+}
+
+.layout-home-snapshot__lead {
+  margin: 0 0 0.55rem !important;
+  color: var(--ci-brown-muted) !important;
+  line-height: 1.54 !important;
+}
+
+.layout-home-snapshot__list {
+  margin: 0 !important;
+  padding-left: 1.1rem !important;
+  font-size: 0.9rem !important;
+  line-height: 1.58 !important;
+  color: #3f342f !important;
+}
+
+/* 메인(index) — 매직라인 메시지 */
 
 /* 환영 포스터(랜드스케이프) — 본문 너비 안에서 높이만 제한 */
 .ml-welcome-poster {
-  margin: 0 0 1.2rem;
+  margin: 0 0 clamp(1.1rem, 3vw, 1.35rem);
   padding: 0;
-  border-radius: 14px;
+  border-radius: clamp(16px, 2.4vw, 22px);
   overflow: hidden;
-  border: 1px solid rgba(74, 53, 40, 0.12);
-  box-shadow: 0 6px 28px rgba(74, 53, 40, 0.08);
-  background: #100e0c;
+  border: 1px solid rgba(47, 111, 79, 0.14);
+  box-shadow:
+    0 12px 42px rgba(26, 32, 28, 0.1),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  background: radial-gradient(circle at 50% -20%, rgba(155, 228, 184, 0.12), transparent 52%), #100e0c;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,12 +112,116 @@
   height: auto;
   object-fit: contain;
   display: block;
+  filter: saturate(1.05) contrast(1.02);
 }
 
 @media (min-width: 640px) {
   .ml-welcome-poster__img {
     max-height: min(380px, 42vw);
   }
+}
+
+/* 메인(index) — 결제 체계 초안(홈 상단 고지) */
+.home-payment-draft {
+  margin: 0 0 1.45rem;
+  padding: 1.2rem 1.2rem 1.22rem;
+  border-radius: 18px;
+  background:
+    radial-gradient(ellipse 80% 50% at 100% -20%, rgba(155, 228, 184, 0.18), transparent 55%),
+    linear-gradient(152deg, #fffefb 0%, #f5faf6 48%, #fff9f4 100%);
+  border: 1px solid rgba(47, 111, 79, 0.16);
+  box-shadow:
+    0 16px 40px rgba(47, 111, 79, 0.09),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+.home-payment-draft__badge {
+  margin: 0 0 0.5rem;
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(47, 91, 78, 0.95);
+  padding: 0.2rem 0.48rem;
+  border-radius: 999px;
+  background: rgba(155, 228, 184, 0.35);
+  border: 1px solid rgba(47, 111, 79, 0.28);
+}
+
+.home-payment-draft__title {
+  margin: 0 0 0.45rem;
+  font-size: clamp(1.12rem, 2.9vw, 1.35rem);
+  font-weight: 900;
+  color: #3d5c4f;
+  letter-spacing: -0.04em;
+}
+
+.home-payment-draft__lead {
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #5d4a40;
+}
+
+.home-payment-draft__lead a {
+  color: #236b53;
+  font-weight: 700;
+}
+
+.home-payment-draft__grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+@media (min-width: 720px) {
+  .home-payment-draft__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.85rem;
+  }
+}
+
+.home-payment-draft__card {
+  margin: 0;
+  padding: 0.85rem 0.92rem;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(74, 53, 40, 0.1);
+  box-shadow: 0 2px 10px rgba(74, 53, 40, 0.05);
+}
+
+.home-payment-draft__card-title {
+  margin: 0 0 0.4rem;
+  font-size: 1rem;
+  font-weight: 850;
+  color: #234d3f;
+}
+
+.home-payment-draft__card-body {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.62;
+  color: #594636;
+}
+
+.home-payment-draft__mono {
+  display: inline;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+  color: #2e5e4c;
+}
+
+.home-payment-draft__foot {
+  margin: 1rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(74, 53, 40, 0.1);
+  font-size: 0.9rem;
+}
+
+.home-payment-draft__foot a {
+  font-weight: 750;
+  color: #236b53;
 }
 
 .ml-manifesto {
@@ -36,27 +232,32 @@
 }
 
 .ml-manifesto__head {
-  padding: 1.25rem 1.2rem 1.3rem;
-  border-radius: 16px;
-  background: linear-gradient(165deg, #fff9f2 0%, #fff5eb 40%, #f3f8f4 100%);
-  border: 1px solid rgba(199, 91, 74, 0.12);
-  box-shadow: 0 6px 28px rgba(74, 53, 40, 0.06);
-  margin-bottom: 1rem;
+  padding: 1.3rem 1.25rem 1.35rem;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 0% -10%, rgba(199, 91, 74, 0.08), transparent 45%),
+    linear-gradient(168deg, #fffdfb 0%, #fcf7ef 42%, #f1f8f4 100%);
+  border: 1px solid rgba(199, 91, 74, 0.11);
+  box-shadow:
+    0 14px 42px rgba(74, 53, 40, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  margin-bottom: 1.08rem;
 }
 
 .ml-manifesto__title {
   margin: 0 0 0.55rem;
-  font-size: clamp(1.22rem, 3vw, 1.42rem);
-  font-weight: 900;
-  color: #5c4033;
-  letter-spacing: -0.045em;
+  font-size: clamp(1.2rem, 3.05vw, 1.52rem);
+  font-weight: 930;
+  color: rgba(92, 64, 51, 0.98);
+  letter-spacing: -0.048em;
+  text-wrap: balance;
 }
 
 .ml-manifesto__lead {
   margin: 0;
-  font-size: clamp(0.98rem, 2.6vw, 1.06rem);
-  color: #6b5344;
-  line-height: 1.65;
+  font-size: clamp(1rem, 2.65vw, 1.09rem);
+  color: rgba(107, 83, 68, 0.97);
+  line-height: 1.72;
   font-weight: 520;
 }
 
@@ -143,11 +344,11 @@
 }
 
 .ml-manifesto__body {
-  padding: 1.15rem 1.15rem 1.2rem;
-  border-radius: 14px;
-  background: #fffef9;
-  border: 1px solid rgba(74, 53, 40, 0.08);
-  box-shadow: 0 2px 14px rgba(47, 111, 79, 0.04);
+  padding: 1.2rem 1.2rem 1.28rem;
+  border-radius: 16px;
+  background: rgba(255, 254, 251, 0.92);
+  border: 1px solid rgba(74, 53, 40, 0.07);
+  box-shadow: 0 8px 30px rgba(47, 111, 79, 0.055), inset 0 1px 0 rgba(255, 255, 255, 0.82);
 }
 
 .ml-subh {
@@ -471,6 +672,29 @@
   margin-bottom: 0;
 }
 
+/* 메인 최하단 — 시황 분석 게시판 */
+.home-market-board {
+  margin-top: 2rem;
+  padding: 1.25rem 1.15rem 1.35rem;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #fffef9 0%, #f7faf9 100%);
+  border: 1px solid rgba(47, 92, 68, 0.14);
+  box-shadow: 0 6px 22px rgba(47, 111, 79, 0.07);
+}
+
+.home-market-board__h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.15rem;
+  color: var(--ci-brown);
+  letter-spacing: -0.02em;
+}
+
+.home-market-board__intro {
+  margin: 0 0 1rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
 .magictrading-solution {
   position: relative;
   display: flex;
@@ -757,6 +981,45 @@
   font-weight: 600;
   font-size: 0.75em;
   opacity: 0.92;
+}
+
+/* 홈 허브 — 세련된 카드(텍스트 밀도·그림자 정리, index 한정 클래스) */
+.layout-home .home-map__title {
+  font-size: clamp(1.1rem, 2.95vw, 1.42rem);
+  font-weight: 930;
+  letter-spacing: -0.044em;
+  text-wrap: balance;
+}
+
+.layout-home .home-map__lead {
+  font-size: 0.93rem;
+  line-height: 1.62;
+}
+
+.layout-home .main-hub a {
+  border-radius: 14px;
+  background: rgba(248, 252, 249, 0.96);
+  border: 1px solid rgba(47, 111, 79, 0.12);
+  box-shadow:
+    0 6px 22px rgba(47, 111, 79, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.78);
+  font-variant-numeric: tabular-nums;
+}
+
+.layout-home .home-map--boards .main-hub a {
+  background: rgba(232, 244, 236, 0.88);
+}
+
+.layout-home .main-hub a:hover {
+  border-color: rgba(47, 111, 79, 0.28);
+  box-shadow:
+    0 14px 34px rgba(47, 111, 79, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+.layout-home .main-hub small {
+  letter-spacing: -0.012em;
+  opacity: 0.93;
 }
 
 @media (max-width: 720px) {

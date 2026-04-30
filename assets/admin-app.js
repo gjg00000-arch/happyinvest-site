@@ -1,7 +1,11 @@
 (function () {
   var TOKEN_KEY = "magic_admin_token";
-  var API =
-    (document.querySelector('meta[name="api-base"]') || {}).content || "https://happyinvests.com";
+  var metaApi = (document.querySelector('meta[name="api-base"]') || {}).content || "";
+  var isLocalAdmin =
+    location.protocol === "file:" ||
+    location.hostname === "localhost" ||
+    location.hostname === "127.0.0.1";
+  var API = isLocalAdmin ? "http://localhost:3000" : metaApi || "https://happyinvests.com";
 
   function getToken() {
     try {
@@ -59,7 +63,21 @@
         return;
       }
       var d = x.j;
+      var sla = "";
+      var staleN =
+        typeof d.ticket_bug_stale_48h === "number"
+          ? d.ticket_bug_stale_48h
+          : Number(d.ticket_bug_stale_48h || 0);
+      if (!isNaN(staleN) && staleN > 0) {
+        sla =
+          '<div class="admin-sla-alert" role="alert"><strong>SLA</strong> 카테고리 bug, ' +
+          "생성 후 48시간 경과했으나 상태가 <code>resolved</code>/<code>closed</code>가 아닌 접수가 " +
+          "<strong>" +
+          staleN +
+          "</strong>건 있습니다. <strong>문의·티켓</strong> 탭에서 우선 처리하세요.</div>";
+      }
       box.innerHTML =
+        sla +
         '<div class="admin-stats">' +
         '<div class="admin-stat"><p class="label">등록 회원</p><p class="value">' +
         (d.users || 0) +
@@ -308,6 +326,9 @@
     if (name === "tickets") renderTickets();
     if (name === "coupons") renderCoupons();
     if (name === "refunds") renderRefunds();
+    if (name === "deposits") renderDeposits();
+    if (name === "ledger") renderLedgerPortfolio();
+    if (name === "free-coupons") renderFreeCouponTracking();
     if (name === "business") renderBusinessOrgs();
   }
 
@@ -342,7 +363,8 @@
 
         var cell = tr.cells[6];
         var catRaw = String(p.category || "");
-        var isPromoBoard = catRaw === "event_promo_shoutout";
+        var isPromoStyle =
+          catRaw === "event_promo_shoutout" || catRaw === "reflection";
         if (statusLabel === "approved" && p.review_coupon_code) {
           cell.innerHTML =
             "<span class='admin-note'>완료</span><br/><code style='font-size:0.7rem'>" +
@@ -363,11 +385,14 @@
           var btn = document.createElement("button");
           btn.type = "button";
           btn.className = "btn btn--small";
-          btn.textContent = isPromoBoard ? "검토 완료 + MagicTrading 1달 쿠폰" : "검토 완료 + 1개월 쿠폰";
+          btn.textContent = isPromoStyle ? "검토 완료 + MagicTrading 1달 쿠폰" : "검토 완료 + 1개월 쿠폰";
           btn.addEventListener("click", function () {
-            var msg = isPromoBoard
-              ? "검토 완료 후 MagicTrading 1개월 이벤트 쿠폰을 발급할까요? (정회원 이상, 계정당 교환 1회)"
-              : "검토 완료 처리하고 MagicTrading 1개월 기간형 쿠폰을 발급할까요?";
+            var msg =
+              catRaw === "reflection"
+                ? "실전 후기(reflection)를 승인하고 MagicTrading 1개월(31일) 이벤트 쿠폰을 발급할까요? 동일 이메일·계정으로는 승인·발급 1회만 가능합니다."
+                : isPromoStyle
+                  ? "검토 완료 후 MagicTrading 1개월 이벤트 쿠폰을 발급할까요? (가입·인증된 회원, 쿠폰 교환은 계정당 1회)"
+                  : "검토 완료 처리하고 MagicTrading 1개월 기간형 쿠폰을 발급할까요?";
             if (!confirm(msg)) return;
             var notify = tr.querySelector(".post-review-notify");
             api("/api/admin/post-reviews/" + encodeURIComponent(id) + "/complete", {
@@ -552,6 +577,540 @@
             }
           });
         });
+      });
+    });
+  }
+
+  var DEPOSIT_CHANNELS = ["paypal", "airwallex", "crypto"];
+
+  /** 흔한 오타·별칭을 정규 토큰으로 치환한 뒤 mt5/trv/영웅문 구간 추출 */
+  function normalizePlatformDelimiterKeywords(s) {
+    var t = String(s || "").replace(/\u00a0/g, " ");
+    t = t.replace(/\s+/g, " ").trim();
+    t = t
+      .replace(/\b엠티\s*[·•]?\s*5\b/gi, "mt5 ")
+      .replace(/\b엠티5\b/gi, " mt5 ")
+      .replace(/\b메타\s*트레이더\s*5\b/gi, " mt5 ")
+      .replace(/\bmeta\s*trader\s*5\b/gi, " mt5 ")
+      .replace(/\bMT\s*5\b/g, " mt5 ")
+      .replace(/\b트뷰\b/gi, " trv ")
+      .replace(/\b트레이딩\s*[·•]?\s*뷰\b/gi, " trv ")
+      .replace(/\btrading\s*view\b/gi, " trv ")
+      .replace(/\b티\s*브이\b/gi, " trv ")
+      .replace(/\b예:\s*t\s*v\b/gi, " trv ")
+      .replace(/\b영\s*웅\s*문\b/g, "영웅문");
+    return t.replace(/\s+/g, " ").trim();
+  }
+
+  /** 제목+본문에서 `mt5` · `trv` · `영웅문` 구분자 뒤 구간을 추출(입금 확인·무료 쿠폰 보드 공통). */
+  function parseMt5TrvYeongmunDelimiters(title, bodySnippet) {
+    var full = normalizePlatformDelimiterKeywords(
+      String(title || "").trim() + " " + String(bodySnippet || "").trim()
+    );
+    var out = { mt5: "", trv: "", yeongungmun: "" };
+    if (!full) return out;
+    var tokens = [
+      { key: "mt5", keyOut: "mt5", re: /\bmt5\b/i },
+      { key: "trv", keyOut: "trv", re: /\btrv\b/i },
+      { key: "yeongungmun", keyOut: "yeongungmun", re: /영웅문/ },
+    ];
+    var hits = [];
+    tokens.forEach(function (tok) {
+      tok.re.lastIndex = 0;
+      var m = tok.re.exec(full);
+      if (m) hits.push({ keyOut: tok.keyOut, index: m.index, end: m.index + m[0].length });
+    });
+    hits.sort(function (a, b) {
+      return a.index - b.index;
+    });
+    for (var i = 0; i < hits.length; i++) {
+      var h = hits[i];
+      var next = hits[i + 1];
+      var segment = full.slice(h.end, next ? next.index : full.length).trim();
+      if (h.keyOut === "mt5") out.mt5 = segment;
+      else if (h.keyOut === "trv") out.trv = segment;
+      else if (h.keyOut === "yeongungmun") out.yeongungmun = segment;
+    }
+    return out;
+  }
+
+  function escLt(s) {
+    return String(s == null ? "" : s).replace(/</g, "&lt;");
+  }
+
+  function renderDepositChannel(channelKey) {
+    var stEl = document.getElementById("deposit-" + channelKey + "-status");
+    var tbody = document.querySelector("#deposit-" + channelKey + "-table tbody");
+    if (!tbody || !stEl) return;
+    var status = stEl.value || "pending";
+    tbody.innerHTML = "<tr><td colspan='8'>불러오는 중…</td></tr>";
+    api(
+      "/api/admin/deposit-confirmations/" +
+        encodeURIComponent(channelKey) +
+        "?status=" +
+        encodeURIComponent(status) +
+        "&limit=150",
+      { method: "GET" }
+    ).then(function (x) {
+      if (!x.ok) {
+        tbody.innerHTML =
+          "<tr><td colspan='8'>" + (x.j.error || JSON.stringify(x.j)) + "</td></tr>";
+        return;
+      }
+      var posts = x.j.posts || [];
+      tbody.innerHTML = "";
+      if (!posts.length) {
+        tbody.innerHTML = "<tr><td colspan='8' class='admin-note'>항목 없음</td></tr>";
+        return;
+      }
+      posts.forEach(function (p) {
+        var id = p._id ? String(p._id) : "";
+        var idShort = id.slice(-8);
+        var fullBody =
+          p.content != null && p.content !== undefined
+            ? String(p.content)
+            : String(p.content_preview || "");
+        var rawTitle = String(p.title || "");
+        var slots = parseMt5TrvYeongmunDelimiters(rawTitle, fullBody);
+        var prevShort = fullBody.replace(/\s+/g, " ").trim();
+        if (prevShort.length > 280) prevShort = prevShort.slice(0, 280) + "…";
+        var prev = prevShort.replace(/</g, "&lt;");
+        var title = rawTitle.replace(/</g, "&lt;");
+        var memo = String(p.author_id || "").replace(/</g, "&lt;");
+        var created = p.created_at ? new Date(p.created_at).toLocaleString("ko-KR") : "";
+        var dv = p.deposit_verified === true;
+        var verifiedAt =
+          dv && p.deposit_verified_at
+            ? new Date(p.deposit_verified_at).toLocaleString("ko-KR")
+            : "";
+        var byWho = dv ? String(p.deposit_verified_by || "").replace(/</g, "&lt;") : "";
+
+        var tr = document.createElement("tr");
+        tr.innerHTML =
+          "<td><code style='font-size:0.7rem'>" +
+          escLt(idShort) +
+          "</code></td>" +
+          "<td style='max-width:9rem;font-size:0.71rem;word-break:break-word'>" +
+          escLt(slots.mt5) +
+          "</td>" +
+          "<td style='max-width:9rem;font-size:0.71rem;word-break:break-word'>" +
+          escLt(slots.trv) +
+          "</td>" +
+          "<td style='max-width:9rem;font-size:0.71rem;word-break:break-word'>" +
+          escLt(slots.yeongungmun) +
+          "</td>" +
+          "<td style='max-width:220px;font-size:0.78rem'><strong>" +
+          title +
+          "</strong><br/><span style='opacity:0.9'>" +
+          prev +
+          "</span></td>" +
+          "<td style='font-size:0.72rem'>" +
+          memo +
+          "</td>" +
+          "<td style='font-size:0.72rem'>" +
+          created +
+          "</td>";
+
+        var tdAct = document.createElement("td");
+        if (dv) {
+          tdAct.innerHTML =
+            "<span class='admin-note'>확인 완료</span><br/><small style='font-size:0.68rem'>" +
+            (verifiedAt ? verifiedAt + " · " + byWho : byWho ? byWho : "") +
+            "</small>";
+        } else {
+          var noteIn = document.createElement("input");
+          noteIn.type = "text";
+          noteIn.className = "user-note";
+          noteIn.placeholder = "메모(선택)";
+          noteIn.style.minWidth = "8rem";
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "btn btn--small";
+          btn.textContent = "확인 완료 처리";
+          btn.addEventListener("click", function () {
+            if (!confirm("입금 확인 완료로 표시할까요? (쿠폰 발급 없음)")) return;
+            api(
+              "/api/admin/deposit-confirmations/" +
+                encodeURIComponent(channelKey) +
+                "/" +
+                encodeURIComponent(id) +
+                "/confirm",
+              {
+                method: "POST",
+                body: JSON.stringify({ deposit_note: noteIn.value || "" }),
+              }
+            ).then(function (r) {
+              if (!r.ok) {
+                alert(r.j.error || "실패");
+                return;
+              }
+              alert("처리되었습니다.");
+              renderDepositChannel(channelKey);
+            });
+          });
+          tdAct.appendChild(noteIn);
+          tdAct.appendChild(document.createElement("br"));
+          tdAct.appendChild(btn);
+        }
+        tr.appendChild(tdAct);
+        tbody.appendChild(tr);
+      });
+    });
+  }
+
+  function renderDeposits() {
+    DEPOSIT_CHANNELS.forEach(function (ch) {
+      renderDepositChannel(ch);
+    });
+  }
+
+  function fmtMoney(n, currency) {
+    var x = Number(n || 0);
+    if (!isFinite(x)) x = 0;
+    if (currency === "KRW") return "₩" + Math.round(x).toLocaleString("ko-KR");
+    return (currency || "USDT") + " " + x.toLocaleString("ko-KR", { maximumFractionDigits: 2 });
+  }
+
+  function fmtPct(n) {
+    if (n === null || n === undefined || !isFinite(Number(n))) return "—";
+    var x = Number(n);
+    return (x >= 0 ? "+" : "") + x.toFixed(2) + "%";
+  }
+
+  function renderLedgerSummary(data) {
+    var wrap = document.getElementById("ledger-summary-wrap");
+    if (!wrap) return;
+    var snap = data.latest_snapshot || {};
+    var summary = snap.summary || {};
+    var changes = data.changes || {};
+    function changeCell(key, label) {
+      var c = changes[key];
+      if (!c) return "<div class='admin-stat'><p class='label'>" + label + "</p><p class='value'>—</p></div>";
+      return (
+        "<div class='admin-stat'><p class='label'>" +
+        label +
+        "</p><p class='value'>" +
+        fmtMoney(c.value_usdt, "USDT") +
+        "</p><small>" +
+        fmtPct(c.pct_usdt) +
+        " · " +
+        fmtMoney(c.value_krw, "KRW") +
+        "</small></div>"
+      );
+    }
+    var created = snap.created_at ? new Date(snap.created_at).toLocaleString("ko-KR") : "스냅샷 없음";
+    wrap.innerHTML =
+      "<div class='admin-stats'>" +
+      "<div class='admin-stat'><p class='label'>총 평가(USDT)</p><p class='value'>" +
+      fmtMoney(summary.total_value_usdt, "USDT") +
+      "</p></div>" +
+      "<div class='admin-stat'><p class='label'>총 평가(KRW)</p><p class='value'>" +
+      fmtMoney(summary.total_value_krw, "KRW") +
+      "</p></div>" +
+      "<div class='admin-stat'><p class='label'>포함/제외</p><p class='value'>" +
+      (summary.included_count || 0) +
+      " / " +
+      (summary.excluded_count || 0) +
+      "</p></div>" +
+      changeCell("day", "1D 변동") +
+      changeCell("week", "1W 변동") +
+      changeCell("month", "1M 변동") +
+      "</div><p class='admin-note'>최근 스냅샷: " +
+      escLt(created) +
+      " · 현재 모드: 체인/가격 자동조회 시도 + 수동 폴백</p>";
+  }
+
+  function renderLedgerPortfolio() {
+    var tbody = document.querySelector("#ledger-accounts-table tbody");
+    if (!tbody) return;
+    tbody.innerHTML = "<tr><td colspan='7'>불러오는 중…</td></tr>";
+    api("/api/admin/ledger-portfolio", { method: "GET" }).then(function (x) {
+      if (!x.ok) {
+        tbody.innerHTML = "<tr><td colspan='7'>" + (x.j.error || JSON.stringify(x.j)) + "</td></tr>";
+        return;
+      }
+      renderLedgerSummary(x.j || {});
+      var accounts = x.j.accounts || [];
+      if (!accounts.length) {
+        tbody.innerHTML = "<tr><td colspan='7' class='admin-note'>등록된 Ledger 주소/xpub이 없습니다.</td></tr>";
+        return;
+      }
+      tbody.innerHTML = "";
+      accounts.forEach(function (a) {
+        var id = a._id ? String(a._id) : "";
+        var amount = Number(a.amount || 0);
+        var price = Number(a.price_usdt || 0);
+        var usdKrwEl = document.getElementById("ledger-usd-krw");
+        var usdKrw = Number((usdKrwEl && usdKrwEl.value) || 1350) || 1350;
+        var valueUsdt = amount * price;
+        var valueKrw = valueUsdt * usdKrw;
+        var src =
+          (a.last_balance_source || "manual_fallback") +
+          " / " +
+          (a.last_price_source || (a.price_usdt ? "manual_fallback" : "missing"));
+        var err = a.last_balance_error ? "<br><small style='color:#8a3b20'>조회 실패: " + escLt(a.last_balance_error) + "</small>" : "";
+        var tr = document.createElement("tr");
+        tr.innerHTML =
+          "<td><strong>" +
+          escLt(a.asset_symbol || "") +
+          "</strong><br><small>" +
+          escLt(a.network || "") +
+          "</small><br><input type='text' class='ledger-label' value='" +
+          escLt(a.label || "").replace(/'/g, "&#39;") +
+          "' /></td>" +
+          "<td style='max-width:220px;word-break:break-all;font-size:0.72rem'>" +
+          escLt(a.address_or_xpub || "") +
+          "</td>" +
+          "<td><input type='number' step='any' min='0' class='ledger-amount-row' value='" +
+          amount +
+          "' style='max-width:8rem' /></td>" +
+          "<td><input type='number' step='any' min='0' class='ledger-price-row' value='" +
+          price +
+          "' style='max-width:8rem' /><br><small>" +
+          fmtMoney(valueUsdt, "USDT") +
+          "</small></td>" +
+          "<td>" +
+          fmtMoney(valueKrw, "KRW") +
+          "</td>" +
+          "<td><label style='font-size:0.74rem'><input type='checkbox' class='ledger-exclude-row' " +
+          (a.exclude_from_total ? "checked" : "") +
+          " /> 총액 제외</label><br><label style='font-size:0.74rem'><input type='checkbox' class='ledger-active-row' " +
+          (a.active === false ? "" : "checked") +
+          " /> 활성</label><br><small>" +
+          escLt(src) +
+          "</small>" +
+          err +
+          "</td><td></td>";
+        var note = document.createElement("input");
+        note.type = "text";
+        note.className = "ledger-note-row";
+        note.placeholder = "메모";
+        note.value = a.note || "";
+        note.style.maxWidth = "10rem";
+        var save = document.createElement("button");
+        save.type = "button";
+        save.className = "btn btn--small";
+        save.textContent = "저장";
+        save.addEventListener("click", function () {
+          api("/api/admin/ledger-accounts/" + encodeURIComponent(id), {
+            method: "PATCH",
+            body: JSON.stringify({
+              label: tr.querySelector(".ledger-label").value,
+              asset_symbol: a.asset_symbol,
+              network: a.network,
+              address_or_xpub: a.address_or_xpub,
+              amount: tr.querySelector(".ledger-amount-row").value,
+              price_usdt: tr.querySelector(".ledger-price-row").value,
+              exclude_from_total: tr.querySelector(".ledger-exclude-row").checked,
+              active: tr.querySelector(".ledger-active-row").checked,
+              note: note.value,
+            }),
+          }).then(function (r) {
+            alert(r.ok ? "저장됨" : r.j.error || "실패");
+            if (r.ok) renderLedgerPortfolio();
+          });
+        });
+        tr.cells[6].appendChild(note);
+        tr.cells[6].appendChild(document.createElement("br"));
+        tr.cells[6].appendChild(save);
+        tbody.appendChild(tr);
+      });
+    });
+  }
+
+  function ledgerBulkRowsFromText(text) {
+    var found = {};
+    String(text || "")
+      .split(/\r?\n/)
+      .forEach(function (line) {
+        var s = line.trim();
+        if (!s) return;
+        var parts = s.split(/\s+/);
+        if (parts.length < 2) return;
+        var key = parts[0].toLowerCase();
+        var addr = parts.slice(1).join("").trim();
+        if (!addr) return;
+        if (key === "poly" || key === "polygon" || key === "matic" || key === "pol") key = "polygon";
+        if (key === "tron" || key === "trx") key = "tron";
+        if (key === "bitcoin") key = "btc";
+        if (key === "ethereum") key = "eth";
+        found[key] = addr;
+      });
+    var rows = [];
+    function add(symbol, network, key, label) {
+      if (!found[key]) return;
+      rows.push({
+        label: label,
+        asset_symbol: symbol,
+        network: network,
+        address_or_xpub: found[key],
+        amount: 0,
+        price_usdt: 0,
+        exclude_from_total: false,
+      });
+    }
+    add("BTC", "Bitcoin", "btc", "Ledger BTC Native SegWit");
+    add("ETH", "Ethereum", "eth", "Ledger ETH");
+    add("TRX", "Tron", "tron", "Ledger TRX");
+    add("USDT", "TRC-20", "tron", "Ledger USDT TRC-20");
+    add("USDC", "TRC-20", "tron", "Ledger USDC TRC-20");
+    add("SOL", "Solana", "sol", "Ledger SOL");
+    add("XRP", "XRP", "xrp", "Ledger XRP");
+    add("BNB", "BNB Chain", "bnb", "Ledger BNB Chain");
+    add("MATIC", "Polygon", "polygon", "Ledger Polygon");
+    add("USDT", "Polygon", "polygon", "Ledger USDT Polygon");
+    add("USDC", "Polygon", "polygon", "Ledger USDC Polygon");
+    add("USDT", "ERC-20", "eth", "Ledger USDT ERC-20");
+    add("USDC", "ERC-20", "eth", "Ledger USDC ERC-20");
+    add("USDT", "BEP-20", "bnb", "Ledger USDT BEP-20");
+    add("USDC", "BEP-20", "bnb", "Ledger USDC BEP-20");
+    return rows;
+  }
+
+  function importLedgerBulkRows() {
+    var ta = document.getElementById("ledger-bulk-addresses");
+    var out = document.getElementById("ledger-account-out");
+    var rows = ledgerBulkRowsFromText(ta ? ta.value : "");
+    if (!rows.length) {
+      alert("등록할 주소를 찾지 못했습니다. 예: btc bc1... / tron T... 형식으로 붙여넣어 주세요.");
+      return;
+    }
+    if (!confirm(rows.length + "개 Ledger 자산 항목을 등록할까요? 이미 등록된 항목은 실패로 표시될 수 있습니다.")) return;
+    var ok = 0;
+    var fail = 0;
+    if (out) out.textContent = "일괄 등록 중…";
+    rows
+      .reduce(function (p, row) {
+        return p.then(function () {
+          return api("/api/admin/ledger-accounts", {
+            method: "POST",
+            body: JSON.stringify(row),
+          }).then(function (r) {
+            if (r.ok) ok += 1;
+            else fail += 1;
+          });
+        });
+      }, Promise.resolve())
+      .then(function () {
+        if (out) out.textContent = "일괄 등록 완료: 성공 " + ok + "개, 실패/중복 " + fail + "개";
+        renderLedgerPortfolio();
+      });
+  }
+
+  function renderFreeCouponTracking() {
+    var stEl = document.getElementById("free-coupon-tracking-status");
+    var tbody = document.querySelector("#free-coupon-tracking-table tbody");
+    if (!tbody || !stEl) return;
+    var status = stEl.value || "pending";
+    tbody.innerHTML = "<tr><td colspan='9'>불러오는 중…</td></tr>";
+    api(
+      "/api/admin/free-coupon-tracking?status=" + encodeURIComponent(status) + "&limit=150",
+      { method: "GET" }
+    ).then(function (x) {
+      if (!x.ok) {
+        tbody.innerHTML =
+          "<tr><td colspan='9'>" + (x.j.error || JSON.stringify(x.j)) + "</td></tr>";
+        return;
+      }
+      var posts = x.j.posts || [];
+      tbody.innerHTML = "";
+      if (!posts.length) {
+        tbody.innerHTML = "<tr><td colspan='9' class='admin-note'>항목 없음</td></tr>";
+        return;
+      }
+      posts.forEach(function (p) {
+        var id = p._id ? String(p._id) : "";
+        var idShort = id.slice(-8);
+        var fullBody =
+          p.content != null && p.content !== undefined
+            ? String(p.content)
+            : String(p.content_preview || "");
+        var rawTitle = String(p.title || "");
+        var slots = parseMt5TrvYeongmunDelimiters(rawTitle, fullBody);
+        var prevShort = fullBody.replace(/\s+/g, " ").trim();
+        if (prevShort.length > 280) prevShort = prevShort.slice(0, 280) + "…";
+        var prev = prevShort.replace(/</g, "&lt;");
+        var title = rawTitle.replace(/</g, "&lt;");
+        var srcBoard = String(p.coupon_source_board || "").replace(/</g, "&lt;");
+        var memo = String(p.author_id || "").replace(/</g, "&lt;");
+        var created = p.created_at ? new Date(p.created_at).toLocaleString("ko-KR") : "";
+        var dv = p.free_coupon_admin_verified === true;
+        var verifiedAt =
+          dv && p.free_coupon_admin_verified_at
+            ? new Date(p.free_coupon_admin_verified_at).toLocaleString("ko-KR")
+            : "";
+        var byWho = dv ? String(p.free_coupon_admin_verified_by || "").replace(/</g, "&lt;") : "";
+
+        var tr = document.createElement("tr");
+        tr.innerHTML =
+          "<td><code style='font-size:0.7rem'>" +
+          escLt(idShort) +
+          "</code></td>" +
+          "<td style='max-width:8rem;font-size:0.71rem;word-break:break-word'>" +
+          escLt(slots.mt5) +
+          "</td>" +
+          "<td style='max-width:8rem;font-size:0.71rem;word-break:break-word'>" +
+          escLt(slots.trv) +
+          "</td>" +
+          "<td style='max-width:8rem;font-size:0.71rem;word-break:break-word'>" +
+          escLt(slots.yeongungmun) +
+          "</td>" +
+          "<td style='max-width:9rem;font-size:0.72rem;word-break:break-word'><code style='font-size:0.68rem'>" +
+          (srcBoard || "—") +
+          "</code></td>" +
+          "<td style='max-width:200px;font-size:0.78rem'><strong>" +
+          title +
+          "</strong><br/><span style='opacity:0.9'>" +
+          prev +
+          "</span></td>" +
+          "<td style='font-size:0.72rem'>" +
+          memo +
+          "</td>" +
+          "<td style='font-size:0.72rem'>" +
+          created +
+          "</td>";
+
+        var tdAct = document.createElement("td");
+        if (dv) {
+          tdAct.innerHTML =
+            "<span class='admin-note'>확인 완료</span><br/><small style='font-size:0.68rem'>" +
+            (verifiedAt ? verifiedAt + " · " + byWho : byWho ? byWho : "") +
+            "</small>";
+        } else {
+          var noteIn = document.createElement("input");
+          noteIn.type = "text";
+          noteIn.className = "user-note";
+          noteIn.placeholder = "관리 메모(선택)";
+          noteIn.style.minWidth = "7rem";
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "btn btn--small";
+          btn.textContent = "관리 확인 완료";
+          btn.addEventListener("click", function () {
+            if (
+              !confirm(
+                "무료 쿠폰 관리 건으로 확인 처리할까요? (게시글 검토 탭 자동발급·쿠폰 코드 발급과는 별도입니다.)"
+              )
+            )
+              return;
+            api("/api/admin/free-coupon-tracking/" + encodeURIComponent(id) + "/confirm", {
+              method: "POST",
+              body: JSON.stringify({ free_coupon_note: noteIn.value || "" }),
+            }).then(function (r) {
+              if (!r.ok) {
+                alert(r.j.error || "실패");
+                return;
+              }
+              alert("처리되었습니다.");
+              renderFreeCouponTracking();
+            });
+          });
+          tdAct.appendChild(noteIn);
+          tdAct.appendChild(document.createElement("br"));
+          tdAct.appendChild(btn);
+        }
+        tr.appendChild(tdAct);
+        tbody.appendChild(tr);
       });
     });
   }
@@ -761,13 +1320,37 @@
           "<td style='max-width:180px;font-size:0.72rem'>" +
           bex.replace(/</g, "&lt;") +
           "</td>" +
-          "<td>" +
-          (t.status || "") +
-          "</td>" +
-          "<td>" +
+          "<td></td>" +
+          "<td style='white-space:nowrap;font-size:0.72rem'>" +
           dt +
           "</td>" +
           "<td></td>";
+        var stSel = document.createElement("select");
+        stSel.className = "admin-ticket-status";
+        stSel.style.fontSize = "0.72rem";
+        stSel.style.maxWidth = "10rem";
+        [
+          ["auto_replied", "자동응답(미분류)"],
+          ["open", "미해결"],
+          ["in_progress", "진행중"],
+          ["answered", "답변완료"],
+          ["resolved", "처리완료"],
+          ["closed", "종료"],
+        ].forEach(function (pair) {
+          var opt = document.createElement("option");
+          opt.value = pair[0];
+          opt.textContent = pair[1];
+          stSel.appendChild(opt);
+        });
+        var curSt = String(t.status || "auto_replied");
+        if (!stSel.querySelector('option[value="' + curSt + '"]')) {
+          var o = document.createElement("option");
+          o.value = curSt;
+          o.textContent = curSt + "(레거시)";
+          stSel.appendChild(o);
+        }
+        stSel.value = curSt;
+
         var ta = document.createElement("textarea");
         ta.className = "admin-ticket-reply";
         ta.rows = 3;
@@ -784,11 +1367,12 @@
         save.textContent = "저장";
         save.addEventListener("click", function () {
           var n = tr.querySelector(".admin-ticket-notify");
+          var sts = tr.querySelector(".admin-ticket-status");
           api("/api/admin/tickets/" + encodeURIComponent(id), {
             method: "PATCH",
             body: JSON.stringify({
               admin_reply: ta.value,
-              status: "answered",
+              status: sts ? sts.value : "answered",
               notify_email: n && n.checked,
             }),
           }).then(function (r) {
@@ -797,6 +1381,7 @@
           });
         });
 
+        tr.cells[5].appendChild(stSel);
         var cell = tr.cells[7];
         cell.appendChild(ta);
         cell.appendChild(document.createElement("br"));
@@ -811,11 +1396,11 @@
     });
   }
 
-  function showApp(show) {
+  function showApp(isVisible) {
     var login = document.getElementById("admin-login-section");
     var app = document.getElementById("admin-app-section");
-    show(login, !show);
-    show(app, show);
+    show(login, !isVisible);
+    show(app, isVisible);
   }
 
   function logout() {
@@ -876,7 +1461,7 @@
   document.getElementById("admin-home-save")?.addEventListener("click", function () {
     saveHomeHtml();
   });
-  document.getElementById("admin-home-preview")?.addEventListener("click", function () {
+  document.getElementById("admin-home-refresh-preview")?.addEventListener("click", function () {
     updateHomePreview();
   });
   document.getElementById("admin-home-html")?.addEventListener("input", function () {
@@ -888,6 +1473,62 @@
 
   document.getElementById("admin-business-reload")?.addEventListener("click", function () {
     renderBusinessOrgs();
+  });
+  document.getElementById("ledger-reload")?.addEventListener("click", function () {
+    renderLedgerPortfolio();
+  });
+  document.getElementById("ledger-refresh")?.addEventListener("click", function () {
+    var out = document.getElementById("ledger-account-out");
+      if (out) out.textContent = "체인 잔고·가격·환율 조회 후 스냅샷 저장 중…";
+    api("/api/admin/ledger-portfolio/refresh", {
+      method: "POST",
+      body: JSON.stringify({
+        usd_krw: document.getElementById("ledger-usd-krw")?.value || 1350,
+        note: document.getElementById("ledger-snapshot-note")?.value || "",
+      }),
+    }).then(function (r) {
+      if (out) out.textContent = r.ok ? "스냅샷 저장됨. 지원 체인은 자동조회, 실패/미지원 자산은 수동값으로 반영됐습니다." : r.j.error || "실패";
+      if (r.ok) renderLedgerPortfolio();
+    });
+  });
+  document.getElementById("ledger-add-account")?.addEventListener("click", function () {
+    var out = document.getElementById("ledger-account-out");
+    var symbol = document.getElementById("ledger-symbol")?.value || "";
+    var network = document.getElementById("ledger-network")?.value || "";
+    var addr = document.getElementById("ledger-address")?.value || "";
+    if (!String(symbol).trim() || !String(network).trim() || !String(addr).trim()) {
+      alert("코인, 네트워크, 주소 또는 xpub을 입력하세요.");
+      return;
+    }
+    if (out) out.textContent = "등록 중…";
+    api("/api/admin/ledger-accounts", {
+      method: "POST",
+      body: JSON.stringify({
+        label: document.getElementById("ledger-label")?.value || "",
+        asset_symbol: symbol,
+        network: network,
+        address_or_xpub: addr,
+        amount: document.getElementById("ledger-amount")?.value || 0,
+        price_usdt: document.getElementById("ledger-price-usdt")?.value || 0,
+        exclude_from_total: !!document.getElementById("ledger-exclude")?.checked,
+      }),
+    }).then(function (r) {
+      if (!r.ok) {
+        if (out) out.textContent = r.j.error || "실패";
+        return;
+      }
+      if (out) out.textContent = "등록됨. 스냅샷 저장 시 지원 체인은 자동조회하고, 미지원/실패 자산은 수동값으로 평가합니다.";
+      ["ledger-label", "ledger-symbol", "ledger-network", "ledger-address", "ledger-amount", "ledger-price-usdt"].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.value = "";
+      });
+      var ex = document.getElementById("ledger-exclude");
+      if (ex) ex.checked = false;
+      renderLedgerPortfolio();
+    });
+  });
+  document.getElementById("ledger-bulk-import")?.addEventListener("click", function () {
+    importLedgerBulkRows();
   });
   document.getElementById("admin-business-create")?.addEventListener("click", function () {
     var out = document.getElementById("admin-business-create-out");
@@ -981,6 +1622,22 @@
   });
   document.getElementById("post-review-status")?.addEventListener("change", function () {
     renderPostReviews();
+  });
+
+  DEPOSIT_CHANNELS.forEach(function (ch) {
+    document.getElementById("deposit-" + ch + "-reload")?.addEventListener("click", function () {
+      renderDepositChannel(ch);
+    });
+    document.getElementById("deposit-" + ch + "-status")?.addEventListener("change", function () {
+      renderDepositChannel(ch);
+    });
+  });
+
+  document.getElementById("free-coupon-reload")?.addEventListener("click", function () {
+    renderFreeCouponTracking();
+  });
+  document.getElementById("free-coupon-tracking-status")?.addEventListener("change", function () {
+    renderFreeCouponTracking();
   });
 
   document.getElementById("admin-add-user")?.addEventListener("click", function () {

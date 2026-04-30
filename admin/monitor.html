@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="api-base" content="https://happyinvests.com" />
+    <title>Magic 지표 — 플랜 모니터(관리)</title>
+    <link rel="stylesheet" href="../assets/common.css" />
+    <link rel="stylesheet" href="../assets/admin.css" />
+    <link rel="stylesheet" href="../assets/site-ux.css" />
+  </head>
+  <body>
+    <header class="site-header" role="banner">
+      <div class="ci-wrap">
+        <img
+          class="ci-logo-img"
+          src="../assets/haengbokdam-company-ci.png"
+          width="280"
+          height="140"
+          alt="주식회사 행복도담 인베스트 CI"
+        />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </header>
+    <nav class="site-nav" aria-label="주요 메뉴">
+      <a href="../index.html">메인</a>
+      <a href="../guide/index.html">가이드</a>
+      <a href="../guide/usage.html">지표 사용</a>
+      <a href="../guide/usage-trv.html">TRV</a>
+      <a href="../guide/usage-mt5.html">MT5</a>
+      <a href="../downloads/index.html">다운로드</a>
+      <a href="../registration/index.html">가입·등록</a>
+      <a href="../verify/index.html">본인인증</a>
+      <a href="../billing/index.html">구독·결제</a>
+      <a href="../events/index.html">이벤트</a>
+      <a href="../membership/index.html">회원혜택</a>
+      <a href="../reflection/index.html">실전후기</a>
+      <a href="../contact/index.html">문의</a>
+      <a href="../boards/index.html">모임터</a>
+      <a href="../boards/index.html?board=event_promo_shoutout">추천·홍보</a>
+      <a href="../legal/index.html">약관·정책</a>
+      <a href="../head-daily-report/index.html">본부 데일리</a>
+      <a href="index.html">관리자</a>
+      <a href="monitor.html" aria-current="page">플랜 모니터</a>
+      <a href="../integrations/index.html">연동</a>
+    </nav>
+    <div class="wrap">
+      <h1 class="page-title">플랜 모니터 · 7일 무료 &amp; 1M 이벤트</h1>
+      <p class="lead">
+        <code>GET /api/admin/monitor/plan-board</code> — TRV/MT5 구분, KST(서울) 캘린더 기준 <strong>당일 · 이번 주(월~일) · 당월</strong> 신규
+        집계와 <strong>누적</strong>이 포함됩니다. 1M 이벤트는
+        <code>event_1m_trv_used_at</code> / <code>event_1m_mt5_used_at</code> 기준입니다.
+      </p>
+
+      <section id="admin-monitor-login" class="admin-login">
+        <h2>관리자 로그인</h2>
+        <p id="admin-login-err" class="err" style="display: none"></p>
+        <form id="admin-monitor-login-form">
+          <label for="admin-email">이메일</label>
+          <input id="admin-email" type="email" autocomplete="username" required />
+          <label for="admin-password">비밀번호</label>
+          <input id="admin-password" type="password" autocomplete="current-password" required />
+          <button type="submit" class="btn">로그인</button>
+        </form>
+      </section>
+
+      <div id="admin-monitor-app" class="admin-app admin-monitor" style="display: none">
+        <div class="admin-toolbar">
+          <span class="who">로그인: <strong id="admin-monitor-who"></strong></span>
+          <button type="button" class="btn btn--ghost btn--small" id="admin-monitor-logout">로그아웃</button>
+        </div>
+        <nav class="admin-monitor-nav" aria-label="관리자 하위">
+          <a href="index.html">← 관리자 홈(회원·쿠폰·환불)</a>
+        </nav>
+        <div class="admin-form-inline" style="align-items: center">
+          <label
+            ><input type="checkbox" id="include-samples" checked />
+            샘플 포함(최근 7일 원장·1M 관련 회원)</label
+          >
+          <button type="button" class="btn btn--small" id="plan-board-reload">새로고침</button>
+        </div>
+        <div id="plan-board-content"></div>
+      </div>
+    </div>
+    <footer class="site-footer" role="contentinfo">
+      <div class="ci-wrap ci-wrap--footer">
+        <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="220" height="110" alt="" />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </footer>
+    <script src="../assets/site-ux.js"></script>
+    <script src="../assets/admin-monitor.js"></script>
+  </body>
+</html>

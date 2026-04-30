@@ -1,0 +1,18 @@
+{
+  "name": "magic-indicator-site",
+  "private": true,
+  "description": "Magic 지표 정적 사이트 — 내비 빌드·SEO·링크·린트: npm run build",
+  "type": "module",
+  "scripts": {
+    "build:nav": "node scripts/inject-site-nav.mjs",
+    "build:seo": "node scripts/generate-seo-files.mjs",
+    "build:og": "node scripts/rewrite-og-absolute.mjs",
+    "lint:html": "node scripts/lint-html.mjs",
+    "lint:links": "node scripts/check-links.mjs",
+    "build": "npm run build:nav && npm run build:seo && npm run build:og && npm run lint:html && npm run lint:links",
+    "verify": "npm run build"
+  },
+  "devDependencies": {
+    "html-validate": "^9.5.5"
+  }
+}

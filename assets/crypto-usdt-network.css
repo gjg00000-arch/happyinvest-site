@@ -1,0 +1,62 @@
+/* USDT 블록체인 검색 · 셀렉트(결제·크립토 납부) */
+
+.crypto-usdt-wrap {
+  grid-column: 1 / -1;
+  padding: 0.65rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid rgba(47, 111, 79, 0.28);
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.crypto-usdt-wrap label > .crypto-usdt-hint {
+  display: block;
+  margin-top: 0.25rem;
+  font-weight: 500;
+  color: var(--ci-brown-muted, #6d5c55);
+}
+
+#crypto-usdt-filter {
+  display: block;
+  width: 100%;
+  max-width: 32rem;
+  margin: 0.45rem 0 0.55rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 8px;
+  border: 1px solid rgba(74, 53, 40, 0.2);
+  font-size: 0.93rem;
+}
+
+#crypto-usdt-network {
+  display: block;
+  width: 100%;
+  max-width: 36rem;
+  margin-top: 0.35rem;
+  padding: 0.5rem 0.55rem;
+  border-radius: 8px;
+  border: 1px solid rgba(74, 53, 40, 0.25);
+  font-size: 0.91rem;
+  max-height: 14rem;
+  background: #fffefb;
+}
+
+.usdt-chain-ref-scroll {
+  max-height: min(340px, 48vh);
+  overflow: auto;
+  margin-top: 0.5rem;
+  border-radius: 10px;
+  border: 1px solid rgba(74, 53, 40, 0.12);
+}
+
+#usdt-network-reference h3 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  color: var(--ci-brown, #4a3528);
+}
+
+#usdt-chain-ref-filter {
+  width: 100%;
+  max-width: 24rem;
+  padding: 0.4rem 0.55rem;
+  border-radius: 8px;
+  border: 1px solid rgba(74, 53, 40, 0.2);
+}

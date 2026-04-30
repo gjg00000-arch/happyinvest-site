@@ -17,9 +17,12 @@
         </div>
       </div>
     </header>
-        <nav class="site-nav" aria-label="주요 메뉴">
+    <nav class="site-nav" aria-label="주요 메뉴">
       <a href="../index.html">메인</a>
       <a href="../guide/index.html">가이드</a>
+      <a href="../guide/usage.html">지표 사용</a>
+      <a href="../guide/usage-trv.html">TRV</a>
+      <a href="../guide/usage-mt5.html">MT5</a>
       <a href="../downloads/index.html">다운로드</a>
       <a href="../registration/index.html">가입·등록</a>
       <a href="../verify/index.html">본인인증</a>
@@ -28,7 +31,10 @@
       <a href="../membership/index.html">회원혜택</a>
       <a href="../reflection/index.html">실전후기</a>
       <a href="../contact/index.html">문의</a>
-      <a href="../legal/index.html">약관·정책</a>
+      <a href="../boards/index.html">모임터</a>
+      <a href="../boards/index.html?board=event_promo_shoutout">추천·홍보</a>
+      <a href="index.html">약관·정책</a>
+      <a href="../head-daily-report/index.html">본부 데일리</a>
       <a href="../admin/index.html">관리자</a>
       <a href="../integrations/index.html">연동</a>
     </nav>
@@ -40,11 +46,18 @@
         <strong>게시판 카테고리 <code>qa</code></strong>는 무료 회원(<code>free</code>) 이상만 읽기·글쓰기 가능합니다.
       </p>
 
-      <h2>요약 (레벨)</h2>
+      <h2>요약 (접근 그룹)</h2>
       <ul class="notice-list dummy small">
         <li><strong>Guest</strong> — 일부 게시판만 읽기/참여</li>
         <li><strong>무료 회원</strong> — 베타·실전후기 제외 등</li>
-        <li><strong>체험·정규 접근·커뮤니티 VIP</strong> — 회원 전용 보드 포함</li>
+        <li>
+          <strong>체험·정규(구독) 등 이용권</strong> — <code>trial</code>·<code>sub</code> 등은
+          <strong>쿠폰·결제로 붙는 이용 기간</strong>에 따른 구분이며, «승급·등급»이 쌓이는 구조가 아닙니다.
+        </li>
+        <li>
+          <strong>커뮤니티 VIP</strong> — 운영이 선정해 <strong>표기·명예</strong>로 쓰는 이름(친구추천·이벤트 안내 등). 계정
+          <code>role: vip</code>은 <strong>접근 제어용</strong>일 뿐이라, 이 «커뮤니티 VIP»와 항상 같은 의미는 아닐 수 있습니다.
+        </li>
         <li><strong>관리자</strong> — 전체</li>
       </ul>
 
@@ -55,7 +68,7 @@
               <th>영역</th>
               <th>Guest</th>
               <th>무료</th>
-              <th>체험/정규/VIP</th>
+              <th>체험·정규(trial·sub·role)</th>
             </tr>
           </thead>
           <tbody>

@@ -3,10 +3,118 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="MagicTrading 구독·결제 — 플랜 선택, Airwallex·PayPal, 크립토·송금 안내 및 환불 절차." />
+    <link rel="canonical" href="https://happyinvests.com/billing/index.html" />
+    <meta property="og:title" content="Magic 지표 — 구독·결제" />
+    <meta property="og:description" content="MagicTrading 구독·결제, 플랜·결제 수단 안내 및 환불 관련 표시." />
+    <meta property="og:url" content="https://happyinvests.com/billing/index.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://happyinvests.com/assets/haengbokdam-company-ci.png" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="api-base" content="https://happyinvests.com" />
     <title>Magic 지표 — 구독·결제</title>
     <link rel="stylesheet" href="../assets/common.css" />
     <link rel="stylesheet" href="../assets/site-ux.css" />
+    <link rel="stylesheet" href="../assets/crypto-usdt-network.css" />
+    <script src="https://static.airwallex.com/components/sdk/v1/index.js" defer></script>
+    <style>
+      .coupon-redeem-section {
+        margin-top: 1.75rem;
+        padding: 1.1rem 1.15rem 1.25rem;
+        border-radius: 14px;
+        border: 1px solid rgba(47, 111, 79, 0.2);
+        background: linear-gradient(165deg, #fffef9 0%, #f4faf6 100%);
+      }
+      .refund-request-section--primary {
+        border-width: 2px;
+        border-color: rgba(47, 111, 79, 0.42) !important;
+        box-shadow: 0 4px 18px rgba(47, 111, 79, 0.11);
+        background: linear-gradient(168deg, #f7fbf8 0%, #f4faf6 100%);
+      }
+      .coupon-redeem-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+      }
+      .coupon-redeem-input {
+        flex: 1 1 14rem;
+        min-width: 0;
+        padding: 0.55rem 0.65rem;
+        border: 1px solid #cfd6e0;
+        border-radius: 8px;
+        font: inherit;
+      }
+      .refund-preview {
+        margin: 0 0 0.75rem;
+        padding: 0.65rem 0.75rem;
+        border-radius: 10px;
+        color: var(--ci-brown-muted);
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(47, 111, 79, 0.14);
+        font-size: 0.88rem;
+        line-height: 1.5;
+      }
+      .refund-form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.7rem;
+      }
+      .refund-form-grid label {
+        display: grid;
+        gap: 0.3rem;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--ci-brown);
+      }
+      .refund-form-grid input,
+      .refund-form-grid select {
+        width: 100%;
+        min-width: 0;
+        padding: 0.55rem 0.65rem;
+        border: 1px solid #cfd6e0;
+        border-radius: 8px;
+        font: inherit;
+        font-weight: 400;
+      }
+      .refund-actions {
+        margin-top: 0.85rem;
+      }
+      @media (max-width: 720px) {
+        .refund-form-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .billing-page-toc {
+        margin: 0 0 1rem;
+        padding: 0.65rem 0.85rem;
+        border-radius: 10px;
+        border: 1px solid rgba(47, 111, 79, 0.22);
+        background: rgba(255, 255, 255, 0.55);
+      }
+      .billing-page-toc__list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem 0.85rem;
+        align-items: center;
+        font-size: 0.88rem;
+        line-height: 1.45;
+      }
+      .billing-page-toc__list a {
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+      @media (max-width: 520px) {
+        .billing-page-toc__list {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.35rem;
+        }
+      }
+    </style>
   </head>
   <body>
     <header class="site-header" role="banner">
@@ -18,13 +126,16 @@
         </div>
       </div>
     </header>
-            <nav class="site-nav" aria-label="주요 메뉴">
+    <nav class="site-nav" aria-label="주요 메뉴">
       <a href="../index.html">메인</a>
       <a href="../guide/index.html">가이드</a>
+      <a href="../guide/usage.html">지표 사용</a>
+      <a href="../guide/usage-trv.html">TRV</a>
+      <a href="../guide/usage-mt5.html">MT5</a>
       <a href="../downloads/index.html">다운로드</a>
       <a href="../registration/index.html">가입·등록</a>
       <a href="../verify/index.html">본인인증</a>
-      <a href="../billing/index.html">구독·결제</a>
+      <a href="index.html" aria-current="page">구독·결제</a>
       <a href="../events/index.html">이벤트</a>
       <a href="../membership/index.html">회원혜택</a>
       <a href="../reflection/index.html">실전후기</a>
@@ -35,7 +146,7 @@
       <a href="../admin/index.html">관리자</a>
       <a href="../integrations/index.html">연동</a>
     </nav>
-    <div class="wrap">
+    <main class="wrap" id="main-content">
       <ol class="flow-steps" aria-label="가입 절차">
         <li class="is-done"><span>1</span> 가입</li>
         <li class="is-done"><span>2</span> 본인인증</li>
@@ -43,9 +154,41 @@
       </ol>
       <h1 class="page-title">MagicTrading · 결제</h1>
       <p class="lead">
-        MagicTrading은 단일 전략 상품입니다. Stripe 등 결제 수단은 <strong>신청·승인 절차</strong>가 끝나야 연동할 수 있습니다.
-        지금은 뼈대와 약관·고지를 먼저 정리합니다.
+        MagicTrading은 단일 전략 상품입니다. <strong>납부</strong>는 대표적으로 네 갈래로 안내합니다. <strong>①
+        PayPal(카드)</strong> — <strong>소액·이벤트·가입</strong> 등은 PG 루트(신용·체크 위주)로 받습니다(잔액·페이는 제한·수수료는
+        PayPal 정책). <strong>② Airwallex USD 미국 수취계좌로 직접 송금</strong> — <strong>달러 현금 송금</strong>은
+        <a href="#aw-usd-base">미국 USD 계좌</a>로 이체(ACH·Fedwire·SWIFT). <strong>③ 크립토 직접 송금</strong> —
+        메이저 코인과 Ledger 지원 코인(수동 견적), 수취·꼬리표는 <a href="#crypto-deposit">아래</a>·<a href="../contact/index.html">문의</a>. <strong>④
+        국내 원화(₩) 납부</strong> — <strong>당사 법인 명의</strong>(우리은행) 계좌·환산은 <a href="#krw-corporate">아래</a>·<a href="../contact/index.html">인보이스</a>를
+        따릅니다(원화 <strong>법인 송금</strong>: <strong>구매 당시 환율</strong>·<strong>만 원 단위 절삭</strong>).
       </p>
+      <p
+        class="refund-top-hint"
+        style="
+          margin: 0.15rem 0 0.85rem;
+          padding: 0.55rem 0.75rem;
+          border-radius: 10px;
+          background: linear-gradient(135deg, rgba(47, 111, 79, 0.11) 0%, rgba(155, 228, 184, 0.12) 100%);
+          border: 1px solid rgba(47, 111, 79, 0.35);
+          font-size: 0.92rem;
+          line-height: 1.5;
+        "
+      >
+        <strong>정규·비즈(월) 환불 요청</strong>은 <a href="#refund-h2">이 페이지의 환불 요청란</a>에서 접수합니다. (이메일·로그인·API
+        연동이 필요하며, 이벤트·쿠폰·7일 체험·리커버리는 대상이 아닙니다.) → <a href="../legal/refund.html#sec-refund-formula">산정 방식(31일·USD)</a>
+      </p>
+
+      <nav class="billing-page-toc" aria-label="페이지 목차">
+        <h2 class="visually-hidden">이 페이지에서 바로 보기</h2>
+        <ul class="billing-page-toc__list">
+          <li><a href="#payment-dual">결제·납부 채널</a></li>
+          <li><a href="#refund-h2">환불 요청</a></li>
+          <li><a href="#swift-gap-remedy">국제송금 지연 안내</a></li>
+          <li><a href="#krw-corporate">원화 법인 계좌</a></li>
+          <li><a href="#crypto-deposit">가상자산 입금</a></li>
+        </ul>
+      </nav>
+
       <div id="monthly-billing" class="nrf-box" style="border-left: 3px solid rgba(155, 228, 184, 0.55)">
         <strong>월 납부만 — 1개월을 넘는 기간에 대한 일시(연·분기·다월) 선납·&ldquo;년회원&rdquo; 없음</strong>
         <p class="en">We do not process payments for a charge period longer than one month. No annual-prepay or &ldquo;year membership&rdquo; product.</p>
@@ -60,75 +203,842 @@
         </p>
       </div>
 
-      <div class="status-banner" role="status">
-        <strong>현재 상태</strong> — 결제 시스템 연동은 <strong>승인 대기 중</strong>입니다. 카드 입력창이 열리기 전까지는 이 페이지에서 결제되지 않습니다. 요금·체험 조건은 <a href="../events/index.html">이벤트·요금</a>을 참고해 주세요.
+      <div id="pg-status-banner" class="status-banner" role="status">
+        <strong>납부 요약</strong> — <strong>① PayPal</strong>(소액·카드) · <strong>② Airwallex USD 미국 계좌</strong> 직접 송금 ·
+        <strong>③ 크립토</strong> 직접 송금(<a href="#crypto-deposit">메이저 우선 지원·잡코인 수동 견적</a>·꼬리표) · <strong>④
+        국내 원화(₩) 법인계좌</strong>(<a href="#krw-corporate">우리은행·만 원 단위</a>). 이벤트·정산은 운영에서
+        <strong>PayPal · Airwallex</strong> 연동 상태에 맞춰 안내됩니다. <strong>추가 고지</strong>:
+        <a href="../events/index.html">이벤트</a> · <a href="../legal/refund.html#sec-payment-channels">결제 수단(약관)</a> ·
+        <a href="../contact/index.html">문의</a>. 일부 채널은 시기별로 제공 경로가 달라질 수 있습니다.
       </div>
 
-      <div class="pay-grid">
-        <div class="pay-card">
-          <strong>Stripe</strong>
-          <span>카드·구독 빌링 (국제) — 웹훅으로 회원 기간 반영 예정</span>
+      <section id="payment-dual" class="pay-dual" aria-labelledby="pay-dual-title">
+        <h2 id="pay-dual-title">결제·납부 채널: PayPal · USD 은행송금 · 크립토 · 원화(법인)</h2>
+        <p class="pay-dual__intro">
+          <strong>① PayPal</strong> — <strong>소액</strong>·이벤트·가입 루트(카드), <strong>② USD 은행송금</strong> —
+          <strong>Airwallex 미국 USD 수취계좌</strong>로 직접 송금(고액·정규·인보이스), <strong>③ 크립토</strong> — 온체인 직접 송금(메이저 우선 지원·잡코인 수동 견적·<a href="#crypto-deposit">꼬리표</a>), <strong>④ 원화(₩)</strong> — 국내에서 원화로 납부하실 때
+          <strong>법인 계좌(원화)</strong>·환산은 <a href="#krw-corporate">아래</a>·<a href="../contact/index.html">인보이스</a>를
+          따릅니다(USD 등 → 원화: <strong>구매 당시 환율</strong>, <strong>만 원 단위 절삭</strong>). 달러 현금 송금은 Airwallex
+          <a href="#aw-usd-base">미국 USD 수취계좌</a>와 인보이스를 기준으로 대조합니다.
+        </p>
+        <ol class="pay-dual__procedure">
+          <li><strong>① PayPal(소액·카드)</strong> — <a href="?signup=1#signup-checkout">가입·플랜</a>·<a href="../events/index.html">이벤트</a> 등(체크아웃·웹훅은 키·운영에 따름).</li>
+          <li><strong>② USD 은행 직접 송금</strong> — ② 패널의 <a href="#aw-usd-base">Airwallex 미국 USD 수취계좌</a>로 ACH·Fedwire·SWIFT 송금, Reference(이메일·주문) 맞춤.</li>
+          <li><strong>③ 크립토 직접 송금</strong> — <a href="#crypto-deposit">수취 주소(공지) + 입금 알림·꼬리표</a>(수동 대조).</li>
+          <li><strong>④ 국내 원화(법인)</strong> — <a href="#krw-corporate">우리은행 법인계좌</a>·<strong>구매 당시 환율</strong>·<strong>만 원 단위 절삭</strong>(<a href="../contact/index.html">인보이스</a>).</li>
+        </ol>
+        <div class="pay-dual__grid" role="presentation">
+          <div id="paypal-checkout" class="pay-dual__panel" aria-labelledby="paypal-checkout-title">
+            <span class="pay-dual__eyebrow">① PayPal — 소액·카드</span>
+            <h3 id="paypal-checkout-title">PayPal(카드) 체크아웃</h3>
+            <p class="small" style="margin: 0 0 0.6rem; color: var(--ci-brown-muted); line-height: 1.5">
+              <strong>소액·이벤트·가입</strong>은 <strong>PayPal에 카드를 연동</strong>한 결제를 먼저 씁니다(고액·은행·원화·크립토는
+              ②~④). PayPal 잔액·페이류 가능 여부는 PayPal 정책과 당시 결제 화면을 따릅니다. Airwallex는 현재 카드 체크아웃이 아니라
+              <a href="#aw-usd-base">USD 은행 직접 송금</a> 채널로 안내합니다.
+            </p>
+            <p class="small" style="margin: 0; line-height: 1.5">
+              <a class="btn" style="display: inline-block; margin: 0.2rem 0.35rem 0.2rem 0" href="?signup=1#signup-checkout">가입·플랜으로 이동</a>
+              <a class="btn" style="display: inline-block; margin: 0.2rem 0.35rem" href="../events/index.html">이벤트 요금</a>
+              <a class="btn" style="display: inline-block; margin: 0.2rem 0.35rem" href="../legal/refund.html#sec-payment-channels">결제 수단(약관)</a>
+            </p>
+            <p class="small en" style="margin: 0.5rem 0 0; font-size: 0.8rem; color: #5a5e66">
+              PayPal hosted / card checkout — fee policy by PayPal. No fake payment iframe here: use the sign-up and plan buttons above when checkout is
+              wired.
+            </p>
+          </div>
+
+          <div id="direct-transfer" class="pay-dual__panel" aria-labelledby="direct-transfer-title">
+            <span class="pay-dual__eyebrow">② USD 은행송금 — Airwallex 미국 수취계좌</span>
+            <h3 id="direct-transfer-title">달러 현금 송금 — USD Receiving Account</h3>
+            <p class="small" style="margin: 0 0 0.45rem; color: var(--ci-brown-muted); line-height: 1.5">
+              <strong>은행에서</strong> 당사 <strong>Airwallex 미국 USD 수취계좌</strong>로 달러를 직접
+              이체하는 경로입니다. 카드 결제창이 아니라 <strong>인보이스 기반 은행 송금</strong>이며, 수취인명·계좌번호·라우팅·SWIFT는
+              <strong>한 글자도</strong> 틀리지 말 것(거절·지연). 미국 내 송금은 ACH/Fedwire, 해외 송금은 SWIFT를 사용합니다.
+            </p>
+            <p class="small" style="margin: 0 0 0.45rem; color: var(--ci-brown-muted)">
+              <strong>절차</strong>: 인보이스 확인 → 은행 앱/창구에서 <strong>USD</strong>로 송금 → Reference/비고에
+              <strong>이메일·주문·인보이스 번호</strong> (운영이 안내한 형식) → 입금 확인.
+            </p>
+            <div
+              id="aw-usd-base"
+              class="nrf-box"
+              style="margin: 0.35rem 0 0.7rem; padding: 0.7rem 0.8rem; border-radius: 11px; border: 1px solid rgba(47, 111, 79, 0.35); background: #fbfcff"
+            >
+              <p class="small" style="margin: 0 0 0.45rem; color: #5c2b2b; line-height: 1.5">
+                <strong>필독</strong> — 송금 시 수취인명 <strong>haengbokdodam invest co ltd</strong>와 계좌·라우팅 번호를 그대로 입력해 주세요.
+                입금자명 또는 Reference가 인보이스와 다르면 권한 부여가 지연될 수 있습니다.
+              </p>
+              <h4 style="font-size: 0.9rem; margin: 0 0 0.4rem; color: var(--ci-brown)">USD 수취 (Airwallex · United States)</h4>
+              <div style="overflow-x: auto" role="region" aria-label="Airwallex 미국 USD 수취계좌">
+                <table class="data-table" style="font-size: 0.83rem; margin: 0">
+                  <tbody>
+                    <tr>
+                      <th scope="row" style="width: 8.2rem">Account name</th>
+                      <td>
+                        <code>haengbokdodam invest co ltd</code>
+                        <span class="small" style="display: block; margin: 0.2rem 0 0; color: var(--ci-brown-muted)">대시보드·송금에 표기되는
+                        영문명과 동일(철자 변경 시 콘솔·인보이스를 우선하세요)</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Bank name</th>
+                      <td>Community Federal Savings Bank / United States</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Account number</th>
+                      <td><code>8483246245</code></td>
+                    </tr>
+                    <tr>
+                      <th scope="row">ACH routing number</th>
+                      <td><code>026073150</code></td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Fedwire routing number</th>
+                      <td><code>026073008</code></td>
+                    </tr>
+                    <tr>
+                      <th scope="row">SWIFT / BIC</th>
+                      <td><code>CMFGUS33</code></td>
+                    </tr>
+                    <tr>
+                      <th scope="row">지원 경로</th>
+                      <td>국내 ACH · 국내 Fedwire · 국제 SWIFT 이체</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p class="small" style="margin: 0.5rem 0 0; color: var(--ci-brown-muted); line-height: 1.5">
+                <strong>도착·처리(참고, 영업·은행·경로에 따름)</strong> — ACH 1~2일 · Fedwire 0~1일 · 국제 SWIFT 0~3일.
+              </p>
+            </div>
+            <div class="currency-chipbar" id="ccy-bar" role="tablist" aria-label="수취 통화">
+              <button type="button" class="currency-chip" role="tab" id="ccy-tab-hkd" aria-selected="false" aria-controls="ccy-panel-hkd" data-ccy="hkd">HKD</button>
+              <button type="button" class="currency-chip" role="tab" id="ccy-tab-cny" aria-selected="false" aria-controls="ccy-panel-cny" data-ccy="cny">CNY</button>
+              <button type="button" class="currency-chip is-on" role="tab" id="ccy-tab-usd" aria-selected="true" aria-controls="ccy-panel-usd" data-ccy="usd">USD</button>
+              <button type="button" class="currency-chip" role="tab" id="ccy-tab-eur" aria-selected="false" aria-controls="ccy-panel-eur" data-ccy="eur">EUR</button>
+              <button type="button" class="currency-chip" role="tab" id="ccy-tab-aud" aria-selected="false" aria-controls="ccy-panel-aud" data-ccy="aud">AUD</button>
+              <button type="button" class="currency-chip" role="tab" id="ccy-tab-cad" aria-selected="false" aria-controls="ccy-panel-cad" data-ccy="cad">CAD</button>
+              <button type="button" class="currency-chip" role="tab" id="ccy-tab-chf" aria-selected="false" aria-controls="ccy-panel-chf" data-ccy="chf">CHF</button>
+              <button type="button" class="currency-chip" role="tab" id="ccy-tab-gbp" aria-selected="false" aria-controls="ccy-panel-gbp" data-ccy="gbp">GBP</button>
+              <button type="button" class="currency-chip" role="tab" id="ccy-tab-jpy" aria-selected="false" aria-controls="ccy-panel-jpy" data-ccy="jpy">JPY</button>
+              <button type="button" class="currency-chip" role="tab" id="ccy-tab-nzd" aria-selected="false" aria-controls="ccy-panel-nzd" data-ccy="nzd">NZD</button>
+              <button type="button" class="currency-chip" role="tab" id="ccy-tab-sgd" aria-selected="false" aria-controls="ccy-panel-sgd" data-ccy="sgd">SGD</button>
+            </div>
+
+            <div id="ccy-panels" role="tabpanel">
+              <p class="small" style="margin: 0.15rem 0 0.45rem; color: var(--ci-brown-muted)">
+                현재 홈페이지에 공개하는 활성 외화 수취계좌는 위 <a href="#aw-usd-base">미국 USD 계좌</a>입니다.
+                다른 통화는 콘솔·인보이스에서 별도 확인된 경우에만 안내합니다.
+              </p>
+              <div id="ccy-panel-hkd" class="d-currency-panel" role="tabpanel" aria-labelledby="ccy-tab-hkd" data-ccy="hkd">
+                <strong>HKD</strong> — Hong Kong dollar
+                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">
+                  현재 공개 기본 계좌는 USD입니다. HKD는 별도 인보이스와 콘솔 계좌가 확인된 경우에만 안내합니다.
+                </p>
+              </div>
+              <div id="ccy-panel-cny" class="d-currency-panel" role="tabpanel" aria-labelledby="ccy-tab-cny" data-ccy="cny">
+                <strong>CNY</strong> — Chinese yuan
+                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">
+                  현재 공개 기본 계좌는 USD입니다. CNY는 별도 인보이스와 콘솔 계좌가 확인된 경우에만 안내합니다.
+                </p>
+              </div>
+              <div id="ccy-panel-usd" class="d-currency-panel is-on" role="tabpanel" aria-labelledby="ccy-tab-usd" data-ccy="usd">
+                <strong>USD</strong> — US dollar
+                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">
+                  입금 <strong>USD</strong> — 미국 내 ACH/Fedwire 또는 해외/글로벌 <strong>SWIFT</strong> 송금.
+                  수취는 위 미국 계좌 정보와 인보이스 Reference를 따릅니다.
+                </p>
+              </div>
+              <div id="ccy-panel-eur" class="d-currency-panel" role="tabpanel" aria-labelledby="ccy-tab-eur" data-ccy="eur">
+                <strong>EUR</strong> — Euro
+                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">현재 공개 기본 계좌는 USD입니다. EUR는 별도 인보이스와 콘솔 계좌가 확인된 경우에만 안내합니다.</p>
+              </div>
+              <div id="ccy-panel-aud" class="d-currency-panel" role="tabpanel" aria-labelledby="ccy-tab-aud" data-ccy="aud">
+                <strong>AUD</strong> — Australian dollar
+                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">현재 공개 기본 계좌는 USD입니다. AUD는 별도 인보이스와 콘솔 계좌가 확인된 경우에만 안내합니다.</p>
+              </div>
+              <div id="ccy-panel-cad" class="d-currency-panel" role="tabpanel" aria-labelledby="ccy-tab-cad" data-ccy="cad">
+                <strong>CAD</strong> — Canadian dollar
+                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">현재 공개 기본 계좌는 USD입니다. CAD는 별도 인보이스와 콘솔 계좌가 확인된 경우에만 안내합니다.</p>
+              </div>
+              <div id="ccy-panel-chf" class="d-currency-panel" role="tabpanel" aria-labelledby="ccy-tab-chf" data-ccy="chf">
+                <strong>CHF</strong> — Swiss franc
+                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">현재 공개 기본 계좌는 USD입니다. CHF는 별도 인보이스와 콘솔 계좌가 확인된 경우에만 안내합니다.</p>
+              </div>
+              <div id="ccy-panel-gbp" class="d-currency-panel" role="tabpanel" aria-labelledby="ccy-tab-gbp" data-ccy="gbp">
+                <strong>GBP</strong> — British pound
+                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">현재 공개 기본 계좌는 USD입니다. GBP는 별도 인보이스와 콘솔 계좌가 확인된 경우에만 안내합니다.</p>
+              </div>
+              <div id="ccy-panel-jpy" class="d-currency-panel" role="tabpanel" aria-labelledby="ccy-tab-jpy" data-ccy="jpy">
+                <strong>JPY</strong> — Japanese yen
+                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">현재 공개 기본 계좌는 USD입니다. JPY는 별도 인보이스와 콘솔 계좌가 확인된 경우에만 안내합니다.</p>
+              </div>
+              <div id="ccy-panel-nzd" class="d-currency-panel" role="tabpanel" aria-labelledby="ccy-tab-nzd" data-ccy="nzd">
+                <strong>NZD</strong> — New Zealand dollar
+                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">현재 공개 기본 계좌는 USD입니다. NZD는 별도 인보이스와 콘솔 계좌가 확인된 경우에만 안내합니다.</p>
+              </div>
+              <div id="ccy-panel-sgd" class="d-currency-panel" role="tabpanel" aria-labelledby="ccy-tab-sgd" data-ccy="sgd">
+                <strong>SGD</strong> — Singapore dollar
+                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">현재 공개 기본 계좌는 USD입니다. SGD는 별도 인보이스와 콘솔 계좌가 확인된 경우에만 안내합니다.</p>
+              </div>
+            </div>
+            <p class="small" style="margin: 0.5rem 0 0; color: var(--ci-brown-muted)">
+              크립토·기타: <a href="../legal/refund.html#sec-payment-channels">약관</a>·별도 합의(메이저 우선 지원, 기타 코인은 수동 견적·USDT 스왑 완료액 기준). <strong>달러 은행 납부</strong>는
+              <strong>Airwallex 미국 USD 계좌</strong> 기준 — 구 KEB 하나 직접 SWIFT·정규 할인 송금 루트는 운영상 사용하지 않습니다.
+            </p>
+          </div>
         </div>
-        <div class="pay-card">
-          <strong>Coinbase Commerce</strong>
-          <span>암호화폐 결제 — 일회성·정책 확정 후 선택</span>
+        <div class="pay-dual__grid" role="presentation" style="margin-top: 0.8rem; align-items: stretch">
+          <div class="pay-dual__panel" aria-labelledby="channel-crypto-title">
+            <span class="pay-dual__eyebrow">③ 크립토 — 직접 송금</span>
+            <h3 id="channel-crypto-title" style="font-size: 1rem; margin: 0.2rem 0 0.45rem; color: var(--ci-brown)">가상자산(온체인)</h3>
+            <p class="small" style="margin: 0; color: var(--ci-brown-muted); line-height: 1.5">
+              <strong>BTC·ETH·USDT·USDC·XRP·SOL·TRX·BNB·MATIC</strong>은 우선 지원하고, 그 외 Ledger 지원 코인은
+              <strong>수동 견적</strong>으로 접수합니다. 잡코인은 실제 <strong>USDT 스왑 완료액</strong> 기준으로 승인합니다.
+            </p>
+            <p style="margin: 0.55rem 0 0">
+              <a class="btn" style="display: inline-block" href="#crypto-deposit">크립토 입금</a>
+            </p>
+          </div>
+          <div class="pay-dual__panel" aria-labelledby="channel-krw-title">
+            <span class="pay-dual__eyebrow">④ 국내 원화 — 법인 계좌</span>
+            <h3 id="channel-krw-title" style="font-size: 1rem; margin: 0.2rem 0 0.45rem; color: var(--ci-brown)">₩ 원화(법인)</h3>
+            <p class="small" style="margin: 0; color: var(--ci-brown-muted); line-height: 1.5">
+              <strong>당사 법인</strong> <strong>우리은행</strong> 원화·<strong>구매 당시 환율</strong>·<strong>만 원 절삭</strong>은
+              <a href="#krw-corporate">이 페이지</a>·<a href="../contact/index.html">인보이스</a>를 따릅니다.
+            </p>
+            <p style="margin: 0.55rem 0 0">
+              <a class="btn" style="display: inline-block" href="#krw-corporate">원화(법인) 수취</a>
+            </p>
+          </div>
         </div>
-        <div class="pay-card">
-          <strong>크몽 등 국내 채널</strong>
-          <span>국내 사용자용 — 법·표현 검토 후 연동</span>
-        </div>
+      </section>
+      <p class="small" style="margin: 0.4rem 0 0.2rem; color: var(--ci-brown-muted); line-height: 1.5">
+        <strong>① 소액</strong> = <strong>PayPal + 카드</strong>, <strong>②</strong> = <a href="#aw-usd-base"><strong>Airwallex USD 미국 계좌 직접 송금</strong></a>,
+        <strong>③</strong> = <a href="#crypto-deposit">크립토</a>, <strong>④</strong> = <a href="#krw-corporate">원화·법인(우리은행·만 원 절삭)</a>.
+        <strong>한국에서 달러(외화) SWIFT</strong>는 은행·수수료가 다릅니다(총비용·경로는 송금인 기준).
+      </p>
+      <p
+        class="small"
+        style="
+          margin: 0.1rem 0 0.85rem;
+          padding: 0.55rem 0.7rem;
+          border-radius: 9px;
+          border: 1px solid rgba(47, 111, 79, 0.28);
+          background: rgba(47, 111, 79, 0.04);
+          line-height: 1.5;
+        "
+      >
+        <strong>PG 없이 송금만</strong>으로 통일하는 방식은 <strong>권장하지 않습니다</strong>. 낯선 사이트에 고액·선입금을 요구할 때 생기는
+        <strong>불신</strong>과, 은행 앱·참고번호를 거치며 줄어드는 <strong>즉시 전환(임펄스)</strong>이 손실될 수 있습니다. 대신
+          <strong>PG·호스티드(표준 루트)</strong>로 입문·이벤트를 받고, <strong>고액·정규</strong>는
+        <a href="#payment-dual">PayPal·Airwallex·크립토·원화(법인)</a>·<a href="../contact/index.html">문의·인보이스</a>로 맞추는
+        <strong>다채널</strong>이 균형에 맞습니다. (국내 달러/SWIFT·원화는 송금인 은행·<a href="../contact/index.html">문의</a>에 따름.)
+      </p>
+
+      <div
+        class="pg-trust-airwallex"
+        style="
+          margin: 0.75rem 0 1rem;
+          padding: 0.7rem 0.85rem;
+          border-radius: 10px;
+          border: 1px solid rgba(47, 111, 79, 0.32);
+          background: rgba(47, 111, 79, 0.05);
+          font-size: 0.86rem;
+          line-height: 1.5;
+        "
+        role="region"
+        aria-label="PG·이용자 고지"
+      >
+        <strong>결제 전 확인</strong> (심사·투명성)
+        <ul style="margin: 0.4rem 0 0; padding-left: 1.05rem">
+          <li>
+            <strong>7일(1주) 무료</strong>는
+            <a href="../legal/terms-magictrading-free-trial.html">이벤트 무료 체험</a> 기준이며,
+            <strong>기간만료 후 자동으로 유료가 청구되지 않습니다</strong>(별도 결제·동의 시에만).
+          </li>
+          <li>
+            <strong>정규·비즈니스(월) 플랜</strong> — <a href="../legal/refund.html#sec-refund-formula">묻지 않는 일할 환불</a>(31일·USD 식), 해외 수취는 달러 지급 원칙(세부
+            <a href="../legal/terms-magictrading-regular.html">정규 특약</a>·<a href="../legal/plan-terms-nonrefund.html">총괄</a>).
+          </li>
+        </ul>
       </div>
+
+      <div class="nrf-box" style="margin: 0 0 0.5rem; border-left: 3px solid rgba(47, 111, 79, 0.5)">
+        <strong>환불 고지 (정규·비즈만)</strong>
+        <p class="en" style="margin: 0.3rem 0 0; font-size: 0.82rem; opacity: 0.9">
+          Regular / business month: (31 − used days incl. request day) / 31 × plan USD. Non-refundable: events, coupons, trial, recovery.
+        </p>
+        <p style="margin: 0.4rem 0 0; font-size: 0.84rem; line-height: 1.5">
+          한국어: <strong>정규·비즈(월)</strong>만 이유를 묻지 않고 <strong>31일·USD</strong> 일할(식: <a href="../legal/refund.html#sec-refund-formula">환불 정책</a>).
+          해외 수취는 <strong>USD</strong> 지급이 원칙, 국내 원화는 별도. 이벤트·쿠폰·체험·리커버리는 <strong>환불불가</strong>.
+        </p>
+      </div>
+
+      <section
+        id="refund-request"
+        class="coupon-redeem-section refund-request-section refund-request-section--primary"
+        aria-labelledby="refund-h2"
+        style="margin-top: 0.25rem"
+      >
+        <h2 id="refund-h2" style="font-size: 1.2rem; margin-bottom: 0.5rem">환불 요청 (정규·비즈니스 월) · 수취·송금 정보</h2>
+        <p class="lead" style="font-size: 0.95rem; margin-bottom: 0.75rem">
+          <strong>정규·비즈니스(월) 플랜</strong> 결제 건만 접수됩니다. 요청 사유는 선택입니다. 예상액은 <strong>31일 월 구간</strong>·<strong>신청 당일 포함 사용일</strong>·회원 기록의
+          <strong>결제금액(USD)</strong>으로 산정합니다(자세한 식은 <a href="../legal/refund.html#sec-refund-formula">환불 정책</a>).
+          이벤트·쿠폰·무료체험·리커버리는 환불불가입니다. <strong>국내</strong>는 원화 입금(참고 환율), <strong>해외</strong>는 USD 송금입니다.
+        </p>
+        <div class="refund-preview" id="refund-preview-line">로그인 이메일의 정규·비즈 기준으로 31일·USD 일할 환불액을 계산합니다.</div>
+        <p id="refund-fx-hint" class="small" style="margin: 0.35rem 0 0.6rem; color: var(--ci-brown-muted); line-height: 1.45"></p>
+
+        <fieldset class="refund-payout-toggle" style="border: 1px solid rgba(47, 111, 79, 0.25); border-radius: 10px; padding: 0.6rem 0.75rem; margin: 0 0 0.75rem; background: rgba(255, 255, 255, 0.45)">
+          <legend style="font-size: 0.88rem; padding: 0 0.35rem; color: var(--ci-brown)">수취 방식</legend>
+          <label style="display: inline-flex; align-items: center; gap: 0.35rem; margin-right: 1.1rem; cursor: pointer; font-size: 0.9rem"
+            ><input type="radio" name="refund-payout" id="refund-payout-domestic" value="domestic_krw" />
+            국내 (원화 입금) — 은행명·계좌번호·예금주</label
+          >
+          <label style="display: inline-flex; align-items: center; gap: 0.35rem; cursor: pointer; font-size: 0.9rem"
+            ><input type="radio" name="refund-payout" id="refund-payout-intl" value="international_usd" checked />
+            해외 (USD 송금) — SWIFT 등</label
+          >
+        </fieldset>
+
+        <div id="refund-krw-wrap" class="refund-krw-wrap" style="display: none" hidden>
+          <p class="small" style="margin: 0 0 0.5rem; color: var(--ci-brown)">
+            아래 환율·원화액은 <strong>참고</strong>이며, 실제 입금액·수수료·은행/송금일에 따라 달라질 수 있습니다.
+          </p>
+          <div class="refund-form-grid">
+            <label>은행명 (한글) *
+              <input type="text" id="refund-krw-bank" maxlength="80" placeholder="예: 국민은행" autocomplete="off" />
+            </label>
+            <label>계좌번호 *
+              <input type="text" id="refund-krw-account" maxlength="30" inputmode="numeric" placeholder="하이픈 있어도 됨" autocomplete="off" />
+            </label>
+            <label>예금주 (이름) *
+              <input type="text" id="refund-krw-holder" maxlength="60" placeholder="계좌 예금주 실명" autocomplete="name" />
+            </label>
+          </div>
+        </div>
+
+        <div id="refund-intl-wrap" class="refund-intl-wrap">
+          <div class="refund-form-grid">
+            <label>수취인 영문명 *
+              <input type="text" id="refund-beneficiary-name" maxlength="160" autocomplete="name" />
+            </label>
+            <label>수취인 주소
+              <input type="text" id="refund-beneficiary-address" maxlength="300" autocomplete="street-address" />
+            </label>
+            <label>은행명 *
+              <input type="text" id="refund-bank-name" maxlength="160" />
+            </label>
+            <label>브랜치명 *
+              <input type="text" id="refund-branch-name" maxlength="160" />
+            </label>
+            <label>SWIFT / BIC *
+              <input type="text" id="refund-swift-bic" maxlength="40" style="text-transform: uppercase" />
+            </label>
+            <label>계좌번호 *
+              <input type="text" id="refund-account-number" maxlength="120" />
+            </label>
+            <label>은행 국가 *
+              <input type="text" id="refund-bank-country" maxlength="80" placeholder="예: KR, US, JP" />
+            </label>
+            <label>은행 주소
+              <input type="text" id="refund-bank-address" maxlength="300" />
+            </label>
+            <label>IBAN (해당 시)
+              <input type="text" id="refund-iban" maxlength="80" />
+            </label>
+            <label>Routing / ABA (해당 시)
+              <input type="text" id="refund-routing-number" maxlength="80" />
+            </label>
+            <label>중계은행명 (해당 시)
+              <input type="text" id="refund-intermediary-bank-name" maxlength="160" />
+            </label>
+            <label>중계은행 SWIFT (해당 시)
+              <input type="text" id="refund-intermediary-swift-bic" maxlength="40" style="text-transform: uppercase" />
+            </label>
+          </div>
+        </div>
+        <div class="refund-form-grid" style="margin-top: 0.65rem">
+          <label>결제금액 USD (기록 없을 때만 보조 입력)
+            <input type="number" id="refund-paid-amount-usd" min="0" step="0.01" placeholder="DB에 USD 금액이 없을 때" />
+          </label>
+          <label>요청 메모 (선택)
+            <input type="text" id="refund-reason" maxlength="500" placeholder="비워도 접수" />
+          </label>
+        </div>
+        <div class="refund-actions">
+          <button type="button" class="btn" id="refund-submit-btn">일할 계산 후 환불 요청</button>
+        </div>
+        <p id="refund-result" class="small" role="status" style="margin-top: 0.5rem"></p>
+      </section>
 
       <div class="pay-cta-row">
-        <button type="button" class="fake-pay-btn" disabled aria-disabled="true">결제하기 (승인·연동 후 활성화)</button>
+        <p class="small" style="margin: 0; color: var(--ci-brown-muted)">
+          1달 이벤트·가입: <a href="#signup-checkout">「가입 플랜 결제」</a> — <strong>① PayPal(소액·카드)</strong>·수동(운영 대조) /
+          정산(Shopify 등). <strong>정규·고액</strong>은 <a href="#payment-dual">② 직접 송금</a>·<a href="#aw-usd-base">Airwallex USD 미국 계좌</a>,
+          <a href="#crypto-deposit">③ 크립토</a>, <a href="#krw-corporate">④ 원화 법인</a> + <a href="../contact/index.html">문의</a>·인보이스(로그인·<code>?signup=1&amp;plan=…</code>).
+        </p>
       </div>
 
       <section id="wire-transfer" class="pay-wire-section" aria-labelledby="wire-h2" style="margin-top: 1.15rem; padding: 0.9rem 1rem; border-radius: 12px; border: 1px solid rgba(74, 53, 40, 0.14); background: #fffef9">
-        <h2 id="wire-h2" style="font-size: 1.05rem; margin: 0 0 0.4rem; color: var(--ci-brown)">계좌이체·해외 송금(당사 수취)</h2>
+        <h2 id="wire-h2" style="font-size: 1.05rem; margin: 0 0 0.4rem; color: var(--ci-brown)">은행·송금으로 납부 (당사 수취 — Airwallex 중심)</h2>
         <p class="small" style="margin: 0 0 0.55rem; color: var(--ci-brown-muted); line-height: 1.5">
-          카드·PG 외 <strong>은행 이체(원화) 또는 SWIFT(외화)</strong>로 납부(비즈니스·고액·별도 견적 등)할 때, 아래 <strong>KEB Hana
-          Bank(하나은행)</strong> 수취 정보를 씁니다. <strong>국내</strong>는 <strong>은행명(한글) + 계좌번호(통장)</strong>를 알려드리는 것으로
-          충분할 수 있고, <strong>해외</strong>는 SWIFT·영문 주소·지점 등을 함께 확인해 주세요. 수수료·환율은 은행·경로에 따릅니다. 예금주는
-          상담·인보이스의 법인명과 일치시켜 주세요(통상 <strong>주식회사 행복도담 인베스트</strong>).
+          <strong>KEB 하나(한) 직접 SWIFT</strong>·<strong>정규 “SWIFT 직납부 할인”</strong> 루트는 운영을 <strong>Airwallex</strong>로
+          이전하면서 <strong>사용하지 않습니다</strong>. <strong>USD 달러</strong> 은행 입금은
+          <a href="#payment-dual">«② Airwallex»</a>·<a href="#aw-usd-base">미국 USD 수취계좌</a>·인보이스로, <strong>원화(국내)</strong>는
+          <a href="#krw-corporate">법인계좌(우리은행·만 원 절삭)</a>, <strong>크립토</strong>는 <a href="#crypto-deposit">③</a>을 따릅니다.
         </p>
-        <div style="overflow-x: auto" role="region" aria-label="KEB Hana Bank 수취">
-          <table class="data-table" style="font-size: 0.86rem; margin: 0.4rem 0 0.35rem">
+        <p class="small" style="margin: 0 0 0.55rem; color: var(--ci-brown-muted); line-height: 1.5">
+          <strong>해외 또는 국내에서 USD로</strong> 보내는 유저는 <strong>ACH/Fedwire/SWIFT</strong>·수수료를 본인 은행 안내에 따르고, 수취는 Airwallex에 표기된
+          <strong>영문 수취인명</strong>·<strong>미국 계좌번호</strong>·<strong>라우팅/SWIFT</strong>를 맞춥니다.
+        </p>
+        <p class="small" style="margin: 0 0 0.55rem; color: #7a1e1e; line-height: 1.5">
+          <strong>가상자산(온체인)·암호화폐 PG</strong> 등 <strong>별도 합의</strong>로 납부할 때는, 안내받는
+          <strong>네트워크(체인) · 수취 주소 · 메모(Tag·Destination·일부 코인)</strong>를 반드시 지켜 주세요. 이 사이트는
+          <strong>리플(XRP) 전용·TXID 자동승인</strong> 같은 온체인 대조·자동확인을 <strong>기본 제공하지 않습니다</strong>(도입·계약·운영
+          절차가 별도로 필요). 송금 전 조건이 합의와 다르면 <a href="../contact/index.html">문의</a>로 확인해 주세요.
+        </p>
+        <p class="small" style="margin: 0.35rem 0 0; color: var(--ci-brown-muted)">
+          <strong>환불</strong> 시 당사 → 고객 송금 경로(원/달러)는 <a href="../legal/refund.html#sec-company-bank">환불 정책</a>·접수란
+          (입금용 Airwallex와 별개일 수 있음).
+        </p>
+        <details
+          id="swift-gap-remedy"
+          style="margin-top: 0.75rem; padding: 0.65rem 0.85rem; border-radius: 10px; border: 1px solid rgba(47, 111, 79, 0.32); background: linear-gradient(168deg, #f4faf7 0%, #fffef9 100%)"
+        >
+          <summary
+            style="
+              cursor: pointer;
+              font-weight: 700;
+              font-size: 0.93rem;
+              color: var(--ci-brown);
+              line-height: 1.45;
+              list-style-position: outside;
+              padding-inline-start: 0.15rem;
+            "
+          >
+            SWIFT 등 송금이 며칠 걸리는 동안 지표 이용을 시작하고 싶다면 · 송금 공백기
+          </summary>
+          <div class="small" style="margin: 0.55rem 0 0; color: var(--ci-brown-muted); line-height: 1.6">
+            <p style="margin: 0 0 0.5rem">
+              해외 입금 확인은 통상 <strong>영업일 기준 최대 며칠</strong>(은행 표기 참고 · 위
+              <a href="#aw-usd-base">② Airwallex USD 미국 계좌</a> 패널 &ldquo;도착·처리 참고&rdquo;)까지 걸릴 수 있습니다. 아래 방식으로
+              <strong>수납 확인 전이라도 이용을 조기에 시작</strong>하거나 <strong>대기 시간 자체를 줄일</strong> 수 있습니다.
+            </p>
+            <ol style="margin: 0 0 0 1rem; padding: 0; list-style: decimal outside">
+              <li style="margin: 0 0 0.4rem">
+                <strong>송금 증빙(MT103·송금 접수증 등) 선검증</strong> — 송금 직후 은행 쪽에서 받을 수 있는
+                <strong>MT103 요지</strong>, <strong>Remittance Advice</strong>, 모바일뱅킹의
+                &ldquo;송금 접수·처리 증명&rdquo; 등 <strong>금액·수취인(당사)·통화가 인보이스 안내와 맞음을 확인할 수 있는 내용</strong>을 이미지·PDF로 준비해
+                <a href="../boards/index.html">모임터(지정 공지 카테고리)</a> 또는 <a href="../contact/index.html">문의</a>로 제출해 주세요.
+                운영이 증빙을 검토한 뒤 <strong>입금 매칭 전이라도</strong>(사기방지 규칙 적용 범위 내) 해당 구매에 해당하는 <strong>이용 권한을 선 부여</strong>할 수 있습니다.
+                이후 계좌에 실입금이 확인되면 정식으로 마감합니다.
+              </li>
+              <li style="margin: 0 0 0.4rem">
+                <strong>임시 기간 라이선스(시스템 자동 부여는 별도)</strong> — &ldquo;송금 완료&rdquo; 신고·증빙 업로드 시
+                <strong>제한 시간(예: 영업 기준 최대 며칠)</strong>짜리 임시 권한을 자동 발급하고, 미입금·불일치 시 차단하는 방식 등은
+                <strong>API·운영 규칙 준비·계약 검토 후</strong> 도입 가능합니다. 도입 가능 여부·조건은
+                <a href="../contact/index.html">문의</a> 및 정식 회원 채널 안내를 따르세요.
+              </li>
+              <li style="margin: 0">
+                <strong>즉시~단시간 내 반영 채널 병행</strong> —
+                <strong>카드(PayPal 등 결제 즉시 처리되는 루트)</strong>는 승인 직후 권한을 맞추기 쉬운 편입니다.
+                <strong>크립토(예: USDT)</strong>는 네트워크별로 확인까지 보통 수 분~길어야 수 시간 수준이 SWIFT 최대 소요 보다 짧습니다(체인 혼잡 예외 가능).
+              </li>
+            </ol>
+            <p style="margin: 0.6rem 0 0">
+              증빙·개인 정보는 허위·도용 불가 규모로만 활용합니다. 접수 순서와 운영일은 별도 공지 또는 답변에 따릅니다.
+            </p>
+          </div>
+        </details>
+      </section>
+
+      <section
+        id="krw-corporate"
+        class="nrf-box"
+        aria-labelledby="krw-corporate-h2"
+        style="
+          margin-top: 1.15rem;
+          padding: 0.9rem 1rem;
+          border-radius: 12px;
+          border: 1px solid rgba(47, 111, 79, 0.35);
+          background: #fffef9;
+        "
+      >
+        <h2 id="krw-corporate-h2" style="font-size: 1.08rem; margin: 0 0 0.5rem; color: var(--ci-brown)">
+          국내 원화(₩) 납부 — 법인 계좌(우리은행)
+        </h2>
+        <p class="small" style="margin: 0 0 0.6rem; color: var(--ci-brown-muted); line-height: 1.55">
+          <strong>② Airwallex</strong>·외화·크립토 대신 <strong>대한민국 원화</strong>로 납부하실 때
+          <strong>주식회사행복도담 인베스트</strong> 법인 명의 아래 계좌로 이체합니다. <strong>입금액(원)</strong>은
+          <strong>구매(청구·인보이스) 당시</strong> 적용하는 <strong>환율</strong>로 당사가 안내·산출한
+          <strong>USD(또는 기준 통화) → KRW</strong> 금액을 기준으로 하고, 그 금액에 대해 <strong>만 원(10,000원) 미만 자리는
+          절삭</strong>하여(만단위로 내림) <strong>만 원 단위</strong>만 입금·대조합니다. (예: 산출 3,456,789원 → 입금
+          3,450,000원, 등 운영·인보이스가 우선) 세부·소수·은행·시점은 <a href="../contact/index.html">문의</a>·인보이스에 따릅니다.
+        </p>
+        <div
+          class="nrf-box"
+          style="margin: 0 0 0.65rem; padding: 0.55rem 0.7rem; border-radius: 9px; border: 1px solid rgba(47, 111, 79, 0.3); background: #f6faf7"
+        >
+          <p class="small" style="margin: 0; line-height: 1.5; color: #2d4a3a">
+            <strong>환율·만 원 절삭(요지)</strong> — 원화로 납부하는 금액은 <strong>해당 구매·청구 시점</strong>에 당사가 제시·적용한
+            환율로 환산한 뒤, <strong>1원~9,999원 구간을 잘라</strong> <strong>만 원 단위</strong>로 확정됩니다(인보이스·운영 확정
+            금액과 동일하게 맞춰 주세요).
+          </p>
+        </div>
+        <div style="overflow-x: auto" role="region" aria-label="원화 법인 계좌">
+          <table class="data-table" style="font-size: 0.84rem; margin: 0">
             <tbody>
               <tr>
-                <th scope="row" style="width: 7.5rem">은행(한글)</th>
-                <td>하나은행 (KEB 하나은행)</td>
+                <th scope="row" style="width: 6.5rem">은행명</th>
+                <td>우리은행 (Woori Bank)</td>
+              </tr>
+              <tr>
+                <th scope="row">예금주(법인)</th>
+                <td>주식회사행복도담 인베스트</td>
               </tr>
               <tr>
                 <th scope="row">계좌번호</th>
-                <td><code>444-910014-96138</code></td>
-              </tr>
-              <tr>
-                <th scope="row">Bank name</th>
-                <td>KEB Hana Bank</td>
-              </tr>
-              <tr>
-                <th scope="row">Branch</th>
-                <td>Singjungdong-yeok</td>
-              </tr>
-              <tr>
-                <th scope="row">SWIFT / BIC</th>
-                <td><code>KOEXKRSE</code></td>
-              </tr>
-              <tr>
-                <th scope="row">Bank address</th>
-                <td>284, Gilju-ro, Wonmi-gu, Bucheon-si, Gyeonggi-do, Republic of Korea</td>
-              </tr>
-              <tr>
-                <th scope="row">Bank telephone</th>
-                <td>032-341-1111</td>
+                <td>
+                  <code style="font-size: 0.95rem; word-break: break-all">61001073818213</code>
+                  <span class="small" style="display: block; margin: 0.3rem 0 0; color: var(--ci-brown-muted)">복사해 사용하시면
+                  됩니다(인보이스·운영이 안내한 <strong>원화 확정액(만 단위)</strong>과 일치시키세요).</span>
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
-        <p class="small" style="margin: 0.35rem 0 0; color: var(--ci-brown-muted)">
-          전문·세부(예: 원화/외화, 입금자 표기)는 <a href="../legal/refund.html#sec-company-bank">환불 정책(당사 입금·송금)</a>의 동일
-          표와 같이 쓰면 됩니다.
+        <p class="small" style="margin: 0.5rem 0 0; color: #5a2a2a; line-height: 1.5">
+          <strong>이체 전</strong> <a href="../contact/index.html">문의</a>·<strong>인보이스</strong>에 나온 <strong>수취
+          계좌·확정 원화액(만 단위)</strong>과만 일치하는지 다시 한 번 확인하시기 바랍니다(사칭·타 계좌 주의).
         </p>
+      </section>
+
+      <section
+        id="crypto-deposit"
+        class="crypto-deposit-section"
+        aria-labelledby="crypto-deposit-h2"
+        style="
+          margin-top: 1.2rem;
+          padding: 0.95rem 1.05rem;
+          border-radius: 12px;
+          border: 1px solid rgba(47, 111, 79, 0.35);
+          background: linear-gradient(165deg, #fffef9 0%, #f0f7f2 100%);
+        "
+      >
+        <h2 id="crypto-deposit-h2" style="font-size: 1.1rem; margin: 0 0 0.5rem; color: var(--ci-brown)">
+          크립토(가상자산) 입금 — 수취 주소 · 입금 알림(꼬리표)
+        </h2>
+        <p class="small" style="margin: 0 0 0.6rem; color: var(--ci-brown-muted); line-height: 1.55">
+          <strong>메이저 코인</strong>은 우선 지원하고, 그 외 Ledger 지원 코인·신규 코인·밈코인은 <strong>수동 견적</strong>으로 접수합니다. <strong>잡코인/저유동성 코인은 입금 시점 가격이 아니라 실제 USDT 스왑 완료액</strong>을 기준으로 결제 승인합니다. 스왑 수수료·슬리피지·네트워크 수수료·가격 변동으로 부족분이 생기면 추가 입금이 필요할 수 있습니다. <strong>USDT/USDC 등 토큰은 동일 심벌로 여러 블록체인에 존재</strong>하므로, 입금 알림에서는 반드시 체인(네트워크)을 구체적으로 선택하거나 적어 주세요. 다른 자산·체인은 별도 합의 없이 송금하지 마세요. 공개 수취 주소는 <strong>이 페이지와 인보이스</strong>의 네트워크 표기가 일치할 때만 사용합니다.
+        </p>
+        <div
+          id="crypto-price-basis"
+          class="nrf-box"
+          style="
+            margin: 0 0 0.85rem;
+            padding: 0.65rem 0.82rem;
+            border-radius: 10px;
+            border: 1px solid rgba(47, 111, 79, 0.38);
+            background: linear-gradient(135deg, rgba(246, 255, 251, 0.95), rgba(255, 251, 240, 0.98));
+          "
+          aria-labelledby="crypto-price-h3"
+        >
+          <h3 id="crypto-price-h3" style="font-size: 0.95rem; margin: 0 0 0.4rem; color: var(--ci-brown, #4a3528)">
+            가상자산으로 낼 때 — 여기서 챙겨 두는 참고
+          </h3>
+          <p class="small" style="margin: 0; line-height: 1.62; color: #3f4a43">
+            인보이스에 적힌 명목금액을 코인 단위로 맞출 때는, 당일 흐름과 즉시가를 함께 놓고 운영이 정하는 기준에 맞추되 그중에서 <strong style="color: #17694c">이용자께 상대적으로 유리하게</strong>—같은 금액이면 가능한 한 <strong>보내는 코인 개수가 덜 들어가는 방향</strong>으로 감안합니다.
+            과시하는 약속보다 실제 적용 숫자는 <strong>인보이스·안내 문자</strong>를 따르시면 됩니다.
+          </p>
+          <p class="small" style="margin: 0.45rem 0 0; line-height: 1.55; color: #56655d">
+            한 줄로 말하면, 평균가만 박거나 시세만 따라가려고 하면 어색해질 때가 있는데 그때 <strong>「적게 내는 감안」</strong>을 한 번 넣어두는 거라고 보시면 돼요(소수·수수료·네트워크 선택은 해당 인보이스가 우선입니다).
+          </p>
+        </div>
+        <div
+          id="crypto-swap-policy"
+          class="nrf-box"
+          style="
+            margin: 0 0 0.85rem;
+            padding: 0.65rem 0.82rem;
+            border-radius: 10px;
+            border: 1px solid rgba(47, 111, 79, 0.32);
+            background: #f7fbf8;
+          "
+          aria-labelledby="crypto-swap-policy-h3"
+        >
+          <h3 id="crypto-swap-policy-h3" style="font-size: 0.95rem; margin: 0 0 0.45rem; color: var(--ci-brown, #4a3528)">
+            메이저 우선·기타 코인 견적 정책 — 실제 정산은 USDT 기준
+          </h3>
+          <ul class="small" style="margin: 0; padding-left: 1.1rem; line-height: 1.6; color: #3f4a43">
+            <li><strong>우선 지원</strong>: BTC, ETH, USDT, USDC, XRP, SOL, TRX, BNB, MATIC 등 유동성 높은 메이저 코인. 단, 승인·대조는 인보이스와 입금 확인 절차를 따릅니다.</li>
+            <li><strong>수동 견적</strong>: Ledger 지원 코인, 신규 코인, 밈코인, 저유동성 토큰은 먼저 보내지 말고 <strong>견적 요청</strong>부터 접수해 주세요.</li>
+            <li><strong>운영 절차</strong>: 코인명·네트워크·예정 수량 접수 → 운영이 유동성/매도 가능 여부/스왑 수수료 확인 → 견적 유효시간·수취 방식 안내 → 송금 → 실제 USDT 스왑 완료액으로 승인합니다.</li>
+            <li><strong>거절 가능</strong>: 허니팟, 매도 불가, 입금만 가능하고 출금/스왑이 어려운 토큰, 유동성이 너무 낮은 토큰은 접수 후에도 결제 수단으로 거절할 수 있습니다.</li>
+            <li><strong>정산 기준</strong>: 잡코인은 입금 시점 표시가가 아니라 실제로 USDT로 스왑 완료된 금액에서 네트워크 수수료·스왑 수수료·슬리피지를 반영한 뒤 결제 승인합니다.</li>
+            <li><strong>Ledger 자동 스왑 아님</strong>: Ledger는 수취·보관용 지갑입니다. 입금 감지·운영 알림은 자동화할 수 있지만, 출금·스왑은 보안상 운영자가 확인하고 직접 승인합니다.</li>
+            <li><strong>부족/초과</strong>: 스왑 후 부족하면 추가 입금이 필요하고, 초과분은 운영 크레딧·쿠폰·수수료 처리 기준을 따릅니다.</li>
+          </ul>
+        </div>
+        <div
+          id="crypto-amount-signature"
+          class="nrf-box"
+          style="
+            margin: 0 0 0.85rem;
+            padding: 0.65rem 0.82rem;
+            border-radius: 10px;
+            border: 1px solid rgba(74, 120, 150, 0.28);
+            background: linear-gradient(135deg, #f9fcff 0%, #fffef9 55%);
+          "
+          aria-labelledby="crypto-amt-sig-h3"
+        >
+          <h3 id="crypto-amt-sig-h3" style="font-size: 0.95rem; margin: 0 0 0.45rem; color: var(--ci-brown, #4a3528)">
+            입금 확인 — 개인별 «정밀 금액» + 고지(꼬리표와 병행)
+          </h3>
+          <p class="small" style="margin: 0; line-height: 1.6; color: #3a4540">
+            구독료를 <strong>100달러·100USDT처럼 딱 떨어지는 숫자</strong>로만 받지 않고, <strong>주문·이메일·인보이스마다 서로 다른 소수 자리</strong>를 붙인 명목을 안내합니다. 예:
+            <strong>99.9998</strong> · <strong>99.999997</strong>처럼 <strong>겹치지 않게</strong> 잡아 두면, 같은 수취 주소로 여러 건이 들어와도
+            <strong>금액만으로도 누가 보낸 건지</strong> 좁힐 수 있어서 은행 송금에서도 오래 써 온 방식입니다. 가상자산도 인보이스에 적힌
+            <strong>명목(또는 그에 맞춘 코인 수량·소수)</strong>을 <strong>그대로</strong> 맞춰 주시면 대조가 빨라집니다.
+          </p>
+          <p class="small" style="margin: 0.45rem 0 0; line-height: 1.55; color: #4d5c55">
+            운영은 <strong>① 인보이스에 찍힌 정밀 금액(또는 환산된 코인 수량)</strong>과 <strong>② 메모·Tag 등 꼬리표</strong>를
+            함께 보는 쪽을 기본으로 합니다. 둘 중 하나만 맞거나, 금액을 반올림·절사해 보내면 자동 매칭이 안 될 수 있으니
+            <strong>안내문 그대로</strong> 보내 주세요(체인·수수료 제외한 «받는 쪽 기준»은 인보이스에 따릅니다).
+          </p>
+        </div>
+        <div
+          class="nrf-box"
+          style="margin: 0 0 0.75rem; padding: 0.65rem 0.8rem; border-radius: 10px; border: 1px solid rgba(122, 30, 30, 0.28); background: #fff8f5"
+        >
+          <p class="small" style="margin: 0; line-height: 1.55; color: #5a2a2a">
+            <strong>꼬리표(입금 식별 코드) 유의</strong> — 송금 시 <strong>메모·Tag·Destination(해당 시)</strong>에
+            <strong>아래 양식으로 발급되는 꼬리표</strong>를 <strong>정확히</strong> 넣지 않으면, 입금·대조·연동이 불가하거나
+            지연될 수 있으며, <strong>꼬리표 오류·누락·오기재로 식별·확인이 되지 않는 경우 그에 따른 손해·불이익에 대해
+            당사는 책임을 지지 않습니다</strong>(동의 후 접수). <strong>인보이스에 적힌 정밀 금액</strong>과 다르게(반올림·절사 등) 보내면
+            구분이 안 될 수 있습니다. USDT/USDC와 기타 토큰은 <strong>네트워크(ERC-20·TRC-20·BEP-20·Polygon 등)</strong>를 반드시
+            안내받은 것과 동일하게 선택해야 하며, 잘못된 체인 송금은 복구가 어려울 수 있습니다. 입금·대조는 <strong>관리자 수동
+            확인</strong>이 중심입니다.
+          </p>
+        </div>
+        <div style="overflow-x: auto" role="region" aria-label="수취 주소(인보이스 안내)">
+          <table class="data-table" style="font-size: 0.84rem; margin: 0 0 0.85rem">
+            <thead>
+              <tr>
+                <th scope="col">통화</th>
+                <th scope="col">수취 주소(복사)</th>
+                <th scope="col" style="width: 5.5rem">비고</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>BTC</strong> · 비트코인</td>
+                <td>
+                  <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center">
+                    <input
+                      type="text"
+                      class="crypto-addr-input"
+                      readonly
+                      value=""
+                      data-ticker="btc"
+                      aria-label="비트코인 수취 주소"
+                      style="flex: 1; min-width: 12rem; font-family: ui-monospace, monospace; font-size: 0.8rem; padding: 0.4rem 0.5rem"
+                    />
+                    <button type="button" class="btn crypto-addr-copy" style="font-size: 0.78rem; padding: 0.35rem 0.55rem">복사</button>
+                  </div>
+                </td>
+                <td class="small" style="color: var(--ci-brown-muted)">인보이스 안내</td>
+              </tr>
+              <tr>
+                <td><strong>ETH</strong> · 이더리움</td>
+                <td>
+                  <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center">
+                    <input
+                      type="text"
+                      class="crypto-addr-input"
+                      readonly
+                      value=""
+                      data-ticker="eth"
+                      aria-label="이더리움 수취 주소"
+                      style="flex: 1; min-width: 12rem; font-family: ui-monospace, monospace; font-size: 0.8rem; padding: 0.4rem 0.5rem"
+                    />
+                    <button type="button" class="btn crypto-addr-copy" style="font-size: 0.78rem; padding: 0.35rem 0.55rem">복사</button>
+                  </div>
+                </td>
+                <td class="small" style="color: var(--ci-brown-muted)">인보이스 안내</td>
+              </tr>
+              <tr>
+                <td><strong>XRP</strong> · 리플</td>
+                <td>
+                  <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center">
+                    <input
+                      type="text"
+                      class="crypto-addr-input"
+                      readonly
+                      value=""
+                      data-ticker="xrp"
+                      aria-label="리플 수취 주소"
+                      style="flex: 1; min-width: 12rem; font-family: ui-monospace, monospace; font-size: 0.8rem; padding: 0.4rem 0.5rem"
+                    />
+                    <button type="button" class="btn crypto-addr-copy" style="font-size: 0.78rem; padding: 0.35rem 0.55rem">복사</button>
+                  </div>
+                </td>
+                <td class="small" style="color: var(--ci-brown-muted)">Tag/메모는 인보이스 기준</td>
+              </tr>
+              <tr>
+                <td><strong>USDT / USDC</strong> · Tron(TRC-20)</td>
+                <td>
+                  <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: center">
+                    <input
+                      type="text"
+                      class="crypto-addr-input"
+                      readonly
+                      value="TUBXMuAEGTN3WtM7NHVebe2MAYbuQTDjbw"
+                      data-ticker="usdt"
+                      aria-label="USDT 또는 USDC TRC-20 수취 주소"
+                      style="flex: 1; min-width: 12rem; font-family: ui-monospace, monospace; font-size: 0.8rem; padding: 0.4rem 0.5rem"
+                    />
+                    <button type="button" class="btn crypto-addr-copy" style="font-size: 0.78rem; padding: 0.35rem 0.55rem">복사</button>
+                  </div>
+                </td>
+                <td class="small" style="color: var(--ci-brown-muted)">Tron/TRC-20 전용 · <a href="#usdt-network-reference">USDT 목록·콤보</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <section
+          id="usdt-network-reference"
+          class="crypto-usdt-wrap"
+          style="margin: 0.75rem 0 1rem; padding: 0.75rem 0.95rem"
+          aria-labelledby="usdt-ref-h3"
+        >
+          <h3 id="usdt-ref-h3" style="margin: 0 0 0.4rem; font-size: 1.02rem; color: var(--ci-brown)">
+            USDT 블록체인(네트워크) 전체 목록 — 검색
+          </h3>
+          <p class="small" style="margin: 0 0 0.5rem; color: var(--ci-brown-muted); line-height: 1.52">
+            <strong>통화 표기는 모두 USDT</strong>입니다. 이용 중인 레저·거래소·지갑이 안내하는 <strong>정확한 네트워크 명칭</strong>과 다음 행 중 하나가 대응하는지 확인 후, 입금 알림에서는 콤보로 동일 블록을 선택해 주세요(업데이트 시 JSON을 갱신합니다).
+          </p>
+          <label for="usdt-chain-ref-filter" class="small" style="display: block; font-weight: 700; margin-bottom: 0.35rem">
+            목록 검색
+          </label>
+          <input
+            type="search"
+            id="usdt-chain-ref-filter"
+            placeholder="예: ERC · 트론 · 매틱 …"
+            autocomplete="off"
+          />
+          <div class="usdt-chain-ref-scroll" role="region" aria-label="USDT 블록체인 목록">
+            <table class="data-table" style="font-size: 0.82rem; margin: 0; min-width: 100%">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">표시(티커)</th>
+                  <th scope="col">블록체인·설명</th>
+                  <th scope="col">내부 코드(id)</th>
+                </tr>
+              </thead>
+              <tbody id="usdt-chain-ref-body">
+                <tr>
+                  <td colspan="4" class="small" style="color: var(--ci-brown-muted); padding: 0.65rem">
+                    목록 불러오는 중… (<code>assets/usdt-networks.json</code>)
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <p class="small" style="margin: 0 0 0.7rem; color: var(--ci-brown-muted); line-height: 1.5">
+          송금을 보내기 <strong>전</strong>에 아래 <strong>「입금 알림」</strong>을 제출하면 운영에 통보되며, <strong>꼬리표</strong>가
+          자동으로 발급됩니다(메일·알림 수단이 설정된 경우 관리자에게 전달). 이후 <strong>실제로 전송</strong>할 때
+          <strong>동일 꼬리표</strong>를 메모·Tag에 넣어 주세요.
+        </p>
+        <div class="refund-form-grid" style="grid-template-columns: 1fr 1fr; max-width: 48rem; margin: 0">
+          <label>
+            이메일 *
+            <input type="email" id="crypto-user-email" maxlength="200" required autocomplete="email" placeholder="연락·대조용" />
+          </label>
+          <label>
+            입금 통화 *
+            <select id="crypto-currency" required>
+              <option value="">선택</option>
+              <option value="btc">비트코인 (BTC)</option>
+              <option value="eth">이더리움 (ETH)</option>
+              <option value="usdt">USDT (테더, 체인 별개)</option>
+              <option value="usdc">USDC (체인 별개)</option>
+              <option value="xrp">리플 (XRP)</option>
+              <option value="sol">솔라나 (SOL)</option>
+              <option value="trx">트론 (TRX)</option>
+              <option value="bnb">BNB / BSC</option>
+              <option value="matic">MATIC / Polygon</option>
+              <option value="other">기타 Ledger 지원 코인 · 수동 견적</option>
+            </select>
+          </label>
+          <label>
+            네트워크/체인
+            <input type="text" id="crypto-network" maxlength="120" placeholder="예: BTC mainnet · Ethereum ERC-20 · Tron TRC-20 · Polygon · Solana" />
+          </label>
+          <label>
+            기타 코인명/티커
+            <input type="text" id="crypto-other-asset" maxlength="120" placeholder="기타 선택 시 예: DOGE · AVAX · PEPE 등" />
+          </label>
+          <div id="crypto-usdt-network-wrap" class="crypto-usdt-wrap" hidden>
+            <label for="crypto-usdt-network">
+              USDT 체인(네트워크) *
+              <span class="small crypto-usdt-hint">
+                레저·메타마스크 등 상단에 같은 «USDT» 표기만 보일 수 있습니다. <strong>아래 줄에서 반드시 보내려는 블록</strong>을 고릅니다(검색 가능).
+              </span>
+            </label>
+            <input
+              type="search"
+              id="crypto-usdt-filter"
+              autocomplete="off"
+              placeholder="체인 이름 검색(예: ERC · 트론 · 폴리곤)…"
+              aria-label="USDT 네트워크 검색"
+            />
+            <select id="crypto-usdt-network" disabled aria-label="선택 확정 블록체인">
+              <option value="">네트워크 목록 로딩 중…</option>
+            </select>
+          </div>
+          <label style="grid-column: 1 / -1">
+            입금 예정 수량·금액(본인 기입, 가상자산 단위)
+            <input
+              type="text"
+              id="crypto-amount"
+              maxlength="80"
+              placeholder="인보이스 정밀 금액·수량 예: 99.999812 USDT (선택, 대조 보조)"
+            />
+          </label>
+          <label>
+            TXID / TxHash (이미 보낸 뒤면 기재)
+            <input type="text" id="crypto-txid" maxlength="200" placeholder="선택" autocomplete="off" />
+          </label>
+          <label>
+            기타 메모(선택)
+            <input type="text" id="crypto-user-note" maxlength="500" placeholder="참고용" />
+          </label>
+        </div>
+        <p class="small" style="margin: 0.55rem 0 0.4rem; color: #5a2a2a; line-height: 1.5">
+          <label style="font-weight: 700; display: flex; gap: 0.45rem; align-items: flex-start; max-width: 40rem; cursor: pointer">
+            <input type="checkbox" id="crypto-disclaimer" required style="margin-top: 0.2rem" />
+            <span>수취 주소·네트워크·꼬리표(Tag·메모) 오기재·누락·오류로 입금이 식별되지 않거나 지연될 수 있으며, 잡코인/저유동성 코인은 운영 견적 전 선송금하면 접수·승인·복구가 거절될 수 있습니다. 해당 코인은 실제 USDT 스왑 완료액 기준으로 승인되어 부족분 추가 입금이 필요할 수 있습니다. 그로 인한 확인 불가
+              및 손해에 대해 <strong>당사는 책임을 지지 않음</strong>을 이해하고 동의합니다. (필수)</span>
+          </label>
+        </p>
+        <div class="refund-actions">
+          <button type="button" class="btn" id="crypto-deposit-submit">입금 알림 보내기 · 꼬리표 발급</button>
+        </div>
+        <p id="crypto-deposit-out" class="small" role="status" style="margin-top: 0.55rem; color: var(--ci-brown)"></p>
+        <div
+          id="crypto-deposit-success"
+          style="display: none; margin-top: 0.65rem; padding: 0.65rem 0.8rem; border-radius: 10px; border: 1px solid rgba(47, 111, 79, 0.45); background: #f6fff9"
+        >
+          <p class="small" style="margin: 0 0 0.45rem; font-weight: 700; color: var(--ci-brown)">발급된 꼬리표(메모·Tag에 정확히 입력)</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 0.45rem; align-items: center">
+            <code id="crypto-tracking-ref" style="font-size: 0.9rem; word-break: break-all; flex: 1; min-width: 10rem"></code>
+            <button type="button" class="btn" id="crypto-tracking-copy" style="font-size: 0.82rem; padding: 0.35rem 0.6rem">꼬리표 복사</button>
+          </div>
+        </div>
       </section>
 
       <section
@@ -166,7 +1076,10 @@
         <h2 id="signup-h2">가입 플랜 결제</h2>
         <p class="lead" style="font-size: 0.95rem; margin-bottom: 0.6rem">
           가입 단계에서 고른 MagicTrading 접근권을 활성화합니다. 7일 무료 체험은 홈페이지 회원가입 없이 TradingView(TRV) ID 또는 MT5 계좌 번호+서버 1조합만으로 신청할 수 있습니다.
-          결제 연동은 1달 이벤트 참여자부터 시작합니다.
+          <strong>1개월 이벤트</strong>는 Whop TRV <strong>$119</strong> · Whop MT5 <strong>$129</strong> · MQL MT5 <strong>$149</strong> 기준으로
+          <strong>PayPal(신용·체크 카드)</strong> 등 당시 켜진 PG와 운영 수동 대조 루트를 병행합니다.
+          <strong>정규</strong>는 Whop TRV <strong>$5,499</strong> · Whop MT5 <strong>$5,999</strong> · MQL MT5 <strong>$6,999</strong> 월 기준이며,
+          <a href="#payment-dual">납부 채널(①~④)</a>(<a href="#aw-usd-base">Airwallex USD 미국 계좌</a>·<a href="#crypto-deposit">크립토</a>·<a href="#krw-corporate">원화 법인</a>) + 상담·인보이스로 진행해 주시면 됩니다.
         </p>
         <p id="signup-plan-line" class="small" style="margin: 0 0 0.55rem; color: var(--ci-brown-muted)"></p>
         <div id="signup-free-trial-wrap" style="display: none; margin-bottom: 0.75rem">
@@ -208,24 +1121,27 @@
         <div id="signup-regular-tier-wrap" class="coupon-redeem-row" style="display: none; margin-bottom: 0.5rem">
           <label for="signup-regular-tier" style="min-width: 9rem; font-size: 0.9rem">정규 접근권</label>
           <select id="signup-regular-tier" class="coupon-redeem-input" style="max-width: 20rem">
-            <option value="reg_magictrading" selected>MagicTrading · USD 100 / month</option>
+            <option value="whop_trv" selected>Whop · TRV 정규 · USD 5,499 / month</option>
+            <option value="whop_mt5">Whop · MT5 정규 · USD 5,999 / month</option>
+            <option value="mql_mt5">MQL · MT5 정규 · USD 6,999 / month</option>
           </select>
         </div>
         <div id="signup-platform-wrap" class="coupon-redeem-row" style="display: none; margin-bottom: 0.5rem">
-          <label for="signup-platform" style="min-width: 9rem; font-size: 0.9rem">이벤트 구분</label>
+          <label for="signup-platform" style="min-width: 9rem; font-size: 0.9rem">마켓/이벤트</label>
           <select id="signup-platform" class="coupon-redeem-input" style="max-width: 20rem">
-            <option value="trv" selected>TRV 1달 이벤트</option>
-            <option value="mt5">MT5 1달 이벤트</option>
+            <option value="whop_trv" selected>Whop · TRV 이벤트 · USD 119</option>
+            <option value="whop_mt5">Whop · MT5 이벤트 · USD 129</option>
+            <option value="mql_mt5">MQL · MT5 이벤트 · USD 149</option>
           </select>
-          <span class="small" style="color: var(--ci-brown-muted)">TRV와 MT5는 각각 1회 신청 가능</span>
+          <span class="small" style="color: var(--ci-brown-muted)">확정 가격표 기준</span>
         </div>
         <div class="coupon-redeem-row" style="margin-bottom: 0.5rem">
           <label for="signup-provider" style="min-width: 9rem; font-size: 0.9rem">결제 공급자</label>
           <select id="signup-provider" class="coupon-redeem-input" style="max-width: 20rem">
-            <option value="manual" selected>임시 수동 처리 (승인 전)</option>
-            <option value="stripe">Stripe</option>
-            <option value="paypal">PayPal</option>
-            <option value="coinbase">Coinbase</option>
+            <option value="manual">수동(결제 참조번호·운영 대조)</option>
+            <option value="airwallex" disabled>Airwallex 카드 체크아웃(현재 미사용)</option>
+            <option value="paypal" selected>PayPal (카드·USD)</option>
+            <option value="coinbase">Coinbase (미연동)</option>
           </select>
         </div>
         <div class="coupon-redeem-row">
@@ -242,17 +1158,10 @@
         <p id="signup-result" class="small" role="status" style="margin-top: 0.5rem"></p>
       </section>
 
-      <div class="nrf-box">
-        <strong>환불 고지</strong>
-        <p class="en">Regular plan refunds are accepted on request and calculated pro rata by remaining service days.</p>
-        <p class="en">Event, coupon, trial, and recovery benefits are non-refundable. The 1-month USD 100 event is strictly non-refundable.</p>
-        <p style="margin: 0.5rem 0 0; font-size: 0.82rem; opacity: 0.9">한국어: <strong>정규</strong> 플랜 결제만 이유를 묻지 않고 일할 환불합니다. <strong>1달 100불(USD) 유료 이벤트</strong>·기타 이벤트·쿠폰·무료체험·리커버리는 <strong>환불불가</strong>(1달 100불은 <a href="../legal/refund.html" style="color: #a8c7ff">환불 정책</a>에 <strong>절대 환불 불가</strong>로 별도 명시). 수취·송금 계좌는 <a href="#wire-transfer" style="color: #a8c7ff">위 안내</a>·<a href="../legal/refund.html#sec-company-bank" style="color: #a8c7ff">정책</a>과 동일합니다.</p>
-      </div>
-
       <section>
         <h2>상품·플랜</h2>
         <p>
-          MagicTrading 정식 접근권, 비회원 7일 무료 체험, 1달 100불 이벤트, 2개월 리커버리 접근권은 <a href="../events/index.html">이벤트·요금</a> 페이지에 정리했습니다.
+          MagicTrading 정식 접근권, 비회원 7일 무료 체험, Whop/MQL 1개월 이벤트, 2개월 리커버리 접근권은 <a href="../events/index.html">이벤트·요금</a> 페이지에 정리했습니다.
           구독 만료일·플랜은 결제 연동 후 DB와 동기화되는 것을 목표로 합니다.
         </p>
       </section>
@@ -260,67 +1169,10 @@
       <div class="terms-box">
         <strong>구독 약관 핵심 고지</strong>
         <ul class="notice-list">
-          <li>정규 플랜 환불 요청은 <strong>이유 불문 접수</strong>하며, 남은 이용일 기준으로 <strong>USD 일할 계산</strong>합니다. → <a href="../legal/refund.html">Refund Policy</a></li>
+          <li>정규·비즈니스(월) 환불은 <strong>이유 불문</strong>, <strong>(31 − 사용일) / 31 × 플랜가(USD)</strong> (신청일 포함). 해외 수취는 <strong>USD</strong> 지급 원칙. → <a href="../legal/refund.html#sec-refund-formula">환불 정책</a></li>
           <li>이벤트·쿠폰·무료체험·리커버리 혜택은 환불불가이며, 쿠폰은 최초 교환 계정에 귀속되고 양도할 수 없습니다.</li>
         </ul>
       </div>
-
-      <section class="coupon-redeem-section refund-request-section" aria-labelledby="refund-h2">
-        <h2 id="refund-h2">환불 요청 · USD 송금 정보</h2>
-        <p class="lead" style="font-size: 0.95rem; margin-bottom: 0.75rem">
-          정규 플랜 결제 건만 접수됩니다. 요청 사유는 선택이며, 서버가 현재 정규 플랜의 결제금액·이용기간을 기준으로 남은 날짜를 일할 계산합니다.
-          이벤트·쿠폰·무료체험·리커버리는 환불불가이며, 쿠폰은 최초 교환 계정에 귀속되고 양도할 수 없습니다. 은행·중계은행 수수료와 환율 차이는 실제 송금 과정에서 달라질 수 있습니다.
-        </p>
-        <div class="refund-preview" id="refund-preview-line">로그인 이메일의 정규 플랜 기준으로 일할 환불액을 계산합니다.</div>
-        <div class="refund-form-grid">
-          <label>수취인 영문명 *
-            <input type="text" id="refund-beneficiary-name" maxlength="160" autocomplete="name" />
-          </label>
-          <label>수취인 주소
-            <input type="text" id="refund-beneficiary-address" maxlength="300" autocomplete="street-address" />
-          </label>
-          <label>은행명 *
-            <input type="text" id="refund-bank-name" maxlength="160" />
-          </label>
-          <label>브랜치명 *
-            <input type="text" id="refund-branch-name" maxlength="160" />
-          </label>
-          <label>SWIFT / BIC *
-            <input type="text" id="refund-swift-bic" maxlength="40" style="text-transform: uppercase" />
-          </label>
-          <label>계좌번호 *
-            <input type="text" id="refund-account-number" maxlength="120" />
-          </label>
-          <label>은행 국가 *
-            <input type="text" id="refund-bank-country" maxlength="80" placeholder="예: KR, US, JP" />
-          </label>
-          <label>은행 주소
-            <input type="text" id="refund-bank-address" maxlength="300" />
-          </label>
-          <label>IBAN (해당 시)
-            <input type="text" id="refund-iban" maxlength="80" />
-          </label>
-          <label>Routing / ABA (해당 시)
-            <input type="text" id="refund-routing-number" maxlength="80" />
-          </label>
-          <label>중계은행명 (해당 시)
-            <input type="text" id="refund-intermediary-bank-name" maxlength="160" />
-          </label>
-          <label>중계은행 SWIFT (해당 시)
-            <input type="text" id="refund-intermediary-swift-bic" maxlength="40" style="text-transform: uppercase" />
-          </label>
-          <label>결제금액 USD (기록 없을 때 보조)
-            <input type="number" id="refund-paid-amount-usd" min="0" step="0.01" placeholder="예: 100" />
-          </label>
-          <label>요청 메모 (선택)
-            <input type="text" id="refund-reason" maxlength="500" placeholder="비워도 접수됩니다" />
-          </label>
-        </div>
-        <div class="refund-actions">
-          <button type="button" class="btn" id="refund-submit-btn">일할 계산 후 환불 요청</button>
-        </div>
-        <p id="refund-result" class="small" role="status" style="margin-top: 0.5rem"></p>
-      </section>
 
       <section class="coupon-redeem-section" aria-labelledby="coupon-h2">
         <h2 id="coupon-h2">쿠폰 코드 교환</h2>
@@ -344,7 +1196,7 @@
         </div>
         <p id="coupon-redeem-result" class="small" role="status" style="margin-top: 0.5rem"></p>
       </section>
-    </div>
+    </main>
     <footer class="site-footer" role="contentinfo">
       <div class="ci-wrap ci-wrap--footer">
         <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="220" height="110" alt="" />
@@ -356,68 +1208,6 @@
     </footer>
     <script src="../assets/site-ux.js"></script>
     <script src="../assets/magic-auth.js"></script>
-    <style>
-      .coupon-redeem-section {
-        margin-top: 1.75rem;
-        padding: 1.1rem 1.15rem 1.25rem;
-        border-radius: 14px;
-        border: 1px solid rgba(47, 111, 79, 0.2);
-        background: linear-gradient(165deg, #fffef9 0%, #f4faf6 100%);
-      }
-      .coupon-redeem-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        align-items: center;
-      }
-      .coupon-redeem-input {
-        flex: 1 1 14rem;
-        min-width: 0;
-        padding: 0.55rem 0.65rem;
-        border: 1px solid #cfd6e0;
-        border-radius: 8px;
-        font: inherit;
-      }
-      .refund-preview {
-        margin: 0 0 0.75rem;
-        padding: 0.65rem 0.75rem;
-        border-radius: 10px;
-        color: var(--ci-brown-muted);
-        background: rgba(255, 255, 255, 0.72);
-        border: 1px solid rgba(47, 111, 79, 0.14);
-        font-size: 0.88rem;
-        line-height: 1.5;
-      }
-      .refund-form-grid {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 0.7rem;
-      }
-      .refund-form-grid label {
-        display: grid;
-        gap: 0.3rem;
-        font-size: 0.82rem;
-        font-weight: 700;
-        color: var(--ci-brown);
-      }
-      .refund-form-grid input {
-        width: 100%;
-        min-width: 0;
-        padding: 0.55rem 0.65rem;
-        border: 1px solid #cfd6e0;
-        border-radius: 8px;
-        font: inherit;
-        font-weight: 400;
-      }
-      .refund-actions {
-        margin-top: 0.85rem;
-      }
-      @media (max-width: 720px) {
-        .refund-form-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-    </style>
     <script>
       (function () {
         var meta = document.querySelector('meta[name="api-base"]');
@@ -447,8 +1237,13 @@
         var signupTrialMt5Server = document.getElementById("signup-trial-mt5-server");
         var signupProvider = document.getElementById("signup-provider");
         var signupPlanCode = "";
-        var providerEnabledMap = { stripe: false, paypal: false, coinbase: false, manual: true };
+        var providerEnabledMap = { airwallex: false, paypal: false, coinbase: false, manual: true };
         var refundPreviewLine = document.getElementById("refund-preview-line");
+        var refundFxHint = document.getElementById("refund-fx-hint");
+        var refundPayoutDomestic = document.getElementById("refund-payout-domestic");
+        var refundPayoutIntl = document.getElementById("refund-payout-intl");
+        var refundKrwWrap = document.getElementById("refund-krw-wrap");
+        var refundIntlWrap = document.getElementById("refund-intl-wrap");
         var refundBtn = document.getElementById("refund-submit-btn");
         var refundOut = document.getElementById("refund-result");
 
@@ -465,8 +1260,31 @@
           return el ? String(el.value || "").trim() : "";
         }
 
+        function setRefundPayoutMode(domestic) {
+          if (refundKrwWrap) {
+            refundKrwWrap.style.display = domestic ? "block" : "none";
+            if (domestic) refundKrwWrap.removeAttribute("hidden");
+            else refundKrwWrap.setAttribute("hidden", "hidden");
+          }
+          if (refundIntlWrap) {
+            refundIntlWrap.style.display = domestic ? "none" : "block";
+            if (domestic) refundIntlWrap.setAttribute("hidden", "hidden");
+            else refundIntlWrap.removeAttribute("hidden");
+          }
+        }
+
+        if (refundPayoutDomestic && refundPayoutIntl) {
+          function syncPayoutFromRadios() {
+            setRefundPayoutMode(!!(refundPayoutDomestic && refundPayoutDomestic.checked));
+          }
+          refundPayoutDomestic.addEventListener("change", syncPayoutFromRadios);
+          refundPayoutIntl.addEventListener("change", syncPayoutFromRadios);
+          syncPayoutFromRadios();
+        }
+
         function loadRefundPreview() {
           if (!refundPreviewLine) return;
+          if (refundFxHint) refundFxHint.textContent = "";
           fetch(API + "/api/payments/refund-preview", { cache: "no-store", headers: readHeaders() })
             .then(function (r) {
               return r.json().then(function (j) {
@@ -475,22 +1293,40 @@
             })
             .then(function (x) {
               if (!x.ok) {
-                refundPreviewLine.textContent = x.j.error || "정규 플랜 결제 건만 환불 예상액을 확인할 수 있습니다.";
+                refundPreviewLine.textContent = x.j.error || "정규·비즈(월) 결제 건만 환불 예상액을 확인할 수 있습니다.";
                 return;
               }
-              refundPreviewLine.textContent =
-                "예상 환불액: USD " +
-                Number(x.j.refund_amount_usd || 0).toFixed(2) +
-                " / 결제금액 USD " +
-                Number(x.j.paid_amount_usd || 0).toFixed(2) +
-                " · 남은 " +
-                (x.j.remaining_days || 0) +
-                "일 / 전체 " +
-                (x.j.total_days || 0) +
-                "일";
+              var u = x.j;
+              var line =
+                "예상 환불: USD " +
+                Number(u.refund_amount_usd || 0).toFixed(2) +
+                " (결제 기준 USD " +
+                Number(u.paid_amount_usd || 0).toFixed(2) +
+                ") · 남은 " +
+                (u.remaining_days || 0) +
+                "일 / " +
+                (u.total_days || 0) +
+                "일(31일 월 기준). ";
+              var k = u.usd_krw;
+              if (k && k.refund_amount_krw != null) {
+                line +=
+                  "참고 원화: 약 " +
+                  Number(k.refund_amount_krw).toLocaleString("ko-KR") +
+                  "원 (1 USD = " +
+                  (typeof k.rate === "number" ? k.rate.toFixed(2) : k.rate) +
+                  " KRW, 출처: " +
+                  (k.source || "-") +
+                  ").";
+                if (refundFxHint) {
+                  refundFxHint.textContent =
+                    (k.note || "참고용 환율입니다. 수수료·실제 송금일·은행에 따라 달라질 수 있습니다.") +
+                    (k.is_fallback ? " (대체/고정 환율이 사용되었을 수 있습니다.)" : "");
+                }
+              }
+              refundPreviewLine.textContent = line;
             })
             .catch(function () {
-              refundPreviewLine.textContent = "환불 예상액을 불러오지 못했습니다. 정규 플랜만 접수 가능합니다.";
+              refundPreviewLine.textContent = "환불 예상액을 불러오지 못했습니다. 정규·비즈(월)만 가능합니다.";
             });
         }
 
@@ -595,8 +1431,8 @@
             planCode === "1m_magictrading" ||
             planCode === "1m_premium"
           )
-            return "MagicTrading · 1달 100불 이벤트";
-          if (planCode === "regular_default") return "MagicTrading · 월 $100";
+            return "MagicTrading · 1개월 이벤트";
+          if (planCode === "regular_default") return "MagicTrading · 정규 접근권";
           return planCode || "";
         }
 
@@ -615,6 +1451,40 @@
             planCode === "1m_magictrading" ||
             planCode === "1m_premium"
           );
+        }
+
+        function marketChoiceFromSelect(el, fallbackPlatform) {
+          var raw = String((el && el.value) || "").trim().toLowerCase();
+          if (raw === "mql_mt5") return { sales_channel: "mql", product_platform: "mt5" };
+          if (raw === "whop_mt5" || raw === "mt5") return { sales_channel: "whop", product_platform: "mt5" };
+          return { sales_channel: "whop", product_platform: fallbackPlatform || "trv" };
+        }
+
+        function selectedSignupMarket(planCode) {
+          return isOneMonthEventPlan(planCode)
+            ? marketChoiceFromSelect(signupPlatform, "trv")
+            : marketChoiceFromSelect(signupRegularTier, "trv");
+        }
+
+        function signupAmountUsd(planCode) {
+          if (planCode === "event_1w_free") return 0;
+          var choice = selectedSignupMarket(planCode);
+          if (isOneMonthEventPlan(planCode)) {
+            if (choice.sales_channel === "mql") return 149;
+            return choice.product_platform === "mt5" ? 129 : 119;
+          }
+          if (planCode === "reg_magictrading" || planCode === "reg_premium") {
+            if (choice.sales_channel === "mql") return 6999;
+            return choice.product_platform === "mt5" ? 5999 : 5499;
+          }
+          return 0;
+        }
+
+        /** 쿼리/폼 plan 코드 → complete API plan_code(정규는 reg_magictrading로 통일) */
+        function resolvePlanForSignupComplete(raw) {
+          var s = String(raw || "").trim();
+          if (s === "regular_default") return "reg_magictrading";
+          return s;
         }
 
         function initSignupCheckout() {
@@ -659,13 +1529,16 @@
             .then(function (j) {
               if (!signupPlanLine) return;
               var badge = [];
-              if (j && j.stripe) {
-                providerEnabledMap.stripe = !!j.stripe.enabled;
-                badge.push("Stripe " + (j.stripe.enabled ? "ON" : "준비중"));
+              if (j && j.airwallex) {
+                providerEnabledMap.airwallex = !!j.airwallex.enabled;
+                badge.push("Airwallex " + (j.airwallex.enabled ? "ON" : "준비중"));
               }
               if (j && j.paypal) {
                 providerEnabledMap.paypal = !!j.paypal.enabled;
                 badge.push("PayPal " + (j.paypal.enabled ? "ON" : "준비중"));
+                if (signupProvider) {
+                  signupProvider.value = j.paypal.enabled ? "paypal" : "manual";
+                }
               }
               if (j && j.coinbase) {
                 providerEnabledMap.coinbase = !!j.coinbase.enabled;
@@ -674,8 +1547,191 @@
               if (badge.length) {
                 signupPlanLine.textContent += " · 결제공급자: " + badge.join(" / ");
               }
+              var bnr = document.getElementById("pg-status-banner");
+              if (bnr && j && j.airwallex) {
+                bnr.setAttribute("data-airwallex", j.airwallex.enabled ? "1" : "0");
+              }
             })
             .catch(function () {});
+
+          var stAw = q.get("awx");
+          var intentIdQ = String(q.get("id") || q.get("intent_id") || "").trim();
+          var stPp = q.get("pp");
+          var paypalOrderQ = String(q.get("token") || q.get("order_id") || "").trim();
+          if (stAw === "cancel" && signupOut) {
+            signupOut.textContent =
+              "Airwallex 결제 화면에서 나왔습니다. 다시 시도하려면 아래「가입 플랜 적용」에서 Airwallex 를 선택한 뒤 진행하세요.";
+            try {
+              if (window.history && window.history.replaceState) {
+                var uCan = new URL(window.location.href);
+                uCan.searchParams.delete("awx");
+                window.history.replaceState({}, "", uCan.toString());
+              }
+            } catch (eCan) {
+              void eCan;
+            }
+          }
+          if (stAw === "success" && intentIdQ && signupOut) {
+            var rawP = String(q.get("plan") || "").trim();
+            var rPlan = resolvePlanForSignupComplete(rawP);
+            signupOut.textContent = "Airwallex 결제 확인 중…";
+            fetch(API + "/api/payments/airwallex/confirm-checkout", {
+              method: "POST",
+              headers: authHeaders(),
+              body: JSON.stringify({ intent_id: intentIdQ }),
+            })
+              .then(function (r) {
+                return r.json().then(function (j) {
+                  return { ok: r.ok, j: j };
+                });
+              })
+              .then(function (c) {
+                if (!c.ok) {
+                  signupOut.textContent = (c.j && c.j.error) || "결제 확인에 실패했습니다. 잠시 후 다시 시도하세요.";
+                  return;
+                }
+                var reqId = c.j && c.j.request_id ? String(c.j.request_id) : "";
+                var plat = c.j && c.j.product_platform ? String(c.j.product_platform).trim() : "";
+                var confirmedChoice = {
+                  product_platform: plat || selectedSignupMarket(rPlan).product_platform,
+                  sales_channel: c.j && c.j.sales_channel ? String(c.j.sales_channel).trim() : selectedSignupMarket(rPlan).sales_channel,
+                };
+                if (!plat) {
+                  plat = confirmedChoice.product_platform;
+                }
+                signupOut.textContent = "가입 플랜 반영 중…";
+                return fetch(API + "/api/payments/signup-plan/complete", {
+                  method: "POST",
+                  headers: authHeaders(),
+                  body: JSON.stringify({
+                    plan_code: rPlan,
+                    payment_ref: intentIdQ,
+                    payment_request_id: reqId,
+                    product_platform: plat || undefined,
+                    sales_channel: confirmedChoice.sales_channel,
+                    welcome_coupon_platform: plat || undefined,
+                  }),
+                });
+              })
+              .then(function (r) {
+                if (!r || !r.json) return;
+                return r.json().then(function (j) {
+                  return { ok: r.ok, j: j };
+                });
+              })
+              .then(function (x) {
+                if (!x) return;
+                if (!x.ok) {
+                  signupOut.textContent = x.j.error || "가입 플랜 반영에 실패했습니다.";
+                  return;
+                }
+                var j = x.j || {};
+                var until = j.expires_at
+                  ? new Date(j.expires_at).toLocaleString("ko-KR")
+                  : "정규/확인";
+                signupOut.textContent = "완료 · " + (j.plan_sku || j.plan_code || "-") + " · 만료 " + until;
+                loadCouponStatus();
+                try {
+                  if (window.history && window.history.replaceState) {
+                    var u = new URL(window.location.href);
+                    u.searchParams.delete("id");
+                    u.searchParams.delete("intent_id");
+                    u.searchParams.delete("awx");
+                    u.searchParams.delete("type");
+                    window.history.replaceState({}, "", u.toString());
+                  }
+                } catch (e1) {
+                  void e1;
+                }
+              })
+              .catch(function (e) {
+                if (signupOut) signupOut.textContent = String(e.message || e);
+              });
+          }
+          if (stPp === "cancel" && signupOut) {
+            signupOut.textContent = "PayPal 결제 화면에서 나왔습니다. 다시 시도하려면 아래 결제 공급자에서 PayPal을 선택해 주세요.";
+            try {
+              if (window.history && window.history.replaceState) {
+                var uPpCan = new URL(window.location.href);
+                uPpCan.searchParams.delete("pp");
+                window.history.replaceState({}, "", uPpCan.toString());
+              }
+            } catch (ePpCan) {
+              void ePpCan;
+            }
+          }
+          if (stPp === "success" && paypalOrderQ && signupOut) {
+            var ppRawPlan = String(q.get("plan") || "").trim();
+            var ppPlan = resolvePlanForSignupComplete(ppRawPlan);
+            signupOut.textContent = "PayPal 결제 확인 중…";
+            fetch(API + "/api/payments/paypal/capture-order", {
+              method: "POST",
+              headers: authHeaders(),
+              body: JSON.stringify({ order_id: paypalOrderQ }),
+            })
+              .then(function (r) {
+                return r.json().then(function (j) {
+                  return { ok: r.ok, j: j };
+                });
+              })
+              .then(function (c) {
+                if (!c.ok) {
+                  signupOut.textContent = (c.j && c.j.error) || "PayPal 결제 확인에 실패했습니다.";
+                  return;
+                }
+                var reqId = c.j && c.j.request_id ? String(c.j.request_id) : "";
+                var plat = c.j && c.j.product_platform ? String(c.j.product_platform).trim() : "";
+                var confirmedChoice = {
+                  product_platform: plat || selectedSignupMarket(ppPlan).product_platform,
+                  sales_channel: c.j && c.j.sales_channel ? String(c.j.sales_channel).trim() : selectedSignupMarket(ppPlan).sales_channel,
+                };
+                signupOut.textContent = "가입 플랜 반영 중…";
+                return fetch(API + "/api/payments/signup-plan/complete", {
+                  method: "POST",
+                  headers: authHeaders(),
+                  body: JSON.stringify({
+                    plan_code: ppPlan,
+                    payment_ref: (c.j && (c.j.capture_id || c.j.order_id)) || paypalOrderQ,
+                    payment_request_id: reqId,
+                    product_platform: confirmedChoice.product_platform,
+                    sales_channel: confirmedChoice.sales_channel,
+                    welcome_coupon_platform: confirmedChoice.product_platform,
+                  }),
+                });
+              })
+              .then(function (r) {
+                if (!r || !r.json) return;
+                return r.json().then(function (j) {
+                  return { ok: r.ok, j: j };
+                });
+              })
+              .then(function (x) {
+                if (!x) return;
+                if (!x.ok) {
+                  signupOut.textContent = x.j.error || "가입 플랜 반영에 실패했습니다.";
+                  return;
+                }
+                var j = x.j || {};
+                var until = j.expires_at ? new Date(j.expires_at).toLocaleString("ko-KR") : "정규/확인";
+                signupOut.textContent = "완료 · " + (j.plan_sku || j.plan_code || "-") + " · 만료 " + until;
+                loadCouponStatus();
+                try {
+                  if (window.history && window.history.replaceState) {
+                    var uPp = new URL(window.location.href);
+                    uPp.searchParams.delete("pp");
+                    uPp.searchParams.delete("token");
+                    uPp.searchParams.delete("PayerID");
+                    uPp.searchParams.delete("order_id");
+                    window.history.replaceState({}, "", uPp.toString());
+                  }
+                } catch (ePp) {
+                  void ePp;
+                }
+              })
+              .catch(function (e) {
+                if (signupOut) signupOut.textContent = String(e.message || e);
+              });
+          }
         }
 
         if (btn && inp) {
@@ -807,22 +1863,141 @@
             var provider = String((signupProvider && signupProvider.value) || "manual").toLowerCase();
             if (provider !== "manual" && !providerEnabledMap[provider]) {
               signupOut.textContent =
-                provider + " 는 아직 승인/연동 전입니다. 임시 수동 처리로 진행해 주세요.";
+                "선택한 결제로는 아직 온보딩되지 않았습니다. 수동(결제 참조)으로 바꾸거나 나중에 다시 시도하세요.";
               return;
             }
             var paymentRef = String((signupRef && signupRef.value) || "").trim();
-            if (isPaidSignupPlan(resolvedPlan) && !paymentRef) {
-              signupOut.textContent = "유료 플랜은 결제 참조번호를 입력해 주세요.";
+            if (isPaidSignupPlan(resolvedPlan) && provider === "manual" && !paymentRef) {
+              signupOut.textContent = "수동(운영 대조) 모드: 유료 플랜은 결제 참조번호를 입력해 주세요.";
               if (signupRef) signupRef.focus();
               return;
             }
-            var amtUsd = (function () {
-              if (resolvedPlan === "event_1w_free") return 0;
-              if (isOneMonthEventPlan(resolvedPlan))
-                return 100;
-              if (resolvedPlan === "reg_magictrading" || resolvedPlan === "reg_premium") return 100;
-              return 0;
-            })();
+            if (isPaidSignupPlan(resolvedPlan) && provider === "paypal") {
+              if (isOneMonthEventPlan(resolvedPlan)) {
+                var ppMarket = selectedSignupMarket(resolvedPlan);
+                var ppPlat = ppMarket.product_platform;
+                if (ppPlat !== "trv" && ppPlat !== "mt5") {
+                  signupOut.textContent = "1달 이벤트는 TRV 또는 MT5 구분을 선택해 주세요.";
+                  return;
+                }
+              }
+              var ppBody = { plan_code: resolvePlanForSignupComplete(resolvedPlan) };
+              var ppCheckoutMarket = selectedSignupMarket(resolvedPlan);
+              ppBody.product_platform = ppCheckoutMarket.product_platform;
+              ppBody.sales_channel = ppCheckoutMarket.sales_channel;
+              signupOut.textContent = "PayPal 결제창 준비 중…";
+              fetch(API + "/api/payments/paypal/create-order", {
+                method: "POST",
+                headers: authHeaders(),
+                body: JSON.stringify(ppBody),
+              })
+                .then(function (r) {
+                  return r.json().then(function (j) {
+                    return { ok: r.ok, j: j };
+                  });
+                })
+                .then(function (x) {
+                  if (!x.ok) {
+                    signupOut.textContent = (x.j && x.j.error) || "PayPal 주문 생성에 실패했습니다.";
+                    return;
+                  }
+                  if (!(x.j && x.j.approve_url)) {
+                    signupOut.textContent = "PayPal 승인 URL을 받지 못했습니다.";
+                    return;
+                  }
+                  window.location.href = x.j.approve_url;
+                })
+                .catch(function (e) {
+                  signupOut.textContent = String(e.message || e);
+                });
+              return;
+            }
+            if (isPaidSignupPlan(resolvedPlan) && provider === "airwallex") {
+              if (isOneMonthEventPlan(resolvedPlan)) {
+                var pMarket = selectedSignupMarket(resolvedPlan);
+                var pPlat = pMarket.product_platform;
+                if (pPlat !== "trv" && pPlat !== "mt5") {
+                  signupOut.textContent = "1달 이벤트는 TRV 또는 MT5 구분을 선택해 주세요.";
+                  return;
+                }
+              }
+              var checkoutBody = { plan_code: resolvePlanForSignupComplete(resolvedPlan) };
+              var checkoutMarket = selectedSignupMarket(resolvedPlan);
+              checkoutBody.product_platform = checkoutMarket.product_platform;
+              checkoutBody.sales_channel = checkoutMarket.sales_channel;
+              signupOut.textContent = "Airwallex 보안 결제(체크아웃)로 이동…";
+              fetch(API + "/api/payments/airwallex/create-intent", {
+                method: "POST",
+                headers: authHeaders(),
+                body: JSON.stringify(checkoutBody),
+              })
+                .then(function (r) {
+                  return r.json().then(function (j) {
+                    return { ok: r.ok, j: j, status: r.status };
+                  });
+                })
+                .then(function (x) {
+                  if (!x.ok) {
+                    signupOut.textContent = (x.j && x.j.error) || "결제 Intent 생성에 실패했습니다. 서버 .env(Airwallex)를 확인하세요.";
+                    return;
+                  }
+                  if (!(x.j && x.j.intent_id && x.j.client_secret)) {
+                    signupOut.textContent = "결제 정보를 받지 못했습니다.";
+                    return;
+                  }
+                  function loadAwxSdk() {
+                    return new Promise(function (resolve, reject) {
+                      if (window.AirwallexComponentsSDK) {
+                        resolve();
+                        return;
+                      }
+                      var s = document.createElement("script");
+                      s.src = "https://static.airwallex.com/components/sdk/v1/index.js";
+                      s.async = true;
+                      s.onload = function () {
+                        resolve();
+                      };
+                      s.onerror = function () {
+                        reject(new Error("Airwallex SDK 로드 실패"));
+                      };
+                      document.head.appendChild(s);
+                    });
+                  }
+                  return loadAwxSdk().then(function () {
+                    if (!window.AirwallexComponentsSDK || typeof window.AirwallexComponentsSDK.init !== "function") {
+                      throw new Error("Airwallex SDK 초기화 API 없음");
+                    }
+                    return window.AirwallexComponentsSDK.init({
+                      env: x.j.airwallex_env === "demo" ? "demo" : "prod",
+                      enabledElements: ["payments"],
+                    });
+                  }).then(function (sdk) {
+                    var pay = sdk && (sdk.payments || (sdk.default && sdk.default.payments));
+                    if (!pay || typeof pay.redirectToCheckout !== "function") {
+                      throw new Error("redirectToCheckout 사용 불가");
+                    }
+                    var awxEnv = x.j.airwallex_env === "demo" ? "demo" : "prod";
+                    return pay.redirectToCheckout({
+                      env: awxEnv,
+                      mode: "payment",
+                      intent_id: x.j.intent_id,
+                      client_secret: x.j.client_secret,
+                      currency: x.j.currency || "USD",
+                      country_code: x.j.country_code || "US",
+                      successUrl: x.j.success_url,
+                      cancelUrl: x.j.cancel_url || undefined,
+                      locale: "ko",
+                      methods: ["card"],
+                      shopper_email: x.j.shopper_email || undefined,
+                    });
+                  });
+                })
+                .catch(function (e) {
+                  signupOut.textContent = String(e.message || e);
+                });
+              return;
+            }
+            var amtUsd = signupAmountUsd(resolvedPlan);
             var trialPayload = {};
             if (resolvedPlan === "event_1w_free") {
               var trId = String((signupTrialTrId && signupTrialTrId.value) || "").trim();
@@ -881,6 +2056,8 @@
                 provider: provider,
                 plan_code: resolvedPlan,
                 amount_usd: amtUsd,
+                product_platform: selectedSignupMarket(resolvedPlan).product_platform,
+                sales_channel: selectedSignupMarket(resolvedPlan).sales_channel,
               }),
             })
               .then(function (r) {
@@ -898,9 +2075,8 @@
                     plan_code: resolvedPlan,
                     payment_ref: paymentRef || undefined,
                     payment_request_id: signupPrepId || undefined,
-                    product_platform: isOneMonthEventPlan(resolvedPlan)
-                      ? String((signupPlatform && signupPlatform.value) || "trv")
-                      : undefined,
+                    product_platform: selectedSignupMarket(resolvedPlan).product_platform,
+                    sales_channel: selectedSignupMarket(resolvedPlan).sales_channel,
                   }),
                 });
               })
@@ -933,36 +2109,58 @@
         if (refundBtn) {
           refundBtn.addEventListener("click", function () {
             if (!refundOut) return;
-            var payload = {
-              beneficiary_name: val("refund-beneficiary-name"),
-              beneficiary_address: val("refund-beneficiary-address"),
-              bank_name: val("refund-bank-name"),
-              branch_name: val("refund-branch-name"),
-              swift_bic: val("refund-swift-bic"),
-              account_number: val("refund-account-number"),
-              bank_country: val("refund-bank-country"),
-              bank_address: val("refund-bank-address"),
-              iban: val("refund-iban"),
-              routing_number: val("refund-routing-number"),
-              intermediary_bank_name: val("refund-intermediary-bank-name"),
-              intermediary_swift_bic: val("refund-intermediary-swift-bic"),
-              paid_amount_usd: val("refund-paid-amount-usd"),
-              reason: val("refund-reason"),
-            };
-            var missing = [];
-            [
-              ["beneficiary_name", "수취인 영문명"],
-              ["bank_name", "은행명"],
-              ["branch_name", "브랜치명"],
-              ["swift_bic", "SWIFT/BIC"],
-              ["account_number", "계좌번호"],
-              ["bank_country", "은행 국가"],
-            ].forEach(function (x) {
-              if (!payload[x[0]]) missing.push(x[1]);
-            });
-            if (missing.length) {
-              refundOut.textContent = "필수 정보가 필요합니다: " + missing.join(", ");
-              return;
+            var domestic = refundPayoutDomestic && refundPayoutDomestic.checked;
+            var payload;
+            if (domestic) {
+              payload = {
+                payout_type: "domestic_krw",
+                krw_bank_name: val("refund-krw-bank"),
+                krw_account_number: val("refund-krw-account"),
+                krw_account_holder: val("refund-krw-holder"),
+                paid_amount_usd: val("refund-paid-amount-usd"),
+                reason: val("refund-reason"),
+              };
+              var miss = [];
+              if (!payload.krw_bank_name) miss.push("은행명(한글)");
+              if (!payload.krw_account_number) miss.push("계좌번호");
+              if (!payload.krw_account_holder) miss.push("예금주(이름)");
+              if (miss.length) {
+                refundOut.textContent = "국내 원화: 다음을 입력해 주세요 — " + miss.join(", ");
+                return;
+              }
+            } else {
+              payload = {
+                payout_type: "international_usd",
+                beneficiary_name: val("refund-beneficiary-name"),
+                beneficiary_address: val("refund-beneficiary-address"),
+                bank_name: val("refund-bank-name"),
+                branch_name: val("refund-branch-name"),
+                swift_bic: val("refund-swift-bic"),
+                account_number: val("refund-account-number"),
+                bank_country: val("refund-bank-country"),
+                bank_address: val("refund-bank-address"),
+                iban: val("refund-iban"),
+                routing_number: val("refund-routing-number"),
+                intermediary_bank_name: val("refund-intermediary-bank-name"),
+                intermediary_swift_bic: val("refund-intermediary-swift-bic"),
+                paid_amount_usd: val("refund-paid-amount-usd"),
+                reason: val("refund-reason"),
+              };
+              var missing = [];
+              [
+                ["beneficiary_name", "수취인 영문명"],
+                ["bank_name", "은행명"],
+                ["branch_name", "브랜치명"],
+                ["swift_bic", "SWIFT/BIC"],
+                ["account_number", "계좌번호"],
+                ["bank_country", "은행 국가"],
+              ].forEach(function (x) {
+                if (!payload[x[0]]) missing.push(x[1]);
+              });
+              if (missing.length) {
+                refundOut.textContent = "필수 정보: " + missing.join(", ");
+                return;
+              }
             }
             refundOut.textContent = "환불 요청 접수 중…";
             fetch(API + "/api/payments/refund-requests", {
@@ -980,14 +2178,13 @@
                   refundOut.textContent = x.j.error || "환불 요청 접수에 실패했습니다.";
                   return;
                 }
-                refundOut.textContent =
-                  "정규 플랜 환불 요청 접수 완료 · 접수번호 " +
-                  (x.j.refund_request_no || "-") +
-                  " · 일할 환불액 USD " +
-                  Number(x.j.refund_amount_usd || 0).toFixed(2) +
-                  " · 남은 " +
-                  (x.j.remaining_days || 0) +
-                  "일";
+                var j = x.j || {};
+                var tail =
+                  " · USD " + Number(j.refund_amount_usd || 0).toFixed(2) + " / 남은 " + (j.remaining_days || 0) + "일";
+                if (j.refund_amount_krw != null) {
+                  tail += " · 참고 KRW " + Number(j.refund_amount_krw).toLocaleString("ko-KR") + "원";
+                }
+                refundOut.textContent = "접수 완료 · " + (j.refund_request_no || "-") + tail;
                 loadRefundPreview();
               })
               .catch(function (e) {
@@ -999,6 +2196,184 @@
         initSignupCheckout();
         loadRefundPreview();
         loadCouponStatus();
+      })();
+    </script>
+    <script src="../assets/crypto-usdt-network.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        if (typeof cryptoUsdtInit === "function") {
+          cryptoUsdtInit({ jsonUrl: "../assets/usdt-networks.json" });
+        }
+      });
+    </script>
+    <script>
+      (function () {
+        var meta = document.querySelector('meta[name="api-base"]');
+        var API = (meta && meta.content) || "https://happyinvests.com";
+        var emptyAddrMsg =
+          "수취 주소는 지갑·계정 개설 후 이 페이지에 공지됩니다. https://happyinvests.com/billing/index.html#crypto-deposit";
+        var sec = document.getElementById("crypto-deposit");
+        if (sec) {
+          sec.querySelectorAll(".crypto-addr-copy").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+              var tr = btn.closest("tr");
+              var inp = tr && tr.querySelector(".crypto-addr-input");
+              var v = inp && (inp.value || "").trim();
+              var t = v || emptyAddrMsg;
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(t).then(function () {
+                  if (window.HappyUX && window.HappyUX.toast) {
+                    window.HappyUX.toast(v ? "수취 주소를 복사했습니다." : "안내 문구를 복사했습니다. 주소는 개설 후 이 칸에 반영됩니다.", {
+                      duration: 6000,
+                      type: v ? "ok" : "warn",
+                    });
+                  }
+                });
+              }
+            });
+          });
+        }
+        var subBtn = document.getElementById("crypto-deposit-submit");
+        var cOut = document.getElementById("crypto-deposit-out");
+        var successBox = document.getElementById("crypto-deposit-success");
+        var refEl = document.getElementById("crypto-tracking-ref");
+        var refCopy = document.getElementById("crypto-tracking-copy");
+        if (subBtn && cOut) {
+          subBtn.addEventListener("click", function () {
+            var user_email = (document.getElementById("crypto-user-email") && document.getElementById("crypto-user-email").value) || "";
+            var currency = (document.getElementById("crypto-currency") && document.getElementById("crypto-currency").value) || "";
+            var network = (document.getElementById("crypto-network") && document.getElementById("crypto-network").value) || "";
+            var otherAsset = (document.getElementById("crypto-other-asset") && document.getElementById("crypto-other-asset").value) || "";
+            var usdtNet = typeof getSelectedUsdtNetwork === "function" ? getSelectedUsdtNetwork() : "";
+            var dis = document.getElementById("crypto-disclaimer");
+            cOut.textContent = "";
+            if (successBox) successBox.style.display = "none";
+            if (!String(user_email).trim()) {
+              cOut.textContent = "이메일을 입력해 주세요.";
+              return;
+            }
+            if (!currency) {
+              cOut.textContent = "입금 통화를 선택해 주세요.";
+              return;
+            }
+            if (currency === "usdt" && !usdtNet) {
+              cOut.textContent = "USDT는 체인(네트워크)을 반드시 선택해 주세요.";
+              return;
+            }
+            if (currency === "other" && !String(otherAsset).trim()) {
+              cOut.textContent = "기타 코인은 코인명/티커를 입력해 주세요.";
+              return;
+            }
+            if (!dis || !dis.checked) {
+              cOut.textContent = "면책·유의사항에 동의해 주세요.";
+              return;
+            }
+            cOut.textContent = "접수 중…";
+            var payload = {
+              user_email: String(user_email).trim(),
+              currency: currency,
+              amount_crypto: (document.getElementById("crypto-amount") && document.getElementById("crypto-amount").value) || "",
+              tx_id: (document.getElementById("crypto-txid") && document.getElementById("crypto-txid").value) || "",
+              network: String(network || "").trim(),
+              other_asset: String(otherAsset || "").trim(),
+              settlement_policy: "actual_usdt_swap_amount",
+              user_note: (document.getElementById("crypto-user-note") && document.getElementById("crypto-user-note").value) || "",
+              disclaimer_accepted: true,
+            };
+            if (currency === "usdt" && usdtNet) {
+              payload.usdt_network = usdtNet;
+              payload.network = usdtNet;
+            }
+            fetch(API + "/api/payments/crypto-deposit/submit", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            })
+              .then(function (r) {
+                return r.json().then(function (j) {
+                  return { ok: r.ok, j: j };
+                });
+              })
+              .then(function (x) {
+                if (!x.ok) {
+                  cOut.textContent = (x.j && x.j.error) || "접수에 실패했습니다.";
+                  return;
+                }
+                cOut.textContent = (x.j && x.j.message) || "접수되었습니다. 송금 메모·Tag에 꼬리표를 정확히 넣어 주세요.";
+                if (refEl && x.j && x.j.tracking_ref) {
+                  refEl.textContent = x.j.tracking_ref;
+                  if (successBox) successBox.style.display = "block";
+                }
+              })
+              .catch(function (e) {
+                cOut.textContent = String(e.message || e);
+              });
+          });
+        }
+        if (refCopy && refEl) {
+          refCopy.addEventListener("click", function () {
+            var t = (refEl.textContent || "").trim();
+            if (t && navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(t).then(function () {
+                if (window.HappyUX && window.HappyUX.toast) {
+                  window.HappyUX.toast("꼬리표를 복사했습니다. 송금 시 메모/Tag에 동일하게 넣어 주세요.", { duration: 5000, type: "ok" });
+                }
+              });
+            }
+          });
+        }
+      })();
+    </script>
+    <script>
+      (function () {
+        var bar = document.getElementById("ccy-bar");
+        if (!bar) return;
+        var chips = bar.querySelectorAll(".currency-chip");
+        var root = document.getElementById("ccy-panels");
+        if (!root) return;
+        var panels = root.querySelectorAll(".d-currency-panel");
+        function show(code) {
+          chips.forEach(function (b) {
+            var on = b.getAttribute("data-ccy") === code;
+            b.classList.toggle("is-on", on);
+            b.setAttribute("aria-pressed", on ? "true" : "false");
+            b.setAttribute("aria-selected", on ? "true" : "false");
+          });
+          panels.forEach(function (p) {
+            var on = p.getAttribute("data-ccy") === code;
+            p.classList.toggle("is-on", on);
+            p.setAttribute("aria-hidden", on ? "false" : "true");
+          });
+        }
+        chips.forEach(function (b) {
+          b.addEventListener("click", function () {
+            show(b.getAttribute("data-ccy") || "hkd");
+          });
+        });
+        var first = bar.querySelector(".currency-chip.is-on") || chips[0];
+        if (first) show(first.getAttribute("data-ccy") || "hkd");
+      })();
+    </script>
+    <script>
+      (function () {
+        var sec = document.getElementById("wire-transfer");
+        if (!sec || !window.HappyUX || !window.HappyUX.toast) return;
+        var codes = sec.querySelectorAll("code");
+        var msg =
+          "복사했습니다. 은행·SWIFT·입금자명이 안내와 같은지 확인해 주세요. " +
+          "가상자산·온체인으로 별도 송금 시에는 네트워크·메모(Tag 등) 누락으로 입금 확인이 지연될 수 있습니다.";
+        codes.forEach(function (el) {
+          el.style.cursor = "pointer";
+          el.setAttribute("title", "클릭하여 복사");
+          el.addEventListener("click", function () {
+            var t = (el.textContent || "").replace(/\s+/g, "");
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(t).then(function () {
+                window.HappyUX.toast(msg, { duration: 9000, type: "warn" });
+              });
+            }
+          });
+        });
       })();
     </script>
   </body>

@@ -20,14 +20,21 @@
     <nav class="site-nav" aria-label="주요 메뉴">
       <a href="../index.html">메인</a>
       <a href="../guide/index.html">가이드</a>
+      <a href="../guide/usage.html">지표 사용</a>
+      <a href="../guide/usage-trv.html">TRV</a>
+      <a href="../guide/usage-mt5.html">MT5</a>
       <a href="../downloads/index.html">다운로드</a>
       <a href="../registration/index.html">가입·등록</a>
       <a href="../verify/index.html">본인인증</a>
       <a href="../billing/index.html">구독·결제</a>
       <a href="../events/index.html">이벤트</a>
       <a href="../membership/index.html">회원혜택</a>
+      <a href="../reflection/index.html">실전후기</a>
       <a href="../contact/index.html">문의</a>
+      <a href="../boards/index.html">모임터</a>
+      <a href="../boards/index.html?board=event_promo_shoutout">추천·홍보</a>
       <a href="index.html">약관·정책</a>
+      <a href="../head-daily-report/index.html">본부 데일리</a>
       <a href="../admin/index.html">관리자</a>
       <a href="../integrations/index.html">연동</a>
     </nav>
@@ -56,14 +63,14 @@
       <ul>
         <li><a href="terms-magictrading-free-trial.html">1주(7일) 무료 지표 체험</a></li>
         <li><a href="terms-magictrading-event.html">MagicTrading 이벤트(유료) 특약</a> — <strong>회원·1회(계정) · 리커버리</strong> 등</li>
-        <li><a href="terms-magictrading-regular.html">MagicTrading 정규(월 구독) 특약</a> — <strong>Limited / Unlimited</strong> 등</li>
+        <li><a href="terms-magictrading-regular.html">MagicTrading 정규(월 구독) 특약</a> — <strong>Whop TRV · Whop MT5 · MQL MT5</strong></li>
       </ul>
       <p>운영·로그 해석: <strong>정규 월 정산(결제·플랜코드)인지, 쿠폰(HB-…, 기간/프로모)인지, 유료 1m 이벤트인지</strong>는 서로 다른 경로이며, API 응답·<code>coupons</code>·<code>users</code> 필드를 함께 본다.</p>
 
       <div class="nrf-box" role="region" aria-label="환불 핵심 고지">
-        <strong>정규 플랜 환불 · 이벤트/쿠폰/체험 환불불가(원칙)</strong>
-        <p class="en">Regular plan payments: pro-rata refund as in Refund Policy. Event, trial, coupon, recovery: non-refundable.</p>
-        <p style="margin: 0.5rem 0 0; color: #cfd2d8; font-size: 0.82rem">한국어: 정규(Limited·Unlimited)만 이유를 묻지 않고 일할 환불. 이벤트·쿠폰·무료체험·리커버리는 환불불가(본 문서·세부 약관·PG 고지). <strong>MagicTrading 1개월 100불(USD) 유료 이벤트</strong>는 <strong>사유 불문·절대 환불 불가</strong>입니다(별도 문단: <a href="refund.html" style="color: #8fd4ff">환불 정책</a>).</p>
+        <strong>정규·비즈니스(월) 묻지 않는 환불 · 이벤트/쿠폰/체험 환불불가(원칙)</strong>
+        <p class="en">Regular and business monthly plans: reason-agnostic pro-rata refund (31-day USD formula in Refund Policy). Event, trial, coupon, recovery: non-refundable.</p>
+        <p style="margin: 0.5rem 0 0; color: #cfd2d8; font-size: 0.82rem">한국어: <strong>정규(Whop TRV·Whop MT5·MQL MT5)</strong>와 <strong>비즈니스(조직) 월</strong>만 이유를 묻지 않고 일할 환불(31일·USD 식·<a href="refund.html#sec-refund-formula" style="color: #8fd4ff">환불 정책</a>). <strong>해외 수취는 USD 지급 원칙</strong>, 국내 원화는 별도 안내. 이벤트·쿠폰·무료체험·리커버리는 환불불가. <strong>1개월 유료 이벤트</strong>는 <strong>절대 환불 불가</strong>입니다.</p>
       </div>
       <p>
         <strong>계좌이체·해외 송금</strong>으로 당사에 납부(비즈니스·고액·이벤트 별도 정산 등)하실 때 필요한
@@ -77,7 +84,7 @@
       </ul>
 
       <h2>제2조(구) 정규 상품 범위 — 요약</h2>
-      <p>개인(일반) <strong>정규</strong>는 <a href="terms-magictrading-regular.html">정규 특약</a>의 <strong>두 가지(USD: Limited $4,999 / Unlimited $19,999)</strong>가 대표이며, 홈·랜딩에 범위(예: $4,999~$29,999)를 표시하는 경우, <strong>상·하한은 상담·엔터프라이즈·옵션</strong>에 따라 달라질 수 있음을 뜻합니다. 다단계 <strong>티어</strong>는 두지 않습니다.</p>
+      <p><strong>정규</strong>는 <a href="terms-magictrading-regular.html">정규 특약</a>의 <strong>세 가지(USD: Whop TRV $5,499 / Whop MT5 $5,999 / MQL MT5 $6,999)</strong>가 대표입니다. 다단계 <strong>티어</strong>는 두지 않습니다.</p>
 
       <h2 id="sec-business">제3조(구) 엔터프라이즈·조직</h2>
       <p>다수 ID·견적·SOW·별도 조직용 라이선스는 <strong>개인 정규 2가지</strong>와 별도입니다. 수치·가격·좌석은 <strong>개별 견적·계약</strong>이 우선이며, 본 총괄 문서의 옛 배수·표(멀티·VIP 등)는 <strong>폐지</strong>되고 홈·상담·계약서로 확정합니다.</p>
@@ -119,7 +126,7 @@
           <label class="legal-consent__row">
             <input type="checkbox" id="ag-regular" autocomplete="off" />
             <span
-              ><strong>정규(월·Limited/Unlimited)</strong> — <a href="terms-magictrading-regular.html">정규 특약</a>·<a href="refund.html">이유 불문 일할 환불(정규)</a>·쿠폰(프로모)과의 구분을 읽었습니다.</span
+              ><strong>정규(월·Whop TRV/Whop MT5/MQL MT5)</strong> — <a href="terms-magictrading-regular.html">정규 특약</a>·<a href="refund.html">이유 불문 일할 환불(정규)</a>·쿠폰(프로모)과의 구분을 읽었습니다.</span
             >
           </label>
           <label class="legal-consent__row">

@@ -1,5 +1,25 @@
 /* downloads/index.html — TradingView 상단 · MT5 하단 */
 
+.downloads-otp-gate {
+  margin: 0 0 1.25rem;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(180, 92, 0, 0.35);
+  background: rgba(255, 248, 230, 0.95);
+  font-size: 0.87rem;
+  line-height: 1.55;
+}
+.downloads-otp-gate a {
+  font-weight: 600;
+}
+.downloads-otp-gate--hidden {
+  display: none !important;
+}
+html[data-theme="dark"] .downloads-otp-gate {
+  background: rgba(60, 40, 18, 0.45);
+  border-color: rgba(230, 162, 60, 0.45);
+}
+
 .dl-page-lead {
   margin-bottom: 1.5rem;
   color: var(--ci-brown-muted);
