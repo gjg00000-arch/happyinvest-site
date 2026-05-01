@@ -6,7 +6,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const SAME_ORIGIN_URL = new URL((process.env.SITE_ORIGIN || "https://happyinvests.com").replace(/\/?$/, "") + "/");
+const SAME_ORIGIN_URL = new URL((process.env.SITE_ORIGIN || "https://magicindicatorglobal.com").replace(/\/?$/, "") + "/");
 
 const HREF_RE = /\bhref\s*=\s*"([^"]*)"/gi;
 

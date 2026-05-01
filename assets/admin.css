@@ -103,6 +103,38 @@
   border-color: #2f6f4f;
 }
 
+html[data-theme="dark"] .admin-tabs button {
+  background: #21262d;
+  color: #e6edf3;
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+html[data-theme="dark"] .admin-tabs button.is-active {
+  background: #2f6f4f;
+  color: #fff;
+  border-color: #3fb950;
+}
+
+html[data-theme="dark"] .admin-stat,
+html[data-theme="dark"] .admin-form-inline,
+html[data-theme="dark"] .admin-table-wrap,
+html[data-theme="dark"] .admin-home-preview {
+  background: #161b22;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+html[data-theme="dark"] .admin-stat .label,
+html[data-theme="dark"] .admin-note,
+html[data-theme="dark"] .admin-toolbar .who {
+  color: #8b949e;
+}
+
+html[data-theme="dark"] .admin-stat .value,
+html[data-theme="dark"] .admin-subh3,
+html[data-theme="dark"] .admin-monitor h2 {
+  color: #e6edf3;
+}
+
 .admin-panel {
   display: none;
 }
@@ -116,6 +148,11 @@
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 0.75rem;
   margin-bottom: 1.25rem;
+}
+
+.admin-coupon-stats {
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  margin-bottom: 0.85rem;
 }
 
 .admin-stat {
@@ -279,6 +316,33 @@
   color: #2f6f4f;
 }
 
+html[data-theme="dark"] .admin-app .btn--ghost {
+  background: #21262d;
+  color: #9be4b8;
+  border-color: rgba(155, 228, 184, 0.28);
+}
+
+html[data-theme="dark"] .admin-table th {
+  background: #1f2933;
+  color: #e6edf3;
+}
+
+html[data-theme="dark"] .admin-table td {
+  color: #c9d1d9;
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+html[data-theme="dark"] .admin-table input[type="text"],
+html[data-theme="dark"] .admin-table select,
+html[data-theme="dark"] .admin-form-inline input,
+html[data-theme="dark"] .admin-form-inline select,
+html[data-theme="dark"] .admin-ticket-reply,
+html[data-theme="dark"] .admin-home-editor textarea#admin-home-html {
+  color: #e6edf3;
+  background: #0d1117;
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
 .admin-app .btn--small {
   font-size: 0.72rem;
   padding: 0.25rem 0.45rem;
@@ -294,6 +358,42 @@
   border-radius: 6px;
   margin-bottom: 0.35rem;
   box-sizing: border-box;
+}
+
+.admin-ticket-body {
+  max-width: 24rem;
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.admin-ticket-body summary {
+  cursor: pointer;
+  font-weight: 650;
+}
+
+.admin-ticket-body pre {
+  white-space: pre-wrap;
+  margin: 0.45rem 0 0;
+  padding: 0.55rem;
+  border-radius: 6px;
+  background: #fff;
+  border: 1px solid #e5ddd3;
+}
+
+.admin-ticket-meta {
+  margin: 0 0 0.35rem;
+  color: #7a6c5e;
+  font-size: 0.72rem;
+}
+
+html[data-theme="dark"] .admin-ticket-body pre {
+  background: #0d1117;
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #c9d1d9;
+}
+
+html[data-theme="dark"] .admin-ticket-meta {
+  color: #8b949e;
 }
 
 /* 홈 HTML 편집(미리보기는 참고용, 실제 드래그 빌더 아님) */

@@ -1,7 +1,7 @@
 (function () {
   var TOKEN_KEY = "magic_admin_token";
   var API =
-    (document.querySelector('meta[name="api-base"]') || {}).content || "https://happyinvests.com";
+    (document.querySelector('meta[name="api-base"]') || {}).content || "https://magicindicatorglobal.com";
 
   function getToken() {
     try {

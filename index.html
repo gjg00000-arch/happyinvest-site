@@ -6,18 +6,18 @@
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <meta name="api-base" content="https://happyinvests.com" />
+    <meta name="api-base" content="https://magicindicatorglobal.com" />
     <title>Magic 지표 — 메인</title>
     <meta name="description" content="Magic 지표 가이드·가입·모임터 — 주식회사 행복도담 인베스트" />
     <meta property="og:title" content="Magic 지표 — 행복도담 인베스트" />
     <meta property="og:description" content="Magic 지표 가이드·가입·모임터" />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://happyinvests.com/assets/haengbokdam-company-ci.png" />
+    <meta property="og:image" content="https://magicindicatorglobal.com/assets/haengbokdam-company-ci.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta property="og:url" content="https://happyinvests.com/" />
-    <link rel="canonical" href="https://happyinvests.com/" />
+    <meta property="og:url" content="https://magicindicatorglobal.com/" />
+    <link rel="canonical" href="https://magicindicatorglobal.com/" />
     <script type="application/ld+json">
-      {"@context":"https://schema.org","@type":"Organization","name":"주식회사 행복도담 인베스트","alternateName":"Haengbokdodam Invest co.ltd","url":"https://happyinvests.com/"}
+      {"@context":"https://schema.org","@type":"Organization","name":"주식회사 행복도담 인베스트","alternateName":"Haengbokdodam Invest co.ltd","url":"https://magicindicatorglobal.com/"}
     </script>
     <link rel="manifest" href="assets/site.webmanifest" />
     <link rel="stylesheet" href="assets/common.css" />
@@ -29,8 +29,10 @@
     <div class="main-top-banner">
       <img
         class="main-top-banner__img"
-        src="assets/main-top-banner.png"
-        alt="주식회사 행복도담 인베스트"
+        src="assets/main-top-banner.webp"
+        width="1800"
+        height="520"
+        alt="Magic Indicator 차트 신호와 추세선 예시"
         fetchpriority="high"
         decoding="async"
       />
@@ -52,10 +54,10 @@
     </header>
     <nav class="site-nav" aria-label="주요 메뉴">
       <a href="index.html" aria-current="page">메인</a>
-      <a href="guide/index.html">가이드</a>
-      <a href="guide/usage.html">지표 사용</a>
-      <a href="guide/usage-trv.html">TRV</a>
-      <a href="guide/usage-mt5.html">MT5</a>
+      <a href="guide/index.html">설치 안내</a>
+      <a href="guide/usage.html">사용법</a>
+      <a href="guide/usage-trv.html">TRV 설정</a>
+      <a href="guide/usage-mt5.html">MT5 설정</a>
       <a href="downloads/index.html">다운로드</a>
       <a href="registration/index.html">가입·등록</a>
       <a href="verify/index.html">본인인증</a>
@@ -77,27 +79,66 @@
       <header>
         <h1 class="page-title" data-i18n="indexTitle">Magic 지표 · 매직라인</h1>
         <p class="lead" id="index-lead">
-          차트 위에서 흐름을 조금 더 읽기 쉽게 돕는 지표입니다. TradingView(TRV)와 MetaTrader 5를 함께 쓰는 분들을 위해, 가이드·이벤트·커뮤니티를 한곳에 모았습니다. 투자 권유나 수익 보장이 아니라,
-          <strong>판단을 돕는 참고 도구</strong>라는 점만 기억해 주세요.
-        </p>
-        <p class="small" style="margin-top: 0.65rem; color: var(--ci-brown-muted)">
-          가입 정책: <strong>이메일(아이디) + 휴대폰 SMS 6자리 코드 인증 완료</strong> 시에만 회원가입이 완료됩니다.
-          <strong>정규 플랜(regular_default)</strong>은 가입 단계에서 <strong>Google OTP</strong>를 추가로 확인합니다.
-          휴대폰 인증은 링크 클릭이 아니라 <strong>코드 입력 방식</strong>만 사용합니다.
+          복잡한 분석보다 <strong>방향·구간·대응</strong>을 빠르게 보는 지표입니다. 차트에 입히고, 내 플랜을 고르고,
+          매직라인 방향만 확인하세요.
         </p>
       </header>
 
-      <figure class="ml-welcome-poster" aria-label="개인 투자자를 환영하는 포스터 일러스트">
-        <img
-          class="ml-welcome-poster__img"
-          src="assets/magic-welcome-poster.png"
-          width="1024"
-          height="558"
-          loading="lazy"
-          decoding="async"
-          alt="포스터: 부자는 NO, 헐벗은 개미는 WELCOME. 개미가 KOSPI·나스닥·환율 줄 위를 걷고 해가 뜨는 일러스트"
-        />
-      </figure>
+      <section class="ml-quick-start" aria-labelledby="ml-quick-start-title">
+        <p class="ml-quick-start__badge">MagicLine 시작하기 · 3초 가이드</p>
+        <h2 id="ml-quick-start-title">심플하게, 세 단계만 기억하세요.</h2>
+        <div class="ml-quick-start__grid" role="list">
+          <article class="ml-quick-start__card" role="listitem">
+            <span class="ml-quick-start__num">1</span>
+            <h3>내 차트에 입히기</h3>
+            <p>MT5 또는 TradingView 환경에 맞춰 MagicLine 지표를 차트에 적용합니다.</p>
+          </article>
+          <article class="ml-quick-start__card" role="listitem">
+            <span class="ml-quick-start__num">2</span>
+            <h3>나에게 맞는 플랜 선택</h3>
+            <p>단타·스윙 등 매매 스타일에 맞는 플랜을 고르고 이용 절차를 진행합니다.</p>
+          </article>
+          <article class="ml-quick-start__card" role="listitem">
+            <span class="ml-quick-start__num">3</span>
+            <h3>시그널 확인 및 대응</h3>
+            <p>복잡한 해석보다 매직라인의 방향성과 구간을 먼저 확인합니다.</p>
+          </article>
+        </div>
+        <div class="ml-quick-start__why">
+          <strong>왜 심플이 정답인가요?</strong>
+          <span>고민 시간을 줄여야 실행이 빨라집니다. 핵심 로직에 자신이 있을수록 설명은 짧아집니다.</span>
+        </div>
+        <p class="ml-quick-start__actions">
+          <a class="btn" href="registration/index.html">지표 신청 시작하기</a>
+          <a class="btn btn--ghost" href="guide/usage.html">사용법 보기</a>
+        </p>
+      </section>
+
+      <section class="ml-cloud-care" aria-labelledby="ml-cloud-care-title">
+        <p class="ml-cloud-care__badge">부가 옵션 · 기술 환경 관리</p>
+        <h2 id="ml-cloud-care-title">MagicLine 24/7 클라우드 케어</h2>
+        <p class="ml-cloud-care__lead">
+          차트를 계속 켜두기 어렵거나 설정 관리가 부담스러운 사용자를 위한 선택 옵션입니다.
+          MagicLine 이용 환경의 <strong>설정 보관·구동 점검·알림 연결</strong>을 기술적으로 지원합니다.
+        </p>
+        <div class="ml-cloud-care__grid" role="list">
+          <article class="ml-cloud-care__card" role="listitem">
+            <h3>설정 백업 및 관리</h3>
+            <p>고객님이 적용한 MagicLine 플랜과 차트 설정을 보관해 필요 시 복구를 돕습니다.</p>
+          </article>
+          <article class="ml-cloud-care__card" role="listitem">
+            <h3>환경 안정성 점검</h3>
+            <p>MT5 및 클라우드 실행 환경의 가동 상태를 주기적으로 확인합니다.</p>
+          </article>
+          <article class="ml-cloud-care__card" role="listitem">
+            <h3>알림 연결 지원</h3>
+            <p>설정된 MagicLine 알림이 지정 채널로 정상 송출되는지 기술적 연결 상태를 관리합니다.</p>
+          </article>
+        </div>
+        <p class="ml-cloud-care__notice">
+          본 서비스는 사용자의 기술적 이용 환경을 관리하는 보조 옵션이며, 투자의 최종 판단은 사용자에게 있습니다.
+        </p>
+      </section>
 
       <section class="home-payment-draft" id="payment-draft" aria-labelledby="payment-draft-h2">
         <p class="home-payment-draft__badge" role="presentation">운영 안내 · 결제 채널</p>
@@ -115,9 +156,9 @@
           <article class="home-payment-draft__card" role="listitem">
             <h3 class="home-payment-draft__card-title">USD 은행송금</h3>
             <p class="home-payment-draft__card-body">
-              <strong>고액·정규·해외 고객</strong>은 Airwallex의 <strong>미국 USD 수취계좌</strong>로 직접 송금합니다.
-              은행명은 Community Federal Savings Bank, 계좌번호는 <span class="home-payment-draft__mono">8483246245</span>이며
-              ACH·Fedwire·SWIFT 정보는 결제 페이지와 인보이스를 따릅니다.
+              <strong>고액·정규·해외 고객</strong>은 하나은행의 <strong>외화 수취계좌</strong>로 직접 송금합니다.
+              은행명은 KEB Hana Bank, 계좌번호는 <span class="home-payment-draft__mono">444-910014-96138</span>이며
+              SWIFT 정보는 결제 페이지와 인보이스를 따릅니다.
             </p>
           </article>
           <article class="home-payment-draft__card" role="listitem">
@@ -270,7 +311,7 @@
           <a href="downloads/index.html">다운로드 <small>지표·MT5 패키지</small></a>
           <a href="registration/index.html">가입·등록 <small>회원 계정</small></a>
           <a href="verify/index.html">본인 인증 <small>계정 보호</small></a>
-          <a href="billing/index.html#payment-dual">구독·결제 <small>PayPal · Airwallex · 크립토 · 원화</small></a>
+          <a href="billing/index.html#payment-dual">구독·결제 <small>PayPal · 하나은행 외화 · 크립토 · 원화</small></a>
           <a href="events/index.html">이벤트 <small>체험·요금</small></a>
           <a href="membership/index.html">회원 혜택 <small>추천 쿠폰</small></a>
           <a href="reflection/index.html">실전 후기 <small>승인 시 1달 쿠폰</small></a>
@@ -381,7 +422,7 @@
               </div>
               <p style="margin: 0; font-size: 0.88rem; color: #5a4034">
                 정규 접근권은 마켓과 플랫폼별 확정가로 판매합니다. 고액 정규 결제는 <a href="contact/index.html">상담·인보이스</a>와
-                Airwallex/송금 루트를 함께 안내합니다.
+                하나은행 외화송금 루트를 함께 안내합니다.
               </p>
             </div>
           </div>
@@ -412,7 +453,7 @@
               <h3>TRV Regular</h3>
               <p class="market-license-card__price">$5,499 <span class="plan-price-suffix">/ 월 (USD)</span></p>
               <p>
-                TradingView 중심 사용자용 정규 접근권입니다. 정규 결제는 상담·인보이스·Airwallex 루트를 함께 안내합니다.
+                TradingView 중심 사용자용 정규 접근권입니다. 정규 결제는 상담·인보이스·하나은행 외화송금 루트를 함께 안내합니다.
               </p>
             </article>
             <article class="market-license-card market-license-card--business">
@@ -432,7 +473,7 @@
           <p class="market-license__note">
             <strong>납부:</strong> 1개월(1회 청구)을 넘는 <strong>연·분기·다월 일시 선납</strong>이나 &ldquo;년회원&rdquo; 형태는 <strong>지원하지 않고</strong>,
             <strong>월 1회 납부</strong>만 합니다(개인·조직 <strong>자금·도산</strong> 등을 고려한 정책이에요. <a href="legal/terms-magictrading-regular.html">정규 특약</a>·<a href="billing/index.html#monthly-billing">구독</a> 참고).
-            <strong>정규 고액</strong>은 <a href="billing/index.html#aw-usd-base">Airwallex 미국 USD 계좌 직접 송금</a> 등으로 맞출 수 있고,
+            <strong>정규 고액</strong>은 <a href="billing/index.html#aw-usd-base">하나은행 외화계좌 직접 송금</a> 등으로 맞출 수 있고,
             카드·PG 수수료 구조와 비교해 유리한 경우가 있으면 <strong>권장</strong>해요(금액·조건은 인보이스·<a href="contact/index.html">상담</a>·송금·은행 수수료는 별도). 공유·재판매 금지, TRV/MT5·
             <a href="legal/terms-magictrading-regular.html">정규 약관</a>·<a href="legal/plan-terms-nonrefund.html#sec-business">총괄(엔터프라이즈·조직)</a>·<strong>MT5 우선</strong> 식별 등은 그대로 적용돼요.
           </p>

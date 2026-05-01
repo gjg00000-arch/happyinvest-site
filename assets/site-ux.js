@@ -123,19 +123,14 @@
     try {
       saved = localStorage.getItem(THEME_KEY) || "";
     } catch (e) {}
-    if (saved === "dark") applyTheme(true);
-    else if (saved === "light") applyTheme(false);
-    else if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      applyTheme(true);
-    } else applyTheme(false);
+    if (saved === "light") applyTheme(false);
+    else applyTheme(true);
 
     if (window.matchMedia) {
       window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () {
         try {
           var s = localStorage.getItem(THEME_KEY);
-          if (!s) {
-            applyTheme(window.matchMedia("(prefers-color-scheme: dark)").matches);
-          }
+          if (!s) applyTheme(true);
         } catch (e) {}
       });
     }
@@ -170,7 +165,10 @@
       languageAria: "언어 선택",
       nav: {
         home: "메인",
-        guide: "가이드",
+        guide: "설치 안내",
+        usage: "사용법",
+        trv: "TRV 설정",
+        mt5: "MT5 설정",
         downloads: "다운로드",
         register: "가입·등록",
         verify: "본인인증",
@@ -189,9 +187,9 @@
       },
       indexTitle: "Magic 지표 · 매직라인",
       indexLead:
-        "차트 위에서 흐름을 조금 더 읽기 쉽게 돕는 지표입니다. TradingView(TRV)와 MetaTrader 5를 함께 쓰는 분들을 위해, 가이드·이벤트·커뮤니티를 한곳에 모았습니다. 투자 권유나 수익 보장이 아니라, 판단을 돕는 참고 도구라는 점만 기억해 주세요.",
+        "복잡한 분석보다 방향·구간·대응을 빠르게 보는 지표입니다. 차트에 입히고, 내 플랜을 고르고, 매직라인 방향만 확인하세요.",
       indexLeadHtml:
-        "차트 위에서 흐름을 조금 더 읽기 쉽게 돕는 지표입니다. TradingView(TRV)와 MetaTrader 5를 함께 쓰는 분들을 위해, 가이드·이벤트·커뮤니티를 한곳에 모았습니다. 투자 권유나 수익 보장이 아니라, <strong>판단을 돕는 참고 도구</strong>라는 점만 기억해 주세요.",
+        "복잡한 분석보다 <strong>방향·구간·대응</strong>을 빠르게 보는 지표입니다. 차트에 입히고, 내 플랜을 고르고, 매직라인 방향만 확인하세요.",
     },
     en: {
       skip: "Skip to content",
@@ -201,7 +199,10 @@
       languageAria: "Language",
       nav: {
         home: "Home",
-        guide: "Guide",
+        guide: "Setup",
+        usage: "How to use",
+        trv: "TRV setup",
+        mt5: "MT5 setup",
         downloads: "Downloads",
         register: "Sign up",
         verify: "Verification",
@@ -220,7 +221,7 @@
       },
       indexTitle: "Magic Indicators · Magic Line",
       indexLead:
-        "Indicators to read price flow a little more clearly. For TradingView and MetaTrader 5 users, we gathered guides, events, and community in one place. This is not investment advice or a profit guarantee—only a tool to help your judgment.",
+        "A simple indicator for reading direction, zones, and response faster. Apply it to your chart, choose your plan, and check the Magic Line direction.",
     },
     ja: {
       skip: "本文へスキップ",
@@ -230,7 +231,10 @@
       languageAria: "言語",
       nav: {
         home: "ホーム",
-        guide: "ガイド",
+        guide: "導入案内",
+        usage: "使い方",
+        trv: "TRV設定",
+        mt5: "MT5設定",
         downloads: "ダウンロード",
         register: "登録",
         verify: "本人確認",
@@ -249,7 +253,7 @@
       },
       indexTitle: "Magic インジ · マジックライン",
       indexLead:
-        "チャートの流れを少し読みやすくするインジケーターです。TradingView と MetaTrader 5 利用者向けにガイド·イベント·コミュニティを集約しました。投資勧誘や利潤保証ではなく、判断の補助ツールです。",
+        "方向・ゾーン・対応をすばやく確認するためのシンプルなインジケーターです。チャートに適用し、プランを選び、Magic Line の方向を確認します。",
     },
     zh: {
       skip: "跳转至正文",
@@ -259,7 +263,10 @@
       languageAria: "语言",
       nav: {
         home: "首页",
-        guide: "指南",
+        guide: "安装指南",
+        usage: "使用方法",
+        trv: "TRV 设置",
+        mt5: "MT5 设置",
         downloads: "下载",
         register: "注册",
         verify: "身份验证",
@@ -278,7 +285,7 @@
       },
       indexTitle: "Magic 指标 · 魔线",
       indexLead:
-        "帮助更清晰地阅读走势的指标。为同时使用 TradingView 与 MetaTrader 5 的用户提供指南、活动与社区入口。非投资建议或收益保证，仅作辅助判断。",
+        "用于快速查看方向、区间和应对的简洁指标。应用到图表，选择计划，然后确认 Magic Line 方向。",
     },
     es: {
       skip: "Ir al contenido",
@@ -288,7 +295,10 @@
       languageAria: "Idioma",
       nav: {
         home: "Inicio",
-        guide: "Guía",
+        guide: "Instalación",
+        usage: "Uso",
+        trv: "Config. TRV",
+        mt5: "Config. MT5",
         downloads: "Descargas",
         register: "Registro",
         verify: "Verificación",
@@ -307,7 +317,7 @@
       },
       indexTitle: "Indicadores Magic · Magic Line",
       indexLead:
-        "Indicadores para leer el flajo del gráfico con más claridad. Guías, eventos y comunidad en un solo sitio para usuarios de TradingView y MetaTrader 5. No es asesoramiento de inversión ni garantía de beneficio: solo una herramienta de apoyo.",
+        "Un indicador simple para leer dirección, zonas y respuesta con más rapidez. Aplícalo al gráfico, elige tu plan y revisa la dirección de Magic Line.",
     },
   };
 
@@ -339,6 +349,9 @@
     if (s.indexOf("tradingview-magic") >= 0) return "tvr";
     if (s.indexOf("telegram-chat") >= 0) return "telegram";
     if (s.indexOf("board=event_promo_shoutout") >= 0) return "promo";
+    if (s.indexOf("usage-trv") >= 0) return "trv";
+    if (s.indexOf("usage-mt5") >= 0) return "mt5";
+    if (s.indexOf("guide/usage") >= 0 || s.indexOf("/guide/usage") >= 0) return "usage";
     if (s.indexOf("guide/") >= 0 || s.indexOf("/guide") >= 0) return "guide";
     if (s.indexOf("downloads") >= 0) return "downloads";
     if (s.indexOf("registration") >= 0) return "register";

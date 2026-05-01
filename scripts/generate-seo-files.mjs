@@ -1,6 +1,6 @@
 /**
  * sitemap.xml + robots.txt 생성. 프로젝트 루트: npm run build:seo
- * 배포 도메인: SITE_ORIGIN (기본 https://happyinvests.com)
+ * 배포 도메인: SITE_ORIGIN (기본 https://magicindicatorglobal.com)
  */
 import fs from "fs/promises";
 import path from "path";
@@ -10,7 +10,7 @@ import { PAGES } from "./inject-site-nav.mjs";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, "..");
 
-const ORIGIN = (process.env.SITE_ORIGIN || "https://happyinvests.com").replace(/\/$/, "");
+const ORIGIN = (process.env.SITE_ORIGIN || "https://magicindicatorglobal.com").replace(/\/$/, "");
 
 /** 관리자 HTML은 공개 색인에서 제외(페이지 noindex + 사이트맵 미포함 + robots Disallow). */
 const SITEMAP_PAGES = PAGES.filter(

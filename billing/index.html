@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="MagicTrading 구독·결제 — 플랜 선택, Airwallex·PayPal, 크립토·송금 안내 및 환불 절차." />
+    <meta name="description" content="MagicTrading 구독·결제 — 플랜 선택, PayPal, 하나은행 외화송금, 크립토·원화 송금 안내 및 환불 절차." />
     <link rel="canonical" href="https://happyinvests.com/billing/index.html" />
     <meta property="og:title" content="Magic 지표 — 구독·결제" />
     <meta property="og:description" content="MagicTrading 구독·결제, 플랜·결제 수단 안내 및 환불 관련 표시." />
@@ -16,7 +16,6 @@
     <link rel="stylesheet" href="../assets/common.css" />
     <link rel="stylesheet" href="../assets/site-ux.css" />
     <link rel="stylesheet" href="../assets/crypto-usdt-network.css" />
-    <script src="https://static.airwallex.com/components/sdk/v1/index.js" defer></script>
     <style>
       .coupon-redeem-section {
         margin-top: 1.75rem;
@@ -128,10 +127,10 @@
     </header>
     <nav class="site-nav" aria-label="주요 메뉴">
       <a href="../index.html">메인</a>
-      <a href="../guide/index.html">가이드</a>
-      <a href="../guide/usage.html">지표 사용</a>
-      <a href="../guide/usage-trv.html">TRV</a>
-      <a href="../guide/usage-mt5.html">MT5</a>
+      <a href="../guide/index.html">설치 안내</a>
+      <a href="../guide/usage.html">사용법</a>
+      <a href="../guide/usage-trv.html">TRV 설정</a>
+      <a href="../guide/usage-mt5.html">MT5 설정</a>
       <a href="../downloads/index.html">다운로드</a>
       <a href="../registration/index.html">가입·등록</a>
       <a href="../verify/index.html">본인인증</a>
@@ -156,8 +155,8 @@
       <p class="lead">
         MagicTrading은 단일 전략 상품입니다. <strong>납부</strong>는 대표적으로 네 갈래로 안내합니다. <strong>①
         PayPal(카드)</strong> — <strong>소액·이벤트·가입</strong> 등은 PG 루트(신용·체크 위주)로 받습니다(잔액·페이는 제한·수수료는
-        PayPal 정책). <strong>② Airwallex USD 미국 수취계좌로 직접 송금</strong> — <strong>달러 현금 송금</strong>은
-        <a href="#aw-usd-base">미국 USD 계좌</a>로 이체(ACH·Fedwire·SWIFT). <strong>③ 크립토 직접 송금</strong> —
+        PayPal 정책). <strong>② 하나은행 외화 수취계좌로 직접 송금</strong> — <strong>달러·외화 송금</strong>은
+        <a href="#aw-usd-base">KEB Hana Bank SWIFT 계좌</a>로 이체합니다. <strong>③ 크립토 직접 송금</strong> —
         메이저 코인과 Ledger 지원 코인(수동 견적), 수취·꼬리표는 <a href="#crypto-deposit">아래</a>·<a href="../contact/index.html">문의</a>. <strong>④
         국내 원화(₩) 납부</strong> — <strong>당사 법인 명의</strong>(우리은행) 계좌·환산은 <a href="#krw-corporate">아래</a>·<a href="../contact/index.html">인보이스</a>를
         따릅니다(원화 <strong>법인 송금</strong>: <strong>구매 당시 환율</strong>·<strong>만 원 단위 절삭</strong>).
@@ -204,26 +203,26 @@
       </div>
 
       <div id="pg-status-banner" class="status-banner" role="status">
-        <strong>납부 요약</strong> — <strong>① PayPal</strong>(소액·카드) · <strong>② Airwallex USD 미국 계좌</strong> 직접 송금 ·
+        <strong>납부 요약</strong> — <strong>① PayPal</strong>(소액·카드) · <strong>② 하나은행 외화계좌</strong> 직접 송금 ·
         <strong>③ 크립토</strong> 직접 송금(<a href="#crypto-deposit">메이저 우선 지원·잡코인 수동 견적</a>·꼬리표) · <strong>④
         국내 원화(₩) 법인계좌</strong>(<a href="#krw-corporate">우리은행·만 원 단위</a>). 이벤트·정산은 운영에서
-        <strong>PayPal · Airwallex</strong> 연동 상태에 맞춰 안내됩니다. <strong>추가 고지</strong>:
+        <strong>PayPal</strong> 결제 및 수동 대조 상태에 맞춰 안내됩니다. <strong>추가 고지</strong>:
         <a href="../events/index.html">이벤트</a> · <a href="../legal/refund.html#sec-payment-channels">결제 수단(약관)</a> ·
         <a href="../contact/index.html">문의</a>. 일부 채널은 시기별로 제공 경로가 달라질 수 있습니다.
       </div>
 
       <section id="payment-dual" class="pay-dual" aria-labelledby="pay-dual-title">
-        <h2 id="pay-dual-title">결제·납부 채널: PayPal · USD 은행송금 · 크립토 · 원화(법인)</h2>
+        <h2 id="pay-dual-title">결제·납부 채널: PayPal · 외화 은행송금 · 크립토 · 원화(법인)</h2>
         <p class="pay-dual__intro">
-          <strong>① PayPal</strong> — <strong>소액</strong>·이벤트·가입 루트(카드), <strong>② USD 은행송금</strong> —
-          <strong>Airwallex 미국 USD 수취계좌</strong>로 직접 송금(고액·정규·인보이스), <strong>③ 크립토</strong> — 온체인 직접 송금(메이저 우선 지원·잡코인 수동 견적·<a href="#crypto-deposit">꼬리표</a>), <strong>④ 원화(₩)</strong> — 국내에서 원화로 납부하실 때
+          <strong>① PayPal</strong> — <strong>소액</strong>·이벤트·가입 루트(카드), <strong>② 외화 은행송금</strong> —
+          <strong>하나은행 외화 수취계좌</strong>로 직접 송금(고액·정규·인보이스), <strong>③ 크립토</strong> — 온체인 직접 송금(메이저 우선 지원·잡코인 수동 견적·<a href="#crypto-deposit">꼬리표</a>), <strong>④ 원화(₩)</strong> — 국내에서 원화로 납부하실 때
           <strong>법인 계좌(원화)</strong>·환산은 <a href="#krw-corporate">아래</a>·<a href="../contact/index.html">인보이스</a>를
-          따릅니다(USD 등 → 원화: <strong>구매 당시 환율</strong>, <strong>만 원 단위 절삭</strong>). 달러 현금 송금은 Airwallex
-          <a href="#aw-usd-base">미국 USD 수취계좌</a>와 인보이스를 기준으로 대조합니다.
+          따릅니다(USD 등 → 원화: <strong>구매 당시 환율</strong>, <strong>만 원 단위 절삭</strong>). 달러·외화 현금 송금은
+          <a href="#aw-usd-base">하나은행 SWIFT 수취계좌</a>와 인보이스를 기준으로 대조합니다.
         </p>
         <ol class="pay-dual__procedure">
           <li><strong>① PayPal(소액·카드)</strong> — <a href="?signup=1#signup-checkout">가입·플랜</a>·<a href="../events/index.html">이벤트</a> 등(체크아웃·웹훅은 키·운영에 따름).</li>
-          <li><strong>② USD 은행 직접 송금</strong> — ② 패널의 <a href="#aw-usd-base">Airwallex 미국 USD 수취계좌</a>로 ACH·Fedwire·SWIFT 송금, Reference(이메일·주문) 맞춤.</li>
+          <li><strong>② 외화 은행 직접 송금</strong> — ② 패널의 <a href="#aw-usd-base">하나은행 외화 수취계좌</a>로 SWIFT 송금, Reference(이메일·주문) 맞춤.</li>
           <li><strong>③ 크립토 직접 송금</strong> — <a href="#crypto-deposit">수취 주소(공지) + 입금 알림·꼬리표</a>(수동 대조).</li>
           <li><strong>④ 국내 원화(법인)</strong> — <a href="#krw-corporate">우리은행 법인계좌</a>·<strong>구매 당시 환율</strong>·<strong>만 원 단위 절삭</strong>(<a href="../contact/index.html">인보이스</a>).</li>
         </ol>
@@ -233,8 +232,8 @@
             <h3 id="paypal-checkout-title">PayPal(카드) 체크아웃</h3>
             <p class="small" style="margin: 0 0 0.6rem; color: var(--ci-brown-muted); line-height: 1.5">
               <strong>소액·이벤트·가입</strong>은 <strong>PayPal에 카드를 연동</strong>한 결제를 먼저 씁니다(고액·은행·원화·크립토는
-              ②~④). PayPal 잔액·페이류 가능 여부는 PayPal 정책과 당시 결제 화면을 따릅니다. Airwallex는 현재 카드 체크아웃이 아니라
-              <a href="#aw-usd-base">USD 은행 직접 송금</a> 채널로 안내합니다.
+              ②~④). PayPal 잔액·페이류 가능 여부는 PayPal 정책과 당시 결제 화면을 따릅니다. Airwallex는 고객 직접 송금 채널이 아니라
+              PayPal 정산용으로만 사용합니다.
             </p>
             <p class="small" style="margin: 0; line-height: 1.5">
               <a class="btn" style="display: inline-block; margin: 0.2rem 0.35rem 0.2rem 0" href="?signup=1#signup-checkout">가입·플랜으로 이동</a>
@@ -248,15 +247,15 @@
           </div>
 
           <div id="direct-transfer" class="pay-dual__panel" aria-labelledby="direct-transfer-title">
-            <span class="pay-dual__eyebrow">② USD 은행송금 — Airwallex 미국 수취계좌</span>
-            <h3 id="direct-transfer-title">달러 현금 송금 — USD Receiving Account</h3>
+            <span class="pay-dual__eyebrow">② 외화 은행송금 — 하나은행 수취계좌</span>
+            <h3 id="direct-transfer-title">달러·외화 현금 송금 — KEB Hana Bank</h3>
             <p class="small" style="margin: 0 0 0.45rem; color: var(--ci-brown-muted); line-height: 1.5">
-              <strong>은행에서</strong> 당사 <strong>Airwallex 미국 USD 수취계좌</strong>로 달러를 직접
-              이체하는 경로입니다. 카드 결제창이 아니라 <strong>인보이스 기반 은행 송금</strong>이며, 수취인명·계좌번호·라우팅·SWIFT는
-              <strong>한 글자도</strong> 틀리지 말 것(거절·지연). 미국 내 송금은 ACH/Fedwire, 해외 송금은 SWIFT를 사용합니다.
+              <strong>은행에서</strong> 당사 <strong>하나은행 외화 수취계좌</strong>로 달러·외화를 직접
+              이체하는 경로입니다. 카드 결제창이 아니라 <strong>인보이스 기반 은행 송금</strong>이며, 수취인명·계좌번호·SWIFT는
+              <strong>한 글자도</strong> 틀리지 말 것(거절·지연). 해외 송금은 SWIFT를 사용합니다.
             </p>
             <p class="small" style="margin: 0 0 0.45rem; color: var(--ci-brown-muted)">
-              <strong>절차</strong>: 인보이스 확인 → 은행 앱/창구에서 <strong>USD</strong>로 송금 → Reference/비고에
+              <strong>절차</strong>: 인보이스 확인 → 은행 앱/창구에서 <strong>USD 등 외화</strong>로 송금 → Reference/비고에
               <strong>이메일·주문·인보이스 번호</strong> (운영이 안내한 형식) → 입금 확인.
             </p>
             <div
@@ -265,50 +264,53 @@
               style="margin: 0.35rem 0 0.7rem; padding: 0.7rem 0.8rem; border-radius: 11px; border: 1px solid rgba(47, 111, 79, 0.35); background: #fbfcff"
             >
               <p class="small" style="margin: 0 0 0.45rem; color: #5c2b2b; line-height: 1.5">
-                <strong>필독</strong> — 송금 시 수취인명 <strong>haengbokdodam invest co ltd</strong>와 계좌·라우팅 번호를 그대로 입력해 주세요.
+                <strong>필독</strong> — 송금 시 수취인명 <strong>Haengbokdodam Invest co., Ltd.</strong>와 계좌번호·SWIFT를 그대로 입력해 주세요.
                 입금자명 또는 Reference가 인보이스와 다르면 권한 부여가 지연될 수 있습니다.
               </p>
-              <h4 style="font-size: 0.9rem; margin: 0 0 0.4rem; color: var(--ci-brown)">USD 수취 (Airwallex · United States)</h4>
-              <div style="overflow-x: auto" role="region" aria-label="Airwallex 미국 USD 수취계좌">
+              <h4 style="font-size: 0.9rem; margin: 0 0 0.4rem; color: var(--ci-brown)">외화 수취 (KEB Hana Bank · South Korea)</h4>
+              <div style="overflow-x: auto" role="region" aria-label="하나은행 외화 수취계좌">
                 <table class="data-table" style="font-size: 0.83rem; margin: 0">
                   <tbody>
                     <tr>
-                      <th scope="row" style="width: 8.2rem">Account name</th>
+                      <th scope="row" style="width: 8.2rem">Beneficiary</th>
                       <td>
-                        <code>haengbokdodam invest co ltd</code>
-                        <span class="small" style="display: block; margin: 0.2rem 0 0; color: var(--ci-brown-muted)">대시보드·송금에 표기되는
-                        영문명과 동일(철자 변경 시 콘솔·인보이스를 우선하세요)</span>
+                        <code>Haengbokdodam Invest co., Ltd.</code>
+                        <span class="small" style="display: block; margin: 0.2rem 0 0; color: var(--ci-brown-muted)">은행·인보이스의 법인명 표기를 우선하세요.</span>
                       </td>
                     </tr>
                     <tr>
                       <th scope="row">Bank name</th>
-                      <td>Community Federal Savings Bank / United States</td>
+                      <td>KEB Hana Bank</td>
                     </tr>
                     <tr>
                       <th scope="row">Account number</th>
-                      <td><code>8483246245</code></td>
+                      <td><code>444-910014-96138</code></td>
                     </tr>
                     <tr>
-                      <th scope="row">ACH routing number</th>
-                      <td><code>026073150</code></td>
-                    </tr>
-                    <tr>
-                      <th scope="row">Fedwire routing number</th>
-                      <td><code>026073008</code></td>
+                      <th scope="row">Branch</th>
+                      <td>Singjungdong-yeok</td>
                     </tr>
                     <tr>
                       <th scope="row">SWIFT / BIC</th>
-                      <td><code>CMFGUS33</code></td>
+                      <td><code>KOEXKRSE</code></td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Bank address</th>
+                      <td>284, Gilju-ro, Wonmi-gu, Bucheon-si, Gyeonggi-do, 14548, South Korea</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Bank telephone</th>
+                      <td>032-341-1111</td>
                     </tr>
                     <tr>
                       <th scope="row">지원 경로</th>
-                      <td>국내 ACH · 국내 Fedwire · 국제 SWIFT 이체</td>
+                      <td>국제 SWIFT 외화 송금</td>
                     </tr>
                   </tbody>
                 </table>
               </div>
               <p class="small" style="margin: 0.5rem 0 0; color: var(--ci-brown-muted); line-height: 1.5">
-                <strong>도착·처리(참고, 영업·은행·경로에 따름)</strong> — ACH 1~2일 · Fedwire 0~1일 · 국제 SWIFT 0~3일.
+                <strong>도착·처리(참고, 영업·은행·경로에 따름)</strong> — 국제 SWIFT는 은행·중계은행·국가별 심사에 따라 며칠이 걸릴 수 있습니다.
               </p>
             </div>
             <div class="currency-chipbar" id="ccy-bar" role="tablist" aria-label="수취 통화">
@@ -327,64 +329,64 @@
 
             <div id="ccy-panels" role="tabpanel">
               <p class="small" style="margin: 0.15rem 0 0.45rem; color: var(--ci-brown-muted)">
-                현재 홈페이지에 공개하는 활성 외화 수취계좌는 위 <a href="#aw-usd-base">미국 USD 계좌</a>입니다.
-                다른 통화는 콘솔·인보이스에서 별도 확인된 경우에만 안내합니다.
+                현재 홈페이지에 공개하는 활성 외화 수취계좌는 위 <a href="#aw-usd-base">하나은행 SWIFT 계좌</a>입니다.
+                통화·수수료·중계은행 필요 여부는 인보이스와 은행 안내를 우선합니다.
               </p>
               <div id="ccy-panel-hkd" class="d-currency-panel" role="tabpanel" aria-labelledby="ccy-tab-hkd" data-ccy="hkd">
                 <strong>HKD</strong> — Hong Kong dollar
                 <p class="small" style="margin: 0.35rem 0; line-height: 1.5">
-                  현재 공개 기본 계좌는 USD입니다. HKD는 별도 인보이스와 콘솔 계좌가 확인된 경우에만 안내합니다.
+                  현재 공개 기본 계좌는 하나은행 외화 SWIFT 계좌입니다. HKD는 인보이스와 은행 안내가 확인된 경우에만 안내합니다.
                 </p>
               </div>
               <div id="ccy-panel-cny" class="d-currency-panel" role="tabpanel" aria-labelledby="ccy-tab-cny" data-ccy="cny">
                 <strong>CNY</strong> — Chinese yuan
                 <p class="small" style="margin: 0.35rem 0; line-height: 1.5">
-                  현재 공개 기본 계좌는 USD입니다. CNY는 별도 인보이스와 콘솔 계좌가 확인된 경우에만 안내합니다.
+                  현재 공개 기본 계좌는 하나은행 외화 SWIFT 계좌입니다. CNY는 인보이스와 은행 안내가 확인된 경우에만 안내합니다.
                 </p>
               </div>
               <div id="ccy-panel-usd" class="d-currency-panel is-on" role="tabpanel" aria-labelledby="ccy-tab-usd" data-ccy="usd">
                 <strong>USD</strong> — US dollar
                 <p class="small" style="margin: 0.35rem 0; line-height: 1.5">
-                  입금 <strong>USD</strong> — 미국 내 ACH/Fedwire 또는 해외/글로벌 <strong>SWIFT</strong> 송금.
-                  수취는 위 미국 계좌 정보와 인보이스 Reference를 따릅니다.
+                  입금 <strong>USD</strong> — 해외/글로벌 <strong>SWIFT</strong> 송금.
+                  수취는 위 하나은행 계좌 정보와 인보이스 Reference를 따릅니다.
                 </p>
               </div>
               <div id="ccy-panel-eur" class="d-currency-panel" role="tabpanel" aria-labelledby="ccy-tab-eur" data-ccy="eur">
                 <strong>EUR</strong> — Euro
-                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">현재 공개 기본 계좌는 USD입니다. EUR는 별도 인보이스와 콘솔 계좌가 확인된 경우에만 안내합니다.</p>
+                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">현재 공개 기본 계좌는 하나은행 외화 SWIFT 계좌입니다. EUR는 인보이스와 은행 안내가 확인된 경우에만 안내합니다.</p>
               </div>
               <div id="ccy-panel-aud" class="d-currency-panel" role="tabpanel" aria-labelledby="ccy-tab-aud" data-ccy="aud">
                 <strong>AUD</strong> — Australian dollar
-                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">현재 공개 기본 계좌는 USD입니다. AUD는 별도 인보이스와 콘솔 계좌가 확인된 경우에만 안내합니다.</p>
+                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">현재 공개 기본 계좌는 하나은행 외화 SWIFT 계좌입니다. AUD는 인보이스와 은행 안내가 확인된 경우에만 안내합니다.</p>
               </div>
               <div id="ccy-panel-cad" class="d-currency-panel" role="tabpanel" aria-labelledby="ccy-tab-cad" data-ccy="cad">
                 <strong>CAD</strong> — Canadian dollar
-                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">현재 공개 기본 계좌는 USD입니다. CAD는 별도 인보이스와 콘솔 계좌가 확인된 경우에만 안내합니다.</p>
+                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">현재 공개 기본 계좌는 하나은행 외화 SWIFT 계좌입니다. CAD는 인보이스와 은행 안내가 확인된 경우에만 안내합니다.</p>
               </div>
               <div id="ccy-panel-chf" class="d-currency-panel" role="tabpanel" aria-labelledby="ccy-tab-chf" data-ccy="chf">
                 <strong>CHF</strong> — Swiss franc
-                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">현재 공개 기본 계좌는 USD입니다. CHF는 별도 인보이스와 콘솔 계좌가 확인된 경우에만 안내합니다.</p>
+                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">현재 공개 기본 계좌는 하나은행 외화 SWIFT 계좌입니다. CHF는 인보이스와 은행 안내가 확인된 경우에만 안내합니다.</p>
               </div>
               <div id="ccy-panel-gbp" class="d-currency-panel" role="tabpanel" aria-labelledby="ccy-tab-gbp" data-ccy="gbp">
                 <strong>GBP</strong> — British pound
-                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">현재 공개 기본 계좌는 USD입니다. GBP는 별도 인보이스와 콘솔 계좌가 확인된 경우에만 안내합니다.</p>
+                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">현재 공개 기본 계좌는 하나은행 외화 SWIFT 계좌입니다. GBP는 인보이스와 은행 안내가 확인된 경우에만 안내합니다.</p>
               </div>
               <div id="ccy-panel-jpy" class="d-currency-panel" role="tabpanel" aria-labelledby="ccy-tab-jpy" data-ccy="jpy">
                 <strong>JPY</strong> — Japanese yen
-                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">현재 공개 기본 계좌는 USD입니다. JPY는 별도 인보이스와 콘솔 계좌가 확인된 경우에만 안내합니다.</p>
+                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">현재 공개 기본 계좌는 하나은행 외화 SWIFT 계좌입니다. JPY는 인보이스와 은행 안내가 확인된 경우에만 안내합니다.</p>
               </div>
               <div id="ccy-panel-nzd" class="d-currency-panel" role="tabpanel" aria-labelledby="ccy-tab-nzd" data-ccy="nzd">
                 <strong>NZD</strong> — New Zealand dollar
-                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">현재 공개 기본 계좌는 USD입니다. NZD는 별도 인보이스와 콘솔 계좌가 확인된 경우에만 안내합니다.</p>
+                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">현재 공개 기본 계좌는 하나은행 외화 SWIFT 계좌입니다. NZD는 인보이스와 은행 안내가 확인된 경우에만 안내합니다.</p>
               </div>
               <div id="ccy-panel-sgd" class="d-currency-panel" role="tabpanel" aria-labelledby="ccy-tab-sgd" data-ccy="sgd">
                 <strong>SGD</strong> — Singapore dollar
-                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">현재 공개 기본 계좌는 USD입니다. SGD는 별도 인보이스와 콘솔 계좌가 확인된 경우에만 안내합니다.</p>
+                <p class="small" style="margin: 0.35rem 0; line-height: 1.5">현재 공개 기본 계좌는 하나은행 외화 SWIFT 계좌입니다. SGD는 인보이스와 은행 안내가 확인된 경우에만 안내합니다.</p>
               </div>
             </div>
             <p class="small" style="margin: 0.5rem 0 0; color: var(--ci-brown-muted)">
-              크립토·기타: <a href="../legal/refund.html#sec-payment-channels">약관</a>·별도 합의(메이저 우선 지원, 기타 코인은 수동 견적·USDT 스왑 완료액 기준). <strong>달러 은행 납부</strong>는
-              <strong>Airwallex 미국 USD 계좌</strong> 기준 — 구 KEB 하나 직접 SWIFT·정규 할인 송금 루트는 운영상 사용하지 않습니다.
+              크립토·기타: <a href="../legal/refund.html#sec-payment-channels">약관</a>·별도 합의(메이저 우선 지원, 기타 코인은 수동 견적·USDT 스왑 완료액 기준). <strong>달러·외화 은행 납부</strong>는
+              <strong>하나은행 외화계좌</strong> 기준입니다. Airwallex는 고객 직접 송금용이 아니라 PayPal 정산용으로만 사용합니다.
             </p>
           </div>
         </div>
@@ -414,7 +416,7 @@
         </div>
       </section>
       <p class="small" style="margin: 0.4rem 0 0.2rem; color: var(--ci-brown-muted); line-height: 1.5">
-        <strong>① 소액</strong> = <strong>PayPal + 카드</strong>, <strong>②</strong> = <a href="#aw-usd-base"><strong>Airwallex USD 미국 계좌 직접 송금</strong></a>,
+        <strong>① 소액</strong> = <strong>PayPal + 카드</strong>, <strong>②</strong> = <a href="#aw-usd-base"><strong>하나은행 외화계좌 직접 송금</strong></a>,
         <strong>③</strong> = <a href="#crypto-deposit">크립토</a>, <strong>④</strong> = <a href="#krw-corporate">원화·법인(우리은행·만 원 절삭)</a>.
         <strong>한국에서 달러(외화) SWIFT</strong>는 은행·수수료가 다릅니다(총비용·경로는 송금인 기준).
       </p>
@@ -432,7 +434,7 @@
         <strong>PG 없이 송금만</strong>으로 통일하는 방식은 <strong>권장하지 않습니다</strong>. 낯선 사이트에 고액·선입금을 요구할 때 생기는
         <strong>불신</strong>과, 은행 앱·참고번호를 거치며 줄어드는 <strong>즉시 전환(임펄스)</strong>이 손실될 수 있습니다. 대신
           <strong>PG·호스티드(표준 루트)</strong>로 입문·이벤트를 받고, <strong>고액·정규</strong>는
-        <a href="#payment-dual">PayPal·Airwallex·크립토·원화(법인)</a>·<a href="../contact/index.html">문의·인보이스</a>로 맞추는
+        <a href="#payment-dual">PayPal·하나은행 외화송금·크립토·원화(법인)</a>·<a href="../contact/index.html">문의·인보이스</a>로 맞추는
         <strong>다채널</strong>이 균형에 맞습니다. (국내 달러/SWIFT·원화는 송금인 은행·<a href="../contact/index.html">문의</a>에 따름.)
       </p>
 
@@ -485,7 +487,7 @@
         <p class="lead" style="font-size: 0.95rem; margin-bottom: 0.75rem">
           <strong>정규·비즈니스(월) 플랜</strong> 결제 건만 접수됩니다. 요청 사유는 선택입니다. 예상액은 <strong>31일 월 구간</strong>·<strong>신청 당일 포함 사용일</strong>·회원 기록의
           <strong>결제금액(USD)</strong>으로 산정합니다(자세한 식은 <a href="../legal/refund.html#sec-refund-formula">환불 정책</a>).
-          이벤트·쿠폰·무료체험·리커버리는 환불불가입니다. <strong>국내</strong>는 원화 입금(참고 환율), <strong>해외</strong>는 USD 송금입니다.
+          이벤트·쿠폰·무료체험·리커버리는 환불불가입니다. <strong>국내 원화 환불</strong>은 환불요청시간 기준 USD/KRW 고시환율로 산정하고, <strong>해외</strong>는 USD 송금입니다.
         </p>
         <div class="refund-preview" id="refund-preview-line">로그인 이메일의 정규·비즈 기준으로 31일·USD 일할 환불액을 계산합니다.</div>
         <p id="refund-fx-hint" class="small" style="margin: 0.35rem 0 0.6rem; color: var(--ci-brown-muted); line-height: 1.45"></p>
@@ -504,7 +506,7 @@
 
         <div id="refund-krw-wrap" class="refund-krw-wrap" style="display: none" hidden>
           <p class="small" style="margin: 0 0 0.5rem; color: var(--ci-brown)">
-            아래 환율·원화액은 <strong>참고</strong>이며, 실제 입금액·수수료·은행/송금일에 따라 달라질 수 있습니다.
+            아래 원화액은 <strong>환불요청시간 기준 USD/KRW 고시환율</strong>로 산정합니다. 송금 수수료·은행 처리 조건은 별도 적용될 수 있습니다.
           </p>
           <div class="refund-form-grid">
             <label>은행명 (한글) *
@@ -576,22 +578,22 @@
       <div class="pay-cta-row">
         <p class="small" style="margin: 0; color: var(--ci-brown-muted)">
           1달 이벤트·가입: <a href="#signup-checkout">「가입 플랜 결제」</a> — <strong>① PayPal(소액·카드)</strong>·수동(운영 대조) /
-          정산(Shopify 등). <strong>정규·고액</strong>은 <a href="#payment-dual">② 직접 송금</a>·<a href="#aw-usd-base">Airwallex USD 미국 계좌</a>,
+          정산(Shopify 등). <strong>정규·고액</strong>은 <a href="#payment-dual">② 직접 송금</a>·<a href="#aw-usd-base">하나은행 외화계좌</a>,
           <a href="#crypto-deposit">③ 크립토</a>, <a href="#krw-corporate">④ 원화 법인</a> + <a href="../contact/index.html">문의</a>·인보이스(로그인·<code>?signup=1&amp;plan=…</code>).
         </p>
       </div>
 
       <section id="wire-transfer" class="pay-wire-section" aria-labelledby="wire-h2" style="margin-top: 1.15rem; padding: 0.9rem 1rem; border-radius: 12px; border: 1px solid rgba(74, 53, 40, 0.14); background: #fffef9">
-        <h2 id="wire-h2" style="font-size: 1.05rem; margin: 0 0 0.4rem; color: var(--ci-brown)">은행·송금으로 납부 (당사 수취 — Airwallex 중심)</h2>
+        <h2 id="wire-h2" style="font-size: 1.05rem; margin: 0 0 0.4rem; color: var(--ci-brown)">은행·송금으로 납부 (당사 수취 — 하나은행 외화계좌 중심)</h2>
         <p class="small" style="margin: 0 0 0.55rem; color: var(--ci-brown-muted); line-height: 1.5">
-          <strong>KEB 하나(한) 직접 SWIFT</strong>·<strong>정규 “SWIFT 직납부 할인”</strong> 루트는 운영을 <strong>Airwallex</strong>로
-          이전하면서 <strong>사용하지 않습니다</strong>. <strong>USD 달러</strong> 은행 입금은
-          <a href="#payment-dual">«② Airwallex»</a>·<a href="#aw-usd-base">미국 USD 수취계좌</a>·인보이스로, <strong>원화(국내)</strong>는
+          <strong>외화 직접 송금</strong>은 <strong>하나은행 KEB Hana Bank SWIFT 계좌</strong>를 기준으로 안내합니다. <strong>USD 달러</strong> 은행 입금은
+          <a href="#payment-dual">«② 외화 은행송금»</a>·<a href="#aw-usd-base">하나은행 외화 수취계좌</a>·인보이스로, <strong>원화(국내)</strong>는
           <a href="#krw-corporate">법인계좌(우리은행·만 원 절삭)</a>, <strong>크립토</strong>는 <a href="#crypto-deposit">③</a>을 따릅니다.
+          Airwallex는 고객 직접 송금이 아니라 <strong>PayPal 정산용</strong>으로만 사용합니다.
         </p>
         <p class="small" style="margin: 0 0 0.55rem; color: var(--ci-brown-muted); line-height: 1.5">
-          <strong>해외 또는 국내에서 USD로</strong> 보내는 유저는 <strong>ACH/Fedwire/SWIFT</strong>·수수료를 본인 은행 안내에 따르고, 수취는 Airwallex에 표기된
-          <strong>영문 수취인명</strong>·<strong>미국 계좌번호</strong>·<strong>라우팅/SWIFT</strong>를 맞춥니다.
+          <strong>해외 또는 국내에서 USD 등 외화로</strong> 보내는 유저는 <strong>SWIFT</strong>·수수료를 본인 은행 안내에 따르고, 수취는 하나은행 계좌의
+          <strong>영문 수취인명</strong>·<strong>계좌번호</strong>·<strong>SWIFT</strong>를 맞춥니다.
         </p>
         <p class="small" style="margin: 0 0 0.55rem; color: #7a1e1e; line-height: 1.5">
           <strong>가상자산(온체인)·암호화폐 PG</strong> 등 <strong>별도 합의</strong>로 납부할 때는, 안내받는
@@ -601,7 +603,7 @@
         </p>
         <p class="small" style="margin: 0.35rem 0 0; color: var(--ci-brown-muted)">
           <strong>환불</strong> 시 당사 → 고객 송금 경로(원/달러)는 <a href="../legal/refund.html#sec-company-bank">환불 정책</a>·접수란
-          (입금용 Airwallex와 별개일 수 있음).
+          (고객 입금용 하나은행 외화계좌와 별개일 수 있음).
         </p>
         <details
           id="swift-gap-remedy"
@@ -618,17 +620,17 @@
               padding-inline-start: 0.15rem;
             "
           >
-            SWIFT 등 송금이 며칠 걸리는 동안 지표 이용을 시작하고 싶다면 · 송금 공백기
+            USD 송금 증빙 선검증과 크립토 권한 부여 기준 · 송금 공백기
           </summary>
           <div class="small" style="margin: 0.55rem 0 0; color: var(--ci-brown-muted); line-height: 1.6">
             <p style="margin: 0 0 0.5rem">
-              해외 입금 확인은 통상 <strong>영업일 기준 최대 며칠</strong>(은행 표기 참고 · 위
-              <a href="#aw-usd-base">② Airwallex USD 미국 계좌</a> 패널 &ldquo;도착·처리 참고&rdquo;)까지 걸릴 수 있습니다. 아래 방식으로
-              <strong>수납 확인 전이라도 이용을 조기에 시작</strong>하거나 <strong>대기 시간 자체를 줄일</strong> 수 있습니다.
+              해외 USD 은행송금은 통상 <strong>영업일 기준 최대 며칠</strong>(은행 표기 참고 · 위
+              <a href="#aw-usd-base">② 하나은행 외화계좌</a> 패널 &ldquo;도착·처리 참고&rdquo;)까지 걸릴 수 있습니다.
+              <strong>입금 전 지표 사용 가능 선승인</strong>은 USD 은행송금처럼 은행 증빙자료가 명확한 경우에 한해 운영 검토로 적용합니다.
             </p>
             <ol style="margin: 0 0 0 1rem; padding: 0; list-style: decimal outside">
               <li style="margin: 0 0 0.4rem">
-                <strong>송금 증빙(MT103·송금 접수증 등) 선검증</strong> — 송금 직후 은행 쪽에서 받을 수 있는
+                <strong>USD 송금 증빙(MT103·송금 접수증 등) 선검증</strong> — 송금 직후 은행 쪽에서 받을 수 있는
                 <strong>MT103 요지</strong>, <strong>Remittance Advice</strong>, 모바일뱅킹의
                 &ldquo;송금 접수·처리 증명&rdquo; 등 <strong>금액·수취인(당사)·통화가 인보이스 안내와 맞음을 확인할 수 있는 내용</strong>을 이미지·PDF로 준비해
                 <a href="../boards/index.html">모임터(지정 공지 카테고리)</a> 또는 <a href="../contact/index.html">문의</a>로 제출해 주세요.
@@ -636,15 +638,15 @@
                 이후 계좌에 실입금이 확인되면 정식으로 마감합니다.
               </li>
               <li style="margin: 0 0 0.4rem">
-                <strong>임시 기간 라이선스(시스템 자동 부여는 별도)</strong> — &ldquo;송금 완료&rdquo; 신고·증빙 업로드 시
-                <strong>제한 시간(예: 영업 기준 최대 며칠)</strong>짜리 임시 권한을 자동 발급하고, 미입금·불일치 시 차단하는 방식 등은
-                <strong>API·운영 규칙 준비·계약 검토 후</strong> 도입 가능합니다. 도입 가능 여부·조건은
-                <a href="../contact/index.html">문의</a> 및 정식 회원 채널 안내를 따르세요.
+                <strong>크립토는 전송완료 후 승인</strong> — BTC·ETH 등은 네트워크 혼잡, 거래소 출금 심사, 컨펌 수 때문에 시간이 걸릴 수 있습니다.
+                크립토 결제는 <strong>TXID 확인, 온체인 컨펌, 필요 시 실제 USDT 스왑 완료액 확인 후</strong> 지표 이용 권한을 부여합니다.
+                단순 출금 신청 화면이나 전송 예정 신고만으로는 입금 전 선승인하지 않습니다.
               </li>
               <li style="margin: 0">
-                <strong>즉시~단시간 내 반영 채널 병행</strong> —
-                <strong>카드(PayPal 등 결제 즉시 처리되는 루트)</strong>는 승인 직후 권한을 맞추기 쉬운 편입니다.
-                <strong>크립토(예: USDT)</strong>는 네트워크별로 확인까지 보통 수 분~길어야 수 시간 수준이 SWIFT 최대 소요 보다 짧습니다(체인 혼잡 예외 가능).
+                <strong>빠른 전송 경로 권장</strong> —
+                빠른 권한 반영이 필요하면 <strong>PayPal 카드 결제</strong>, 또는 크립토 중에서는 비교적 전송 확인이 빠른
+                <strong>XRP(리플)</strong>, <strong>TRX</strong>, <strong>USDT-TRC20</strong> 같은 경로를 우선 검토해 주세요.
+                단, 네트워크·주소·Tag·메모가 인보이스와 정확히 일치해야 합니다.
               </li>
             </ol>
             <p style="margin: 0.6rem 0 0">
@@ -670,21 +672,22 @@
           국내 원화(₩) 납부 — 법인 계좌(우리은행)
         </h2>
         <p class="small" style="margin: 0 0 0.6rem; color: var(--ci-brown-muted); line-height: 1.55">
-          <strong>② Airwallex</strong>·외화·크립토 대신 <strong>대한민국 원화</strong>로 납부하실 때
+          <strong>② 외화 송금</strong>·크립토 대신 <strong>대한민국 원화</strong>로 납부하실 때
           <strong>주식회사행복도담 인베스트</strong> 법인 명의 아래 계좌로 이체합니다. <strong>입금액(원)</strong>은
           <strong>구매(청구·인보이스) 당시</strong> 적용하는 <strong>환율</strong>로 당사가 안내·산출한
-          <strong>USD(또는 기준 통화) → KRW</strong> 금액을 기준으로 하고, 그 금액에 대해 <strong>만 원(10,000원) 미만 자리는
-          절삭</strong>하여(만단위로 내림) <strong>만 원 단위</strong>만 입금·대조합니다. (예: 산출 3,456,789원 → 입금
-          3,450,000원, 등 운영·인보이스가 우선) 세부·소수·은행·시점은 <a href="../contact/index.html">문의</a>·인보이스에 따릅니다.
+          <strong>USD(또는 기준 통화) → KRW</strong> 금액을 기준으로 하고, 환산액을 넘지 않는 범위에서
+          <strong>100~999원의 식별 차액</strong>이 보이는 <strong>정확한 안내 금액</strong>으로 입금·대조합니다. 이 식별 차액은
+          송금 메모가 누락되어도 주문을 추적하기 위한 운영용 꼬리표이며, 금액 조정은 고객에게 불리하지 않게 적용합니다. 세부·소수·은행·시점은
+          <a href="../contact/index.html">문의</a>·인보이스에 따릅니다.
         </p>
         <div
           class="nrf-box"
           style="margin: 0 0 0.65rem; padding: 0.55rem 0.7rem; border-radius: 9px; border: 1px solid rgba(47, 111, 79, 0.3); background: #f6faf7"
         >
           <p class="small" style="margin: 0; line-height: 1.5; color: #2d4a3a">
-            <strong>환율·만 원 절삭(요지)</strong> — 원화로 납부하는 금액은 <strong>해당 구매·청구 시점</strong>에 당사가 제시·적용한
-            환율로 환산한 뒤, <strong>1원~9,999원 구간을 잘라</strong> <strong>만 원 단위</strong>로 확정됩니다(인보이스·운영 확정
-            금액과 동일하게 맞춰 주세요).
+            <strong>환율·식별 차액(요지)</strong> — 원화로 납부하는 금액은 <strong>해당 구매·청구 시점</strong>의 환율로 환산한 뒤,
+            환산액을 초과하지 않는 고객 유리 금액 안에서 <strong>100~999원 식별 차액</strong>이 남도록 확정됩니다. 반드시 인보이스·운영이 안내한
+            <strong>정확한 원화 금액</strong>과 동일하게 맞춰 주세요.
           </p>
         </div>
         <div style="overflow-x: auto" role="region" aria-label="원화 법인 계좌">
@@ -703,7 +706,7 @@
                 <td>
                   <code style="font-size: 0.95rem; word-break: break-all">61001073818213</code>
                   <span class="small" style="display: block; margin: 0.3rem 0 0; color: var(--ci-brown-muted)">복사해 사용하시면
-                  됩니다(인보이스·운영이 안내한 <strong>원화 확정액(만 단위)</strong>과 일치시키세요).</span>
+                  됩니다(인보이스·운영이 안내한 <strong>식별 차액 포함 원화 확정액</strong>과 일치시키세요).</span>
                 </td>
               </tr>
             </tbody>
@@ -733,6 +736,16 @@
         <p class="small" style="margin: 0 0 0.6rem; color: var(--ci-brown-muted); line-height: 1.55">
           <strong>메이저 코인</strong>은 우선 지원하고, 그 외 Ledger 지원 코인·신규 코인·밈코인은 <strong>수동 견적</strong>으로 접수합니다. <strong>잡코인/저유동성 코인은 입금 시점 가격이 아니라 실제 USDT 스왑 완료액</strong>을 기준으로 결제 승인합니다. 스왑 수수료·슬리피지·네트워크 수수료·가격 변동으로 부족분이 생기면 추가 입금이 필요할 수 있습니다. <strong>USDT/USDC 등 토큰은 동일 심벌로 여러 블록체인에 존재</strong>하므로, 입금 알림에서는 반드시 체인(네트워크)을 구체적으로 선택하거나 적어 주세요. 다른 자산·체인은 별도 합의 없이 송금하지 마세요. 공개 수취 주소는 <strong>이 페이지와 인보이스</strong>의 네트워크 표기가 일치할 때만 사용합니다.
         </p>
+        <div
+          class="nrf-box"
+          style="margin: 0 0 0.85rem; padding: 0.65rem 0.82rem; border-radius: 10px; border: 1px solid rgba(121, 74, 24, 0.32); background: #fff8ed"
+        >
+          <p class="small" style="margin: 0; line-height: 1.58; color: #5b3f22">
+            <strong>지표 사용 가능 시점</strong> — 크립토는 <strong>출금 신청</strong>이나 <strong>입금 예정 신고</strong>만으로는 선승인하지 않습니다.
+            <strong>TXID 확인 + 온체인 컨펌 + 운영 대조</strong>가 끝난 뒤 지표 권한을 부여합니다. BTC·ETH처럼 시간이 걸릴 수 있는 체인은 완료까지 기다려야 하며,
+            빠른 반영이 필요하면 <strong>XRP(리플)</strong>, <strong>TRX</strong>, <strong>USDT-TRC20</strong> 등 전송 확인이 빠른 경로를 우선 검토해 주세요.
+          </p>
+        </div>
         <div
           id="crypto-price-basis"
           class="nrf-box"
@@ -773,8 +786,9 @@
           </h3>
           <ul class="small" style="margin: 0; padding-left: 1.1rem; line-height: 1.6; color: #3f4a43">
             <li><strong>우선 지원</strong>: BTC, ETH, USDT, USDC, XRP, SOL, TRX, BNB, MATIC 등 유동성 높은 메이저 코인. 단, 승인·대조는 인보이스와 입금 확인 절차를 따릅니다.</li>
+            <li><strong>빠른 반영 권장</strong>: 시간이 중요한 경우 BTC보다 XRP(리플), TRX, USDT-TRC20처럼 전송 확인이 빠른 네트워크를 우선 검토해 주세요.</li>
             <li><strong>수동 견적</strong>: Ledger 지원 코인, 신규 코인, 밈코인, 저유동성 토큰은 먼저 보내지 말고 <strong>견적 요청</strong>부터 접수해 주세요.</li>
-            <li><strong>운영 절차</strong>: 코인명·네트워크·예정 수량 접수 → 운영이 유동성/매도 가능 여부/스왑 수수료 확인 → 견적 유효시간·수취 방식 안내 → 송금 → 실제 USDT 스왑 완료액으로 승인합니다.</li>
+            <li><strong>운영 절차</strong>: 코인명·네트워크·예정 수량 접수 → 운영이 유동성/매도 가능 여부/스왑 수수료 확인 → 견적 유효시간·수취 방식 안내 → 송금 → TXID·컨펌 확인 → 실제 USDT 스왑 완료액으로 승인합니다.</li>
             <li><strong>거절 가능</strong>: 허니팟, 매도 불가, 입금만 가능하고 출금/스왑이 어려운 토큰, 유동성이 너무 낮은 토큰은 접수 후에도 결제 수단으로 거절할 수 있습니다.</li>
             <li><strong>정산 기준</strong>: 잡코인은 입금 시점 표시가가 아니라 실제로 USDT로 스왑 완료된 금액에서 네트워크 수수료·스왑 수수료·슬리피지를 반영한 뒤 결제 승인합니다.</li>
             <li><strong>Ledger 자동 스왑 아님</strong>: Ledger는 수취·보관용 지갑입니다. 입금 감지·운영 알림은 자동화할 수 있지만, 출금·스왑은 보안상 운영자가 확인하고 직접 승인합니다.</li>
@@ -1021,7 +1035,7 @@
         <p class="small" style="margin: 0.55rem 0 0.4rem; color: #5a2a2a; line-height: 1.5">
           <label style="font-weight: 700; display: flex; gap: 0.45rem; align-items: flex-start; max-width: 40rem; cursor: pointer">
             <input type="checkbox" id="crypto-disclaimer" required style="margin-top: 0.2rem" />
-            <span>수취 주소·네트워크·꼬리표(Tag·메모) 오기재·누락·오류로 입금이 식별되지 않거나 지연될 수 있으며, 잡코인/저유동성 코인은 운영 견적 전 선송금하면 접수·승인·복구가 거절될 수 있습니다. 해당 코인은 실제 USDT 스왑 완료액 기준으로 승인되어 부족분 추가 입금이 필요할 수 있습니다. 그로 인한 확인 불가
+            <span>수취 주소·네트워크·꼬리표(Tag·메모) 오기재·누락·오류로 입금이 식별되지 않거나 지연될 수 있으며, 크립토는 TXID·온체인 컨펌·운영 대조가 끝난 뒤 지표 권한이 부여됩니다. BTC 등 확인이 오래 걸리는 체인은 완료까지 기다려야 하고, 잡코인/저유동성 코인은 운영 견적 전 선송금하면 접수·승인·복구가 거절될 수 있습니다. 해당 코인은 실제 USDT 스왑 완료액 기준으로 승인되어 부족분 추가 입금이 필요할 수 있습니다. 그로 인한 확인 불가
               및 손해에 대해 <strong>당사는 책임을 지지 않음</strong>을 이해하고 동의합니다. (필수)</span>
           </label>
         </p>
@@ -1079,7 +1093,7 @@
           <strong>1개월 이벤트</strong>는 Whop TRV <strong>$119</strong> · Whop MT5 <strong>$129</strong> · MQL MT5 <strong>$149</strong> 기준으로
           <strong>PayPal(신용·체크 카드)</strong> 등 당시 켜진 PG와 운영 수동 대조 루트를 병행합니다.
           <strong>정규</strong>는 Whop TRV <strong>$5,499</strong> · Whop MT5 <strong>$5,999</strong> · MQL MT5 <strong>$6,999</strong> 월 기준이며,
-          <a href="#payment-dual">납부 채널(①~④)</a>(<a href="#aw-usd-base">Airwallex USD 미국 계좌</a>·<a href="#crypto-deposit">크립토</a>·<a href="#krw-corporate">원화 법인</a>) + 상담·인보이스로 진행해 주시면 됩니다.
+          <a href="#payment-dual">납부 채널(①~④)</a>(<a href="#aw-usd-base">하나은행 외화계좌</a>·<a href="#crypto-deposit">크립토</a>·<a href="#krw-corporate">원화 법인</a>) + 상담·인보이스로 진행해 주시면 됩니다.
         </p>
         <p id="signup-plan-line" class="small" style="margin: 0 0 0.55rem; color: var(--ci-brown-muted)"></p>
         <div id="signup-free-trial-wrap" style="display: none; margin-bottom: 0.75rem">
@@ -1139,7 +1153,7 @@
           <label for="signup-provider" style="min-width: 9rem; font-size: 0.9rem">결제 공급자</label>
           <select id="signup-provider" class="coupon-redeem-input" style="max-width: 20rem">
             <option value="manual">수동(결제 참조번호·운영 대조)</option>
-            <option value="airwallex" disabled>Airwallex 카드 체크아웃(현재 미사용)</option>
+            <option value="airwallex" disabled>Airwallex(PayPal 정산용 · 고객 결제 미사용)</option>
             <option value="paypal" selected>PayPal (카드·USD)</option>
             <option value="coinbase">Coinbase (미연동)</option>
           </select>
@@ -1310,7 +1324,7 @@
               var k = u.usd_krw;
               if (k && k.refund_amount_krw != null) {
                 line +=
-                  "참고 원화: 약 " +
+                  "원화 환불 기준액: " +
                   Number(k.refund_amount_krw).toLocaleString("ko-KR") +
                   "원 (1 USD = " +
                   (typeof k.rate === "number" ? k.rate.toFixed(2) : k.rate) +
@@ -1319,7 +1333,7 @@
                   ").";
                 if (refundFxHint) {
                   refundFxHint.textContent =
-                    (k.note || "참고용 환율입니다. 수수료·실제 송금일·은행에 따라 달라질 수 있습니다.") +
+                    (k.note || "환불요청시간 기준 USD/KRW 고시환율입니다. 송금 수수료·은행 처리 조건은 별도 적용될 수 있습니다.") +
                     (k.is_fallback ? " (대체/고정 환율이 사용되었을 수 있습니다.)" : "");
                 }
               }
@@ -1530,8 +1544,7 @@
               if (!signupPlanLine) return;
               var badge = [];
               if (j && j.airwallex) {
-                providerEnabledMap.airwallex = !!j.airwallex.enabled;
-                badge.push("Airwallex " + (j.airwallex.enabled ? "ON" : "준비중"));
+                providerEnabledMap.airwallex = false;
               }
               if (j && j.paypal) {
                 providerEnabledMap.paypal = !!j.paypal.enabled;
@@ -1560,7 +1573,7 @@
           var paypalOrderQ = String(q.get("token") || q.get("order_id") || "").trim();
           if (stAw === "cancel" && signupOut) {
             signupOut.textContent =
-              "Airwallex 결제 화면에서 나왔습니다. 다시 시도하려면 아래「가입 플랜 적용」에서 Airwallex 를 선택한 뒤 진행하세요.";
+              "Airwallex 고객 결제는 현재 사용하지 않습니다. PayPal 또는 수동 결제 참조번호로 진행해 주세요.";
             try {
               if (window.history && window.history.replaceState) {
                 var uCan = new URL(window.location.href);
@@ -1572,81 +1585,7 @@
             }
           }
           if (stAw === "success" && intentIdQ && signupOut) {
-            var rawP = String(q.get("plan") || "").trim();
-            var rPlan = resolvePlanForSignupComplete(rawP);
-            signupOut.textContent = "Airwallex 결제 확인 중…";
-            fetch(API + "/api/payments/airwallex/confirm-checkout", {
-              method: "POST",
-              headers: authHeaders(),
-              body: JSON.stringify({ intent_id: intentIdQ }),
-            })
-              .then(function (r) {
-                return r.json().then(function (j) {
-                  return { ok: r.ok, j: j };
-                });
-              })
-              .then(function (c) {
-                if (!c.ok) {
-                  signupOut.textContent = (c.j && c.j.error) || "결제 확인에 실패했습니다. 잠시 후 다시 시도하세요.";
-                  return;
-                }
-                var reqId = c.j && c.j.request_id ? String(c.j.request_id) : "";
-                var plat = c.j && c.j.product_platform ? String(c.j.product_platform).trim() : "";
-                var confirmedChoice = {
-                  product_platform: plat || selectedSignupMarket(rPlan).product_platform,
-                  sales_channel: c.j && c.j.sales_channel ? String(c.j.sales_channel).trim() : selectedSignupMarket(rPlan).sales_channel,
-                };
-                if (!plat) {
-                  plat = confirmedChoice.product_platform;
-                }
-                signupOut.textContent = "가입 플랜 반영 중…";
-                return fetch(API + "/api/payments/signup-plan/complete", {
-                  method: "POST",
-                  headers: authHeaders(),
-                  body: JSON.stringify({
-                    plan_code: rPlan,
-                    payment_ref: intentIdQ,
-                    payment_request_id: reqId,
-                    product_platform: plat || undefined,
-                    sales_channel: confirmedChoice.sales_channel,
-                    welcome_coupon_platform: plat || undefined,
-                  }),
-                });
-              })
-              .then(function (r) {
-                if (!r || !r.json) return;
-                return r.json().then(function (j) {
-                  return { ok: r.ok, j: j };
-                });
-              })
-              .then(function (x) {
-                if (!x) return;
-                if (!x.ok) {
-                  signupOut.textContent = x.j.error || "가입 플랜 반영에 실패했습니다.";
-                  return;
-                }
-                var j = x.j || {};
-                var until = j.expires_at
-                  ? new Date(j.expires_at).toLocaleString("ko-KR")
-                  : "정규/확인";
-                signupOut.textContent = "완료 · " + (j.plan_sku || j.plan_code || "-") + " · 만료 " + until;
-                loadCouponStatus();
-                try {
-                  if (window.history && window.history.replaceState) {
-                    var u = new URL(window.location.href);
-                    u.searchParams.delete("id");
-                    u.searchParams.delete("intent_id");
-                    u.searchParams.delete("awx");
-                    u.searchParams.delete("type");
-                    window.history.replaceState({}, "", u.toString());
-                  }
-                } catch (e1) {
-                  void e1;
-                }
-              })
-              .catch(function (e) {
-                if (signupOut) signupOut.textContent = String(e.message || e);
-              });
+            signupOut.textContent = "Airwallex 고객 결제는 현재 사용하지 않습니다. PayPal 또는 수동 결제 참조번호로 진행해 주세요.";
           }
           if (stPp === "cancel" && signupOut) {
             signupOut.textContent = "PayPal 결제 화면에서 나왔습니다. 다시 시도하려면 아래 결제 공급자에서 PayPal을 선택해 주세요.";
@@ -1868,8 +1807,48 @@
             }
             var paymentRef = String((signupRef && signupRef.value) || "").trim();
             if (isPaidSignupPlan(resolvedPlan) && provider === "manual" && !paymentRef) {
-              signupOut.textContent = "수동(운영 대조) 모드: 유료 플랜은 결제 참조번호를 입력해 주세요.";
-              if (signupRef) signupRef.focus();
+              var manualAmtUsd = signupAmountUsd(resolvedPlan);
+              signupOut.textContent = "원화 인보이스 금액 생성 중...";
+              fetch(API + "/api/payments/prepare-checkout", {
+                method: "POST",
+                headers: authHeaders(),
+                body: JSON.stringify({
+                  provider: "manual",
+                  plan_code: resolvedPlan,
+                  amount_usd: manualAmtUsd,
+                  product_platform: selectedSignupMarket(resolvedPlan).product_platform,
+                  sales_channel: selectedSignupMarket(resolvedPlan).sales_channel,
+                }),
+              })
+                .then(function (r) {
+                  return r.json().then(function (j) {
+                    return { ok: r.ok, j: j };
+                  });
+                })
+                .then(function (x) {
+                  if (!x.ok) {
+                    signupOut.textContent = (x.j && x.j.error) || "원화 인보이스 금액 생성에 실패했습니다.";
+                    return;
+                  }
+                  var inv = x.j && x.j.krw_invoice;
+                  if (!inv) {
+                    signupOut.textContent = "원화 인보이스 금액을 받지 못했습니다. 운영자에게 문의해 주세요.";
+                    return;
+                  }
+                  signupOut.innerHTML =
+                    "원화 입금 안내 금액: <strong>₩" +
+                    Number(inv.payable_amount_krw || 0).toLocaleString("ko-KR") +
+                    "</strong> · 식별 차액 " +
+                    Number(inv.tracking_offset_krw || 0).toLocaleString("ko-KR") +
+                    "원 · 고객 유리 조정 " +
+                    Number(inv.customer_favorable_discount_krw || 0).toLocaleString("ko-KR") +
+                    "원<br><small>송금 메모가 누락되어도 추적되도록 금액 꼬리표가 포함된 금액이며, 환산액을 넘지 않게 조정됩니다. 요청번호: " +
+                    String(x.j.request_id || "").slice(-8) +
+                    "</small>";
+                })
+                .catch(function (e) {
+                  signupOut.textContent = String(e.message || e);
+                });
               return;
             }
             if (isPaidSignupPlan(resolvedPlan) && provider === "paypal") {
@@ -1913,88 +1892,7 @@
               return;
             }
             if (isPaidSignupPlan(resolvedPlan) && provider === "airwallex") {
-              if (isOneMonthEventPlan(resolvedPlan)) {
-                var pMarket = selectedSignupMarket(resolvedPlan);
-                var pPlat = pMarket.product_platform;
-                if (pPlat !== "trv" && pPlat !== "mt5") {
-                  signupOut.textContent = "1달 이벤트는 TRV 또는 MT5 구분을 선택해 주세요.";
-                  return;
-                }
-              }
-              var checkoutBody = { plan_code: resolvePlanForSignupComplete(resolvedPlan) };
-              var checkoutMarket = selectedSignupMarket(resolvedPlan);
-              checkoutBody.product_platform = checkoutMarket.product_platform;
-              checkoutBody.sales_channel = checkoutMarket.sales_channel;
-              signupOut.textContent = "Airwallex 보안 결제(체크아웃)로 이동…";
-              fetch(API + "/api/payments/airwallex/create-intent", {
-                method: "POST",
-                headers: authHeaders(),
-                body: JSON.stringify(checkoutBody),
-              })
-                .then(function (r) {
-                  return r.json().then(function (j) {
-                    return { ok: r.ok, j: j, status: r.status };
-                  });
-                })
-                .then(function (x) {
-                  if (!x.ok) {
-                    signupOut.textContent = (x.j && x.j.error) || "결제 Intent 생성에 실패했습니다. 서버 .env(Airwallex)를 확인하세요.";
-                    return;
-                  }
-                  if (!(x.j && x.j.intent_id && x.j.client_secret)) {
-                    signupOut.textContent = "결제 정보를 받지 못했습니다.";
-                    return;
-                  }
-                  function loadAwxSdk() {
-                    return new Promise(function (resolve, reject) {
-                      if (window.AirwallexComponentsSDK) {
-                        resolve();
-                        return;
-                      }
-                      var s = document.createElement("script");
-                      s.src = "https://static.airwallex.com/components/sdk/v1/index.js";
-                      s.async = true;
-                      s.onload = function () {
-                        resolve();
-                      };
-                      s.onerror = function () {
-                        reject(new Error("Airwallex SDK 로드 실패"));
-                      };
-                      document.head.appendChild(s);
-                    });
-                  }
-                  return loadAwxSdk().then(function () {
-                    if (!window.AirwallexComponentsSDK || typeof window.AirwallexComponentsSDK.init !== "function") {
-                      throw new Error("Airwallex SDK 초기화 API 없음");
-                    }
-                    return window.AirwallexComponentsSDK.init({
-                      env: x.j.airwallex_env === "demo" ? "demo" : "prod",
-                      enabledElements: ["payments"],
-                    });
-                  }).then(function (sdk) {
-                    var pay = sdk && (sdk.payments || (sdk.default && sdk.default.payments));
-                    if (!pay || typeof pay.redirectToCheckout !== "function") {
-                      throw new Error("redirectToCheckout 사용 불가");
-                    }
-                    var awxEnv = x.j.airwallex_env === "demo" ? "demo" : "prod";
-                    return pay.redirectToCheckout({
-                      env: awxEnv,
-                      mode: "payment",
-                      intent_id: x.j.intent_id,
-                      client_secret: x.j.client_secret,
-                      currency: x.j.currency || "USD",
-                      country_code: x.j.country_code || "US",
-                      successUrl: x.j.success_url,
-                      cancelUrl: x.j.cancel_url || undefined,
-                      locale: "ko",
-                      methods: ["card"],
-                      shopper_email: x.j.shopper_email || undefined,
-                    });
-                  });
-                })
-                .catch(function (e) {
-                  signupOut.textContent = String(e.message || e);
-                });
+              signupOut.textContent = "Airwallex는 PayPal 정산용으로만 사용합니다. 고객 결제는 PayPal 또는 수동 입금 대조로 진행해 주세요.";
               return;
             }
             var amtUsd = signupAmountUsd(resolvedPlan);
@@ -2182,7 +2080,7 @@
                 var tail =
                   " · USD " + Number(j.refund_amount_usd || 0).toFixed(2) + " / 남은 " + (j.remaining_days || 0) + "일";
                 if (j.refund_amount_krw != null) {
-                  tail += " · 참고 KRW " + Number(j.refund_amount_krw).toLocaleString("ko-KR") + "원";
+                  tail += " · 원화 환불 기준액 " + Number(j.refund_amount_krw).toLocaleString("ko-KR") + "원";
                 }
                 refundOut.textContent = "접수 완료 · " + (j.refund_request_no || "-") + tail;
                 loadRefundPreview();
@@ -2299,7 +2197,9 @@
                   cOut.textContent = (x.j && x.j.error) || "접수에 실패했습니다.";
                   return;
                 }
-                cOut.textContent = (x.j && x.j.message) || "접수되었습니다. 송금 메모·Tag에 꼬리표를 정확히 넣어 주세요.";
+                cOut.textContent =
+                  (x.j && x.j.message) ||
+                  "접수되었습니다. 송금 메모·Tag에 꼬리표를 정확히 넣어 주세요. 지표 권한은 TXID·온체인 컨펌·운영 대조 완료 후 부여됩니다.";
                 if (refEl && x.j && x.j.tracking_ref) {
                   refEl.textContent = x.j.tracking_ref;
                   if (successBox) successBox.style.display = "block";

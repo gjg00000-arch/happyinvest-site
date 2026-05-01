@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../assets/common.css" />
     <link rel="stylesheet" href="boards.css" />
     <link rel="stylesheet" href="../assets/site-ux.css" />
-    <meta name="api-base" content="https://happyinvests.com" />
+    <meta name="api-base" content="https://magicindicatorglobal.com" />
   </head>
   <body class="board-body">
     <header class="site-header" role="banner">
@@ -21,10 +21,10 @@
     </header>
     <nav class="site-nav" aria-label="주요 메뉴">
       <a href="../index.html">메인</a>
-      <a href="../guide/index.html">가이드</a>
-      <a href="../guide/usage.html">지표 사용</a>
-      <a href="../guide/usage-trv.html">TRV</a>
-      <a href="../guide/usage-mt5.html">MT5</a>
+      <a href="../guide/index.html">설치 안내</a>
+      <a href="../guide/usage.html">사용법</a>
+      <a href="../guide/usage-trv.html">TRV 설정</a>
+      <a href="../guide/usage-mt5.html">MT5 설정</a>
       <a href="../downloads/index.html">다운로드</a>
       <a href="../registration/index.html">가입·등록</a>
       <a href="../verify/index.html">본인인증</a>
@@ -55,7 +55,7 @@
       <details class="board-tech-hint">
         <summary>연결 정보 (개발·점검용)</summary>
         <p class="board-api-hint">
-          서버 주소 <span id="api-base-label">https://happyinvests.com</span>
+          서버 주소 <span id="api-base-label">https://magicindicatorglobal.com</span>
         </p>
       </details>
 
@@ -339,7 +339,7 @@
     <script>
       (function () {
         var meta = document.querySelector('meta[name="api-base"]');
-        var API = (meta && meta.content) || "https://happyinvests.com";
+        var API = (meta && meta.content) || "https://magicindicatorglobal.com";
         var elLabel = document.getElementById("api-base-label");
         if (elLabel) elLabel.textContent = API;
 

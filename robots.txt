@@ -5,4 +5,4 @@ Allow: /
 # 관리자 UI — 색인·사이트맵에서 제외(검색 노출 완화)
 Disallow: /admin/
 
-Sitemap: https://happyinvests.com/sitemap.xml
+Sitemap: https://magicindicatorglobal.com/sitemap.xml

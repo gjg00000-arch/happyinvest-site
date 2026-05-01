@@ -5,7 +5,12 @@
     location.protocol === "file:" ||
     location.hostname === "localhost" ||
     location.hostname === "127.0.0.1";
-  var API = isLocalAdmin ? "http://localhost:3000" : metaApi || "https://happyinvests.com";
+  var isIpHost = /^\d{1,3}(?:\.\d{1,3}){3}$/.test(location.hostname || "");
+  var API = isLocalAdmin
+    ? "http://localhost:3000"
+    : isIpHost
+    ? location.origin
+    : metaApi || location.origin || "https://magicindicatorglobal.com";
 
   function getToken() {
     try {
@@ -107,6 +112,138 @@
     });
   }
 
+  var adminUsersCache = [];
+
+  function userMatchesSearch(u, q) {
+    if (!q) return true;
+    var haystack = [
+      u.email || "",
+      u.role || "",
+      u.status === "suspended" ? "정지 suspended" : "활성 active",
+      u.note || "",
+    ]
+      .join(" ")
+      .toLowerCase();
+    return haystack.indexOf(q) !== -1;
+  }
+
+  function updateUserSearchNote(total, shown) {
+    var note = document.getElementById("admin-user-search-note");
+    if (!note) return;
+    var q = (document.getElementById("admin-user-search") || {}).value || "";
+    q = q.trim();
+    note.textContent = q
+      ? "검색 결과 " + shown + "명 / 전체 " + total + "명"
+      : "검색어 없이 전체 " + total + "명을 표시합니다.";
+  }
+
+  function fmtDateTime(v) {
+    if (!v) return "—";
+    var d = new Date(v);
+    return isNaN(d.getTime()) ? "—" : d.toLocaleString("ko-KR");
+  }
+
+  function renderUsersTable(users) {
+    var tbody = document.querySelector("#admin-users-table tbody");
+    if (!tbody) return;
+    var q = ((document.getElementById("admin-user-search") || {}).value || "").trim().toLowerCase();
+    var filtered = users.filter(function (u) {
+      return userMatchesSearch(u, q);
+    });
+    updateUserSearchNote(users.length, filtered.length);
+    tbody.innerHTML = "";
+    if (filtered.length === 0) {
+      tbody.innerHTML =
+        "<tr><td colspan='6'>" +
+        (users.length === 0 ? "회원 없음" : "검색 결과가 없습니다.") +
+        "</td></tr>";
+      return;
+    }
+    var roles = ["guest", "free", "trial", "sub", "vip", "admin"];
+    filtered.forEach(function (u) {
+      var tr = document.createElement("tr");
+      var statusLabel =
+        u.status === "suspended"
+          ? '<span class="admin-badge admin-badge--off">정지</span>'
+          : '<span class="admin-badge admin-badge--on">활성</span>';
+      tr.innerHTML =
+        "<td>" +
+        (u.email || "") +
+        "</td>" +
+        "<td></td>" +
+        "<td></td>" +
+        "<td>" +
+        statusLabel +
+        "</td>" +
+        "<td><input type='text' class='user-note' data-email='" +
+        (u.email || "").replace(/'/g, "&#39;") +
+        "' value='" +
+        String(u.note || "").replace(/"/g, "&quot;") +
+        "' /></td>" +
+        "<td class='btn-row'></td>";
+
+      var sel = document.createElement("select");
+      sel.className = "user-role";
+      roles.forEach(function (r) {
+        var o = document.createElement("option");
+        o.value = r;
+        o.textContent = r;
+        if ((u.role || "") === r) o.selected = true;
+        sel.appendChild(o);
+      });
+      tr.cells[1].appendChild(sel);
+
+      var st = document.createElement("select");
+      st.className = "user-status";
+      ["active", "suspended"].forEach(function (s) {
+        var o = document.createElement("option");
+        o.value = s;
+        o.textContent = s === "suspended" ? "정지" : "활성";
+        if ((u.status || "active") === s) o.selected = true;
+        st.appendChild(o);
+      });
+      tr.cells[2].appendChild(st);
+
+      var save = document.createElement("button");
+      save.type = "button";
+      save.className = "btn btn--small";
+      save.textContent = "저장";
+      save.addEventListener("click", function () {
+        var em = u.email;
+        var noteIn = tr.querySelector(".user-note");
+        api("/api/admin/users/" + encodeURIComponent(em), {
+          method: "PATCH",
+          body: JSON.stringify({
+            role: sel.value,
+            status: st.value,
+            note: noteIn ? noteIn.value : "",
+          }),
+        }).then(function (r) {
+          alert(r.ok ? "저장됨" : r.j.error || "실패");
+          if (r.ok) renderUsers();
+        });
+      });
+
+      var del = document.createElement("button");
+      del.type = "button";
+      del.className = "btn btn--ghost btn--small";
+      del.textContent = "삭제";
+      del.addEventListener("click", function () {
+        if (!confirm("이 회원 레코드를 삭제할까요?")) return;
+        api("/api/admin/users/" + encodeURIComponent(u.email), { method: "DELETE" }).then(
+          function (r) {
+            alert(r.ok ? "삭제됨" : r.j.error || "실패");
+            if (r.ok) renderUsers();
+          }
+        );
+      });
+
+      tr.cells[5].appendChild(save);
+      tr.cells[5].appendChild(del);
+      tbody.appendChild(tr);
+    });
+  }
+
   function renderUsers() {
     var tbody = document.querySelector("#admin-users-table tbody");
     if (!tbody) return;
@@ -117,94 +254,8 @@
           "<tr><td colspan='6'>" + (x.j.error || JSON.stringify(x.j)) + "</td></tr>";
         return;
       }
-      var users = x.j.users || [];
-      tbody.innerHTML = "";
-      var roles = ["guest", "free", "trial", "sub", "vip", "admin"];
-      users.forEach(function (u) {
-        var tr = document.createElement("tr");
-        var statusLabel =
-          u.status === "suspended"
-            ? '<span class="admin-badge admin-badge--off">정지</span>'
-            : '<span class="admin-badge admin-badge--on">활성</span>';
-        tr.innerHTML =
-          "<td>" +
-          (u.email || "") +
-          "</td>" +
-          "<td></td>" +
-          "<td></td>" +
-          "<td>" +
-          statusLabel +
-          "</td>" +
-          "<td><input type='text' class='user-note' data-email='" +
-          (u.email || "").replace(/'/g, "&#39;") +
-          "' value='" +
-          String(u.note || "").replace(/"/g, "&quot;") +
-          "' /></td>" +
-          "<td class='btn-row'></td>";
-
-        var sel = document.createElement("select");
-        sel.className = "user-role";
-        roles.forEach(function (r) {
-          var o = document.createElement("option");
-          o.value = r;
-          o.textContent = r;
-          if ((u.role || "") === r) o.selected = true;
-          sel.appendChild(o);
-        });
-        tr.cells[1].appendChild(sel);
-
-        var st = document.createElement("select");
-        st.className = "user-status";
-        ["active", "suspended"].forEach(function (s) {
-          var o = document.createElement("option");
-          o.value = s;
-          o.textContent = s === "suspended" ? "정지" : "활성";
-          if ((u.status || "active") === s) o.selected = true;
-          st.appendChild(o);
-        });
-        tr.cells[2].appendChild(st);
-
-        var save = document.createElement("button");
-        save.type = "button";
-        save.className = "btn btn--small";
-        save.textContent = "저장";
-        save.addEventListener("click", function () {
-          var em = u.email;
-          var noteIn = tr.querySelector(".user-note");
-          api("/api/admin/users/" + encodeURIComponent(em), {
-            method: "PATCH",
-            body: JSON.stringify({
-              role: sel.value,
-              status: st.value,
-              note: noteIn ? noteIn.value : "",
-            }),
-          }).then(function (r) {
-            alert(r.ok ? "저장됨" : r.j.error || "실패");
-            if (r.ok) renderUsers();
-          });
-        });
-
-        var del = document.createElement("button");
-        del.type = "button";
-        del.className = "btn btn--ghost btn--small";
-        del.textContent = "삭제";
-        del.addEventListener("click", function () {
-          if (!confirm("이 회원 레코드를 삭제할까요?")) return;
-          api("/api/admin/users/" + encodeURIComponent(u.email), { method: "DELETE" }).then(
-            function (r) {
-              alert(r.ok ? "삭제됨" : r.j.error || "실패");
-              if (r.ok) renderUsers();
-            }
-          );
-        });
-
-        tr.cells[5].appendChild(save);
-        tr.cells[5].appendChild(del);
-        tbody.appendChild(tr);
-      });
-      if (users.length === 0) {
-        tbody.innerHTML = "<tr><td colspan='6'>회원 없음</td></tr>";
-      }
+      adminUsersCache = x.j.users || [];
+      renderUsersTable(adminUsersCache);
     });
   }
 
@@ -335,14 +386,23 @@
   function renderPostReviews() {
     var tbody = document.querySelector("#admin-post-reviews-table tbody");
     var stEl = document.getElementById("post-review-status");
+    var catEl = document.getElementById("post-review-category");
     if (!tbody || !stEl) return;
     var status = stEl.value || "pending";
-    tbody.innerHTML = "<tr><td colspan='7'>불러오는 중…</td></tr>";
-    api("/api/admin/post-reviews?status=" + encodeURIComponent(status) + "&limit=120", {
-      method: "GET",
-    }).then(function (x) {
+    var category = catEl ? catEl.value || "all" : "all";
+    tbody.innerHTML = "<tr><td colspan='9'>불러오는 중…</td></tr>";
+    api(
+      "/api/admin/post-reviews?status=" +
+        encodeURIComponent(status) +
+        "&category=" +
+        encodeURIComponent(category) +
+        "&limit=120",
+      {
+        method: "GET",
+      }
+    ).then(function (x) {
       if (!x.ok) {
-        tbody.innerHTML = "<tr><td colspan='7'>" + (x.j.error || JSON.stringify(x.j)) + "</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='9'>" + (x.j.error || JSON.stringify(x.j)) + "</td></tr>";
         return;
       }
       var posts = x.j.posts || [];
@@ -350,7 +410,9 @@
       posts.forEach(function (p) {
         var id = p._id ? String(p._id) : "";
         var tr = document.createElement("tr");
-        var created = p.created_at ? new Date(p.created_at).toLocaleString("ko-KR") : "";
+        var created = fmtDateTime(p.created_at);
+        var requested = fmtDateTime(p.review_requested_at || p.created_at);
+        var approved = fmtDateTime(p.reviewed_at);
         var statusLabel = p.review_status || "pending";
         tr.innerHTML =
           "<td><code style='font-size:0.7rem'>" + id.slice(-8) + "</code></td>" +
@@ -359,9 +421,11 @@
           "<td style='max-width:220px;font-size:0.75rem'>" + String(p.title || "").replace(/</g, "&lt;") + "</td>" +
           "<td>" + statusLabel + "</td>" +
           "<td style='font-size:0.72rem'>" + created + "</td>" +
+          "<td style='font-size:0.72rem'>" + requested + "</td>" +
+          "<td style='font-size:0.72rem'>" + approved + "</td>" +
           "<td></td>";
 
-        var cell = tr.cells[6];
+        var cell = tr.cells[8];
         var catRaw = String(p.category || "");
         var isPromoStyle =
           catRaw === "event_promo_shoutout" || catRaw === "reflection";
@@ -421,7 +485,7 @@
         tbody.appendChild(tr);
       });
       if (posts.length === 0) {
-        tbody.innerHTML = "<tr><td colspan='7'>조건에 맞는 게시글이 없습니다.</td></tr>";
+        tbody.innerHTML = "<tr><td colspan='9'>조건에 맞는 게시글이 없습니다.</td></tr>";
       }
     });
   }
@@ -430,12 +494,48 @@
     var wrap = document.getElementById("admin-coupons-wrap");
     if (!wrap) return;
     wrap.innerHTML = "<p class='admin-note'>불러오는 중…</p>";
-    api("/api/admin/coupons?limit=200", { method: "GET" }).then(function (x) {
+    var status = (document.getElementById("cp-filter-status") || {}).value || "all";
+    var platform = (document.getElementById("cp-filter-platform") || {}).value || "all";
+    var kindFilter = (document.getElementById("cp-filter-kind") || {}).value || "all";
+    var q = ((document.getElementById("cp-filter-q") || {}).value || "").trim();
+    api(
+      "/api/admin/coupons?limit=200&status=" +
+        encodeURIComponent(status) +
+        "&target_platform=" +
+        encodeURIComponent(platform) +
+        "&coupon_kind=" +
+        encodeURIComponent(kindFilter) +
+        "&q=" +
+        encodeURIComponent(q),
+      { method: "GET" }
+    ).then(function (x) {
       if (!x.ok) {
         wrap.innerHTML = "<p class='admin-note'>오류: " + (x.j.error || JSON.stringify(x.j)) + "</p>";
         return;
       }
       var note = x.j.non_transferable_notice || "";
+      var stats = x.j.stats || {};
+      var total = Number(stats.total || 0);
+      var redeemedN = Number(stats.redeemed || 0);
+      var usageRate = total ? Math.round((redeemedN / total) * 1000) / 10 : 0;
+      var statsHtml =
+        '<div class="admin-stats admin-coupon-stats">' +
+        '<div class="admin-stat"><p class="label">발급 총계</p><p class="value">' +
+        total +
+        "</p></div>" +
+        '<div class="admin-stat"><p class="label">미사용</p><p class="value">' +
+        Number(stats.issued || 0) +
+        "</p></div>" +
+        '<div class="admin-stat"><p class="label">사용 완료</p><p class="value">' +
+        redeemedN +
+        "</p></div>" +
+        '<div class="admin-stat"><p class="label">폐기</p><p class="value">' +
+        Number(stats.revoked || 0) +
+        "</p></div>" +
+        '<div class="admin-stat"><p class="label">사용율</p><p class="value">' +
+        usageRate +
+        "%</p></div>" +
+        "</div>";
       var rows = (x.j.coupons || [])
         .map(function (c) {
           var id = c._id ? String(c._id) : "";
@@ -453,13 +553,25 @@
                 String(c.code || "").replace(/'/g, "&#39;") +
                 "'>폐기</button>"
               : "";
+          var targetMap = { all: "공통", trv: "TRV", mt5: "MT5", kiwoom_dll: "영웅문DLL" };
+          var target = targetMap[c.target_platform || "all"] || c.target_platform || "공통";
+          var usedCell =
+            c.status === "redeemed"
+              ? "사용 확인" + (c.redeemed_at ? "<br><small>교환/웹훅 반영</small>" : "")
+              : c.status === "revoked"
+                ? "폐기"
+                : "미사용";
           return (
             "<tr><td><code style='font-size:0.72rem'>" +
             (c.code || "").replace(/</g, "&lt;") +
             "</code></td><td style='font-size:0.75rem'>" +
             kindLabel.replace(/</g, "&lt;") +
             "</td><td>" +
+            target +
+            "</td><td>" +
             termCell +
+            "</td><td>" +
+            usedCell +
             "</td><td>" +
             (c.status || "") +
             "</td><td style='font-size:0.75rem'>" +
@@ -475,11 +587,12 @@
         })
         .join("");
       wrap.innerHTML =
+        statsHtml +
         "<p class='admin-note' style='margin-bottom:0.75rem'>" +
         (note ? note.replace(/</g, "&lt;") : "") +
         "</p>" +
-        "<div class='admin-table-wrap'><table class='admin-table'><thead><tr><th>코드</th><th>종류</th><th>월/혜택</th><th>상태</th><th>교환자</th><th>발급</th><th>교환일</th><th></th></tr></thead><tbody>" +
-        (rows || "<tr><td colspan='8'>쿠폰 없음</td></tr>") +
+        "<div class='admin-table-wrap'><table class='admin-table'><thead><tr><th>코드</th><th>종류</th><th>대상</th><th>월/혜택</th><th>사용여부</th><th>상태</th><th>교환자</th><th>발급날짜</th><th>교환일</th><th></th></tr></thead><tbody>" +
+        (rows || "<tr><td colspan='10'>조건에 맞는 쿠폰이 없습니다.</td></tr>") +
         "</tbody></table></div>";
       wrap.querySelectorAll(".cp-revoke").forEach(function (btn) {
         btn.addEventListener("click", function () {
@@ -498,7 +611,18 @@
     var wrap = document.getElementById("admin-refunds-wrap");
     if (!wrap) return;
     wrap.innerHTML = "<p class='admin-note'>불러오는 중…</p>";
-    api("/api/admin/refund-requests", { method: "GET" }).then(function (x) {
+    var status = (document.getElementById("admin-refunds-status") || {}).value || "requested";
+    var currency = (document.getElementById("admin-refunds-currency") || {}).value || "all";
+    var q = ((document.getElementById("admin-refunds-q") || {}).value || "").trim();
+    api(
+      "/api/admin/refund-requests?status=" +
+        encodeURIComponent(status) +
+        "&currency=" +
+        encodeURIComponent(currency) +
+        "&q=" +
+        encodeURIComponent(q),
+      { method: "GET" }
+    ).then(function (x) {
       if (!x.ok) {
         wrap.innerHTML = "<p class='admin-note'>오류: " + (x.j.error || JSON.stringify(x.j)) + "</p>";
         return;
@@ -510,36 +634,56 @@
           var calc = r.calculation || {};
           var rem = r.remittance || {};
           var requested = r.requested_at ? new Date(r.requested_at).toLocaleString("ko-KR") : "";
+          var remitRequested = r.remittance_requested_at
+            ? new Date(r.remittance_requested_at).toLocaleString("ko-KR")
+            : requested;
+          var remittedAt = r.remitted_at ? new Date(r.remitted_at).toLocaleString("ko-KR") : "—";
+          var payoutCurrency = String(r.payout_currency || (rem.type === "domestic_krw" ? "KRW" : "USD"));
+          var amount =
+            payoutCurrency === "KRW"
+              ? "KRW " + Math.round((calc.fx && calc.fx.refund_amount_krw) || 0).toLocaleString("ko-KR")
+              : "USD " + Number(calc.refund_amount_usd || 0).toFixed(2);
           var bank =
-            (rem.bank_name || "—") +
-            " / " +
-            (rem.branch_name || "—") +
-            "<br><small>SWIFT " +
-            (rem.swift_bic || "—") +
-            " · " +
-            (rem.bank_country || "—") +
-            "</small><br><small>계좌 " +
-            (rem.account_number || "—") +
-            "</small>";
+            payoutCurrency === "KRW"
+              ? (rem.krw_bank_name || "—") +
+                "<br><small>예금주 " +
+                (rem.krw_account_holder || "—") +
+                "</small><br><small>계좌 " +
+                (rem.krw_account_number || "—") +
+                "</small>"
+              : (rem.bank_name || "—") +
+                " / " +
+                (rem.branch_name || "—") +
+                "<br><small>SWIFT " +
+                (rem.swift_bic || "—") +
+                " · " +
+                (rem.bank_country || "—") +
+                "</small><br><small>계좌 " +
+                (rem.account_number || "—") +
+                "</small>";
           var action =
             r.status === "remitted"
-              ? "송금완료"
+              ? "처리 완료<br><small>" + remittedAt + "</small>"
               : "<input type='text' class='refund-ref' data-id='" +
                 id +
                 "' placeholder='송금 참조번호' style='max-width:9rem' /> " +
                 "<button type='button' class='btn btn--small refund-remit' data-id='" +
                 id +
-                "'>송금완료</button>";
+                "'>처리 완료</button>";
           return (
             "<tr><td><code style='font-size:0.72rem'>" +
             (r.refund_request_no || id).replace(/</g, "&lt;") +
-            "</code><br><small>" +
+            "</code></td><td style='font-size:0.72rem'>" +
             requested +
-            "</small></td><td>" +
+            "</td><td style='font-size:0.72rem'>" +
+            remitRequested +
+            "</td><td>" +
             (r.user_email || "").replace(/</g, "&lt;") +
-            "</td><td><strong>USD " +
-            Number(calc.refund_amount_usd || 0).toFixed(2) +
-            "</strong><br><small>결제 " +
+            "</td><td><strong>" +
+            amount +
+            "</strong><br><small>방식 " +
+            (payoutCurrency === "KRW" ? "원화 송금" : "달러 송금") +
+            " · 결제 USD " +
             Number(calc.paid_amount_usd || 0).toFixed(2) +
             " · 잔여 " +
             (calc.remaining_days || 0) +
@@ -556,8 +700,8 @@
         })
         .join("");
       wrap.innerHTML =
-        "<div class='admin-table-wrap'><table class='admin-table'><thead><tr><th>접수</th><th>이메일</th><th>계산</th><th>상태</th><th>송금정보</th><th>작업</th></tr></thead><tbody>" +
-        (rows || "<tr><td colspan='6'>환불 요청 없음</td></tr>") +
+        "<div class='admin-table-wrap'><table class='admin-table'><thead><tr><th>접수번호</th><th>신청일</th><th>송금요청일</th><th>이메일</th><th>환불액</th><th>상태</th><th>송금정보</th><th>작업</th></tr></thead><tbody>" +
+        (rows || "<tr><td colspan='8'>환불 요청 없음</td></tr>") +
         "</tbody></table></div>";
       wrap.querySelectorAll(".refund-remit").forEach(function (btn) {
         btn.addEventListener("click", function () {
@@ -565,7 +709,7 @@
           var ref = "";
           var inp = wrap.querySelector(".refund-ref[data-id='" + id + "']");
           if (inp) ref = String(inp.value || "").trim();
-          if (!id || !confirm("이 환불 요청을 송금완료로 표시할까요?")) return;
+          if (!id || !confirm("이 환불 요청을 처리 완료로 표시할까요? 실제 송금 완료 후에만 누르세요.")) return;
           api("/api/admin/refund-requests/" + encodeURIComponent(id) + "/remitted", {
             method: "POST",
             body: JSON.stringify({ remittance_ref: ref }),
@@ -638,29 +782,189 @@
     return String(s == null ? "" : s).replace(/</g, "&lt;");
   }
 
+  function renderDepositStats(channelKey, stats) {
+    var box = document.getElementById("deposit-" + channelKey + "-stats");
+    if (!box) return;
+    stats = stats || {};
+    var total = Number(stats.total || 0);
+    var pending = Number(stats.pending || 0);
+    var confirmed = Number(stats.confirmed || 0);
+    var usd = Number(stats.usd || 0);
+    var krw = Number(stats.krw || 0);
+    var rate = total ? Math.round(Number(stats.confirm_rate || 0) * 1000) / 10 : 0;
+    box.className = "admin-stats admin-coupon-stats";
+    box.innerHTML =
+      "<div class='admin-stat'><p class='label'>전체</p><p class='value'>" +
+      total.toLocaleString("ko-KR") +
+      "</p></div>" +
+      "<div class='admin-stat'><p class='label'>확인 대기</p><p class='value'>" +
+      pending.toLocaleString("ko-KR") +
+      "</p></div>" +
+      "<div class='admin-stat'><p class='label'>확인 완료</p><p class='value'>" +
+      confirmed.toLocaleString("ko-KR") +
+      "</p></div>" +
+      "<div class='admin-stat'><p class='label'>확인율</p><p class='value'>" +
+      rate.toLocaleString("ko-KR", { maximumFractionDigits: 1 }) +
+      "%</p></div>" +
+      (channelKey === "airwallex" && stats.usd !== undefined
+        ? "<div class='admin-stat'><p class='label'>USD</p><p class='value'>" +
+          usd.toLocaleString("ko-KR") +
+          "</p></div>"
+        : "") +
+      (channelKey === "airwallex" && stats.krw !== undefined
+        ? "<div class='admin-stat'><p class='label'>KRW</p><p class='value'>" +
+          krw.toLocaleString("ko-KR") +
+          "</p></div>"
+        : "");
+  }
+
+  function renderDepositSummary() {
+    var daysEl = document.getElementById("deposit-summary-days");
+    var statsBox = document.getElementById("deposit-summary-stats");
+    var tbody = document.querySelector("#deposit-summary-trend-table tbody");
+    if (!statsBox || !tbody) return;
+    var days = daysEl ? daysEl.value || "30" : "30";
+    statsBox.className = "admin-stats admin-coupon-stats";
+    statsBox.innerHTML = "<div class='admin-stat'><p class='label'>합산</p><p class='value'>...</p></div>";
+    tbody.innerHTML = "<tr><td colspan='8'>합산 추이 불러오는 중...</td></tr>";
+    api("/api/admin/deposit-confirmations-summary?days=" + encodeURIComponent(days), {
+      method: "GET",
+    }).then(function (x) {
+      if (!x.ok) {
+        statsBox.innerHTML =
+          "<div class='admin-stat'><p class='label'>오류</p><p class='value'>!</p></div>";
+        tbody.innerHTML =
+          "<tr><td colspan='8'>" + (x.j.error || JSON.stringify(x.j)) + "</td></tr>";
+        return;
+      }
+      var s = x.j.stats || {};
+      var channels = s.channels || {};
+      var paypal = channels.paypal || {};
+      var fiat = channels.airwallex || {};
+      var crypto = channels.crypto || {};
+      var total = Number(s.total || 0);
+      var pending = Number(s.pending || 0);
+      var confirmed = Number(s.confirmed || 0);
+      var amountKrw = Number(s.amount_krw || 0);
+      var rate = total ? Math.round(Number(s.confirm_rate || 0) * 1000) / 10 : 0;
+      var fx = x.j.fx || {};
+      var fxLabel = fx.rate
+        ? "USD/KRW " +
+          Number(fx.rate).toLocaleString("ko-KR", { maximumFractionDigits: 2 }) +
+          " · " +
+          escLt(fx.source || "")
+        : "환율 없음";
+      statsBox.innerHTML =
+        "<div class='admin-stat'><p class='label'>전체 입금</p><p class='value'>" +
+        total.toLocaleString("ko-KR") +
+        "</p></div>" +
+        "<div class='admin-stat'><p class='label'>원화환산 합계</p><p class='value'>₩" +
+        Math.round(amountKrw).toLocaleString("ko-KR") +
+        "</p></div>" +
+        "<div class='admin-stat'><p class='label'>확인 대기</p><p class='value'>" +
+        pending.toLocaleString("ko-KR") +
+        "</p></div>" +
+        "<div class='admin-stat'><p class='label'>확인 완료</p><p class='value'>" +
+        confirmed.toLocaleString("ko-KR") +
+        "</p></div>" +
+        "<div class='admin-stat'><p class='label'>확인율</p><p class='value'>" +
+        rate.toLocaleString("ko-KR", { maximumFractionDigits: 1 }) +
+        "%</p></div>" +
+        "<div class='admin-stat'><p class='label'>PayPal</p><p class='value'>" +
+        Number(paypal.total || 0).toLocaleString("ko-KR") +
+        "</p></div>" +
+        "<div class='admin-stat'><p class='label'>$·원화</p><p class='value'>" +
+        Number(fiat.total || 0).toLocaleString("ko-KR") +
+        "</p></div>" +
+        "<div class='admin-stat'><p class='label'>크립토</p><p class='value'>" +
+        Number(crypto.total || 0).toLocaleString("ko-KR") +
+        "</p></div>" +
+        "<div class='admin-stat'><p class='label'>기준 환율</p><p class='value' style='font-size:0.9rem'>" +
+        fxLabel +
+        "</p></div>";
+
+      var trend = x.j.trend || [];
+      tbody.innerHTML = "";
+      if (!trend.length) {
+        tbody.innerHTML = "<tr><td colspan='8' class='admin-note'>추이 항목 없음</td></tr>";
+        return;
+      }
+      trend.forEach(function (row) {
+        var tr = document.createElement("tr");
+        tr.innerHTML =
+          "<td>" +
+          escLt(row.day || "") +
+          "</td>" +
+          "<td>" +
+          Number(row.total || 0).toLocaleString("ko-KR") +
+          "</td>" +
+          "<td>" +
+          "₩" +
+          Math.round(Number(row.amount_krw || 0)).toLocaleString("ko-KR") +
+          "</td>" +
+          "<td>" +
+          Number(row.pending || 0).toLocaleString("ko-KR") +
+          "</td>" +
+          "<td>" +
+          Number(row.confirmed || 0).toLocaleString("ko-KR") +
+          "</td>" +
+          "<td>" +
+          Number(row.paypal || 0).toLocaleString("ko-KR") +
+          "</td>" +
+          "<td>" +
+          Number(row.airwallex || 0).toLocaleString("ko-KR") +
+          "</td>" +
+          "<td>" +
+          Number(row.crypto || 0).toLocaleString("ko-KR") +
+          "</td>";
+        tbody.appendChild(tr);
+      });
+    });
+  }
+
   function renderDepositChannel(channelKey) {
     var stEl = document.getElementById("deposit-" + channelKey + "-status");
+    var platformEl = document.getElementById("deposit-" + channelKey + "-platform");
+    var currencyEl = document.getElementById("deposit-" + channelKey + "-currency");
+    var qEl = document.getElementById("deposit-" + channelKey + "-q");
     var tbody = document.querySelector("#deposit-" + channelKey + "-table tbody");
     if (!tbody || !stEl) return;
     var status = stEl.value || "pending";
-    tbody.innerHTML = "<tr><td colspan='8'>불러오는 중…</td></tr>";
+    var platform = platformEl ? platformEl.value || "all" : "all";
+    var currency = currencyEl ? currencyEl.value || "all" : "all";
+    var q = qEl ? qEl.value || "" : "";
+    var isFiatDeposit = channelKey === "airwallex";
+    var colCount = isFiatDeposit ? 10 : 8;
+    tbody.innerHTML = "<tr><td colspan='" + colCount + "'>불러오는 중…</td></tr>";
     api(
       "/api/admin/deposit-confirmations/" +
         encodeURIComponent(channelKey) +
         "?status=" +
         encodeURIComponent(status) +
+        "&platform=" +
+        encodeURIComponent(platform) +
+        "&currency=" +
+        encodeURIComponent(currency) +
+        "&q=" +
+        encodeURIComponent(q) +
         "&limit=150",
       { method: "GET" }
     ).then(function (x) {
       if (!x.ok) {
         tbody.innerHTML =
-          "<tr><td colspan='8'>" + (x.j.error || JSON.stringify(x.j)) + "</td></tr>";
+          "<tr><td colspan='" +
+          colCount +
+          "'>" +
+          (x.j.error || JSON.stringify(x.j)) +
+          "</td></tr>";
         return;
       }
       var posts = x.j.posts || [];
+      renderDepositStats(channelKey, x.j.stats);
       tbody.innerHTML = "";
       if (!posts.length) {
-        tbody.innerHTML = "<tr><td colspan='8' class='admin-note'>항목 없음</td></tr>";
+        tbody.innerHTML =
+          "<tr><td colspan='" + colCount + "' class='admin-note'>항목 없음</td></tr>";
         return;
       }
       posts.forEach(function (p) {
@@ -678,6 +982,20 @@
         var title = rawTitle.replace(/</g, "&lt;");
         var memo = String(p.author_id || "").replace(/</g, "&lt;");
         var created = p.created_at ? new Date(p.created_at).toLocaleString("ko-KR") : "";
+        var requestedAt = p.deposit_remittance_requested_at
+          ? new Date(p.deposit_remittance_requested_at).toLocaleString("ko-KR")
+          : created;
+        var remittedAt = p.deposit_remitted_at
+          ? new Date(p.deposit_remitted_at).toLocaleString("ko-KR")
+          : p.deposit_verified_at
+            ? new Date(p.deposit_verified_at).toLocaleString("ko-KR")
+          : "";
+        var currencyLabel =
+          p.deposit_currency === "KRW"
+            ? "KRW"
+            : p.deposit_currency === "USD"
+              ? "USD"
+              : "확인 필요";
         var dv = p.deposit_verified === true;
         var verifiedAt =
           dv && p.deposit_verified_at
@@ -686,10 +1004,17 @@
         var byWho = dv ? String(p.deposit_verified_by || "").replace(/</g, "&lt;") : "";
 
         var tr = document.createElement("tr");
-        tr.innerHTML =
+        var cells =
           "<td><code style='font-size:0.7rem'>" +
           escLt(idShort) +
-          "</code></td>" +
+          "</code></td>";
+        if (isFiatDeposit) {
+          cells +=
+            "<td style='font-size:0.72rem;font-weight:700'>" +
+            escLt(currencyLabel) +
+            "</td>";
+        }
+        cells +=
           "<td style='max-width:9rem;font-size:0.71rem;word-break:break-word'>" +
           escLt(slots.mt5) +
           "</td>" +
@@ -706,10 +1031,22 @@
           "</span></td>" +
           "<td style='font-size:0.72rem'>" +
           memo +
-          "</td>" +
-          "<td style='font-size:0.72rem'>" +
-          created +
           "</td>";
+        if (isFiatDeposit) {
+          cells +=
+            "<td style='font-size:0.72rem'>" +
+            requestedAt +
+            "</td>" +
+            "<td style='font-size:0.72rem'>" +
+            (remittedAt || "<span class='admin-note'>대기</span>") +
+            "</td>";
+        } else {
+          cells +=
+            "<td style='font-size:0.72rem'>" +
+            created +
+            "</td>";
+        }
+        tr.innerHTML = cells;
 
         var tdAct = document.createElement("td");
         if (dv) {
@@ -726,9 +1063,12 @@
           var btn = document.createElement("button");
           btn.type = "button";
           btn.className = "btn btn--small";
-          btn.textContent = "확인 완료 처리";
+          btn.textContent = isFiatDeposit ? "관리자 확인" : "확인 완료 처리";
           btn.addEventListener("click", function () {
-            if (!confirm("입금 확인 완료로 표시할까요? (쿠폰 발급 없음)")) return;
+            var msg = isFiatDeposit
+              ? "입금 확인 및 송금완료일을 지금 시간으로 기록할까요? (쿠폰 발급 없음)"
+              : "입금 확인 완료로 표시할까요? (쿠폰 발급 없음)";
+            if (!confirm(msg)) return;
             api(
               "/api/admin/deposit-confirmations/" +
                 encodeURIComponent(channelKey) +
@@ -759,6 +1099,7 @@
   }
 
   function renderDeposits() {
+    renderDepositSummary();
     DEPOSIT_CHANNELS.forEach(function (ch) {
       renderDepositChannel(ch);
     });
@@ -999,18 +1340,54 @@
 
   function renderFreeCouponTracking() {
     var stEl = document.getElementById("free-coupon-tracking-status");
+    var platformEl = document.getElementById("free-coupon-platform");
+    var sourceEl = document.getElementById("free-coupon-source-board");
+    var qEl = document.getElementById("free-coupon-q");
+    var statsEl = document.getElementById("free-coupon-stats");
     var tbody = document.querySelector("#free-coupon-tracking-table tbody");
     if (!tbody || !stEl) return;
     var status = stEl.value || "pending";
+    var platform = platformEl ? platformEl.value || "all" : "all";
+    var sourceBoard = sourceEl ? sourceEl.value.trim() : "";
+    var q = qEl ? qEl.value.trim() : "";
     tbody.innerHTML = "<tr><td colspan='9'>불러오는 중…</td></tr>";
     api(
-      "/api/admin/free-coupon-tracking?status=" + encodeURIComponent(status) + "&limit=150",
+      "/api/admin/free-coupon-tracking?status=" +
+        encodeURIComponent(status) +
+        "&platform=" +
+        encodeURIComponent(platform) +
+        "&source_board=" +
+        encodeURIComponent(sourceBoard) +
+        "&q=" +
+        encodeURIComponent(q) +
+        "&limit=150",
       { method: "GET" }
     ).then(function (x) {
       if (!x.ok) {
         tbody.innerHTML =
           "<tr><td colspan='9'>" + (x.j.error || JSON.stringify(x.j)) + "</td></tr>";
         return;
+      }
+      var stats = x.j.stats || {};
+      if (statsEl) {
+        var total = Number(stats.total || 0);
+        var confirmed = Number(stats.confirmed || 0);
+        var rate = total ? Math.round((confirmed / total) * 1000) / 10 : 0;
+        statsEl.innerHTML =
+          '<div class="admin-stats admin-coupon-stats">' +
+          '<div class="admin-stat"><p class="label">전체 항목</p><p class="value">' +
+          total +
+          "</p></div>" +
+          '<div class="admin-stat"><p class="label">확인 대기</p><p class="value">' +
+          Number(stats.pending || 0) +
+          "</p></div>" +
+          '<div class="admin-stat"><p class="label">확인 완료</p><p class="value">' +
+          confirmed +
+          "</p></div>" +
+          '<div class="admin-stat"><p class="label">확인율</p><p class="value">' +
+          rate +
+          "%</p></div>" +
+          "</div>";
       }
       var posts = x.j.posts || [];
       tbody.innerHTML = "";
@@ -1290,7 +1667,15 @@
     var tbody = document.querySelector("#admin-tickets-table tbody");
     if (!tbody) return;
     tbody.innerHTML = "<tr><td colspan='8'>불러오는 중…</td></tr>";
-    api("/api/admin/tickets", { method: "GET" }).then(function (x) {
+    var statusFilter = (document.getElementById("admin-ticket-status-filter") || {}).value || "openish";
+    var categoryFilter = ((document.getElementById("admin-ticket-category-filter") || {}).value || "").trim();
+    api(
+      "/api/admin/tickets?status=" +
+        encodeURIComponent(statusFilter) +
+        "&category=" +
+        encodeURIComponent(categoryFilter),
+      { method: "GET" }
+    ).then(function (x) {
       if (!x.ok) {
         tbody.innerHTML =
           "<tr><td colspan='8'>" + (x.j.error || JSON.stringify(x.j)) + "</td></tr>";
@@ -1303,7 +1688,6 @@
         var tr = document.createElement("tr");
         var dt = t.created_at ? new Date(t.created_at).toLocaleString("ko-KR") : "";
         var b = t.body || "";
-        var bex = b.length > 120 ? b.slice(0, 120) + "…" : b;
         tr.innerHTML =
           "<td><code style='font-size:0.7rem'>" +
           id.slice(-8) +
@@ -1317,14 +1701,23 @@
           "<td>" +
           (t.subject || "").replace(/</g, "&lt;") +
           "</td>" +
-          "<td style='max-width:180px;font-size:0.72rem'>" +
-          bex.replace(/</g, "&lt;") +
-          "</td>" +
+          "<td></td>" +
           "<td></td>" +
           "<td style='white-space:nowrap;font-size:0.72rem'>" +
           dt +
           "</td>" +
           "<td></td>";
+        var bodyDetails = document.createElement("details");
+        bodyDetails.className = "admin-ticket-body";
+        bodyDetails.open = true;
+        var bodySummary = document.createElement("summary");
+        bodySummary.textContent = b.length > 90 ? b.slice(0, 90) + "..." : b || "(내용 없음)";
+        var bodyFull = document.createElement("pre");
+        bodyFull.textContent = b || "(내용 없음)";
+        bodyDetails.appendChild(bodySummary);
+        bodyDetails.appendChild(bodyFull);
+        tr.cells[4].appendChild(bodyDetails);
+
         var stSel = document.createElement("select");
         stSel.className = "admin-ticket-status";
         stSel.style.fontSize = "0.72rem";
@@ -1353,9 +1746,14 @@
 
         var ta = document.createElement("textarea");
         ta.className = "admin-ticket-reply";
-        ta.rows = 3;
-        ta.placeholder = "관리자 회신 (간단히)";
+        ta.rows = 4;
+        ta.placeholder = "관리자 회신 또는 내부 처리 메모";
         ta.value = t.admin_reply || "";
+        var lastReply = document.createElement("p");
+        lastReply.className = "admin-ticket-meta";
+        lastReply.textContent = t.admin_reply
+          ? "저장된 회신 있음" + (t.email_admin_sent ? " · 이메일 발송됨" : "")
+          : "아직 관리자 회신 없음";
         var notify = document.createElement("label");
         notify.style.fontSize = "0.72rem";
         notify.innerHTML =
@@ -1383,6 +1781,7 @@
 
         tr.cells[5].appendChild(stSel);
         var cell = tr.cells[7];
+        cell.appendChild(lastReply);
         cell.appendChild(ta);
         cell.appendChild(document.createElement("br"));
         cell.appendChild(notify);
@@ -1468,6 +1867,14 @@
     updateHomePreview();
   });
   document.getElementById("admin-refunds-reload")?.addEventListener("click", function () {
+    renderRefunds();
+  });
+  ["admin-refunds-status", "admin-refunds-currency"].forEach(function (id) {
+    document.getElementById(id)?.addEventListener("change", function () {
+      renderRefunds();
+    });
+  });
+  document.getElementById("admin-refunds-q")?.addEventListener("input", function () {
     renderRefunds();
   });
 
@@ -1579,6 +1986,18 @@
   document.getElementById("cp-kind")?.addEventListener("change", syncCpKindUi);
   syncCpKindUi();
 
+  ["cp-filter-status", "cp-filter-platform", "cp-filter-kind"].forEach(function (id) {
+    document.getElementById(id)?.addEventListener("change", function () {
+      renderCoupons();
+    });
+  });
+  document.getElementById("cp-filter-q")?.addEventListener("input", function () {
+    renderCoupons();
+  });
+  document.getElementById("cp-filter-reload")?.addEventListener("click", function () {
+    renderCoupons();
+  });
+
   document.getElementById("cp-issue")?.addEventListener("click", function () {
     var kindEl = document.getElementById("cp-kind");
     var rawKind = kindEl && kindEl.value;
@@ -1587,6 +2006,8 @@
           ? "promo_magictrading_1m"
           : "duration";
     var term = Number(document.getElementById("cp-term").value);
+    var platformEl = document.getElementById("cp-platform");
+    var target_platform = platformEl && platformEl.value ? platformEl.value : "all";
     var send_email = document.getElementById("cp-email").value.trim();
     var telegram_chat_id = document.getElementById("cp-tg").value.trim();
     var note = document.getElementById("cp-note").value.trim();
@@ -1594,6 +2015,7 @@
     if (out) out.textContent = "발급 중…";
     var body = {
       coupon_kind: coupon_kind,
+      target_platform: target_platform,
       send_email: send_email || undefined,
       telegram_chat_id: telegram_chat_id || undefined,
       note: note || undefined,
@@ -1623,14 +2045,34 @@
   document.getElementById("post-review-status")?.addEventListener("change", function () {
     renderPostReviews();
   });
+  document.getElementById("post-review-category")?.addEventListener("change", function () {
+    renderPostReviews();
+  });
 
   DEPOSIT_CHANNELS.forEach(function (ch) {
     document.getElementById("deposit-" + ch + "-reload")?.addEventListener("click", function () {
       renderDepositChannel(ch);
+      renderDepositSummary();
     });
     document.getElementById("deposit-" + ch + "-status")?.addEventListener("change", function () {
       renderDepositChannel(ch);
+      renderDepositSummary();
     });
+    document.getElementById("deposit-" + ch + "-platform")?.addEventListener("change", function () {
+      renderDepositChannel(ch);
+    });
+    document.getElementById("deposit-" + ch + "-currency")?.addEventListener("change", function () {
+      renderDepositChannel(ch);
+    });
+    document.getElementById("deposit-" + ch + "-q")?.addEventListener("input", function () {
+      renderDepositChannel(ch);
+    });
+  });
+  document.getElementById("deposit-summary-reload")?.addEventListener("click", function () {
+    renderDepositSummary();
+  });
+  document.getElementById("deposit-summary-days")?.addEventListener("change", function () {
+    renderDepositSummary();
   });
 
   document.getElementById("free-coupon-reload")?.addEventListener("click", function () {
@@ -1638,6 +2080,28 @@
   });
   document.getElementById("free-coupon-tracking-status")?.addEventListener("change", function () {
     renderFreeCouponTracking();
+  });
+  ["free-coupon-platform", "free-coupon-source-board", "free-coupon-q"].forEach(function (id) {
+    document.getElementById(id)?.addEventListener("input", function () {
+      renderFreeCouponTracking();
+    });
+    document.getElementById(id)?.addEventListener("change", function () {
+      renderFreeCouponTracking();
+    });
+  });
+
+  document.getElementById("admin-ticket-reload")?.addEventListener("click", function () {
+    renderTickets();
+  });
+  document.getElementById("admin-ticket-status-filter")?.addEventListener("change", function () {
+    renderTickets();
+  });
+  document.getElementById("admin-ticket-category-filter")?.addEventListener("input", function () {
+    renderTickets();
+  });
+
+  document.getElementById("admin-user-search")?.addEventListener("input", function () {
+    renderUsersTable(adminUsersCache);
   });
 
   document.getElementById("admin-add-user")?.addEventListener("click", function () {

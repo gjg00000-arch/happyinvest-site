@@ -1,7 +1,7 @@
 (function () {
   function apiBase() {
     var m = document.querySelector('meta[name="api-base"]');
-    return (m && m.content) || "https://happyinvests.com";
+    return (m && m.content) || "https://magicindicatorglobal.com";
   }
 
   function h(tag, cls, html) {

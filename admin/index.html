@@ -28,10 +28,10 @@
     </header>
     <nav class="site-nav" aria-label="주요 메뉴">
       <a href="../index.html">메인</a>
-      <a href="../guide/index.html">가이드</a>
-      <a href="../guide/usage.html">지표 사용</a>
-      <a href="../guide/usage-trv.html">TRV</a>
-      <a href="../guide/usage-mt5.html">MT5</a>
+      <a href="../guide/index.html">설치 안내</a>
+      <a href="../guide/usage.html">사용법</a>
+      <a href="../guide/usage-trv.html">TRV 설정</a>
+      <a href="../guide/usage-mt5.html">MT5 설정</a>
       <a href="../downloads/index.html">다운로드</a>
       <a href="../registration/index.html">가입·등록</a>
       <a href="../verify/index.html">본인인증</a>
@@ -103,6 +103,10 @@
           <p class="admin-note">역할·정지·메모를 저장하면, 사이트에서 해당 이메일로 접속 시 API가 역할을 덮어씁니다.</p>
           <div class="admin-form-inline">
             <label
+              >회원 검색
+              <input type="search" id="admin-user-search" placeholder="이메일·역할·상태·메모" autocomplete="off" />
+            </label>
+            <label
               >새 이메일
               <input type="email" id="new-user-email" placeholder="user@mail.com" />
             </label>
@@ -119,6 +123,7 @@
             </label>
             <button type="button" class="btn" id="admin-add-user">회원 추가</button>
           </div>
+          <p class="admin-note" id="admin-user-search-note">검색어 없이 전체 회원을 표시합니다.</p>
           <div class="admin-table-wrap">
             <table class="admin-table" id="admin-users-table">
               <thead>
@@ -142,6 +147,26 @@
             접수 시 자동응답 문구가 발송됩니다. 여기서 관리자 회신을 저장할 수 있으며, SMTP가 설정된 경우에만
             회원 이메일로 발송됩니다.
           </p>
+          <div class="admin-form-inline" style="margin-bottom: 0.75rem">
+            <label
+              >상태
+              <select id="admin-ticket-status-filter">
+                <option value="openish">처리 필요</option>
+                <option value="all">전체</option>
+                <option value="auto_replied">자동응답</option>
+                <option value="open">미해결</option>
+                <option value="in_progress">진행중</option>
+                <option value="answered">답변완료</option>
+                <option value="resolved">처리완료</option>
+                <option value="closed">종료</option>
+              </select>
+            </label>
+            <label
+              >유형
+              <input type="search" id="admin-ticket-category-filter" placeholder="예: bug, billing" />
+            </label>
+            <button type="button" class="btn btn--small" id="admin-ticket-reload">새로고침</button>
+          </div>
           <div class="admin-table-wrap">
             <table class="admin-table" id="admin-tickets-table">
               <thead>
@@ -150,10 +175,10 @@
                   <th>이메일</th>
                   <th>유형</th>
                   <th>제목</th>
-                  <th>내용 요약</th>
+                  <th>문의 내용</th>
                   <th>상태</th>
                   <th>일시</th>
-                  <th>회신</th>
+                  <th>관리자 액션</th>
                 </tr>
               </thead>
               <tbody></tbody>
@@ -176,6 +201,23 @@
                 <option value="all">all(전체)</option>
               </select>
             </label>
+            <label
+              >카테고리
+              <select id="post-review-category">
+                <option value="all">전체</option>
+                <option value="head_daily_report">본부 데일리</option>
+                <option value="qa">질문과 답변</option>
+                <option value="general">자유 이야기</option>
+                <option value="beta">베타 소식</option>
+                <option value="event">이벤트</option>
+                <option value="event_1w_free">이벤트 · 7일 무료 체험</option>
+                <option value="event_1m_usd">MagicTrading · 1개월 이벤트</option>
+                <option value="event_6m_recovery">리커버리 · 2개월</option>
+                <option value="membership">회원 혜택</option>
+                <option value="reflection">실전 이야기</option>
+                <option value="event_promo_shoutout">책구매·추천·홍보 인증</option>
+              </select>
+            </label>
             <button type="button" class="btn btn--small" id="post-review-reload">새로고침</button>
           </div>
           <div class="admin-table-wrap">
@@ -188,6 +230,8 @@
                   <th>제목</th>
                   <th>상태</th>
                   <th>작성일</th>
+                  <th>신청일</th>
+                  <th>승인일</th>
                   <th>작업</th>
                 </tr>
               </thead>
@@ -218,14 +262,24 @@
           <p class="admin-note">
             기간: <strong>1·2·3·5·6·12·60개월</strong>. 코드 형식은 레포 규칙
             <code>../../.cursor/rules/coupon-code-numbering.mdc</code> 참고 (자동 채번). 발급 시 이메일·텔레그램(채팅 ID)로 코드를 보낼 수
-            있습니다. <strong>양도 불가</strong> 문구는 발급 본문·DB 필드에 포함되며, 발송 이메일을 넣으면 해당 계정 전용으로 잠깁니다.
+            있습니다. <strong>발급 영역</strong>은 쿠폰 생성용이고, 아래 <strong>전체 현황</strong>은 발급·교환·폐기 관리용입니다.
           </p>
+          <h3 class="admin-subh3">쿠폰 발급</h3>
           <div class="admin-form-inline" style="flex-wrap: wrap; gap: 0.65rem; margin-bottom: 1rem">
             <label
               >쿠폰 종류
               <select id="cp-kind">
                 <option value="duration">기간 이용권</option>
                 <option value="promo_magictrading_1m">MagicTrading 1달 이벤트 쿠폰</option>
+              </select>
+            </label>
+            <label
+              >대상 구분
+              <select id="cp-platform">
+                <option value="all">공통</option>
+                <option value="trv">TRV</option>
+                <option value="mt5">MT5</option>
+                <option value="kiwoom_dll">영웅문DLL</option>
               </select>
             </label>
             <label id="cp-term-wrap"
@@ -255,6 +309,40 @@
             <button type="button" class="btn" id="cp-issue">쿠폰 발급</button>
           </div>
           <p id="cp-issue-result" class="admin-note" style="min-height: 1.25rem"></p>
+          <h3 class="admin-subh3">전체 쿠폰 현황</h3>
+          <div class="admin-form-inline" style="flex-wrap: wrap; gap: 0.65rem; margin-bottom: 1rem">
+            <label
+              >상태
+              <select id="cp-filter-status">
+                <option value="all">전체</option>
+                <option value="issued">미사용</option>
+                <option value="redeemed">사용 완료</option>
+                <option value="revoked">폐기</option>
+              </select>
+            </label>
+            <label
+              >대상 구분
+              <select id="cp-filter-platform">
+                <option value="all">전체</option>
+                <option value="trv">TRV</option>
+                <option value="mt5">MT5</option>
+                <option value="kiwoom_dll">영웅문DLL</option>
+              </select>
+            </label>
+            <label
+              >쿠폰 종류
+              <select id="cp-filter-kind">
+                <option value="all">전체</option>
+                <option value="duration">기간 이용권</option>
+                <option value="promo_magictrading_1m">MagicTrading 1달 이벤트</option>
+              </select>
+            </label>
+            <label style="min-width: 12rem"
+              >검색
+              <input type="search" id="cp-filter-q" placeholder="코드·이메일·메모" autocomplete="off" />
+            </label>
+            <button type="button" class="btn btn--small" id="cp-filter-reload">조회</button>
+          </div>
           <div id="admin-coupons-wrap"></div>
         </div>
 
@@ -278,8 +366,26 @@
                 <option value="all">전체</option>
               </select>
             </label>
+            <label>
+              구분자
+              <select id="free-coupon-platform">
+                <option value="all">전체</option>
+                <option value="trv">TRV</option>
+                <option value="mt5">MT5</option>
+                <option value="kiwoom_dll">영웅문DLL</option>
+              </select>
+            </label>
+            <label>
+              연동 게시판
+              <input type="search" id="free-coupon-source-board" placeholder="reflection, general 등" />
+            </label>
+            <label style="min-width: 12rem">
+              검색
+              <input type="search" id="free-coupon-q" placeholder="제목·본문·작성자" />
+            </label>
             <button type="button" class="btn btn--small" id="free-coupon-reload">새로고침</button>
           </div>
+          <div id="free-coupon-stats"></div>
           <div class="admin-table-wrap">
             <table class="admin-table" id="free-coupon-tracking-table">
               <thead>
@@ -301,22 +407,43 @@
         </div>
 
         <div class="admin-panel" data-panel="refunds">
-          <h2>환불 요청 · USD 송금</h2>
+          <h2>환불 요청 · 송금 처리</h2>
           <p class="admin-note">
-            정규·비즈(월) <strong>일할 환불</strong>만 여기 목록으로 옵니다.
+            정규·비즈(월) <strong>일할 환불</strong>만 여기 목록으로 옵니다. 달러 카드 결제는 <strong>USD 송금</strong>,
+            원화 결제는 <strong>KRW 원화 송금</strong>으로 관리합니다.
             <a href="../legal/refund.html" target="_blank" rel="noopener">일할 환불 요건</a> —
             회원 단의 예상금액은 <code>GET /api/payments/refund-preview</code> 로 산출됩니다.<br />
             <strong>이벤트·쿠폰·무료 체험·리커버리</strong> 이용자는 API에서 환불 요청 접수 자체가
             <strong>403 차단</strong>되도록 되어 있습니다(휴먼 에러 방지).
           </p>
-          <div class="admin-form-inline" style="margin-bottom: 0.75rem">
+          <div class="admin-form-inline" style="flex-wrap: wrap; gap: 0.65rem; margin-bottom: 0.75rem">
+            <label>
+              상태
+              <select id="admin-refunds-status">
+                <option value="requested">처리 대기</option>
+                <option value="remitted">처리 완료</option>
+                <option value="all">전체</option>
+              </select>
+            </label>
+            <label>
+              송금 통화
+              <select id="admin-refunds-currency">
+                <option value="all">전체</option>
+                <option value="USD">USD 달러 송금</option>
+                <option value="KRW">KRW 원화 송금</option>
+              </select>
+            </label>
+            <label style="min-width: 12rem">
+              검색
+              <input type="search" id="admin-refunds-q" placeholder="이메일·접수번호·계좌" />
+            </label>
             <button type="button" class="btn btn--small" id="admin-refunds-reload">새로고침</button>
           </div>
           <div id="admin-refunds-wrap"></div>
         </div>
 
         <div class="admin-panel" data-panel="deposits">
-          <h2>입금 확인 보드 · PayPal / Airwallex / 크립토</h2>
+          <h2>입금 확인 보드 · PayPal / $·원화 / 크립토</h2>
           <p class="admin-note">
             각 채널은 게시판 카테고리
             <code>admin_payment_paypal</code> · <code>admin_payment_airwallex</code> · <code>admin_payment_crypto</code>
@@ -328,6 +455,38 @@
               >mt5 12345678 MetaQuotes-Demo trv PineUser123 영웅문 계좌/HTS표시값</code
             >
           </p>
+          <section class="admin-deposit-block" style="margin-bottom: 1.25rem" aria-labelledby="dep-summary-h3">
+            <h3 id="dep-summary-h3" class="admin-subh3">전체 입금 합산 현황</h3>
+            <div class="admin-form-inline" style="flex-wrap: wrap; gap: 0.65rem; margin-bottom: 0.5rem; align-items: flex-end">
+              <label>
+                추이 기간
+                <select id="deposit-summary-days">
+                  <option value="14">최근 14일</option>
+                  <option value="30" selected>최근 30일</option>
+                  <option value="90">최근 90일</option>
+                </select>
+              </label>
+              <button type="button" class="btn btn--small" id="deposit-summary-reload">합산 새로고침</button>
+            </div>
+            <div id="deposit-summary-stats"></div>
+            <div class="admin-table-wrap">
+              <table class="admin-table" id="deposit-summary-trend-table">
+                <thead>
+                  <tr>
+                    <th>일자</th>
+                    <th>전체 등록</th>
+                    <th>원화환산</th>
+                    <th>확인 대기</th>
+                    <th>확인 완료</th>
+                    <th>PayPal</th>
+                    <th>$·원화</th>
+                    <th>크립토</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </section>
           <section class="admin-deposit-block" style="margin-bottom: 1.25rem" aria-labelledby="dep-paypal-h3">
             <h3 id="dep-paypal-h3" class="admin-subh3">PayPal 입금 확인</h3>
             <div class="admin-form-inline" style="flex-wrap: wrap; gap: 0.65rem; margin-bottom: 0.5rem; align-items: flex-end">
@@ -339,8 +498,22 @@
                   <option value="all">전체</option>
                 </select>
               </label>
+              <label>
+                구분자
+                <select id="deposit-paypal-platform">
+                  <option value="all">전체</option>
+                  <option value="trv">TRV</option>
+                  <option value="mt5">MT5</option>
+                  <option value="kiwoom_dll">영웅문DLL</option>
+                </select>
+              </label>
+              <label style="min-width: 12rem">
+                검색
+                <input type="search" id="deposit-paypal-q" placeholder="제목·본문·작성자" />
+              </label>
               <button type="button" class="btn btn--small" id="deposit-paypal-reload">새로고침</button>
             </div>
+            <div id="deposit-paypal-stats"></div>
             <div class="admin-table-wrap">
               <table class="admin-table" id="deposit-paypal-table">
                 <thead>
@@ -361,7 +534,7 @@
           </section>
 
           <section class="admin-deposit-block" style="margin-bottom: 1.25rem" aria-labelledby="dep-aw-h3">
-            <h3 id="dep-aw-h3" class="admin-subh3">Airwallex 입금 확인</h3>
+            <h3 id="dep-aw-h3" class="admin-subh3">$ · 원화 입금 확인</h3>
             <div class="admin-form-inline" style="flex-wrap: wrap; gap: 0.65rem; margin-bottom: 0.5rem; align-items: flex-end">
               <label>
                 상태
@@ -371,20 +544,44 @@
                   <option value="all">전체</option>
                 </select>
               </label>
+              <label>
+                통화
+                <select id="deposit-airwallex-currency">
+                  <option value="all">전체</option>
+                  <option value="USD">USD · 달러</option>
+                  <option value="KRW">KRW · 원화</option>
+                </select>
+              </label>
+              <label>
+                구분자
+                <select id="deposit-airwallex-platform">
+                  <option value="all">전체</option>
+                  <option value="trv">TRV</option>
+                  <option value="mt5">MT5</option>
+                  <option value="kiwoom_dll">영웅문DLL</option>
+                </select>
+              </label>
+              <label style="min-width: 12rem">
+                검색
+                <input type="search" id="deposit-airwallex-q" placeholder="제목·본문·작성자" />
+              </label>
               <button type="button" class="btn btn--small" id="deposit-airwallex-reload">새로고침</button>
             </div>
+            <div id="deposit-airwallex-stats"></div>
             <div class="admin-table-wrap">
               <table class="admin-table" id="deposit-airwallex-table">
                 <thead>
                   <tr>
                     <th>ID(끝8)</th>
+                    <th>통화</th>
                     <th>MT5</th>
                     <th>TRV</th>
                     <th>영웅문</th>
                     <th>제목·요약</th>
                     <th>메모(작성자 id)</th>
-                    <th>등록일</th>
-                    <th>입금 확인</th>
+                    <th>송금요청일</th>
+                    <th>송금완료일</th>
+                    <th>관리자 확인</th>
                   </tr>
                 </thead>
                 <tbody></tbody>

@@ -8,7 +8,7 @@
 |------|------|
 | `npm install` | 의존성(html-validate) 설치 |
 | `npm run build:nav` | `scripts/inject-site-nav.mjs` 실행 — 상단 `<nav class="site-nav">` 를 **단일 매니페스트** 기준으로 모든 HTML 에 주입 |
-| `npm run build:seo` | `sitemap.xml`·`robots.txt` 생성(도메인은 `SITE_ORIGIN`, 기본 `https://happyinvests.com`; `admin/` 는 색인 배제·사이트맵 제외) |
+| `npm run build:seo` | `sitemap.xml`·`robots.txt` 생성(도메인은 `SITE_ORIGIN`, 기본 `https://magicindicatorglobal.com`; `admin/` 는 색인 배제·사이트맵 제외) |
 | `npm run build:og` | `og:image` 를 `SITE_ORIGIN` 기준 **절대 URL**로 기입(SNS 미리보기 크롤러용; `data-relative` 제거) |
 | `npm run lint:html` | `html-validate` 로 프로젝트 내 `*.html` 검사( `tools/`·`node_modules` 제외 ) |
 | `npm run lint:links` | HTML 간 **`.html` 페이지 링크** 가 저장소에 존재하는지 검사 |

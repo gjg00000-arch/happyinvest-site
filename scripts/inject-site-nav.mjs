@@ -28,6 +28,7 @@ export const PAGES = [
   { rel: "downloads/index.html", kind: "flat", active: "downloads" },
   { rel: "events/index.html", kind: "flat", active: "events" },
   { rel: "integrations/index.html", kind: "flat", active: "integrations" },
+  { rel: "m/index.html", kind: "flat", active: null },
   { rel: "membership/index.html", kind: "flat", active: "membership" },
   { rel: "reflection/index.html", kind: "flat", active: "reflection" },
   { rel: "head-daily-report/index.html", kind: "flat", active: "headDaily" },
@@ -82,10 +83,10 @@ function renderRoot(spec) {
   const push = (...xs) => lines.push(...xs);
   push(
     a("index.html", "메인", act === "home"),
-    a("guide/index.html", "가이드", act === "guide"),
-    a("guide/usage.html", "지표 사용", act === "usage"),
-    a("guide/usage-trv.html", "TRV", act === "trv"),
-    a("guide/usage-mt5.html", "MT5", act === "mt5"),
+    a("guide/index.html", "설치 안내", act === "guide"),
+    a("guide/usage.html", "사용법", act === "usage"),
+    a("guide/usage-trv.html", "TRV 설정", act === "trv"),
+    a("guide/usage-mt5.html", "MT5 설정", act === "mt5"),
     a("downloads/index.html", "다운로드", act === "downloads"),
     a("registration/index.html", "가입·등록", act === "registration"),
     a("verify/index.html", "본인인증", act === "verify"),
@@ -118,10 +119,10 @@ function renderFlat(spec, flatDir) {
 
   push(
     a(U("index.html"), "메인", false),
-    a(U("guide/index.html"), "가이드", act === "guide"),
-    a(U("guide/usage.html"), "지표 사용", act === "usage"),
-    a(U("guide/usage-trv.html"), "TRV", act === "trv"),
-    a(U("guide/usage-mt5.html"), "MT5", act === "mt5"),
+    a(U("guide/index.html"), "설치 안내", act === "guide"),
+    a(U("guide/usage.html"), "사용법", act === "usage"),
+    a(U("guide/usage-trv.html"), "TRV 설정", act === "trv"),
+    a(U("guide/usage-mt5.html"), "MT5 설정", act === "mt5"),
     a(U("downloads/index.html"), "다운로드", act === "downloads"),
     a(U("registration/index.html"), "가입·등록", act === "registration"),
     a(U("verify/index.html"), "본인인증", act === "verify"),
@@ -159,10 +160,10 @@ function renderGuide(spec) {
 
   push(
     a(U("index.html"), "메인", false),
-    a("index.html", "가이드", x === "guide"),
-    a("usage.html", "지표 사용", x === "usage"),
-    a("usage-trv.html", "TRV", x === "trv"),
-    a("usage-mt5.html", "MT5", x === "mt5"),
+    a("index.html", "설치 안내", x === "guide"),
+    a("usage.html", "사용법", x === "usage"),
+    a("usage-trv.html", "TRV 설정", x === "trv"),
+    a("usage-mt5.html", "MT5 설정", x === "mt5"),
     a(U("downloads/index.html"), "다운로드", x === "downloads"),
     a(U("registration/index.html"), "가입·등록", x === "registration"),
     a(U("verify/index.html"), "본인인증", x === "verify"),
@@ -196,10 +197,10 @@ function renderLegal(spec, opt) {
 
   push(
     a(U("index.html"), "메인", false),
-    a(U("guide/index.html"), "가이드", false),
-    a(U("guide/usage.html"), "지표 사용", false),
-    a(U("guide/usage-trv.html"), "TRV", false),
-    a(U("guide/usage-mt5.html"), "MT5", false),
+    a(U("guide/index.html"), "설치 안내", false),
+    a(U("guide/usage.html"), "사용법", false),
+    a(U("guide/usage-trv.html"), "TRV 설정", false),
+    a(U("guide/usage-mt5.html"), "MT5 설정", false),
     a(U("downloads/index.html"), "다운로드", false),
     a(U("registration/index.html"), "가입·등록", false),
     a(U("verify/index.html"), "본인인증", false),
@@ -230,10 +231,10 @@ function renderAdmin(spec, opt) {
 
   push(
     a(U("index.html"), "메인", false),
-    a(U("guide/index.html"), "가이드", false),
-    a(U("guide/usage.html"), "지표 사용", false),
-    a(U("guide/usage-trv.html"), "TRV", false),
-    a(U("guide/usage-mt5.html"), "MT5", false),
+    a(U("guide/index.html"), "설치 안내", false),
+    a(U("guide/usage.html"), "사용법", false),
+    a(U("guide/usage-trv.html"), "TRV 설정", false),
+    a(U("guide/usage-mt5.html"), "MT5 설정", false),
     a(U("downloads/index.html"), "다운로드", false),
     a(U("registration/index.html"), "가입·등록", false),
     a(U("verify/index.html"), "본인인증", false),

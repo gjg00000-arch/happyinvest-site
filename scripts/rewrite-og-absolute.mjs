@@ -7,7 +7,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const ORIGIN = (process.env.SITE_ORIGIN || "https://happyinvests.com").replace(/\/$/, "");
+const ORIGIN = (process.env.SITE_ORIGIN || "https://magicindicatorglobal.com").replace(/\/$/, "");
 
 /**
  * @param {string} pageRelPosix e.g. "legal/refund.html"

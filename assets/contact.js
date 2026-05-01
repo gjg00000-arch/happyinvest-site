@@ -1,6 +1,6 @@
 (function () {
   var API =
-    (document.querySelector('meta[name="api-base"]') || {}).content || "https://happyinvests.com";
+    (document.querySelector('meta[name="api-base"]') || {}).content || "https://magicindicatorglobal.com";
 
   var catSelect = document.getElementById("ct-category");
   var bugRow = document.getElementById("bug-public-row");

@@ -89,10 +89,14 @@ code {
   line-height: 0;
   background: #0d1117;
   flex-shrink: 0;
+  max-height: clamp(8.75rem, 22vw, 14.25rem);
+  overflow: hidden;
 }
 .main-top-banner__img {
   width: 100%;
-  height: auto;
+  height: clamp(8.75rem, 22vw, 14.25rem);
+  object-fit: cover;
+  object-position: center 42%;
   display: block;
 }
 
@@ -755,7 +759,7 @@ button.currency-chip[aria-pressed="true"] {
   color: #666;
 }
 
-/* 결제 직전 — Airwallex/Coinbase 권고 문구 */
+/* 결제 직전 — PG/크립토 권고 문구 */
 .nrf-box {
   margin: 1.25rem 0;
   padding: 1rem 1.15rem;
