@@ -49,6 +49,41 @@ html[data-theme="dark"] .ux-chrome-bar {
   gap: 0.4rem;
   align-items: center;
 }
+.ux-visit-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 44px;
+  padding: 0 0.7rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ci-brown, #4a3528);
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(74, 53, 40, 0.18);
+  border-radius: 8px;
+  white-space: nowrap;
+}
+.ux-visit-counter strong {
+  font-variant-numeric: tabular-nums;
+  color: var(--ci-green, #2f6f4f);
+}
+.ux-visit-counter__sep {
+  color: rgba(74, 53, 40, 0.45);
+}
+.ux-visit-counter.is-muted {
+  opacity: 0.62;
+}
+html[data-theme="dark"] .ux-visit-counter {
+  color: #c9d1d9;
+  background: #21262d;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+html[data-theme="dark"] .ux-visit-counter strong {
+  color: #9be4b8;
+}
+html[data-theme="dark"] .ux-visit-counter__sep {
+  color: rgba(230, 237, 243, 0.45);
+}
 .ux-chrome-btn {
   min-height: 44px;
   min-width: 44px;
@@ -194,6 +229,18 @@ html[data-theme="dark"] .ux-lang__item {
 }
 .ux-lang__item.is-active .ux-lang__check {
   opacity: 1;
+}
+
+@media (max-width: 520px) {
+  .ux-chrome-bar__inner {
+    gap: 0.3rem;
+  }
+  .ux-visit-counter {
+    order: 3;
+    flex-basis: 100%;
+    justify-content: flex-end;
+    min-height: 32px;
+  }
 }
 
 /* 가입·인증·결제 진행 단계 */
@@ -422,6 +469,29 @@ html[data-theme="dark"] .qa-list strong {
 }
 html[data-theme="dark"] a {
   color: #58a6ff;
+}
+html[data-theme="dark"] .legal-prose,
+html[data-theme="dark"] .legal-prose p,
+html[data-theme="dark"] .legal-prose li,
+html[data-theme="dark"] .legal-prose td,
+html[data-theme="dark"] .legal-prose th,
+html[data-theme="dark"] .notice-list,
+html[data-theme="dark"] .qa-list,
+html[data-theme="dark"] .small,
+html[data-theme="dark"] .dummy,
+html[data-theme="dark"] .dummy.small,
+html[data-theme="dark"] small.dummy {
+  color: #c9d1d9;
+}
+html[data-theme="dark"] [style*="color: #2"],
+html[data-theme="dark"] [style*="color:#2"],
+html[data-theme="dark"] [style*="color: #3"],
+html[data-theme="dark"] [style*="color:#3"],
+html[data-theme="dark"] [style*="color: #4"],
+html[data-theme="dark"] [style*="color:#4"],
+html[data-theme="dark"] [style*="color: var(--ci-brown"],
+html[data-theme="dark"] [style*="color:var(--ci-brown"] {
+  color: #c9d1d9 !important;
 }
 html[data-theme="dark"] .btn {
   filter: brightness(1.05);

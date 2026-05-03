@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Magic 지표 MagicTrading 회원 가입 — TRV·MT5 선택, OTP·SMS·본인인증 절차 안내." />
+    <meta name="description" content="Magic 지표 정회원 가입 — SMS·OTP·플랜. 1주 무상 프리는 준회원 가입 페이지를 이용하세요." />
     <link rel="canonical" href="https://magicindicatorglobal.com/registration/index.html" />
     <meta property="og:title" content="Magic 지표 — 회원 가입" />
     <meta property="og:description" content="MagicTrading 회원 가입, TRV·MT5 및 본인인증 연동 안내." />
@@ -30,14 +30,15 @@
     </header>
     <nav class="site-nav" aria-label="주요 메뉴">
       <a href="../index.html">메인</a>
-      <a href="../guide/index.html">설치 안내</a>
-      <a href="../guide/usage.html">사용법</a>
-      <a href="../guide/usage-trv.html">TRV 설정</a>
-      <a href="../guide/usage-mt5.html">MT5 설정</a>
+      <a href="../guide/index.html">가이드</a>
+      <a href="../guide/usage.html">지표 사용</a>
+      <a href="../guide/usage-trv.html">TRV</a>
+      <a href="../guide/usage-mt5.html">MT5</a>
       <a href="../downloads/index.html">다운로드</a>
       <a href="../registration/index.html" aria-current="page">가입·등록</a>
       <a href="../verify/index.html">본인인증</a>
-      <a href="../billing/index.html">구독·결제</a>
+      <a href="sms-addon.html">SMS 시그널</a>
+      <a href="../billing/index.html#sms-signal-plans">구독·결제</a>
       <a href="../events/index.html">이벤트</a>
       <a href="../membership/index.html">회원혜택</a>
       <a href="../reflection/index.html">실전후기</a>
@@ -54,11 +55,16 @@
         <li><span>2</span> 본인인증</li>
         <li><span>3</span> 결제</li>
       </ol>
-      <h1 class="page-title">회원 가입</h1>
+      <h1 class="page-title">정회원 가입</h1>
+      <aside class="callout-soft" role="note" style="margin: 1rem 0 1rem; padding: 0.9rem 1rem; border-radius: 0.5rem; background: rgba(61, 122, 150, 0.09); border: 1px solid rgba(61, 122, 150, 0.25)">
+        <strong>무상 프리(1주) 플랜</strong>은 휴대폰 문자 없이
+        <a href="associate.html">준회원 가입 (최소 정보)</a>으로 먼저 계정을 만든 뒤, 구독·결제에서 7일 체험을 신청해 주세요.
+        Whop 등에서 유입되는 경우 순서 안내는 <a href="../index.html#trv-1week-whop-flow">메인 · 1주 TRV 체험 권장 순서</a>를 참고하세요.
+        <strong>1달 무상·유료 이벤트·정규</strong>(SMS·플랜·필요 시 Google OTP)는 이 <strong>정회원 가입 페이지</strong>에서 진행합니다.
+      </aside>
       <p class="lead">
-        <strong>로그인 ID는 이메일</strong>을 써요. <strong>휴대폰 번호</strong>를 입력하신 뒤 SMS로 받은
-        6자리 인증번호를 입력하면 다음 단계로 넘어갈 수 있어요. <strong>휴대폰 인증이 완료되어야</strong> 회원가입이 끝납니다. 정규 플랜(regular_default)을
-        선택하시면 <strong>Google OTP(TOTP)</strong> 설정까지 진행하게 됩니다.
+        이 페이지는 <strong>정회원 전용 가입 폼</strong>입니다. <strong>로그인 ID는 이메일</strong>이며 <strong>SMS 인증번호(6자리)</strong>로 휴대폰 확정 후
+        가입이 완료됩니다. 정규 플랜(regular_default)을 선택하면 <strong>Google OTP(TOTP)</strong>까지 필요합니다.
       </p>
 
       <p class="reg-api-hint small" style="margin-top: 0.5rem; color: var(--ci-brown-muted, #6b5344)">
@@ -212,8 +218,10 @@
         <fieldset class="reg-fieldset">
           <legend class="reg-legend">가입 옵션</legend>
           <p class="reg-field-hint">
-            기본값은 <strong>MagicTrading 정규 접근권</strong>입니다. 7일 무료 체험은 홈페이지 회원가입 없이 구독·결제 페이지에서 TradingView(TRV) ID 또는 MT5 계좌 번호+서버 1조합만으로도 신청할 수 있습니다.
+            기본값은 <strong>MagicTrading 정규 접근권</strong>입니다. 7일 무료 체험은 <strong>준회원 이상 로그인</strong> 후
+            <a href="../billing/index.html?signup=1&amp;plan=event_1w_free">구독·결제</a>에서 TradingView(TRV) 사용자명 또는 MT5 계좌 번호+서버를 제출해 완료합니다.
             확정가는 Whop TRV 이벤트 $119 / 정규 $5,499, Whop MT5 이벤트 $129 / 정규 $5,999, MQL MT5 이벤트 $149 / 정규 $6,999입니다.
+            7일 무상 프리는 <strong><a href="associate.html">준회원 가입</a></strong>을 먼저 하시는 것을 권장합니다.
           </p>
 
           <div class="reg-field">
@@ -264,6 +272,27 @@
               <span class="reg-hint">정규 플랜(regular_default) 선택 시 필수입니다.</span>
             </div>
           </div>
+        </fieldset>
+
+        <fieldset class="reg-fieldset" id="sms-addon-fieldset-register">
+          <legend class="reg-legend">문자 시그널 패키지(선택)</legend>
+          <p class="reg-field-hint">
+            TradingView·MT5 신호 알림 요약을 <strong>단문 SMS</strong>로도 받을 수 있습니다(월 패키지). 기본값은 이용 안 함입니다. 자세한 요금·한도·문구는
+            <button type="button" class="reg-linklike" data-open-sms-addon-modal>안내 팝업</button> 또는
+            <a href="sms-addon.html">문자 시그널 신청 페이지</a>를 참고하세요.
+          </p>
+          <div class="reg-field">
+            <label for="signup_sms_addon_choice">문자 패키지</label>
+            <select id="signup_sms_addon_choice" name="signup_sms_addon_choice">
+              <option value="none" selected>이용 안 함</option>
+              <option value="sms_200">월 200건 — US$15</option>
+              <option value="sms_500">월 500건 — US$40</option>
+              <option value="sms_1000">월 1000건 — US$80</option>
+            </select>
+          </div>
+          <p class="reg-field-hint" style="margin-top: -0.15rem">
+            결제 확인 전까지 문자 발송이 활성화되지 않을 수 있습니다. 테스트용으로 서버에 <code>SMS_ADDON_ACTIVATE_WITHOUT_PAYMENT=1</code> 이 있으면 선택 즉시 활성처럼 처리됩니다.
+          </p>
         </fieldset>
 
         <fieldset class="reg-fieldset">
@@ -397,7 +426,25 @@
         정규 플랜은 이유 불문 일할 환불, 이벤트·쿠폰·무료체험·리커버리는 환불불가 조건입니다. 쿠폰은 최초 교환 계정에 귀속되고 양도할 수 없습니다. 상세는 <a href="../legal/refund.html">환불 정책</a> 및 <a href="../billing/index.html">결제 페이지</a>를 참고하세요.
       </div>
     </main>
-    <footer class="site-footer" role="contentinfo">
+      <div id="sms-addon-modal" class="sms-addon-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="sms-addon-modal-title-register">
+        <div class="sms-addon-modal-dialog" role="document">
+          <h3 id="sms-addon-modal-title-register" tabindex="-1">문자 시그널 패키지 안내</h3>
+          <ul class="doc-steps">
+            <li><strong>과금 안내:</strong> 월 200건/US$15, 500건/US$40, 1000건/US$80 패키지 중 선택합니다.</li>
+            <li><strong>정회원 필요:</strong> 휴대폰 SMS 가입 인증 번호(<code>phone_e164</code>)가 있어야 유료 문자 옵션을 저장합니다. 준회원은 문자만 담아 두거나 이후 정회원 전환 후 신청 페이지에서 다시 설정하세요.</li>
+            <li><strong>활성:</strong> 과금 검증까지 <code>sms_addon_active</code>가 꺼진 상태면 문자 발송은 되지 않습니다. 테스트는 서버 환경변수나 관리자 설정으로 허용됩니다.</li>
+            <li>
+              <strong>문구:</strong> 통신 원가 절약을 위해 <strong>종목 · 매수/매도/청산 · 숫자 가격만</strong> 짧게 보냅니다.
+              <span class="sms-sample">예: 나스닥 매도 기준27450 HD인베</span>
+            </li>
+            <li><strong>한도:</strong> 패키지 월 통수 초과 시 해당 월 추가 문자 발송 없음이 원칙입니다.</li>
+          </ul>
+          <p style="margin-top: 0.85rem">
+            <button type="button" class="btn" data-close-sms-modal>닫기</button>
+          </p>
+        </div>
+      </div>
+      <footer class="site-footer" role="contentinfo">
       <div class="ci-wrap ci-wrap--footer">
         <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="220" height="110" alt="" />
         <div class="ci-names">
@@ -409,6 +456,7 @@
     <script src="../assets/site-ux.js"></script>
     <script src="../assets/magic-auth.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="sms-addon-shared.js"></script>
     <script src="registration.js"></script>
   </body>
 </html>

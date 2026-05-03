@@ -54,11 +54,12 @@
     </header>
     <nav class="site-nav" aria-label="주요 메뉴">
       <a href="index.html" aria-current="page">메인</a>
-      <a href="guide/index.html">설치 안내</a>
-      <a href="guide/usage.html">사용법</a>
-      <a href="guide/usage-trv.html">TRV 설정</a>
-      <a href="guide/usage-mt5.html">MT5 설정</a>
+      <a href="guide/index.html">가이드</a>
+      <a href="guide/usage.html">지표 사용</a>
+      <a href="guide/usage-trv.html">TRV</a>
+      <a href="guide/usage-mt5.html">MT5</a>
       <a href="downloads/index.html">다운로드</a>
+      <a href="registration/sms-addon.html">SMS 시그널</a>
       <a href="registration/index.html">가입·등록</a>
       <a href="verify/index.html">본인인증</a>
       <a href="billing/index.html#payment-dual">구독·결제</a>
@@ -91,7 +92,10 @@
           <article class="ml-quick-start__card" role="listitem">
             <span class="ml-quick-start__num">1</span>
             <h3>내 차트에 입히기</h3>
-            <p>MT5 또는 TradingView 환경에 맞춰 MagicLine 지표를 차트에 적용합니다.</p>
+            <p>
+              <strong>TradingView</strong>는 봉·틱 등 환경에 맞춰 MagicLine을 적용하고, <strong>MT5</strong>로 받는
+              <code>.ex5</code>는 <strong>틱(Tick) 차트 전용</strong>으로만 판매·배포합니다(일반 M1/M5 등 봉 전용 빌드는 제공하지 않습니다).
+            </p>
           </article>
           <article class="ml-quick-start__card" role="listitem">
             <span class="ml-quick-start__num">2</span>
@@ -110,7 +114,46 @@
         </div>
         <p class="ml-quick-start__actions">
           <a class="btn" href="registration/index.html">지표 신청 시작하기</a>
+          <a class="btn btn--ghost" href="registration/sms-addon.html">문자 시그널 월패키지</a>
           <a class="btn btn--ghost" href="guide/usage.html">사용법 보기</a>
+          <a class="btn btn--ghost" href="guide/magictrading-strategy-inputs-ko.html">MagicTrading 입력 안내</a>
+        </p>
+      </section>
+
+      <section class="ml-quick-start" id="trv-1week-whop-flow" aria-labelledby="trv-1week-whop-title" style="margin-top: 2rem">
+        <p class="ml-quick-start__badge">Whop 등 외부 유입 · TRV 1주 체험</p>
+        <h2 id="trv-1week-whop-title">1주(7일) TradingView 체험 — 진행 순서</h2>
+        <p class="small" style="margin: -0.25rem 0 1rem; max-width: 44rem; line-height: 1.62; color: var(--ci-brown-muted)">
+          Whop 광고·상품 등에서 안내된 링크로 들어오신 분을 위한 순서입니다. 세부 요금·약관은
+          <a href="events/index.html">이벤트·요금</a>과 <a href="legal/terms-magictrading-free-trial.html">7일 무료 체험 특약</a>을 참고하세요.
+          <strong>7일 체험 제출·완료에는 준회원 이상 로그인이 필요합니다.</strong>
+        </p>
+        <ol class="notice-list" style="max-width: 44rem; line-height: 1.72; padding-left: 1.35rem">
+          <li style="margin-bottom: 0.5rem">
+            <strong>Whop</strong> 등에서 안내하는 링크를 눌러 <strong>이 홈페이지</strong>(공식 사이트)로 들어옵니다.
+          </li>
+          <li style="margin-bottom: 0.5rem">
+            <strong>준회원 가입</strong>(SMS 없음, 최소 정보) —
+            <a href="registration/associate.html">준회원 가입 (1주 무상 프리)</a>
+          </li>
+          <li style="margin-bottom: 0.5rem">
+            로그인 후 <a href="billing/index.html?signup=1&amp;plan=event_1w_free">구독·결제 → 7일 무료 체험</a>에서 신청합니다.
+            <strong>TradingView(TRV) 사용자명</strong> 또는 <strong>MT5 계좌 번호+서버</strong>를 입력하고 약관·서명까지 제출합니다.
+          </li>
+          <li style="margin-bottom: 0.5rem">
+            제출이 완료되면 <strong>시스템 원장·회원 정보에 반영</strong>됩니다. 관리자는
+            <a href="admin/monitor.html">플랜 모니터(관리자)</a>의 최근 원장 등에서 접수 내역을 확인합니다.
+          </li>
+          <li style="margin-bottom: 0.5rem">
+            <strong>관리자</strong>가 신청 내용을 바탕으로 TradingView <strong>초대·스크립트 반영</strong> 등 후속 조치를 합니다.
+          </li>
+          <li style="margin-bottom: 0.5rem">
+            조치가 끝나면 <strong>가입해 둔 이메일로 안내</strong>를 보냅니다. 수신이 없으면 스팸함을 확인한 뒤
+            <a href="contact/index.html">문의</a>를 이용해 주세요.
+          </li>
+        </ol>
+        <p class="small" style="margin: 1rem 0 0; max-width: 44rem; line-height: 1.62; color: var(--ci-brown-muted)">
+          플랜 모니터 첫 화면의 <strong>최근 7일 원장</strong> 표에서 TRV 사용자명·MT5 식별값·이메일 옆 <strong>복사</strong> 버튼으로 클립보드에 옮길 수 있습니다(관리자 로그인 필요).
         </p>
       </section>
 
@@ -178,9 +221,9 @@
           <a href="billing/index.html#payment-dual">구독·결제 페이지에서 채널별 상세 보기 →</a>
         </p>
         <p class="small" style="margin: 0.65rem 0 0; color: var(--ci-brown-muted); line-height: 1.62">
-          해외 송금(SWIFT)은 통상 며칠까지 걸릴 수 있습니다. 필요 시
-          <strong>송금 증빙(MT103 등)</strong> 검토 후 이용을 시작하는 운영이 가능하며 안내입니다.
-          <a href="billing/index.html#swift-gap-remedy"><strong>송금 공백기 대처(공개 카피) →</strong></a>
+          해외 <strong>국제 외화 송금</strong>(SWIFT 등)은 통상 며칠까지 걸릴 수 있습니다. 필요 시 금액·수취인이 명확한
+          <strong>은행 증빙(MT103·접수증 등)</strong>을 주시면 검토 후 <strong>입금 확인 전이라도</strong> 지표 이용 선승인이 가능하다고 안내합니다(통화별 동일 원칙).
+          <a href="billing/index.html#swift-gap-remedy"><strong>송금 공백기·증빙 선검증(공개 카피) →</strong></a>
         </p>
       </section>
 
@@ -231,6 +274,7 @@
           <p>
             오랜 실전과 수정을 거듭한 <strong>보조 지표</strong>입니다. 안전마진, 평균으로의 회귀, 가격이 머무는 구간을 읽는 생각을 염두에 두었어요.
             가격에 맞춰 숨 쉬듯 움직이며, <strong>R값</strong>으로 간격을 조절합니다. <strong>틱 차트</strong>와 <strong>선물·옵션</strong>처럼 양방향 매매를 상정했습니다.
+            <strong>MT5</strong>로 내려받는 지표는 <strong>틱 차트 전용 빌드</strong>로만 제공합니다.
             한 방을 약속하기보다, 반복 가능한 판단 기준을 차트 위에 남기는 방향으로 만들었습니다.
           </p>
           <div class="ml-principles" aria-label="MagicTrading 투자 원칙">
@@ -270,7 +314,7 @@
             </ul>
             <p>
               결제·회원은 <a href="billing/index.html">구독·결제</a>, 편한 연락은 <a href="contact/index.html">문의</a>나
-              <a href="mailto:happyinvest@happyinvest.com">happyinvest@happyinvest.com</a>으로 주세요.
+              <a href="mailto:happyinvest@magicindicatorglobal.com">happyinvest@magicindicatorglobal.com</a>으로 주세요.
             </p>
           </div>
         </details>
@@ -287,6 +331,7 @@
         </p>
         <nav class="main-hub main-hub--dense" aria-label="모임터 게시판 구역">
           <a href="boards/index.html">전체 <small>모든 글·검색</small></a>
+          <a href="guide/magictrading-strategy-inputs-ko.html">MagicTrading 입력 <small>Fine Tune 가이드</small></a>
           <a href="boards/index.html?board=quickview">한눈에 보기 <small>요약·스냅샷</small></a>
           <a href="boards/index.html?board=announcement">공지 <small>운영 알림</small></a>
           <a href="boards/index.html?board=market_analysis">시황 분석 <small>차트·시황</small></a>
@@ -307,8 +352,8 @@
           <a href="guide/index.html">가이드 <small>TV · MT5 설치</small></a>
           <a href="guide/usage.html">지표 사용 <small>읽는 법 · TRV/MT5</small></a>
           <a href="guide/usage-trv.html">TRV 사용 <small>차트·알림</small></a>
-          <a href="guide/usage-mt5.html">MT5 사용 <small>설치·틱/봉</small></a>
-          <a href="downloads/index.html">다운로드 <small>지표·MT5 패키지</small></a>
+          <a href="guide/usage-mt5.html">MT5 사용 <small>설치·틱봉 전용</small></a>
+          <a href="downloads/index.html">다운로드 <small>지표·MT5(틱 전용) 패키지</small></a>
           <a href="registration/index.html">가입·등록 <small>회원 계정</small></a>
           <a href="verify/index.html">본인 인증 <small>계정 보호</small></a>
           <a href="billing/index.html#payment-dual">구독·결제 <small>PayPal · 하나은행 외화 · 크립토 · 원화</small></a>
@@ -331,8 +376,14 @@
             <strong>매직라인(Magic Line)</strong>은 캔들·추세를 한눈에 정리해 주는 보조 지표입니다. 급한 매매를 부추기기보다, <em>잠깐 멈춰서 볼 수 있는 선</em>을 그어 드리는 쪽에 가깝습니다.
           </p>
           <ul class="notice-list">
-            <li>지원 환경: TRV(Pine) · MetaTrader 5(컴파일된 <code>.ex5</code> 배포)</li>
-            <li>지표·MT5 패키지의 <strong>고객용 접근권·운영 조건</strong>은 <a href="downloads/index.html#dl-mt5-title">다운로드</a> 표에 정리돼 있어요. <strong>캔들/봉</strong>용과 <a href="downloads/index.html#dl-mt5-tick">틱(Tick) 차트</a>용·기간형 쿠폰은 구역이 나뉘어 있고, 표에는 내부 ID를 넣지 않았습니다.</li>
+            <li>
+              지원 환경: TRV(Pine, 브라우저·앱 차트) · MetaTrader 5(
+              <strong>틱 차트 전용</strong> <code>.ex5</code> — 일반 봉 차트용 MT5 빌드는 판매하지 않음)
+            </li>
+            <li>
+              지표·MT5 패키지의 <strong>고객용 접근권·운영 조건</strong>은 <a href="downloads/index.html#dl-mt5-title">다운로드</a> 표를 따릅니다.
+              <strong>MT5 측은 틱(Tick) 전용</strong>으로만 안내·배포하며, 기간형 쿠폰·플랜 구분은 표와 약관을 보시면 됩니다.
+            </li>
             <li>라이선스: <strong>정규</strong>는 <strong>단일 상품</strong>이며 판매 마켓과 플랫폼에 따라 <strong>Whop TRV · Whop MT5 · MQL MT5</strong>로 구분해요(가격·세부는 <a href="legal/terms-magictrading-regular.html">정규 약관</a>·상담). 이벤트·무료체험은 약관이 따로 있어요.</li>
             <li>로그인 후 MT5 계좌·MQL5·TRV ID를 연결하면, 라이선스·알림 연동에 쓸 수 있습니다.</li>
           </ul>
@@ -395,6 +446,7 @@
                 플랫폼마다 <strong>시장을 나눠</strong> 판매·신청받아요. <strong>TRV(TradingView)</strong>는 아래
                 <strong>9개 필드</strong> 중 <strong>신청 시 고른 필드</strong>에만 지표가 적용되도록 안내·배포합니다. <strong>MT5</strong>는
                 <strong>5개 시장 구간</strong>(외환 · 주식·지수 · 에너지·원자재 · 가상자산 · 채권) 중 <strong>신청 시 고른 구간</strong>에만 적용합니다(1달 이벤트부터 동일 원칙).
+                <strong>MT5 지표 파일은 틱(Tick) 차트 전용</strong>으로 빌드·판매합니다.
               </p>
               <div style="overflow-x: auto; margin: 0.4rem 0 0.45rem" role="region" aria-label="TRV·MT5 적용 구분">
                 <table class="data-table" style="font-size: 0.85rem; margin: 0; min-width: 17rem">
@@ -414,7 +466,8 @@
                     <tr>
                       <td><strong>MT5</strong></td>
                       <td>
-                        ① 외환 · ② 주식·지수 · ③ 에너지·원자재 · ④ 가상자산 · ⑤ 채권 — <strong>5구간 중 택1</strong>
+                        ① 외환 · ② 주식·지수 · ③ 에너지·원자재 · ④ 가상자산 · ⑤ 채권 — <strong>5구간 중 택1</strong>.
+                        제공 지표는 <strong>틱 차트 전용</strong>(일반 시간봉 전용 패키지는 판매하지 않음).
                       </td>
                     </tr>
                   </tbody>
@@ -460,20 +513,26 @@
               <p class="market-license-card__kicker">Whop · MT5</p>
               <h3>MT5 Event / Regular</h3>
               <p class="market-license-card__price">$129 <span class="plan-price-suffix">/ 1개월</span> · $5,999 <span class="plan-price-suffix">/ 월</span></p>
-              <p>Whop의 MT5 사용자용 가격입니다. 계좌 번호+서버 1조합 기준으로 권한을 확인합니다.</p>
+              <p>
+                Whop의 MT5 사용자용 가격입니다. 계좌 번호+서버 1조합 기준으로 권한을 확인합니다.
+                배포되는 지표는 <strong>틱(Tick) 차트 전용</strong>입니다.
+              </p>
             </article>
             <article class="market-license-card market-license-card--business">
               <p class="market-license-card__kicker">MQL · MT5</p>
               <h3>MT5 Event / Regular</h3>
               <p class="market-license-card__price">$149 <span class="plan-price-suffix">/ 1개월</span> · $6,999 <span class="plan-price-suffix">/ 월</span></p>
-              <p>MQL 시장용 MT5 가격입니다. 검증·리뷰·계좌 연동 설명을 더 강하게 붙입니다.</p>
+              <p>
+                MQL 시장용 MT5 가격입니다. 검증·리뷰·계좌 연동 설명을 더 강하게 붙입니다.
+                제공 지표는 <strong>틱(Tick) 차트 전용</strong>입니다.
+              </p>
             </article>
           </div>
 
           <p class="market-license__note">
             <strong>납부:</strong> 1개월(1회 청구)을 넘는 <strong>연·분기·다월 일시 선납</strong>이나 &ldquo;년회원&rdquo; 형태는 <strong>지원하지 않고</strong>,
             <strong>월 1회 납부</strong>만 합니다(개인·조직 <strong>자금·도산</strong> 등을 고려한 정책이에요. <a href="legal/terms-magictrading-regular.html">정규 특약</a>·<a href="billing/index.html#monthly-billing">구독</a> 참고).
-            <strong>정규 고액</strong>은 <a href="billing/index.html#aw-usd-base">하나은행 외화계좌 직접 송금</a> 등으로 맞출 수 있고,
+            <strong>정규 고액</strong>은 <a href="billing/index.html#wire-route-picker">외화 계좌 직접 송금 안내</a> 등으로 맞출 수 있고,
             카드·PG 수수료 구조와 비교해 유리한 경우가 있으면 <strong>권장</strong>해요(금액·조건은 인보이스·<a href="contact/index.html">상담</a>·송금·은행 수수료는 별도). 공유·재판매 금지, TRV/MT5·
             <a href="legal/terms-magictrading-regular.html">정규 약관</a>·<a href="legal/plan-terms-nonrefund.html#sec-business">총괄(엔터프라이즈·조직)</a>·<strong>MT5 우선</strong> 식별 등은 그대로 적용돼요.
           </p>
@@ -536,13 +595,19 @@
           </details>
 
           <ul class="qa-list home-qa-bottom__list">
+            <li>
+              <strong>Q.</strong> Whop에서 온 뒤 순서가 어떻게 되나요? →
+              <a href="#trv-1week-whop-flow">1주 TRV 체험 순서</a>
+              · <a href="events/index.html">이벤트</a>
+            </li>
             <li><strong>Q.</strong> 체험·프로모션이 있나요? → <a href="events/index.html">이벤트</a> (TRV·MT5 조건이 다릅니다)</li>
             <li>
               <strong>Q.</strong> 지표를 어떻게 쓰나요? → <a href="guide/usage.html">지표 사용(허브)</a> ·
               <a href="guide/usage-trv.html">TRV 상세</a> · <a href="guide/usage-mt5.html">MT5 상세</a>
             </li>
             <li><strong>Q.</strong> TRV에 어떻게 붙이나요? → <a href="guide/usage-trv.html">지표 사용 · TRV</a> / <a href="guide/index.html#tv">가이드 · 설치</a></li>
-            <li><strong>Q.</strong> MT5에는 파일을 어디에 넣나요? → <a href="guide/usage-mt5.html">지표 사용 · MT5</a> / <a href="guide/index.html#mt5">가이드 · 설치</a></li>
+            <li><strong>Q.</strong> MT5에는 파일을 어디에 넣나요? → <a href="guide/usage-mt5.html">지표 사용 · MT5</a>(<strong>틱 차트 전용</strong>)
+              / <a href="guide/index.html#mt5">가이드 · 설치</a></li>
             <li><strong>Q.</strong> 결제는 언제 되나요? → <a href="billing/index.html">구독·결제</a> (연동 준비 중일 수 있음)</li>
           </ul>
         </section>

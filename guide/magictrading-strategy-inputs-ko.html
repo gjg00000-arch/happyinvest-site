@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>MagicTrading(TRV) 입력·파인튜닝 사용법 — 지표 가이드</title>
+    <meta
+      name="description"
+      content="TradingView MagicTrading 전략 — Entry Mode, Adjust(Fine Tune), Signals, Risk 인풋별 의미와 추천 순서"
+    />
+    <link rel="stylesheet" href="../assets/common.css" />
+    <link rel="stylesheet" href="../assets/site-ux.css" />
+    <link rel="stylesheet" href="../assets/guide-docs.css" />
+  </head>
+  <body>
+    <header class="site-header" role="banner">
+      <div class="ci-wrap">
+        <img
+          class="ci-logo-img"
+          src="../assets/haengbokdam-company-ci.png"
+          width="280"
+          height="140"
+          alt="주식회사 행복도담 인베스트 CI"
+        />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </header>
+    <nav class="site-nav" aria-label="주요 메뉴">
+      <a href="../index.html">메인</a>
+      <a href="index.html">가이드</a>
+      <a href="usage.html">지표 사용</a>
+      <a href="usage-trv.html">TRV</a>
+      <a href="usage-mt5.html">MT5</a>
+      <a href="../downloads/index.html">다운로드</a>
+      <a href="../registration/index.html">가입·등록</a>
+      <a href="../verify/index.html">본인인증</a>
+      <a href="../billing/index.html">구독·결제</a>
+      <a href="../events/index.html">이벤트</a>
+      <a href="../membership/index.html">회원혜택</a>
+      <a href="../reflection/index.html">실전후기</a>
+      <a href="../contact/index.html">문의</a>
+      <a href="../boards/index.html">모임터</a>
+      <a href="../boards/index.html?board=event_promo_shoutout">추천·홍보</a>
+      <a href="../legal/index.html">약관·정책</a>
+      <a href="../head-daily-report/index.html">본부 데일리</a>
+      <a href="../admin/index.html">관리자</a>
+      <a href="../integrations/index.html">연동</a>
+    </nav>
+    <div class="wrap">
+      <header class="doc-hero">
+        <p class="doc-hero__eyebrow">TradingView · Pine Strategy · MagicTrading</p>
+        <h1 class="doc-hero__title">MagicTrading 입력·파인튜닝 안내</h1>
+        <p class="doc-hero__lead">
+          차트에 붙인 뒤 <strong>설정 → Inputs</strong>에서 바꿀 수 있는 네 블록 — <strong>Mode / Adjust(Fine Tune) / Signals /
+          Risk</strong> — 의 역할과 권장 사용 순서를 정리했습니다. 아래 예시 도해는 교육용이며, 실제 TV 화면과 동일할 필요는 없습니다.
+        </p>
+      </header>
+
+      <figure class="doc-figure doc-figure--wide">
+        <img src="../assets/guide-magictrading-inputs-fig1.svg" width="640" height="420" alt="MagicTrading Inputs 탭 도해 MODE ADJUST SIGNALS RISK" />
+        <figcaption><strong>그림 1.</strong> Inputs 탭 개요 — Mode, Adjust(Fine Tune), Signals, Risk 위치 예시.</figcaption>
+      </figure>
+
+      <figure class="doc-figure doc-figure--wide">
+        <img src="../assets/guide-magictrading-inputs-fig2.svg" width="640" height="380" alt="차트 예시 레인보우 및 설정 패널 도해" />
+        <figcaption>
+          <strong>그림 2.</strong> 메인 차트(레인보우·시그널)와 우측 설정 패널을 함께 둔 작업 예시(NQ 등 틱·봉 차트 공통 개념).
+        </figcaption>
+      </figure>
+
+      <nav class="doc-toc" aria-label="목차">
+        <h2>목차</h2>
+        <ol>
+          <li><a href="#mode">Entry Mode(Input Mode)</a></li>
+          <li><a href="#adjust">Adjust — BaseR 와 파인 튜닝</a></li>
+          <li><a href="#signals">Signals — 표시와 알림·웹훅</a></li>
+          <li><a href="#risk">Risk — 손절·쿨다운·트레일</a></li>
+          <li><a href="#workflow">권장 작업 순서</a></li>
+        </ol>
+      </nav>
+
+      <article class="doc-section" id="mode">
+        <h2>MODE — Entry Mode(Input Mode)</h2>
+        <p>
+          <strong>Conservative</strong>는 가격이 밴드(상·하단)를 <strong>확실히 교차할 때</strong> 진입하는 쪽에 가깝고,
+          <strong>Attack</strong>은 밴드 근처만 와도(설정 비율 이내) 더 이른 진입을 허용합니다. 같은 시장이라도 신호 빈도·승패 패턴이 달라질 수
+          있으므로, <strong>먼저 차트 종류·주기를 고른 뒤</strong> 한쪽 모드로만 충분히 익혀 보는 것이 좋습니다.
+        </p>
+        <ul class="doc-steps" style="list-style: disc; padding-left: 1.25rem">
+          <li><strong>보수적으로 검증할 때:</strong> Conservative부터.</li>
+          <li><strong>반등·추세 초입을 더 잡고 싶을 때:</strong> Attack + Signals의 Attack 근처 비율을 함께 조정.</li>
+        </ul>
+      </article>
+
+      <article class="doc-section doc-section--soft" id="adjust">
+        <h2>ADJUST — Manual BaseR · Auto / Manual Fine Tune</h2>
+        <p>
+          이 블록은 중심선 기준 위·아래 <strong>밴드 폭(%)</strong>을 만드는 데 들어가는 <strong>R(변동폭 성격)</strong>을 어떻게 잡을지
+          결정합니다. 기본값에 가까울수록 종목별 틱·변동성에 맞춰 서버 로직에 가까운 자동폭을 쓰게 되고, 수동값은 그 위에 덮어씁니다.
+        </p>
+        <dl class="doc-dl">
+          <dt>Manual BaseR <code>(0=Auto)</code></dt>
+          <dd>
+            <strong>0</strong>이면 심볼·틱 크기 등에 따른 자동 산출(스크립트 내 자동 규칙)을 우선 따릅니다. 특정 종목만 밴드를 넓히거나
+            좁히고 싶을 때만 0보다 큰 값을 넣어 <strong>고정 기준%</strong>로 씁니다. 과도하게 넓히면 신호가 늘어져 노이즈가 될 수 있습니다.
+          </dd>
+          <dt>Auto Fine Tune</dt>
+          <dd>
+            켜면 최근 변동성(ATR 비율 등)을 반영해 <strong>Fine Tune 배수</strong>를 스스로 움직입니다. 종목 환경이 바뀔 때 밴드를
+            덜 빡세게·덜 넓게 맞추는 용도로 이해하면 됩니다.
+          </dd>
+          <dt>Manual Fine Tune</dt>
+          <dd>
+            Auto가 꺼져 있을 때만 의미가 큽니다. 기본 근처(예: 1.0)에서 <strong>0.75~1.25</strong>처럼 조금씩 바꿔 가며 체감을 맞춥니다.
+            값을 올리면 밴드가 상대적으로 <strong>넓어지는 쪽 성격</strong>이 강해질 수 있어, 진입 빈도·손절 거리 체감이 함께 변합니다.
+            <strong>Auto를 쓰는 중에는</strong> 이 값은 무시되는 구조이므로, 수동 미세 조정을 하려면 Auto를 끄고 시작하세요.
+          </dd>
+        </dl>
+        <p class="small" style="color: var(--ci-brown-muted); margin-top: 0.75rem">
+          파인 튜닝은 “신호 많이 vs 적게”만이 아니라 <strong>스탑·트레일( Risk 블록 )과 연동</strong>됩니다. BaseR만 바꾼 뒤 Risk는 그대로 두면 체감이
+          크게 어긋날 수 있으니 <a href="#workflow">작업 순서</a>를 참고하세요.
+        </p>
+      </article>
+
+      <article class="doc-section" id="signals">
+        <h2>SIGNALS — 표시와 알림</h2>
+        <dl class="doc-dl">
+          <dt>Show Signals</dt>
+          <dd>매수·매도·청산·스탑 등 <strong>차트 위 라벨/모양</strong> 표시 여부입니다.</dd>
+          <dt>Use alert() Messages</dt>
+          <dd>
+            알림 패널에서 만든 알림과 연동됩니다. <strong>끄면</strong> <code>alert()</code> 기반 호출이 나가지 않으므로, 외부
+            서버·텔레그램 파이프라인을 쓰는 경우 <strong>반드시 켜두는 것</strong>이 일반적입니다.
+          </dd>
+          <dt>알림 본문 형식</dt>
+          <dd>
+            <strong>Text</strong>는 사람이 읽기 쉬운 한 줄 문자열 중심이고,
+            <strong>JSON (webhook)</strong>은 중계 서버가 <code>event</code>·<code>text</code>·가격 필드를 파싱하기 좋습니다. 텔레그램·자동 매매
+            연동 시 JSON을 선택하는 편이 안전합니다.
+          </dd>
+          <dt>Attack Entry Near Band · Exit Near Center</dt>
+          <dd>
+            <strong>밴드 높이의 절반(half band)</strong> 대비 몇 퍼센트 안쪽까지를 “근처”로 볼지 정합니다. Attack 모드 진입 허용 폭과
+            중심선 부근 청산 감도에 직접 영향을 줍니다. 숫자를 너무 키우면 청산·추가 진입 같은 <strong>잦은 이벤트</strong>가 늘 수 있습니다.
+          </dd>
+        </dl>
+      </article>
+
+      <article class="doc-section doc-section--soft" id="risk">
+        <h2>RISK — 손절·재진입·트레일</h2>
+        <dl class="doc-dl">
+          <dt>Stop Buffer (% of half band)</dt>
+          <dd>역방향 변동 시 <strong>고정 스탑</strong>이 밴드 바깥으로 얼마나 더 버퍼를 둘지입니다. 노이즈에 걸린 청산을 줄이려면 소폭 키우고, 타이트하게 가져가려면 줄입니다.</dd>
+          <dt>Re-entry Cooldown Bars After Stop</dt>
+          <dd>스탑 직후 같은 방향 재진입을 막는 <strong>바(봉) 수</strong>입니다. 0은 쿨다운 없음. 짧은 횡보장에서 연속 손실을 줄이는 데 유리합니다.</dd>
+          <dt>Use Trailing Stop / Trail Start / Trail Offset</dt>
+          <dd>
+            유리하게 움직인 뒤에만 트레일을 켜고, 고정 스탑과 비교해 <strong>더 타이트한 쪽</strong>이 적용됩니다. 시작·오프셋 역시 half band 비율
+            기준이므로 <a href="#adjust">Adjust</a>에서 밴드를 바꿨다면 여기 숫자도 함께 재점검하세요.
+          </dd>
+        </dl>
+      </article>
+
+      <article class="doc-section" id="workflow">
+        <h2>권장 작업 순서</h2>
+        <ol class="doc-steps">
+          <li><strong>타임프레임·종목 고정</strong> 후 Conservative로 며칠 관창.</li>
+          <li>밴드가 너무 좁거나 넓으면 <strong>Manual BaseR</strong> 또는 Auto Fine Tune 우선 검토.</li>
+          <li>진입 빈도를 바꿀 일이 있으면 <strong>Entry Mode</strong>와 Signals의 Attack/Exit 비율을 세트로 조정.</li>
+          <li>손절·트레일 체감을 맞춘 뒤 <strong>Risk 블록</strong> 미세 조정.</li>
+          <li>알림·외부 연동이 필요하면 Signals에서 <strong>JSON (webhook)</strong> 선택 후 TradingView 알림 생성.</li>
+        </ol>
+        <p class="small" style="margin-top: 0.75rem">
+          질문·개선 요청은 <a href="../boards/index.html?board=qa">모임터 · 질문과 답변</a> 또는
+          <a href="../contact/index.html">문의</a>로 남겨 주세요.
+        </p>
+      </article>
+
+      <div class="terms-box" style="margin-top: 1.5rem">
+        <strong>관련 페이지</strong><br />
+        <a href="usage-trv.html">TRV 지표 사용</a> ·
+        <a href="tradingview-magic-r.html">TradingView · Magic R 안내</a> ·
+        <a href="index.html">가이드 허브</a>
+      </div>
+    </div>
+    <footer class="site-footer" role="contentinfo">
+      <div class="ci-wrap ci-wrap--footer">
+        <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="220" height="110" alt="" />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </footer>
+    <style>
+      .doc-figure {
+        margin: 1.25rem 0;
+        text-align: center;
+      }
+      .doc-figure img {
+        max-width: 100%;
+        height: auto;
+        border: 1px solid rgba(139, 120, 96, 0.35);
+        border-radius: 8px;
+        background: var(--surface-2, #111);
+      }
+      .doc-figure figcaption {
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        color: var(--ci-brown-muted);
+        text-align: left;
+      }
+      .doc-dl dt {
+        font-weight: 600;
+        margin-top: 0.75rem;
+        color: var(--text-strong, inherit);
+      }
+      .doc-dl dd {
+        margin: 0.25rem 0 0 0;
+        padding-left: 0;
+        color: var(--text-muted);
+      }
+    </style>
+    <script src="../assets/site-ux.js"></script>
+  </body>
+</html>

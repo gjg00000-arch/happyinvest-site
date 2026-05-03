@@ -70,6 +70,7 @@
       body: JSON.stringify({
         credential: credential,
         signup_plan_choice: choice,
+        sms_addon_choice: signupSmsAddonChoice(),
       }),
     });
     var data = await res.json().catch(function () {
@@ -146,6 +147,7 @@
   var cooldownEl = document.getElementById("phone-cooldown");
   var cooldownTimer = null;
   var signupChoiceEl = document.getElementById("signup_plan_choice");
+  var smsAddonChoiceEl = document.getElementById("signup_sms_addon_choice");
   var googleOtpBlock = document.getElementById("google-otp-block");
   var googleOtpGenerateBtn = document.getElementById("google-otp-generate");
   var googleOtpStatus = document.getElementById("google-otp-status");
@@ -265,6 +267,11 @@
     var v = signupChoiceEl ? String(signupChoiceEl.value || "").trim() : "";
     if (!v) return "regular_default";
     return v;
+  }
+
+  function signupSmsAddonChoice() {
+    var sel = smsAddonChoiceEl ? String(smsAddonChoiceEl.value || "").trim() : "";
+    return sel || "none";
   }
 
   function isRegularChoice(choice) {
@@ -408,6 +415,7 @@
         return el && el.value.trim() ? el.value.trim() : undefined;
       })(),
       signup_plan_choice: signupPlanChoice(),
+      sms_addon_choice: signupSmsAddonChoice(),
       google_otp_setup_id: googleOtpSetupId ? googleOtpSetupId.value.trim() || undefined : undefined,
       google_otp_code: googleOtpCode ? String(googleOtpCode.value || "").replace(/\D/g, "") || undefined : undefined,
       referral_code: document.getElementById("referral_code").value.trim() || undefined,

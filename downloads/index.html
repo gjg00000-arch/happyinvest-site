@@ -7,11 +7,11 @@
     <title>Magic 지표 — 지표 다운로드</title>
     <meta
       name="description"
-      content="TradingView(Pine) 지표와 MetaTrader 5용 지표 다운로드 허브. 플랜별 포함 지표 및 MT5 패키지 목록."
+      content="TradingView(Pine) 지표와 MetaTrader 5용 틱 차트 전용 .ex5 다운로드 허브. 플랜별 포함 지표 및 MT5 패키지 목록."
     />
     <link rel="canonical" href="https://magicindicatorglobal.com/downloads/index.html" />
     <meta property="og:title" content="Magic 지표 — 지표 다운로드" />
-    <meta property="og:description" content="TradingView·MT5용 Magic 지표 다운로드 및 플랜별 패키지 안내." />
+    <meta property="og:description" content="TradingView와 MT5(틱 차트 전용 .ex5) Magic 지표 다운로드 및 플랜별 패키지 안내." />
     <meta property="og:url" content="https://magicindicatorglobal.com/downloads/index.html" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://magicindicatorglobal.com/assets/haengbokdam-company-ci.png" />
@@ -32,10 +32,10 @@
     </header>
     <nav class="site-nav" aria-label="주요 메뉴">
       <a href="../index.html">메인</a>
-      <a href="../guide/index.html">설치 안내</a>
-      <a href="../guide/usage.html">사용법</a>
-      <a href="../guide/usage-trv.html">TRV 설정</a>
-      <a href="../guide/usage-mt5.html">MT5 설정</a>
+      <a href="../guide/index.html">가이드</a>
+      <a href="../guide/usage.html">지표 사용</a>
+      <a href="../guide/usage-trv.html">TRV</a>
+      <a href="../guide/usage-mt5.html">MT5</a>
       <a href="../downloads/index.html" aria-current="page">다운로드</a>
       <a href="../registration/index.html">가입·등록</a>
       <a href="../verify/index.html">본인인증</a>
@@ -108,7 +108,8 @@
         </table>
       </section>
       <p class="lead dl-page-lead">
-        위쪽은 <strong>TradingView(TRV)</strong>용(Pine 스크립트·스토어 링크 등으로 연결 예정), 아래는 <strong>MetaTrader 5</strong>용(.ex5 등)입니다. 실제 파일 URL은 배포·결제 연동 후 같은 자리에 붙이면 됩니다.
+        위쪽은 <strong>TradingView(TRV)</strong>용(Pine 스크립트·스토어 링크 등으로 연결 예정), 아래는 <strong>MetaTrader 5</strong>용 <strong>틱(Tick) 차트 전용</strong>
+        컴파일 <code>.ex5</code>입니다. M1/M5 등 일반 시간봉 전용 MT5 빌드는 판매·배포하지 않습니다. 실제 파일 URL은 배포·결제 연동 후 같은 자리에 붙이면 됩니다.
         <span class="small" style="display: block; margin-top: 0.5rem; color: var(--ci-brown-muted)">
           차트에 올린 뒤 맞출 항목·읽는 방향: <a href="../guide/usage.html">지표 사용(허브)</a> ·
           <a href="../guide/usage-trv.html">TRV</a> ·
@@ -137,7 +138,7 @@
 
         <div class="dl-plan">
           <h3 class="dl-plan__name">7일 무료 체험</h3>
-          <p class="dl-plan__price">MagicTrading 7일 무료 체험 — 홈페이지 가입 없이 TRV ID 1회, MT5 계좌 번호+서버 1조합 1회</p>
+          <p class="dl-plan__price">MagicTrading 7일 무료 체험 — 준회원 이상 로그인 후 TRV 사용자명 1회·MT5 계좌 번호+서버 1조합 1회(계정당 TRV·MT5 각각)</p>
           <p class="small" style="color: var(--ci-brown-muted); margin: 0.35rem 0 0.6rem">
             MT5는 브로커명 단독 기준이 아니라 <strong>계좌 번호+서버 1조합</strong> 기준으로 적용됩니다. 이는 MT5 로그인 계좌 번호와 서버명을 묶은 고유 기준이며, 중복 체험·공유 방지를 위해 이 조합을 서버에 저장합니다.
           </p>
@@ -254,18 +255,17 @@
       <section class="dl-platform" aria-labelledby="dl-mt5-title">
         <h2 class="dl-platform__title" id="dl-mt5-title">MT5</h2>
         <p class="dl-platform__sub">
-          MT5 접근권은 MT5 쪽 <strong>시장 5구간</strong>(① 외환 · ② 주식·지수 · ③ 에너지·원자재 · ④ 가상자산 · ⑤ 채권)을
-          <strong>구간별로 분리</strong>해 판매·신청받습니다. 이벤트(1달 등)부터 <strong>신청 시 고른 시장</strong>에만 인디케이터·EA가 적용되도록
-          둘 수 있어요. 정규 확장 적용은 <strong>모든 시장·모든 차트</strong>에 적용 가능(전 시장)한 별도 상담 조건이며
-          <a href="../index.html#plan-prices">메인</a>에 <strong>별도 판매·대표가</strong>로 안내합니다.
+          <strong>판매·배포되는 MT5 지표는 틱(Tick) 차트 전용 빌드</strong>뿐입니다. 접근권은 MT5 쪽 <strong>시장 5구간</strong>(① 외환 · ② 주식·지수 · ③ 에너지·원자재 ·
+          ④ 가상자산 · ⑤ 채권)을 <strong>구간별로 분리</strong>해 판매·신청받습니다. 이벤트(1달 등)부터 <strong>신청 시 고른 시장</strong>에만 인디케이터·EA가 적용되도록
+          둘 수 있어요. <strong>5구간 전체(전 구간 단일 패키지)</strong> 등 범위 확장은 <a href="../index.html#plan-prices">메인</a>에 <strong>별도 판매·상담</strong>으로 안내하는 조건입니다.
         </p>
         <p class="dl-platform__sub" style="margin-top: 0.35rem">
           화면에는 <strong>고객용 접근권 이름</strong>과 <strong>운영 상태</strong>만 둡니다. 빌드·인증·라이선스에 쓰는 내부 식별자(예: <code>Dodam_…</code>·<code>…_Tick_…</code>)는
-          <strong>이 표에 넣지 않습니다.</strong> <strong>일반</strong>은 캔들/봉 기준, <strong>Tick</strong>은 틱 차트용 빌드입니다. 파일·배포 URL이 정해지면 &ldquo;.ex5&rdquo;에 연결하시면 됩니다.
+          <strong>이 표에 넣지 않습니다.</strong> 모든 <code>.ex5</code> 받기 링크는 <strong>동일하게 틱 차트 환경</strong>을 전제합니다. 파일·배포 URL이 정해지면 연결하시면 됩니다.
         </p>
 
-        <h3 class="dl-eadh3" id="dl-mt5-std">일반 (캔들·봉)</h3>
-        <table class="dl-eadtable" aria-label="MT5 EA 일반·접근권">
+        <h3 class="dl-eadh3" id="dl-mt5-tick">틱(Tick) 차트 전용 패키지</h3>
+        <table class="dl-eadtable" aria-label="MT5 틱 차트 전용 접근권">
           <thead>
             <tr>
               <th scope="col">접근권</th>
@@ -277,7 +277,7 @@
             <tr>
               <td>
                 MagicTrading
-                <span class="dl-ead__hint">7일 무료 체험</span>
+                <span class="dl-ead__hint">7일 무료 체험 · 틱 차트 전용</span>
               </td>
               <td>TRV/MT5 각각 1회</td>
               <td><a class="dl-btn" href="#" title="빌드 파일 URL 연결 예정">.ex5</a></td>
@@ -288,39 +288,8 @@
               <td><a class="dl-btn" href="#" title="빌드 파일 URL 연결 예정">.ex5</a></td>
             </tr>
             <tr>
-              <td>MagicTrading 정규 접근권</td>
-              <td>Whop TRV $5,499 · Whop MT5 $5,999 · MQL MT5 $6,999 — <a href="#dl-plan-prices">확정가</a></td>
-              <td><a class="dl-btn" href="#" title="빌드 파일 URL 연결 예정">.ex5</a></td>
-            </tr>
-          </tbody>
-        </table>
-
-        <h3 class="dl-eadh3" id="dl-mt5-tick">Tick (틱 차트)</h3>
-        <table class="dl-eadtable" aria-label="MT5 EA Tick·접근권">
-          <thead>
-            <tr>
-              <th scope="col">접근권</th>
-              <th scope="col">운영 기준</th>
-              <th scope="col">다운로드</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                MagicTrading
-                <span class="dl-ead__hint">7일 무료 체험 · 틱용</span>
-              </td>
-              <td>TRV/MT5 각각 1회</td>
-              <td><a class="dl-btn" href="#" title="빌드 파일 URL 연결 예정">.ex5</a></td>
-            </tr>
-            <tr>
-              <td>MagicTrading (1개월 이벤트) · 틱용</td>
-              <td>Whop MT5 $129 · MQL MT5 $149</td>
-              <td><a class="dl-btn" href="#" title="빌드 파일 URL 연결 예정">.ex5</a></td>
-            </tr>
-            <tr>
-              <td>MagicTrading 정규 접근권 · 틱용</td>
-              <td>Whop TRV $5,499 · Whop MT5 $5,999 · MQL MT5 $6,999 — <a href="#dl-plan-prices">확정가</a></td>
+              <td>MagicTrading 정규 접근권 · MT5</td>
+              <td>Whop MT5 $5,999 · MQL MT5 $6,999 — <a href="#dl-plan-prices">확정가</a></td>
               <td><a class="dl-btn" href="#" title="빌드 파일 URL 연결 예정">.ex5</a></td>
             </tr>
           </tbody>
@@ -337,7 +306,7 @@
           </thead>
           <tbody>
             <tr>
-              <td>MagicTrading 기간형 쿠폰</td>
+              <td>MagicTrading 기간형 쿠폰 <span class="dl-ead__hint">틱 차트 전용 .ex5</span></td>
               <td>환불불가 · 최초 교환 계정 귀속 · 양도 불가</td>
               <td><a class="dl-btn" href="#" title="빌드 파일 URL 연결 예정">.ex5</a></td>
             </tr>
@@ -347,8 +316,8 @@
       </section>
 
       <p class="dl-note">
-        <strong>안내.</strong> 이 페이지는 방문자에게 보이는 <strong>접근권 이름·운영 조건</strong>만 갱신하면 됩니다. TV는 스크립트 초대·스토어 URL, MT5는 컴파일
-        <code>.ex5</code> URL을 각 &ldquo;받기&rdquo;에 연결하세요. 내부 ID는 관리·결제·라이선스 쪽 DB에서 쓰는 값과 맞추시면 됩니다.
+        <strong>안내.</strong> 이 페이지는 방문자에게 보이는 <strong>접근권 이름·운영 조건</strong>만 갱신하면 됩니다. TV는 스크립트 초대·스토어 URL, MT5는
+        <strong>틱 차트 전용</strong> 컴파일 <code>.ex5</code> URL을 각 &ldquo;받기&rdquo;에 연결하세요. 내부 ID는 관리·결제·라이선스 쪽 DB에서 쓰는 값과 맞추시면 됩니다.
       </p>
     </div>
     <footer class="site-footer" role="contentinfo">

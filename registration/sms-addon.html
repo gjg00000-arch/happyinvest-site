@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Magic 지표 문자(SMS) 시그널 월패키지 신청 · 휴대폰 문자로 매매 시그널 요약 알림 안내 및 선택 저장."
+    />
+    <title>Magic 지표 — 문자 시그널(SMS) 신청</title>
+    <link rel="canonical" href="https://magicindicatorglobal.com/registration/sms-addon.html" />
+    <meta name="api-base" content="https://magicindicatorglobal.com" />
+    <link rel="stylesheet" href="../assets/common.css" />
+    <link rel="stylesheet" href="../assets/site-ux.css" />
+    <link rel="stylesheet" href="registration.css" />
+  </head>
+  <body>
+    <header class="site-header" role="banner">
+      <div class="ci-wrap">
+        <img
+          class="ci-logo-img"
+          src="../assets/haengbokdam-company-ci.png"
+          width="280"
+          height="140"
+          alt="주식회사 행복도담 인베스트 CI"
+        />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </header>
+    <nav class="site-nav" aria-label="주요 메뉴">
+      <a href="../index.html">메인</a>
+      <a href="../guide/index.html">가이드</a>
+      <a href="../guide/usage.html">지표 사용</a>
+      <a href="index.html">가입·등록</a>
+      <a href="sms-addon.html" aria-current="page">SMS 시그널</a>
+      <a href="../billing/index.html#sms-signal-plans">구독·결제·요금</a>
+      <a href="../contact/index.html">문의</a>
+      <a href="../legal/index.html">약관·정책</a>
+    </nav>
+
+    <main class="wrap registration-wrap" id="main-content">
+      <h1 class="page-title">문자(SMS) 시그널 월패키지</h1>
+      <p class="lead">
+        TradingView·MT5 알림 등으로 전달되는 종목 신호 요약을 <strong>단문 문자 1통</strong> 형태로도 받습니다(월 발송 통수 패키지). 본 페이지에서
+        <strong>패키지만 선택 저장</strong>합니다. 과금 확인 후 문자 발송이 켜지도록 운영·결제 처리를 거칩니다.
+      </p>
+
+      <div id="sms-addon-alert" class="reg-alert" role="status" aria-live="polite" hidden></div>
+
+      <section id="sms-addon-usage-block" class="reg-fieldset" style="margin-top: 1rem" hidden>
+        <h2 class="reg-legend" style="margin-top: 0">이번 달 문자 사용량</h2>
+        <p id="sms-addon-usage-line" class="reg-field-hint"></p>
+        <p id="sms-addon-usage-alerts" class="reg-field-hint small"></p>
+        <div id="sms-addon-topup-wrap" hidden>
+          <p class="reg-field-hint" style="margin-bottom: 0.35rem"><strong>추가 충전</strong> (표시 요금은 참고용, 실제 과금은 안내된 결제 채널 기준)</p>
+          <div id="sms-addon-topup-list" class="sms-topup-list"></div>
+        </div>
+        <p id="sms-addon-topup-off" class="small reg-field-hint" hidden></p>
+      </section>
+
+      <p id="sms-addon-account-hint" class="reg-field-hint" style="margin-top: 0">로그인·사이트 상단 상태를 확인해 주세요.</p>
+
+      <form id="sms-addon-form" class="reg-form" novalidate>
+        <fieldset class="reg-fieldset">
+          <legend class="reg-legend">패키지 선택</legend>
+          <p class="reg-field-hint">
+            정회원(휴대폰 SMS 인증 번호 저장)만 유료 패키지 저장 가능합니다. 초과분은 문자가 나가지 않습니다. 자세한 내용은
+            <button type="button" class="reg-linklike" data-open-sms-addon-modal>안내 보기</button>.
+          </p>
+          <div class="reg-field">
+            <label for="sms_addon_select">패키지</label>
+            <select id="sms_addon_select" name="sms_addon_choice" required>
+              <option value="none">이용 안 함 (SMS 시그널 없음)</option>
+              <option value="sms_200">월 200건 — US$15</option>
+              <option value="sms_500">월 500건 — US$40</option>
+              <option value="sms_1000">월 1000건 — US$80</option>
+            </select>
+          </div>
+          <button type="submit" class="reg-submit">선택 저장</button>
+          <p class="small reg-field-hint">
+            문자 본문은 비용 최소화를 위해 <strong>종목코드 · 매수·매도·청산 · 기준가(숫자)</strong> 정도만 짧게 전송합니다(예:
+            아래 참고 문구 아님, 실포맷은 시스템 생성).
+          </p>
+        </fieldset>
+      </form>
+
+      <div id="sms-addon-modal" class="sms-addon-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="sms-addon-modal-title">
+        <div class="sms-addon-modal-dialog" role="document">
+          <h3 id="sms-addon-modal-title" tabindex="-1">문자 시그널 패키지 안내</h3>
+          <ul class="doc-steps">
+            <li>
+              문자는 정보성 거래 신호 안내 목적입니다. 과금 확인 전까지 문자 발송이 비활성일 수 있습니다. 결제 채널은
+              <a href="../billing/index.html#sms-signal-plans">구독·결제</a> 페이지를 이용해 주세요.
+            </li>
+            <li>
+              월 한도의 약 <strong>70%</strong>·<strong>95%</strong>에 도달하면, 시그널 본문과 별도로 <strong>이용 안내 문자</strong>를 보내드려 남은 통수와
+              추가 충전·문의 방법을 알려 드립니다(이 안내 문자는 월 한도에서 <strong>추가로 차감되지 않음</strong>).
+            </li>
+            <li>월 통수 패키지(200건 / US$15, 500건 / US$40, 1000건 / US$80)를 초과하면 해당 월 추가 문자 발송은 되지 않습니다.</li>
+            <li>
+              문자 본문은 단문 하나에 맞도록 압축됩니다.
+              <span class="sms-sample">예시 느낌: 나스닥 매도 기준27450 HD인베</span>
+            </li>
+            <li>
+              문자와 별개로 알림 채널은 텔레그램·웹훅 등 계속 이용할 수 있습니다. TradingView 본문 키(종목·종류·가격 필드 등) 매핑을 맞춰 주세요.
+            </li>
+            <li><strong>수신 거부:</strong> 옵션을 해제 저장하거나, 문의 페이지로 의사를 알려 주시면 문자 전송 규칙을 조정할 수 있습니다.</li>
+          </ul>
+          <p style="margin-top: 0.85rem">
+            <button type="button" class="btn" data-close-sms-modal>닫기</button>
+          </p>
+        </div>
+      </div>
+
+      <p class="reg-field-hint" style="margin-top: 1.25rem">
+        가입 페이지에서 선택한 문자 옵션은 가입 즉시 DB에 들어가며, 이 페이지에서는 언제든지 다시 수정할 수 있습니다.
+      </p>
+    </main>
+    <footer class="site-footer" role="contentinfo">
+      <div class="ci-wrap ci-wrap--footer">
+        <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="220" height="110" alt="" />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </footer>
+    <script src="../assets/site-ux.js"></script>
+    <script src="../assets/magic-auth.js"></script>
+    <script src="sms-addon-shared.js"></script>
+    <script src="sms-addon-page.js"></script>
+  </body>
+</html>

@@ -24,10 +24,10 @@
     </header>
     <nav class="site-nav" aria-label="주요 메뉴">
       <a href="../index.html">메인</a>
-      <a href="index.html" aria-current="page">설치 안내</a>
-      <a href="usage.html">사용법</a>
-      <a href="usage-trv.html">TRV 설정</a>
-      <a href="usage-mt5.html">MT5 설정</a>
+      <a href="index.html" aria-current="page">가이드</a>
+      <a href="usage.html">지표 사용</a>
+      <a href="usage-trv.html">TRV</a>
+      <a href="usage-mt5.html">MT5</a>
       <a href="../downloads/index.html">다운로드</a>
       <a href="../registration/index.html">가입·등록</a>
       <a href="../verify/index.html">본인인증</a>
@@ -48,7 +48,8 @@
         <p class="doc-hero__eyebrow">User Guide · Documentation</p>
         <h1 class="doc-hero__title">사용자 가이드</h1>
         <p class="doc-hero__lead">
-          Magic 지표·매직라인은 <strong>TradingView(TRV, Pine)</strong>와 <strong>MetaTrader 5(.ex5)</strong>를 기준으로 배포됩니다. 아래는 처음 세팅할 때의
+          Magic 지표·매직라인은 <strong>TradingView(TRV, Pine)</strong>와 <strong>MetaTrader 5</strong>(
+          배포되는 <strong>틱 차트 전용 <code>.ex5</code></strong>)를 기준으로 제공됩니다. 아래는 처음 세팅할 때의
           <strong>순서와 링크</strong>만 모은 문서예요. 세부 스크린샷은 이후에 채워 넣으시면 됩니다.
         </p>
       </header>
@@ -67,7 +68,12 @@
         <a class="doc-summary-card" href="usage-mt5.html">
           <span class="doc-summary-card__k">02</span>
           <span class="doc-summary-card__t">MT5</span>
-          <span class="doc-summary-card__d">지표 사용(상세)</span>
+          <span class="doc-summary-card__d">지표 사용(상세 · 틱 차트 전용)</span>
+        </a>
+        <a class="doc-summary-card" href="magictrading-strategy-inputs-ko.html">
+          <span class="doc-summary-card__k">02b</span>
+          <span class="doc-summary-card__t">MagicTrading 입력</span>
+          <span class="doc-summary-card__d">Mode · Fine Tune · Risk</span>
         </a>
         <a class="doc-summary-card" href="#account">
           <span class="doc-summary-card__k">03</span>
@@ -85,10 +91,11 @@
         <h2>목차</h2>
         <ol>
           <li><a href="usage.html">지표 사용(허브)</a> — <a href="usage-trv.html">TRV</a> · <a href="usage-mt5.html">MT5</a></li>
+          <li><a href="magictrading-strategy-inputs-ko.html">MagicTrading(TRV) 입력·파인튜닝</a> — Mode · Adjust · Signals · Risk</li>
           <li><a href="#overview">이 사이트에서 할 수 있는 것</a></li>
           <li><a href="#account">회원 가입 · 본인 인증 · 결제</a></li>
           <li><a href="#tv">TRV에 지표 넣기</a></li>
-          <li><a href="#mt5">MT5 — 파일 설치 · 차트에 붙이기</a></li>
+          <li><a href="#mt5">MT5 — 파일 설치 · 틱 차트에 붙이기</a></li>
           <li><a href="#tg">텔레그램 Chat ID</a></li>
           <li><a href="#signals">시그널 웹훅 (선택)</a></li>
           <li><a href="#tips">매직라인 운용 팁</a></li>
@@ -139,15 +146,15 @@
       </article>
 
       <article class="doc-section" id="mt5">
-        <h2>MT5 — 파일 받기 · 넣기 · 차트에 붙이기</h2>
-        <p>순서는 <strong>① 파일을 손에 넣고 → ② 터미널이 목록을 읽고 → ③ 차트에 끌어다 놓기</strong>입니다.</p>
+        <h2>MT5 — 파일 받기 · 넣기 · 틱 차트에 붙이기</h2>
+        <p>순서는 <strong>① 파일을 손에 넣고 → ② 터미널이 목록을 읽고 → ③ 틱 차트를 연 뒤 지표 넣기</strong>입니다. 배포 <code>.ex5</code>는 <strong>틱 차트 환경 전용</strong>입니다.</p>
         <ol class="doc-steps">
           <li>브로커에서 제공하는 MetaTrader 5를 설치합니다.</li>
           <li>
             받은 <code>.ex5</code> 파일을 <code>MQL5\Indicators</code> 폴더에 넣습니다. (메뉴 <strong>파일 → 데이터 폴더 열기</strong>로 바로 갈 수 있습니다.)
           </li>
           <li>MT5를 한 번 재시작하거나 내비게이터를 새로고침하면, 사용자 지표 목록에 나타납니다.</li>
-          <li>차트에 끌어 놓거나 <strong>삽입 → 지표 → 사용자 지표</strong>에서 선택합니다.</li>
+          <li>틱(Tick) 차트를 연 다음, 끌어 놓거나 <strong>삽입 → 지표 → 사용자 지표</strong>에서 선택합니다.</li>
         </ol>
         <p class="small" style="color: var(--ci-brown-muted)">
           원본 <code>.mq5</code>는 보통 배포하지 않고, 컴파일된 <code>.ex5</code>만 쓰는 것이 일반적입니다. 브로커·OS마다 경로 표기가 조금씩 다를 수 있습니다.

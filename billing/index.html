@@ -4,14 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="MagicTrading 구독·결제 — 플랜 선택, PayPal, 하나은행 외화송금, 크립토·원화 송금 안내 및 환불 절차." />
-    <link rel="canonical" href="https://happyinvests.com/billing/index.html" />
+    <link rel="canonical" href="https://magicindicatorglobal.com/billing/index.html" />
     <meta property="og:title" content="Magic 지표 — 구독·결제" />
     <meta property="og:description" content="MagicTrading 구독·결제, 플랜·결제 수단 안내 및 환불 관련 표시." />
-    <meta property="og:url" content="https://happyinvests.com/billing/index.html" />
+    <meta property="og:url" content="https://magicindicatorglobal.com/billing/index.html" />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://happyinvests.com/assets/haengbokdam-company-ci.png" />
+    <meta property="og:image" content="https://magicindicatorglobal.com/assets/haengbokdam-company-ci.png" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="api-base" content="https://happyinvests.com" />
+    <meta name="api-base" content="https://magicindicatorglobal.com" />
     <title>Magic 지표 — 구독·결제</title>
     <link rel="stylesheet" href="../assets/common.css" />
     <link rel="stylesheet" href="../assets/site-ux.css" />
@@ -84,6 +84,76 @@
           grid-template-columns: 1fr;
         }
       }
+      .legal-sign-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 100000;
+        display: grid;
+        place-items: center;
+        padding: 1rem;
+        background: rgba(0, 0, 0, 0.58);
+      }
+      .legal-sign-modal[hidden] {
+        display: none;
+      }
+      .legal-sign-modal__panel {
+        width: min(94vw, 560px);
+        max-height: min(86vh, 720px);
+        overflow: auto;
+        padding: 1.15rem;
+        border-radius: 16px;
+        background: #fff;
+        color: var(--ci-brown);
+        box-shadow: 0 18px 60px rgba(0, 0, 0, 0.28);
+      }
+      .legal-sign-modal__panel h2 {
+        margin: 0 0 0.55rem;
+      }
+      .legal-sign-modal__docs {
+        margin: 0.65rem 0;
+        padding-left: 1.1rem;
+        line-height: 1.55;
+      }
+      .legal-sign-modal__label {
+        display: grid;
+        gap: 0.35rem;
+        margin-top: 0.75rem;
+        font-weight: 800;
+      }
+      .legal-sign-modal__label input {
+        width: 100%;
+        padding: 0.6rem 0.7rem;
+        border: 1px solid #cfd6e0;
+        border-radius: 8px;
+        font: inherit;
+      }
+      .legal-sign-modal__check {
+        display: flex;
+        gap: 0.45rem;
+        align-items: flex-start;
+        margin-top: 0.8rem;
+        font-weight: 700;
+        line-height: 1.5;
+      }
+      .legal-sign-modal__check input {
+        margin-top: 0.25rem;
+      }
+      .legal-sign-modal__actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        margin-top: 0.9rem;
+      }
+      html[data-theme="dark"] .legal-sign-modal__panel {
+        background: #161b22;
+        color: #e6edf3;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+      }
+      html[data-theme="dark"] .legal-sign-modal__label input {
+        background: #0d1117;
+        color: #e6edf3;
+        border-color: rgba(255, 255, 255, 0.14);
+      }
       .billing-page-toc {
         margin: 0 0 1rem;
         padding: 0.65rem 0.85rem;
@@ -113,6 +183,64 @@
           gap: 0.35rem;
         }
       }
+      .wire-route-box {
+        margin: 0 0 0.85rem;
+        padding: 0.75rem 0.88rem;
+        border-radius: 11px;
+        border: 1px solid rgba(47, 111, 79, 0.32);
+        background: linear-gradient(165deg, #f8fbff 0%, #f4faf6 100%);
+      }
+      .wire-route-box > h4 {
+        margin: 0 0 0.35rem;
+        font-size: 0.95rem;
+        color: var(--ci-brown);
+      }
+      .wire-route-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+        gap: 0.65rem;
+        margin-top: 0.55rem;
+        align-items: end;
+      }
+      .wire-route-grid label {
+        display: grid;
+        gap: 0.3rem;
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--ci-brown);
+      }
+      .wire-route-grid select {
+        width: 100%;
+        min-width: 0;
+        padding: 0.52rem 0.62rem;
+        border: 1px solid #cfd6e0;
+        border-radius: 8px;
+        font: inherit;
+        font-weight: 500;
+        background: #fff;
+      }
+      .wire-bank-cards {
+        margin-top: 0.8rem;
+        display: grid;
+        gap: 0.75rem;
+      }
+      .wire-bank-card {
+        padding: 0.65rem 0.78rem;
+        border-radius: 10px;
+        border: 1px solid rgba(47, 111, 79, 0.26);
+        background: #fff;
+      }
+      .wire-bank-card h5 {
+        margin: 0 0 0.35rem;
+        font-size: 0.9rem;
+        color: var(--ci-brown);
+      }
+      .wire-bank-card .wire-bank-note {
+        margin: 0 0 0.5rem;
+        font-size: 0.78rem;
+        color: var(--ci-brown-muted);
+        line-height: 1.55;
+      }
     </style>
   </head>
   <body>
@@ -127,10 +255,10 @@
     </header>
     <nav class="site-nav" aria-label="주요 메뉴">
       <a href="../index.html">메인</a>
-      <a href="../guide/index.html">설치 안내</a>
-      <a href="../guide/usage.html">사용법</a>
-      <a href="../guide/usage-trv.html">TRV 설정</a>
-      <a href="../guide/usage-mt5.html">MT5 설정</a>
+      <a href="../guide/index.html">가이드</a>
+      <a href="../guide/usage.html">지표 사용</a>
+      <a href="../guide/usage-trv.html">TRV</a>
+      <a href="../guide/usage-mt5.html">MT5</a>
       <a href="../downloads/index.html">다운로드</a>
       <a href="../registration/index.html">가입·등록</a>
       <a href="../verify/index.html">본인인증</a>
@@ -152,11 +280,16 @@
         <li class="is-current"><span>3</span> 결제</li>
       </ol>
       <h1 class="page-title">MagicTrading · 결제</h1>
+      <p class="payment-brand-trust" role="note">
+        <strong>브랜드·법인 안내</strong> — 「MagicTrading · Magic Indicator(매직 지표)」는
+        <strong>주식회사 행복도담 인베스트</strong>(영문표기 예: Haengbokdodam Invest Co., Ltd.)에서 운영하는 서비스·상표 브랜드입니다.
+        결제 페이지에 표시되는 은행·수취 안내는 위 법인 명의 계좌를 기준으로 합니다.
+      </p>
       <p class="lead">
         MagicTrading은 단일 전략 상품입니다. <strong>납부</strong>는 대표적으로 네 갈래로 안내합니다. <strong>①
         PayPal(카드)</strong> — <strong>소액·이벤트·가입</strong> 등은 PG 루트(신용·체크 위주)로 받습니다(잔액·페이는 제한·수수료는
         PayPal 정책). <strong>② 하나은행 외화 수취계좌로 직접 송금</strong> — <strong>달러·외화 송금</strong>은
-        <a href="#aw-usd-base">KEB Hana Bank SWIFT 계좌</a>로 이체합니다. <strong>③ 크립토 직접 송금</strong> —
+        <a href="#wire-route-picker">KEB Hana Bank SWIFT 계좌</a>로 이체합니다. <strong>③ 크립토 직접 송금</strong> —
         메이저 코인과 Ledger 지원 코인(수동 견적), 수취·꼬리표는 <a href="#crypto-deposit">아래</a>·<a href="../contact/index.html">문의</a>. <strong>④
         국내 원화(₩) 납부</strong> — <strong>당사 법인 명의</strong>(우리은행) 계좌·환산은 <a href="#krw-corporate">아래</a>·<a href="../contact/index.html">인보이스</a>를
         따릅니다(원화 <strong>법인 송금</strong>: <strong>구매 당시 환율</strong>·<strong>만 원 단위 절삭</strong>).
@@ -180,7 +313,9 @@
       <nav class="billing-page-toc" aria-label="페이지 목차">
         <h2 class="visually-hidden">이 페이지에서 바로 보기</h2>
         <ul class="billing-page-toc__list">
+          <li><a href="#sms-signal-plans">SMS 시그널 월패키지</a></li>
           <li><a href="#payment-dual">결제·납부 채널</a></li>
+          <li><a href="#wire-route-picker">현금 송금 계좌 선택</a></li>
           <li><a href="#refund-h2">환불 요청</a></li>
           <li><a href="#swift-gap-remedy">국제송금 지연 안내</a></li>
           <li><a href="#krw-corporate">원화 법인 계좌</a></li>
@@ -211,6 +346,28 @@
         <a href="../contact/index.html">문의</a>. 일부 채널은 시기별로 제공 경로가 달라질 수 있습니다.
       </div>
 
+      <section id="sms-signal-plans" class="nrf-box" style="border-left: 3px solid rgba(61, 122, 150, 0.55); margin-bottom: 1.25rem" aria-labelledby="sms-signal-plans-title">
+        <h2 id="sms-signal-plans-title" style="margin: 0 0 0.5rem; font-size: 1.2rem">
+          문자(SMS) 시그널 월패키지 — 과금 선택
+        </h2>
+        <p style="margin: 0 0 0.65rem; line-height: 1.65">
+          TradingView·MT5 신호 알림 요약을 <strong>단문 한 통</strong>으로 받습니다(종목 방향·숫자 가격 중심, 비용 최소화 문구 자동 생성). 월 패키지는 선택 후
+          <strong>별도 과금 확인</strong>이 있어 발송 활성 시간이 따로 진행됩니다. 금액은 <strong>US$ 과금 안내 표준</strong>입니다.
+        </p>
+        <ul style="margin: 0 0 0.5rem 1rem; padding: 0; line-height: 1.7">
+          <li><strong>200건 · US$15/월</strong></li>
+          <li><strong>500건 · US$40/월</strong></li>
+          <li><strong>1000건 · US$80/월</strong></li>
+        </ul>
+        <p style="margin: 0; font-size: 0.92rem">
+          가입 선택·변경 및 안내 문구:
+          <a href="../registration/index.html">정회원 가입</a> 또는
+          <a href="../registration/sms-addon.html">문자 시그널 전용 페이지</a>
+          — 월 통수 초과 시 문자 발송 안 함 원칙. 문의 및 인보이스는
+          <a href="../contact/index.html">문의 페이지</a>를 이용해 주세요.
+        </p>
+      </section>
+
       <section id="payment-dual" class="pay-dual" aria-labelledby="pay-dual-title">
         <h2 id="pay-dual-title">결제·납부 채널: PayPal · 외화 은행송금 · 크립토 · 원화(법인)</h2>
         <p class="pay-dual__intro">
@@ -218,11 +375,11 @@
           <strong>하나은행 외화 수취계좌</strong>로 직접 송금(고액·정규·인보이스), <strong>③ 크립토</strong> — 온체인 직접 송금(메이저 우선 지원·잡코인 수동 견적·<a href="#crypto-deposit">꼬리표</a>), <strong>④ 원화(₩)</strong> — 국내에서 원화로 납부하실 때
           <strong>법인 계좌(원화)</strong>·환산은 <a href="#krw-corporate">아래</a>·<a href="../contact/index.html">인보이스</a>를
           따릅니다(USD 등 → 원화: <strong>구매 당시 환율</strong>, <strong>만 원 단위 절삭</strong>). 달러·외화 현금 송금은
-          <a href="#aw-usd-base">하나은행 SWIFT 수취계좌</a>와 인보이스를 기준으로 대조합니다.
+          <a href="#wire-route-picker">하나은행 SWIFT 수취계좌</a>와 인보이스를 기준으로 대조합니다.
         </p>
         <ol class="pay-dual__procedure">
           <li><strong>① PayPal(소액·카드)</strong> — <a href="?signup=1#signup-checkout">가입·플랜</a>·<a href="../events/index.html">이벤트</a> 등(체크아웃·웹훅은 키·운영에 따름).</li>
-          <li><strong>② 외화 은행 직접 송금</strong> — ② 패널의 <a href="#aw-usd-base">하나은행 외화 수취계좌</a>로 SWIFT 송금, Reference(이메일·주문) 맞춤.</li>
+          <li><strong>② 외화 은행 직접 송금</strong> — ② 패널의 <a href="#wire-route-picker">하나은행 외화 수취계좌</a>로 SWIFT 송금, Reference(이메일·주문) 맞춤.</li>
           <li><strong>③ 크립토 직접 송금</strong> — <a href="#crypto-deposit">수취 주소(공지) + 입금 알림·꼬리표</a>(수동 대조).</li>
           <li><strong>④ 국내 원화(법인)</strong> — <a href="#krw-corporate">우리은행 법인계좌</a>·<strong>구매 당시 환율</strong>·<strong>만 원 단위 절삭</strong>(<a href="../contact/index.html">인보이스</a>).</li>
         </ol>
@@ -258,6 +415,47 @@
               <strong>절차</strong>: 인보이스 확인 → 은행 앱/창구에서 <strong>USD 등 외화</strong>로 송금 → Reference/비고에
               <strong>이메일·주문·인보이스 번호</strong> (운영이 안내한 형식) → 입금 확인.
             </p>
+
+            <div class="wire-route-box" id="wire-route-picker" aria-labelledby="wire-route-heading">
+              <h4 id="wire-route-heading">현금 송금 계좌 선택</h4>
+              <p class="small" style="margin: 0; color: var(--ci-brown-muted); line-height: 1.55">
+                <strong>납부 통화</strong>를 고르면 사용할 수 있는 <strong>수취 지역</strong>만 콤보에 남습니다.
+                이어서 나오는 표는 <strong>인보이스·글로벌 계좌 안내와 동일한 수취 경로</strong>를 고를 때만 사용하세요 (수취인명·번호·SWIFT 불일치 시 입금 지연).
+              </p>
+              <div class="wire-route-grid">
+                <label for="wire-ccy-select">
+                  납부 통화
+                  <select id="wire-ccy-select" name="wire_ccy" autocomplete="off">
+                    <option value="USD" selected>USD — US dollar</option>
+                    <option value="KRW">KRW — 원화(법인)</option>
+                    <option value="EUR">EUR — Euro</option>
+                    <option value="GBP">GBP — British pound</option>
+                    <option value="JPY">JPY — Japanese yen</option>
+                    <option value="AUD">AUD — Australian dollar</option>
+                    <option value="CAD">CAD — Canadian dollar</option>
+                    <option value="CHF">CHF — Swiss franc</option>
+                    <option value="HKD">HKD — Hong Kong dollar</option>
+                    <option value="CNY">CNY — Chinese yuan</option>
+                    <option value="SGD">SGD — Singapore dollar</option>
+                    <option value="NOK">NOK — Norwegian krone</option>
+                    <option value="NZD">NZD — New Zealand dollar</option>
+                    <option value="SEK">SEK — Swedish krona</option>
+                  </select>
+                </label>
+                <label for="wire-country-select">
+                  수취 계좌 국가·지역
+                  <select id="wire-country-select" name="wire_country" autocomplete="off"></select>
+                </label>
+              </div>
+              <div id="wire-bank-list-root" class="wire-bank-cards" aria-live="polite" aria-label="선택 조건에 맞는 수취 은행"></div>
+              <p class="small" style="margin: 0.75rem 0 0; padding: 0.52rem 0.65rem; border-radius: 9px; border: 1px dashed rgba(47, 111, 79, 0.45); background: rgba(247, 252, 249, 0.98); line-height: 1.58; color: var(--ci-brown)" role="note">
+                <strong>SWIFT·국제송금 시간차</strong> — 당사 계좌에 <strong>도착·매칭</strong>되기까지 은행·경로에 따라 <strong>수일</strong> 걸릴 수 있습니다.
+                송금 직후 <strong>은행 증빙</strong>(송금 접수·처리 화면, MT103류, SEPA 등 해당 통화 접수증 등)으로 금액·수취내역이 명확하면,
+                운영 검토 하에 <strong>실입금 전에도</strong> 해당 구매에 맞춰 <strong>지표 이용 권한을 선 부여</strong>할 수 있습니다. 자세한 제출처·예외는
+                <a href="#swift-gap-remedy"><strong>아래 「송금 공백기·증빙 선검증」안내 →</strong></a>
+              </p>
+            </div>
+
             <div
               id="aw-usd-base"
               class="nrf-box"
@@ -329,8 +527,8 @@
 
             <div id="ccy-panels" role="tabpanel">
               <p class="small" style="margin: 0.15rem 0 0.45rem; color: var(--ci-brown-muted)">
-                현재 홈페이지에 공개하는 활성 외화 수취계좌는 위 <a href="#aw-usd-base">하나은행 SWIFT 계좌</a>입니다.
-                통화·수수료·중계은행 필요 여부는 인보이스와 은행 안내를 우선합니다.
+                현금 송금은 아래 <a href="#wire-route-picker">통화·수취 지역 선택</a>에서 표시되는 계좌를 사용합니다.
+                USD는 대한민국(KEB Hana SWIFT)·미국(CFSB)·싱가포르(DBS) 등 <strong>인보이스와 동일한 수취 경로</strong>를 반드시 고르세요.
               </p>
               <div id="ccy-panel-hkd" class="d-currency-panel" role="tabpanel" aria-labelledby="ccy-tab-hkd" data-ccy="hkd">
                 <strong>HKD</strong> — Hong Kong dollar
@@ -416,7 +614,7 @@
         </div>
       </section>
       <p class="small" style="margin: 0.4rem 0 0.2rem; color: var(--ci-brown-muted); line-height: 1.5">
-        <strong>① 소액</strong> = <strong>PayPal + 카드</strong>, <strong>②</strong> = <a href="#aw-usd-base"><strong>하나은행 외화계좌 직접 송금</strong></a>,
+        <strong>① 소액</strong> = <strong>PayPal + 카드</strong>, <strong>②</strong> = <a href="#wire-route-picker"><strong>하나은행 외화계좌 직접 송금</strong></a>,
         <strong>③</strong> = <a href="#crypto-deposit">크립토</a>, <strong>④</strong> = <a href="#krw-corporate">원화·법인(우리은행·만 원 절삭)</a>.
         <strong>한국에서 달러(외화) SWIFT</strong>는 은행·수수료가 다릅니다(총비용·경로는 송금인 기준).
       </p>
@@ -578,7 +776,7 @@
       <div class="pay-cta-row">
         <p class="small" style="margin: 0; color: var(--ci-brown-muted)">
           1달 이벤트·가입: <a href="#signup-checkout">「가입 플랜 결제」</a> — <strong>① PayPal(소액·카드)</strong>·수동(운영 대조) /
-          정산(Shopify 등). <strong>정규·고액</strong>은 <a href="#payment-dual">② 직접 송금</a>·<a href="#aw-usd-base">하나은행 외화계좌</a>,
+          정산(Shopify 등). <strong>정규·고액</strong>은 <a href="#payment-dual">② 직접 송금</a>·<a href="#wire-route-picker">하나은행 외화계좌</a>,
           <a href="#crypto-deposit">③ 크립토</a>, <a href="#krw-corporate">④ 원화 법인</a> + <a href="../contact/index.html">문의</a>·인보이스(로그인·<code>?signup=1&amp;plan=…</code>).
         </p>
       </div>
@@ -587,7 +785,7 @@
         <h2 id="wire-h2" style="font-size: 1.05rem; margin: 0 0 0.4rem; color: var(--ci-brown)">은행·송금으로 납부 (당사 수취 — 하나은행 외화계좌 중심)</h2>
         <p class="small" style="margin: 0 0 0.55rem; color: var(--ci-brown-muted); line-height: 1.5">
           <strong>외화 직접 송금</strong>은 <strong>하나은행 KEB Hana Bank SWIFT 계좌</strong>를 기준으로 안내합니다. <strong>USD 달러</strong> 은행 입금은
-          <a href="#payment-dual">«② 외화 은행송금»</a>·<a href="#aw-usd-base">하나은행 외화 수취계좌</a>·인보이스로, <strong>원화(국내)</strong>는
+          <a href="#payment-dual">«② 외화 은행송금»</a>·<a href="#wire-route-picker">하나은행 외화 수취계좌</a>·인보이스로, <strong>원화(국내)</strong>는
           <a href="#krw-corporate">법인계좌(우리은행·만 원 절삭)</a>, <strong>크립토</strong>는 <a href="#crypto-deposit">③</a>을 따릅니다.
           Airwallex는 고객 직접 송금이 아니라 <strong>PayPal 정산용</strong>으로만 사용합니다.
         </p>
@@ -620,19 +818,21 @@
               padding-inline-start: 0.15rem;
             "
           >
-            USD 송금 증빙 선검증과 크립토 권한 부여 기준 · 송금 공백기
+            국제 외화 은행송금 — 증빙 선검증 후 이용 가능 · 송금 공백기(크립토 기준 포함)
           </summary>
           <div class="small" style="margin: 0.55rem 0 0; color: var(--ci-brown-muted); line-height: 1.6">
             <p style="margin: 0 0 0.5rem">
-              해외 USD 은행송금은 통상 <strong>영업일 기준 최대 며칠</strong>(은행 표기 참고 · 위
-              <a href="#aw-usd-base">② 하나은행 외화계좌</a> 패널 &ldquo;도착·처리 참고&rdquo;)까지 걸릴 수 있습니다.
-              <strong>입금 전 지표 사용 가능 선승인</strong>은 USD 은행송금처럼 은행 증빙자료가 명확한 경우에 한해 운영 검토로 적용합니다.
+              <strong>SWIFT·Fedwire·SEPA(IBAN)·기타 국제 규격</strong>으로 보내는 외화 송금은 은행·중계 경로에 따라 통상 <strong>영업일 기준 최대 며칠</strong>(은행 표기·
+              <a href="#wire-route-picker">「현금 송금 계좌 선택»</a>에서 고른 경로의 인보이스·금융사 안내 참고)까지 걸릴 수 있습니다.
+              <strong>실제 입금·대조 전에도 지표 이용을 시작할 수 있는 선승인</strong>은,
+              해당 송금에 대해 금액·수취인·통화 등이 명확한 <strong>은행 증빙</strong>이 제출되어 운영이 검증할 수 있을 때(사기방지 규칙 범위 내)에 적용합니다. USD뿐 아니라
+              EUR·SGD 등 <strong>이 페이지 안내 계좌로 보내는 해당 통화</strong> 동일 원칙입니다.
             </p>
             <ol style="margin: 0 0 0 1rem; padding: 0; list-style: decimal outside">
               <li style="margin: 0 0 0.4rem">
-                <strong>USD 송금 증빙(MT103·송금 접수증 등) 선검증</strong> — 송금 직후 은행 쪽에서 받을 수 있는
-                <strong>MT103 요지</strong>, <strong>Remittance Advice</strong>, 모바일뱅킹의
-                &ldquo;송금 접수·처리 증명&rdquo; 등 <strong>금액·수취인(당사)·통화가 인보이스 안내와 맞음을 확인할 수 있는 내용</strong>을 이미지·PDF로 준비해
+                <strong>은행 송금 증빙 선검증(MT103·접수증·Remittance Advice 등)</strong> — 송금 직후 금융사에서 제공하는
+                <strong>송금 접수·처리 증명</strong>, <strong>MT103류 요지(해당 경로)</strong>,
+                유럽권에서는 <strong>SEPA 접수증·참조</strong> 등 <strong>인보이스·이 페이지 선택 경로와 맞음을 확인할 수 있는 자료</strong>를 이미지·PDF로 준비해
                 <a href="../boards/index.html">모임터(지정 공지 카테고리)</a> 또는 <a href="../contact/index.html">문의</a>로 제출해 주세요.
                 운영이 증빙을 검토한 뒤 <strong>입금 매칭 전이라도</strong>(사기방지 규칙 적용 범위 내) 해당 구매에 해당하는 <strong>이용 권한을 선 부여</strong>할 수 있습니다.
                 이후 계좌에 실입금이 확인되면 정식으로 마감합니다.
@@ -654,6 +854,15 @@
             </p>
           </div>
         </details>
+        <script>
+          (function () {
+            try {
+              if (decodeURIComponent(location.hash || "").replace(/^#/, "") !== "swift-gap-remedy") return;
+              var d = document.getElementById("swift-gap-remedy");
+              if (d && d.tagName === "DETAILS") d.open = true;
+            } catch (e) {}
+          })();
+        </script>
       </section>
 
       <section
@@ -1089,17 +1298,17 @@
       >
         <h2 id="signup-h2">가입 플랜 결제</h2>
         <p class="lead" style="font-size: 0.95rem; margin-bottom: 0.6rem">
-          가입 단계에서 고른 MagicTrading 접근권을 활성화합니다. 7일 무료 체험은 홈페이지 회원가입 없이 TradingView(TRV) ID 또는 MT5 계좌 번호+서버 1조합만으로 신청할 수 있습니다.
+          가입 단계에서 고른 MagicTrading 접근권을 활성화합니다. 7일 무료 체험은 <strong>준회원·정회원 로그인</strong> 후 이 화면에서 TradingView(TRV) 사용자명 또는 MT5 계좌 번호+서버를 넣고 완료해야 합니다.
           <strong>1개월 이벤트</strong>는 Whop TRV <strong>$119</strong> · Whop MT5 <strong>$129</strong> · MQL MT5 <strong>$149</strong> 기준으로
           <strong>PayPal(신용·체크 카드)</strong> 등 당시 켜진 PG와 운영 수동 대조 루트를 병행합니다.
           <strong>정규</strong>는 Whop TRV <strong>$5,499</strong> · Whop MT5 <strong>$5,999</strong> · MQL MT5 <strong>$6,999</strong> 월 기준이며,
-          <a href="#payment-dual">납부 채널(①~④)</a>(<a href="#aw-usd-base">하나은행 외화계좌</a>·<a href="#crypto-deposit">크립토</a>·<a href="#krw-corporate">원화 법인</a>) + 상담·인보이스로 진행해 주시면 됩니다.
+          <a href="#payment-dual">납부 채널(①~④)</a>(<a href="#wire-route-picker">하나은행 외화계좌</a>·<a href="#crypto-deposit">크립토</a>·<a href="#krw-corporate">원화 법인</a>) + 상담·인보이스로 진행해 주시면 됩니다.
         </p>
         <p id="signup-plan-line" class="small" style="margin: 0 0 0.55rem; color: var(--ci-brown-muted)"></p>
         <div id="signup-free-trial-wrap" style="display: none; margin-bottom: 0.75rem">
           <p class="small" style="margin: 0 0 0.45rem; color: var(--ci-brown-muted)">
-            둘 중 하나만 입력하세요. TRV ID 또는 MT5 계좌 번호+서버 조건이 맞으면 7일 무료 체험을 바로 등록합니다.
-            회원가입 없이 신청한 분은 비회원 체험 신청자로 보며, TRV와 MT5 체험은 각각 1회 신청할 수 있습니다.
+            둘 중 하나만 입력하세요. TRV 사용자명 또는 MT5 계좌 번호+서버 조건이 맞으면 7일 무료 체험이 등록됩니다.
+            TRV와 MT5 체험은 <strong>식별자당 각각 1회</strong>입니다.
             MT5 체험·라이선스는 브로커명 단독 기준이 아니라 입력한 <strong>계좌 번호+서버 1조합</strong> 기준으로 적용됩니다. 즉 MT5 로그인 계좌 번호와 서버명을 묶어 같은 조합인지 확인합니다.
           </p>
           <div class="coupon-redeem-row" style="margin-bottom: 0.5rem">
@@ -1149,6 +1358,19 @@
           </select>
           <span class="small" style="color: var(--ci-brown-muted)">확정 가격표 기준</span>
         </div>
+        <p
+          id="signup-event-nonrefund-wrap"
+          class="small"
+          style="display: none; margin: 0 0 0.65rem; color: #5a2a2a; line-height: 1.5"
+        >
+          <label style="font-weight: 700; display: flex; gap: 0.45rem; align-items: flex-start; max-width: 46rem; cursor: pointer">
+            <input type="checkbox" id="signup-event-nonrefund-consent" style="margin-top: 0.2rem" />
+            <span>
+              1개월 이벤트 결제는 정규·비즈니스 월 플랜의 31일 일할 환불 대상이 아니며, 안내·결제·활성화 후에는
+              사유·착오 여부와 관계없이 환불·취소·대가 반환이 불가함을 확인합니다. (필수)
+            </span>
+          </label>
+        </p>
         <div class="coupon-redeem-row" style="margin-bottom: 0.5rem">
           <label for="signup-provider" style="min-width: 9rem; font-size: 0.9rem">결제 공급자</label>
           <select id="signup-provider" class="coupon-redeem-input" style="max-width: 20rem">
@@ -1175,7 +1397,7 @@
       <section>
         <h2>상품·플랜</h2>
         <p>
-          MagicTrading 정식 접근권, 비회원 7일 무료 체험, Whop/MQL 1개월 이벤트, 2개월 리커버리 접근권은 <a href="../events/index.html">이벤트·요금</a> 페이지에 정리했습니다.
+          MagicTrading 정식 접근권, 7일 무료 체험(로그인 후), Whop/MQL 1개월 이벤트, 2개월 리커버리 접근권은 <a href="../events/index.html">이벤트·요금</a> 페이지에 정리했습니다.
           구독 만료일·플랜은 결제 연동 후 DB와 동기화되는 것을 목표로 합니다.
         </p>
       </section>
@@ -1211,6 +1433,28 @@
         <p id="coupon-redeem-result" class="small" role="status" style="margin-top: 0.5rem"></p>
       </section>
     </main>
+    <div id="legal-sign-modal" class="legal-sign-modal" hidden>
+      <div class="legal-sign-modal__panel" role="dialog" aria-modal="true" aria-labelledby="legal-sign-title">
+        <h2 id="legal-sign-title">약관 확인 및 전자서명</h2>
+        <p id="legal-sign-desc" class="small">
+          진행 전 적용 약관을 확인하고 전자서명해야 합니다. 서명 기록은 분쟁 방지와 권한 부여 이력 관리를 위해 저장됩니다.
+        </p>
+        <ul id="legal-sign-docs" class="legal-sign-modal__docs"></ul>
+        <label class="legal-sign-modal__label">
+          서명 이름 또는 이메일
+          <input type="text" id="legal-signature-text" maxlength="160" autocomplete="name" />
+        </label>
+        <label class="legal-sign-modal__check">
+          <input type="checkbox" id="legal-sign-accepted" />
+          <span>위 약관 전체를 읽고 이해했으며, 선택한 플랜/체험 진행 전에 전자서명으로 동의합니다.</span>
+        </label>
+        <p id="legal-sign-error" class="err" role="status" style="display: none"></p>
+        <div class="legal-sign-modal__actions">
+          <button type="button" class="btn btn--ghost" id="legal-sign-cancel">취소</button>
+          <button type="button" class="btn" id="legal-sign-submit">서명하고 계속</button>
+        </div>
+      </div>
+    </div>
     <footer class="site-footer" role="contentinfo">
       <div class="ci-wrap ci-wrap--footer">
         <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="220" height="110" alt="" />
@@ -1225,7 +1469,7 @@
     <script>
       (function () {
         var meta = document.querySelector('meta[name="api-base"]');
-        var API = (meta && meta.content) || "https://happyinvests.com";
+        var API = (meta && meta.content) || "https://magicindicatorglobal.com";
         var inp = document.getElementById("coupon-code-input");
         var btn = document.getElementById("coupon-redeem-btn");
         var out = document.getElementById("coupon-redeem-result");
@@ -1245,12 +1489,23 @@
         var signupRegularTier = document.getElementById("signup-regular-tier");
         var signupPlatformWrap = document.getElementById("signup-platform-wrap");
         var signupPlatform = document.getElementById("signup-platform");
+        var signupEventNonrefundWrap = document.getElementById("signup-event-nonrefund-wrap");
+        var signupEventNonrefundConsent = document.getElementById("signup-event-nonrefund-consent");
         var signupFreeTrialWrap = document.getElementById("signup-free-trial-wrap");
         var signupTrialTrId = document.getElementById("signup-trial-tr-id");
         var signupTrialMt5Login = document.getElementById("signup-trial-mt5-login");
         var signupTrialMt5Server = document.getElementById("signup-trial-mt5-server");
         var signupProvider = document.getElementById("signup-provider");
         var signupPlanCode = "";
+        var legalModal = document.getElementById("legal-sign-modal");
+        var legalDocs = document.getElementById("legal-sign-docs");
+        var legalSignatureText = document.getElementById("legal-signature-text");
+        var legalAccepted = document.getElementById("legal-sign-accepted");
+        var legalSignError = document.getElementById("legal-sign-error");
+        var legalSignSubmit = document.getElementById("legal-sign-submit");
+        var legalSignCancel = document.getElementById("legal-sign-cancel");
+        var pendingLegalResolve = null;
+        var pendingLegalReject = null;
         var providerEnabledMap = { airwallex: false, paypal: false, coinbase: false, manual: true };
         var refundPreviewLine = document.getElementById("refund-preview-line");
         var refundFxHint = document.getElementById("refund-fx-hint");
@@ -1272,6 +1527,143 @@
         function val(id) {
           var el = document.getElementById(id);
           return el ? String(el.value || "").trim() : "";
+        }
+
+        function legalDocsForPlan(planCode) {
+          var p = String(planCode || "").toLowerCase();
+          var common = [
+            { title: "이용약관", href: "../legal/terms.html" },
+            { title: "개인정보 처리방침", href: "../legal/privacy.html" },
+          ];
+          if (p === "event_1w_free") {
+            return common.concat([
+              { title: "1주(7일) 무료 지표 체험 특약", href: "../legal/terms-magictrading-free-trial.html" },
+              { title: "환불불가 총괄", href: "../legal/plan-terms-nonrefund.html" },
+            ]);
+          }
+          if (isOneMonthEventPlan(p)) {
+            return common.concat([
+              { title: "MagicTrading 이벤트(유료) 특약", href: "../legal/terms-magictrading-event.html" },
+              { title: "환불 정책", href: "../legal/refund.html" },
+              { title: "환불불가 총괄", href: "../legal/plan-terms-nonrefund.html" },
+            ]);
+          }
+          return common.concat([
+            { title: "MagicTrading 정규 플랜 특약", href: "../legal/terms-magictrading-regular.html" },
+            { title: "환불 정책", href: "../legal/refund.html" },
+          ]);
+        }
+
+        function signerSubjectForPlan(planCode) {
+          if (planCode !== "event_1w_free") return "";
+          var trId = String((signupTrialTrId && signupTrialTrId.value) || "").trim();
+          var mt5Login = String((signupTrialMt5Login && signupTrialMt5Login.value) || "").trim();
+          var mt5Server = String((signupTrialMt5Server && signupTrialMt5Server.value) || "").trim();
+          if (trId) return "TRV:" + trId;
+          if (mt5Login && mt5Server) return "MT5:" + mt5Login + "@" + mt5Server;
+          return "";
+        }
+
+        function requestLegalSignature(planCode) {
+          return new Promise(function (resolve, reject) {
+            if (!legalModal || !legalDocs || !legalSignatureText || !legalAccepted) {
+              reject(new Error("약관 서명 화면을 열 수 없습니다."));
+              return;
+            }
+            pendingLegalResolve = resolve;
+            pendingLegalReject = reject;
+            if (legalSignSubmit) legalSignSubmit.dataset.planCode = planCode;
+            var docs = legalDocsForPlan(planCode);
+            legalDocs.innerHTML = docs
+              .map(function (d) {
+                return '<li><a target="_blank" rel="noopener" href="' + d.href + '">' + d.title + "</a></li>";
+              })
+              .join("");
+            var auth = window.MagicAuth ? MagicAuth.get() : { email: "" };
+            legalSignatureText.value = auth && auth.email && auth.email !== "guest@local" ? auth.email : signerSubjectForPlan(planCode);
+            legalAccepted.checked = false;
+            if (legalSignError) {
+              legalSignError.textContent = "";
+              legalSignError.style.display = "none";
+            }
+            legalModal.removeAttribute("hidden");
+            setTimeout(function () {
+              legalSignatureText.focus();
+              legalSignatureText.select && legalSignatureText.select();
+            }, 0);
+          });
+        }
+
+        function closeLegalModal() {
+          if (legalModal) legalModal.setAttribute("hidden", "hidden");
+          pendingLegalResolve = null;
+          pendingLegalReject = null;
+        }
+
+        function submitLegalSignature(planCode) {
+          var sig = String((legalSignatureText && legalSignatureText.value) || "").trim();
+          if (!sig || sig.length < 2) {
+            if (legalSignError) {
+              legalSignError.textContent = "서명 이름 또는 이메일을 입력해 주세요.";
+              legalSignError.style.display = "block";
+            }
+            return;
+          }
+          if (!(legalAccepted && legalAccepted.checked)) {
+            if (legalSignError) {
+              legalSignError.textContent = "약관 전체 동의 체크가 필요합니다.";
+              legalSignError.style.display = "block";
+            }
+            return;
+          }
+          var auth = window.MagicAuth ? MagicAuth.get() : { email: "" };
+          var payload = {
+            plan_code: planCode,
+            signature_text: sig,
+            accepted: true,
+            signer_email: auth && auth.email && auth.email !== "guest@local" ? auth.email : "",
+            signer_subject: signerSubjectForPlan(planCode),
+            visitor_id: window.HappyUX && HappyUX.getVisitorId ? HappyUX.getVisitorId() : undefined,
+          };
+          if (legalSignError) {
+            legalSignError.textContent = "서명 저장 중...";
+            legalSignError.style.display = "block";
+          }
+          fetch(API + "/api/legal/acceptances", {
+            method: "POST",
+            headers: authHeaders(),
+            body: JSON.stringify(payload),
+          })
+            .then(function (r) {
+              return r.json().then(function (j) {
+                return { ok: r.ok, j: j };
+              });
+            })
+            .then(function (x) {
+              if (!x.ok) throw new Error((x.j && x.j.error) || "약관 서명 저장 실패");
+              var id = x.j && x.j.acceptance_id ? String(x.j.acceptance_id) : "";
+              if (!id) throw new Error("약관 서명 ID를 받지 못했습니다.");
+              if (pendingLegalResolve) pendingLegalResolve(id);
+              closeLegalModal();
+            })
+            .catch(function (e) {
+              if (legalSignError) {
+                legalSignError.textContent = String(e.message || e);
+                legalSignError.style.display = "block";
+              }
+            });
+        }
+
+        if (legalSignCancel) {
+          legalSignCancel.addEventListener("click", function () {
+            if (pendingLegalReject) pendingLegalReject(new Error("약관 서명이 취소되었습니다."));
+            closeLegalModal();
+          });
+        }
+        if (legalSignSubmit) {
+          legalSignSubmit.addEventListener("click", function () {
+            submitLegalSignature(String(legalSignSubmit.dataset.planCode || signupPlanCode || ""));
+          });
         }
 
         function setRefundPayoutMode(domestic) {
@@ -1524,6 +1916,12 @@
           if (signupPlatformWrap) {
             signupPlatformWrap.style.display = isOneMonthEventPlan(signupPlanCode) ? "flex" : "none";
           }
+          if (signupEventNonrefundWrap) {
+            signupEventNonrefundWrap.style.display = isOneMonthEventPlan(signupPlanCode) ? "block" : "none";
+          }
+          if (signupEventNonrefundConsent && !isOneMonthEventPlan(signupPlanCode)) {
+            signupEventNonrefundConsent.checked = false;
+          }
           if (signupFreeTrialWrap) {
             signupFreeTrialWrap.style.display = signupPlanCode === "event_1w_free" ? "block" : "none";
           }
@@ -1635,6 +2033,7 @@
                     product_platform: confirmedChoice.product_platform,
                     sales_channel: confirmedChoice.sales_channel,
                     welcome_coupon_platform: confirmedChoice.product_platform,
+                    legal_acceptance_id: (c.j && c.j.legal_acceptance_id) || undefined,
                   }),
                 });
               })
@@ -1805,6 +2204,35 @@
                 "선택한 결제로는 아직 온보딩되지 않았습니다. 수동(결제 참조)으로 바꾸거나 나중에 다시 시도하세요.";
               return;
             }
+            if (isOneMonthEventPlan(resolvedPlan) && !(signupEventNonrefundConsent && signupEventNonrefundConsent.checked)) {
+              signupOut.textContent = "1개월 이벤트 환불불가 고지를 확인하고 동의해 주세요.";
+              if (signupEventNonrefundConsent) signupEventNonrefundConsent.focus();
+              return;
+            }
+            if (resolvedPlan === "event_1w_free" && !signerSubjectForPlan(resolvedPlan)) {
+              signupOut.textContent = "7일 무료 체험은 TRV ID 또는 MT5 계좌 번호+서버를 먼저 입력한 뒤 약관에 서명해 주세요.";
+              if (signupTrialTrId) signupTrialTrId.focus();
+              return;
+            }
+            var legalGateKey = resolvedPlan + "|" + signerSubjectForPlan(resolvedPlan);
+            if (
+              !signupBtn.dataset.legalAcceptanceId ||
+              signupBtn.dataset.legalAcceptancePlan !== resolvedPlan ||
+              signupBtn.dataset.legalAcceptanceKey !== legalGateKey
+            ) {
+              signupOut.textContent = "약관 서명이 필요합니다.";
+              requestLegalSignature(resolvedPlan)
+                .then(function (acceptanceId) {
+                  signupBtn.dataset.legalAcceptanceId = acceptanceId;
+                  signupBtn.dataset.legalAcceptancePlan = resolvedPlan;
+                  signupBtn.dataset.legalAcceptanceKey = legalGateKey;
+                  signupBtn.click();
+                })
+                .catch(function (e) {
+                  signupOut.textContent = String(e.message || e);
+                });
+              return;
+            }
             var paymentRef = String((signupRef && signupRef.value) || "").trim();
             if (isPaidSignupPlan(resolvedPlan) && provider === "manual" && !paymentRef) {
               var manualAmtUsd = signupAmountUsd(resolvedPlan);
@@ -1818,6 +2246,7 @@
                   amount_usd: manualAmtUsd,
                   product_platform: selectedSignupMarket(resolvedPlan).product_platform,
                   sales_channel: selectedSignupMarket(resolvedPlan).sales_channel,
+                  legal_acceptance_id: signupBtn.dataset.legalAcceptanceId,
                 }),
               })
                 .then(function (r) {
@@ -1864,6 +2293,7 @@
               var ppCheckoutMarket = selectedSignupMarket(resolvedPlan);
               ppBody.product_platform = ppCheckoutMarket.product_platform;
               ppBody.sales_channel = ppCheckoutMarket.sales_channel;
+              ppBody.legal_acceptance_id = signupBtn.dataset.legalAcceptanceId;
               signupOut.textContent = "PayPal 결제창 준비 중…";
               fetch(API + "/api/payments/paypal/create-order", {
                 method: "POST",
@@ -1917,6 +2347,7 @@
                   Object.assign(
                     {
                       plan_code: resolvedPlan,
+                      legal_acceptance_id: signupBtn.dataset.legalAcceptanceId,
                     },
                     trialPayload
                   )
@@ -1956,6 +2387,7 @@
                 amount_usd: amtUsd,
                 product_platform: selectedSignupMarket(resolvedPlan).product_platform,
                 sales_channel: selectedSignupMarket(resolvedPlan).sales_channel,
+                legal_acceptance_id: signupBtn.dataset.legalAcceptanceId,
               }),
             })
               .then(function (r) {
@@ -1975,6 +2407,7 @@
                     payment_request_id: signupPrepId || undefined,
                     product_platform: selectedSignupMarket(resolvedPlan).product_platform,
                     sales_channel: selectedSignupMarket(resolvedPlan).sales_channel,
+                    legal_acceptance_id: signupBtn.dataset.legalAcceptanceId,
                   }),
                 });
               })
@@ -2107,9 +2540,9 @@
     <script>
       (function () {
         var meta = document.querySelector('meta[name="api-base"]');
-        var API = (meta && meta.content) || "https://happyinvests.com";
+        var API = (meta && meta.content) || "https://magicindicatorglobal.com";
         var emptyAddrMsg =
-          "수취 주소는 지갑·계정 개설 후 이 페이지에 공지됩니다. https://happyinvests.com/billing/index.html#crypto-deposit";
+          "수취 주소는 지갑·계정 개설 후 이 페이지에 공지됩니다. https://magicindicatorglobal.com/billing/index.html#crypto-deposit";
         var sec = document.getElementById("crypto-deposit");
         if (sec) {
           sec.querySelectorAll(".crypto-addr-copy").forEach(function (btn) {
@@ -2222,6 +2655,442 @@
             }
           });
         }
+      })();
+    </script>
+    <script>
+      (function () {
+        var root = document.getElementById("wire-bank-list-root");
+        var selCcy = document.getElementById("wire-ccy-select");
+        var selRg = document.getElementById("wire-country-select");
+        if (!root || !selCcy || !selRg) return;
+
+        document.documentElement.classList.add("js-wire-route-active");
+
+        var prevCcyWireToast = null;
+
+        var COPY_MSG =
+          "복사했습니다. 은행·SWIFT·입금자명이 안내와 같은지 확인해 주세요. " +
+          "가상자산·온체인으로 별도 송금 시에는 네트워크·메모(Tag 등) 누락으로 입금 확인이 지연될 수 있습니다.";
+
+        var GLOBAL_ACC_NAME = "haengbokdoam invest co ltd";
+
+        var REGION_LABEL = {
+          KR: "대한민국 — KEB Hana Bank · USD 외화",
+          US: "미국 — Community Federal Savings Bank · USD",
+          SG: "싱가포르 — DBS Bank Ltd · 다통화",
+          CA: "캐나다 — Digital Commerce Bank · CAD",
+          AU: "호주 — Australia and New Zealand Banking Group · AUD",
+          HK: "홍콩 SAR — Standard Chartered Bank · HKD",
+          DE: "독일 — Banking Circle S.A. · EUR(IBAN)",
+          GB: "영국 — AIRWALLEX (UK) LIMITED · GBP"
+        };
+
+        function esc(s) {
+          return String(s || "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;");
+        }
+
+        function bindCodesIn(el) {
+          if (!el || !window.HappyUX || !window.HappyUX.toast) return;
+          el.querySelectorAll("code").forEach(function (c) {
+            c.style.cursor = "pointer";
+            c.setAttribute("title", "클릭하여 복사");
+            c.addEventListener("click", function () {
+              var t = (c.textContent || "").replace(/\s+/g, "");
+              if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(t).then(function () {
+                  window.HappyUX.toast(COPY_MSG, { duration: 9000, type: "warn" });
+                });
+              }
+            });
+          });
+        }
+
+        function regionsForCurrency(ccy) {
+          var u = String(ccy || "").toUpperCase();
+          if (u === "KRW") return ["KR"];
+          if (u === "USD") return ["KR", "US", "SG"];
+          if (u === "CAD") return ["CA"];
+          if (u === "AUD") return ["AU"];
+          if (u === "HKD") return ["HK"];
+          if (u === "EUR") return ["DE", "SG"];
+          if (u === "GBP") return ["GB", "SG"];
+          if (["SGD", "CNY", "CHF", "JPY", "NOK", "NZD", "SEK"].indexOf(u) >= 0) return ["SG"];
+          return [];
+        }
+
+        function syncRegionCombo() {
+          var ccy = String(selCcy.value || "").toUpperCase();
+          var regs = regionsForCurrency(ccy);
+          var prev = String(selRg.value || "").toUpperCase();
+          selRg.innerHTML = "";
+          for (var i = 0; i < regs.length; i++) {
+            var rg = regs[i];
+            var o = document.createElement("option");
+            o.value = rg;
+            o.textContent = REGION_LABEL[rg] || rg;
+            selRg.appendChild(o);
+          }
+          var keep = regs.indexOf(prev) >= 0;
+          selRg.value = keep ? prev : regs[0] || "";
+        }
+
+        var COMMON_GLOBAL_NOTE =
+          "글로벌 수취(활성) 안내입니다. <strong>인보이스·Airwallex(또는 운영) 화면</strong>의 수취인명·계좌·SWIFT·국가 표기와 <strong>완전히 동일</strong>해야 입금 확인이 빠릅니다. 선택한 통화와 실제 입금 통화가 다르면 거절·지연될 수 있습니다.";
+
+        var CFSB_USD_ROWS = [
+          { k: "글로벌 계좌명 (Account name)", v: GLOBAL_ACC_NAME, code: false },
+          { k: "Account number", v: "9483246245", code: true },
+          { k: "ACH routing number", v: "026073150", code: true },
+          { k: "Fedwire routing number", v: "026073008", code: true },
+          { k: "SWIFT / BIC", v: "CMFGUS33", code: true },
+          { k: "Bank name", v: "Community Federal Savings Bank", code: false },
+          { k: "Bank country", v: "United States (USA)", code: false },
+          {
+            k: "Bank address (필요 시)",
+            v: "89-16 Jamaica Ave, Richmond Hill, NY 11418, United States",
+            code: false
+          }
+        ];
+
+        var HANA_USD_ROWS = [
+          { k: "Beneficiary", v: "Haengbokdodam Invest co., Ltd.", code: false },
+          { k: "Bank name", v: "KEB Hana Bank", code: false },
+          { k: "Account number", v: "444-910014-96138", code: true },
+          { k: "Branch", v: "Singjungdong-yeok", code: false },
+          { k: "SWIFT / BIC", v: "KOEXKRSE", code: true },
+          {
+            k: "Bank address",
+            v: "284, Gilju-ro, Wonmi-gu, Bucheon-si, Gyeonggi-do, 14548, South Korea",
+            code: false
+          },
+          { k: "Bank telephone", v: "032-341-1111", code: false },
+          { k: "지원 경로", v: "국제 SWIFT 외화 송금", code: false }
+        ];
+
+        var WOORI_KRW_ROWS = [
+          { k: "은행명", v: "우리은행 (Woori Bank)", code: false },
+          { k: "예금주(법인)", v: "주식회사행복도담 인베스트", code: false },
+          { k: "계좌번호", v: "61001073818213", code: true }
+        ];
+
+        var CA_CAD_ROWS = [
+          { k: "글로벌 계좌명", v: GLOBAL_ACC_NAME, code: false },
+          { k: "Bank name", v: "Digital Commerce Bank", code: false },
+          { k: "Account number", v: "937882792", code: true },
+          { k: "Branch Code", v: "10009", code: true },
+          { k: "Institution No", v: "352", code: true },
+          { k: "E-transfer email", v: "etransfer.937882792@airwallex.com", code: false }
+        ];
+
+        var AU_AUD_ROWS = [
+          { k: "글로벌 계좌명", v: GLOBAL_ACC_NAME, code: false },
+          {
+            k: "Bank name",
+            v: "Australia and New Zealand Banking Group Limited",
+            code: false
+          },
+          { k: "BSB Code", v: "013843", code: true },
+          { k: "Account number", v: "613006509", code: true }
+        ];
+
+        var HK_HKD_ROWS = [
+          { k: "글로벌 계좌명", v: GLOBAL_ACC_NAME, code: false },
+          { k: "Bank name", v: "Standard Chartered Bank (Hong Kong) Ltd", code: false },
+          { k: "Account number", v: "44790552518", code: true },
+          { k: "Bank Code", v: "003", code: true },
+          { k: "Branch Code", v: "447", code: true },
+          { k: "SWIFT / BIC", v: "BECHHKHH", code: true }
+        ];
+
+        var DE_EUR_ROWS = [
+          { k: "글로벌 계좌명", v: GLOBAL_ACC_NAME, code: false },
+          { k: "Bank name", v: "Banking Circle S.A.", code: false },
+          { k: "IBAN", v: "DE47107000000079790492", code: true },
+          { k: "SWIFT / BIC", v: "GNTYDEFF", code: true }
+        ];
+
+        var GB_GBP_ROWS = [
+          { k: "글로벌 계좌명", v: GLOBAL_ACC_NAME, code: false },
+          { k: "Bank name", v: "AIRWALLEX (UK) LIMITED", code: false },
+          { k: "Account number", v: "3536792", code: true },
+          { k: "Sort Code", v: "040605", code: true },
+          { k: "SWIFT / BIC", v: "AIRWGB22XXX", code: true }
+        ];
+
+        function dbsRows(ccyLabel) {
+          return [
+            { k: "글로벌 계좌명 (Account name)", v: GLOBAL_ACC_NAME, code: false },
+            { k: "입금 통화(위에서 선택)", v: ccyLabel, code: false },
+            { k: "Bank name", v: "DBS Bank Ltd", code: false },
+            { k: "Account number", v: "88530740174", code: true },
+            { k: "Bank Code", v: "7171", code: true },
+            { k: "Branch Code", v: "072", code: true },
+            { k: "SWIFT / BIC", v: "DBSSSGSS", code: true }
+          ];
+        }
+
+        function tableFromRows(rows) {
+          var tb = rows
+            .map(function (r) {
+              var td =
+                r.code ?
+                  "<td><code>" + esc(r.v) + "</code></td>"
+                : "<td>" + esc(r.v) + "</td>";
+              return (
+                "<tr><th scope=\"row\" style=\"width:8.2rem\">" +
+                esc(r.k) +
+                "</th>" +
+                td +
+                "</tr>"
+              );
+            })
+            .join("");
+          return (
+            "<div style=\"overflow-x:auto\" role=\"region\"><table class=\"data-table\" style=\"font-size:0.83rem;margin:0\"><tbody>" +
+            tb +
+            "</tbody></table></div>"
+          );
+        }
+
+        function cardHtml(title, note, rows) {
+          return (
+            "<section class=\"wire-bank-card\"><h5>" +
+            esc(title) +
+            "</h5>" +
+            (note ? "<p class=\"wire-bank-note\">" + note + "</p>" : "") +
+            tableFromRows(rows) +
+            "</section>"
+          );
+        }
+
+        function syncCurrencyChips(ccy) {
+          var bar = document.getElementById("ccy-bar");
+          var paneRoot = document.getElementById("ccy-panels");
+          if (!bar || !paneRoot) return;
+          var code = String(ccy || "USD").toLowerCase();
+          var chips = bar.querySelectorAll(".currency-chip");
+          var panels = paneRoot.querySelectorAll(".d-currency-panel");
+          var allowed =
+            "hkd,cny,usd,eur,aud,cad,chf,gbp,jpy,nzd,sgd".split(",").indexOf(code) >= 0;
+          if (!allowed) {
+            chips.forEach(function (b) {
+              b.classList.remove("is-on");
+              b.setAttribute("aria-pressed", "false");
+              b.setAttribute("aria-selected", "false");
+            });
+            panels.forEach(function (p) {
+              p.classList.remove("is-on");
+              p.setAttribute("aria-hidden", "true");
+            });
+            return;
+          }
+          var btn = bar.querySelector('.currency-chip[data-ccy="' + code + '"]');
+          if (btn) btn.click();
+        }
+
+        function domesticWireFormExampleCfsb() {
+          return (
+            "<section class=\"wire-bank-card\" style=\"border-style:dashed\"><h5>국내 은행 해외송금 화면 · 입력 예시 (미국 CFSB)</h5>" +
+            "<p class=\"wire-bank-note\">수취인이 <strong>Community Federal Savings Bank</strong>인 경우 예시입니다. 항목명은 은행마다 다를 수 있으며, <strong>인보이스·글로벌 계좌 화면</strong>을 우선하세요.</p>" +
+            "<ul class=\"small\" style=\"margin:0;padding-left:1.15rem;line-height:1.65;color:var(--ci-brown)\">" +
+            "<li><strong>이름</strong>: <code>HAENGBOKDOAM INVEST CO LTD</code></li>" +
+            "<li><strong>주소(요구 시)</strong>: <code>89-16 Jamaica Ave</code>, <code>Richmond Hill</code>, <code>NY</code>, <code>United States</code></li>" +
+            "<li><strong>은행·SWIFT·계좌</strong>: <code>Community Federal Savings Bank</code> · <code>CMFGUS33</code> · <code>9483246245</code></li>" +
+            "<li><strong>메모</strong>: 인보이스 Reference</li>" +
+            "</ul></section>"
+          );
+        }
+
+        function domesticWireFormExampleEurIban() {
+          return (
+            "<section class=\"wire-bank-card\" style=\"border-style:dashed\"><h5>국내/EU 은행 EUR 송금 화면 · IBAN 입력 예시</h5>" +
+            "<p class=\"wire-bank-note\">수취가 <strong>Banking Circle S.A. (독일 IBAN)</strong>일 때 참고 예시입니다. 필드 이름은 기관마다 다르며 <strong>인보이스·글로벌 계좌</strong>를 최우선으로 맞춥니다.</p>" +
+            "<ul class=\"small\" style=\"margin:0;padding-left:1.15rem;line-height:1.65;color:var(--ci-brown)\">" +
+            "<li><strong>수취인명(Beneficiary)</strong>: 영문법인 표기 우선 예: <code>haengbokdoam invest co ltd</code> (공백·대소문자는 은행 UI에 따라 정규화될 수 있음)</li>" +
+            "<li><strong>IBAN</strong>: <code>DE47107000000079790492</code></li>" +
+            "<li><strong>BIC/SWIFT</strong>: <code>GNTYDEFF</code></li>" +
+            "<li><strong>은행명</strong>: <code>Banking Circle S.A.</code></li>" +
+            "<li><strong>통화</strong>: <code>EUR</code> · <strong>참조</strong>: 인보이스 Reference</li>" +
+            "</ul></section>"
+          );
+        }
+
+        function resolveCard(ccy, rg) {
+          if (ccy === "KRW" && rg === "KR") {
+            return {
+              html:
+                cardHtml(
+                  "우리은행 — 대한민국 원화(법인)",
+                  "원화 납부는 인보이스·운영이 안내한 <strong>확정 원화액(만 원 단위·식별 차액)</strong>과만 일치해야 합니다. 세부는 <a href=\"#krw-corporate\">원화(법인) 섹션</a>·문의를 따릅니다.",
+                  WOORI_KRW_ROWS
+                ),
+              extra: ""
+            };
+          }
+          if (ccy === "USD" && rg === "US") {
+            return {
+              html:
+                cardHtml(
+                  "Community Federal Savings Bank — 미국 (USD)",
+                  COMMON_GLOBAL_NOTE +
+                    " ACH·Fedwire·SWIFT는 은행 화면에 맞는 필드에 넣어 주세요.",
+                  CFSB_USD_ROWS
+                ) + domesticWireFormExampleCfsb(),
+              extra: ""
+            };
+          }
+          if (ccy === "USD" && rg === "KR") {
+            return {
+              html: cardHtml(
+                "KEB Hana Bank — 대한민국 (USD · SWIFT)",
+                "한국의 수취 은행(KEB Hana) 외화계좌로 USD를 송금할 때 사용합니다. " +
+                  "<strong>Beneficiary명</strong>은 인보이스·이 페이지의 영문 표기(<code>Haengbokdodam Invest co., Ltd.</code>)와 <strong>그대로</strong> 일치해야 합니다. " +
+                  "국내 발신은행 화면이 <strong>한글 수취인만 허용</strong>하면 시스템 제한일 수 있으므로 ‘영문 수취인’·국제송금 필드가 있는지 확인하고, 문자 허용 범위는 <strong>해당 금융사 창구</strong>에 문의해 주세요.",
+                HANA_USD_ROWS
+              ),
+              extra: ""
+            };
+          }
+          if (ccy === "USD" && rg === "SG") {
+            return {
+              html: cardHtml(
+                "DBS Bank Ltd — 싱가포르 (USD)",
+                COMMON_GLOBAL_NOTE + " 동일 계좌로 여러 통화 입금이 가능한 상품입니다. 이번 납부는 <strong>USD</strong>로 맞춥니다.",
+                dbsRows("USD")
+              ),
+              extra: ""
+            };
+          }
+          if (ccy === "CAD" && rg === "CA") {
+            return {
+              html: cardHtml(
+                "Digital Commerce Bank — 캐나다 (CAD)",
+                COMMON_GLOBAL_NOTE + " E-transfer 이메일 납부가 허용되는 경우에만 해당 경로를 사용합니다.",
+                CA_CAD_ROWS
+              ),
+              extra: ""
+            };
+          }
+          if (ccy === "AUD" && rg === "AU") {
+            return {
+              html: cardHtml(
+                "Australia and New Zealand Banking Group — 호주 (AUD)",
+                COMMON_GLOBAL_NOTE,
+                AU_AUD_ROWS
+              ),
+              extra: ""
+            };
+          }
+          if (ccy === "HKD" && rg === "HK") {
+            return {
+              html: cardHtml(
+                "Standard Chartered Bank — 홍콩 SAR (HKD)",
+                COMMON_GLOBAL_NOTE,
+                HK_HKD_ROWS
+              ),
+              extra: ""
+            };
+          }
+          if (ccy === "EUR" && rg === "DE") {
+            return {
+              html:
+                cardHtml(
+                  "Banking Circle S.A. — 독일 (EUR · IBAN)",
+                  COMMON_GLOBAL_NOTE,
+                  DE_EUR_ROWS
+                ) + domesticWireFormExampleEurIban(),
+              extra: ""
+            };
+          }
+          if (ccy === "EUR" && rg === "SG") {
+            return {
+              html: cardHtml(
+                "DBS Bank Ltd — 싱가포르 (EUR)",
+                COMMON_GLOBAL_NOTE,
+                dbsRows("EUR")
+              ),
+              extra: ""
+            };
+          }
+          if (ccy === "GBP" && rg === "GB") {
+            return {
+              html: cardHtml(
+                "AIRWALLEX (UK) LIMITED — 영국 (GBP)",
+                COMMON_GLOBAL_NOTE,
+                GB_GBP_ROWS
+              ),
+              extra: ""
+            };
+          }
+          if (ccy === "GBP" && rg === "SG") {
+            return {
+              html: cardHtml(
+                "DBS Bank Ltd — 싱가포르 (GBP)",
+                COMMON_GLOBAL_NOTE,
+                dbsRows("GBP")
+              ),
+              extra: ""
+            };
+          }
+          if (rg === "SG") {
+            return {
+              html: cardHtml(
+                "DBS Bank Ltd — 싱가포르 (" + esc(ccy) + ")",
+                COMMON_GLOBAL_NOTE +
+                  " 싱가포르 다통화 계좌입니다. 선택한 통화로만 입금하세요.",
+                dbsRows(ccy)
+              ),
+              extra: ""
+            };
+          }
+          return null;
+        }
+
+        function render() {
+          syncRegionCombo();
+          var ccy = String(selCcy.value || "").toUpperCase();
+          var rg = String(selRg.value || "").toUpperCase();
+
+          if (prevCcyWireToast !== null && prevCcyWireToast !== ccy) {
+            if (window.HappyUX && window.HappyUX.toast) {
+              window.HappyUX.toast(
+                "선택한 통화에 맞춰 수취 계좌 국가·지역 목록이 갱신되었습니다. 수취 지역과 표시된 계좌 정보를 다시 확인해 주세요.",
+                { duration: 5200 }
+              );
+            }
+          }
+          prevCcyWireToast = ccy;
+
+          var regs = regionsForCurrency(ccy);
+          var html = "";
+
+          if (!regs.length) {
+            html =
+              "<section class=\"wire-bank-card\"><p class=\"wire-bank-note\">목록에서 지원하지 않는 조합입니다. <a href=\"../contact/index.html\">문의</a> 또는 인보이스의 수취 안내를 확인해 주세요.</p></section>";
+          } else {
+            var pack = resolveCard(ccy, rg);
+            if (pack) html = pack.html;
+            else
+              html =
+                "<section class=\"wire-bank-card\"><p class=\"wire-bank-note\">선택한 <strong>" +
+                esc(ccy) +
+                " · " +
+                esc(rg) +
+                "</strong> 조합에 대한 표가 없습니다. 통화 또는 수취 지역을 바꿔 보세요.</p></section>";
+          }
+
+          root.innerHTML = html;
+          bindCodesIn(root);
+          syncCurrencyChips(ccy);
+        }
+
+        selCcy.addEventListener("change", render);
+        selRg.addEventListener("change", render);
+        render();
       })();
     </script>
     <script>

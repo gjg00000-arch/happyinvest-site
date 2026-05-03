@@ -4,6 +4,7 @@
 (function () {
   var THEME_KEY = "happyinvest-theme";
   var LANG_KEY = "happyinvest-lang";
+  var VISITOR_ID_KEY = "happyinvest-visitor-id";
   /** 상태 표시줄·PWA — 라이트/다크 브랜드 톤 (manifest theme_color 와 균형) */
   var META_THEME_LIGHT = "#2f6f4f";
   var META_THEME_DARK = "#0d1117";
@@ -163,6 +164,8 @@
       theme: "테마",
       themeAria: "밝기·어두움 전환",
       languageAria: "언어 선택",
+      visitToday: "오늘",
+      visitTotal: "누적",
       nav: {
         home: "메인",
         guide: "설치 안내",
@@ -197,6 +200,8 @@
       theme: "Theme",
       themeAria: "Toggle light/dark",
       languageAria: "Language",
+      visitToday: "Today",
+      visitTotal: "Total",
       nav: {
         home: "Home",
         guide: "Setup",
@@ -229,6 +234,8 @@
       theme: "テーマ",
       themeAria: "明暗を切替",
       languageAria: "言語",
+      visitToday: "今日",
+      visitTotal: "累計",
       nav: {
         home: "ホーム",
         guide: "導入案内",
@@ -261,6 +268,8 @@
       theme: "主题",
       themeAria: "切换明暗",
       languageAria: "语言",
+      visitToday: "今日",
+      visitTotal: "累计",
       nav: {
         home: "首页",
         guide: "安装指南",
@@ -293,6 +302,8 @@
       theme: "Tema",
       themeAria: "Cambiar claro/oscuro",
       languageAria: "Idioma",
+      visitToday: "Hoy",
+      visitTotal: "Total",
       nav: {
         home: "Inicio",
         guide: "Instalación",
@@ -424,6 +435,11 @@
     var langSum = document.getElementById("ux-btn-lang");
     if (langSum) langSum.setAttribute("aria-label", t.languageAria || "Language");
 
+    var visitTodayLabel = document.getElementById("ux-visit-today-label");
+    if (visitTodayLabel) visitTodayLabel.textContent = t.visitToday || I18N.ko.visitToday;
+    var visitTotalLabel = document.getElementById("ux-visit-total-label");
+    if (visitTotalLabel) visitTotalLabel.textContent = t.visitTotal || I18N.ko.visitTotal;
+
     var nodes = document.querySelectorAll("[data-i18n]");
     for (var n = 0; n < nodes.length; n++) {
       var el = nodes[n];
@@ -442,6 +458,73 @@
         elLead.textContent = t.indexLead;
       }
     }
+  }
+
+  function apiBase() {
+    var meta = document.querySelector('meta[name="api-base"]');
+    return ((meta && meta.content) || window.location.origin || "").replace(/\/$/, "");
+  }
+
+  function getVisitorId() {
+    var existing = "";
+    try {
+      existing = localStorage.getItem(VISITOR_ID_KEY) || "";
+    } catch (e) {}
+    if (/^[a-zA-Z0-9._:-]{16,96}$/.test(existing)) return existing;
+
+    var id = "";
+    try {
+      if (window.crypto && window.crypto.randomUUID) id = window.crypto.randomUUID();
+    } catch (e1) {}
+    if (!id) {
+      id =
+        "v-" +
+        Date.now().toString(36) +
+        "-" +
+        Math.random().toString(36).slice(2, 12) +
+        Math.random().toString(36).slice(2, 12);
+    }
+    try {
+      localStorage.setItem(VISITOR_ID_KEY, id);
+    } catch (e2) {}
+    return id;
+  }
+
+  function setVisitCounter(today, total) {
+    var t = document.getElementById("ux-visit-today");
+    var a = document.getElementById("ux-visit-total");
+    if (t && Number.isFinite(Number(today))) t.textContent = Number(today).toLocaleString("ko-KR");
+    if (a && Number.isFinite(Number(total))) a.textContent = Number(total).toLocaleString("ko-KR");
+  }
+
+  function syncVisitCounter() {
+    var box = document.getElementById("ux-visit-counter");
+    if (!box || !window.fetch) return;
+    var base = apiBase();
+    if (!base) return;
+    fetchWithRetry(
+      base + "/api/site-visits",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          visitor_id: getVisitorId(),
+          page_path: window.location.pathname || "/",
+        }),
+        keepalive: true,
+      },
+      1
+    )
+      .then(function (r) {
+        return r.json();
+      })
+      .then(function (j) {
+        setVisitCounter(j.today_visitors, j.total_visitors);
+        box.classList.add("is-loaded");
+      })
+      .catch(function () {
+        box.classList.add("is-muted");
+      });
   }
 
   function initSkipLink() {
@@ -494,6 +577,15 @@
 
     bar.innerHTML =
       '<div class="ux-chrome-bar__inner">' +
+      '<div class="ux-visit-counter" id="ux-visit-counter" aria-live="polite" title="하루 방문자수 / 누적 방문자수">' +
+      '<span class="ux-visit-counter__item"><span id="ux-visit-today-label">' +
+      ((I18N[cur] && I18N[cur].visitToday) || I18N.ko.visitToday) +
+      '</span> <strong id="ux-visit-today">-</strong></span>' +
+      '<span class="ux-visit-counter__sep" aria-hidden="true">/</span>' +
+      '<span class="ux-visit-counter__item"><span id="ux-visit-total-label">' +
+      ((I18N[cur] && I18N[cur].visitTotal) || I18N.ko.visitTotal) +
+      '</span> <strong id="ux-visit-total">-</strong></span>' +
+      "</div>" +
       '<button type="button" class="ux-chrome-btn" id="ux-btn-theme" aria-label="' +
       (I18N[cur] && I18N[cur].themeAria ? I18N[cur].themeAria : I18N.ko.themeAria) +
       '">🌓 ' +
@@ -565,6 +657,7 @@
     });
 
     applyI18n(cur);
+    syncVisitCounter();
   }
 
   function initOgImageAbsolute() {
@@ -591,6 +684,7 @@
   window.HappyUX = {
     toast: toast,
     fetchWithRetry: fetchWithRetry,
+    getVisitorId: getVisitorId,
     getLang: getUiLang,
     setLang: function (code) {
       applyI18n(code);

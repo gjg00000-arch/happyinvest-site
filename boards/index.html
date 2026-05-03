@@ -21,10 +21,10 @@
     </header>
     <nav class="site-nav" aria-label="주요 메뉴">
       <a href="../index.html">메인</a>
-      <a href="../guide/index.html">설치 안내</a>
-      <a href="../guide/usage.html">사용법</a>
-      <a href="../guide/usage-trv.html">TRV 설정</a>
-      <a href="../guide/usage-mt5.html">MT5 설정</a>
+      <a href="../guide/index.html">가이드</a>
+      <a href="../guide/usage.html">지표 사용</a>
+      <a href="../guide/usage-trv.html">TRV</a>
+      <a href="../guide/usage-mt5.html">MT5</a>
       <a href="../downloads/index.html">다운로드</a>
       <a href="../registration/index.html">가입·등록</a>
       <a href="../verify/index.html">본인인증</a>
@@ -51,6 +51,18 @@
           읽고, 남기고, 서로 답하는 공간이에요. 서두르지 않아도 괜찮습니다.
         </p>
       </header>
+
+      <aside class="board-pinned-guide" aria-labelledby="board-pinned-guide-title">
+        <h2 id="board-pinned-guide-title" class="board-pinned-guide__title">TradingView MagicTrading — 입력·파인튜닝</h2>
+        <p class="board-pinned-guide__text">
+          차트 설정 <strong>Inputs</strong>에서 다루는 <strong>Entry Mode, Adjust, Signals, Risk</strong>를 모아 둔 안내입니다.
+          Mode와 Fine Tune(Auto/Manual)·웹훅 JSON까지 한 번에 확인하세요.
+        </p>
+        <p class="board-pinned-guide__actions">
+          <a class="btn board-btn-primary" href="../guide/magictrading-strategy-inputs-ko.html">상세 안내 페이지</a>
+          <a class="btn btn--ghost" href="../guide/usage-trv.html">TRV 사용법</a>
+        </p>
+      </aside>
 
       <details class="board-tech-hint">
         <summary>연결 정보 (개발·점검용)</summary>
@@ -240,6 +252,13 @@
               aria-label="제목·내용 검색"
               autocomplete="off"
             />
+            <div class="board-feed__toolbar" role="toolbar" aria-label="목록 도구">
+              <label class="board-sort-label" for="board-sort">정렬</label>
+              <select id="board-sort" class="board-sort-select" aria-label="글 목록 정렬 방식">
+                <option value="new">최신순</option>
+                <option value="popular">인기순 (조회수)</option>
+              </select>
+            </div>
             <div id="board-highlights" class="board-highlights" aria-label="이번 주 많이 본 글"></div>
             <div class="board-feed__meta" id="board-status">불러오는 중이에요…</div>
             <ul id="board-list" class="board-rows" aria-live="polite"></ul>
@@ -802,6 +821,16 @@
 
         var currentCat = "";
         var lastListData = null;
+        var boardSort = "new";
+
+        function getBoardSortSelect() {
+          return document.getElementById("board-sort");
+        }
+
+        function syncBoardSortFromSelect() {
+          var sel = getBoardSortSelect();
+          if (sel) boardSort = sel.value === "popular" ? "popular" : "new";
+        }
 
         var bannerTitles = {
           "": "글 목록 — 전체",
@@ -943,13 +972,20 @@
           }
         }
 
-        function openBoardThread(p, threadEl, statsEl, toggleBtn) {
+        function openBoardThread(p, threadEl, statsEl, toggleBtn, viewsBadgeEl) {
           var pid = p._id ? String(p._id) : "";
           if (!pid) return;
           function setStats(views, cc) {
-            if (statsEl)
-              statsEl.textContent =
-                "조회 " + (views != null ? views : 0) + " · 댓글 " + (cc != null ? cc : 0);
+            if (statsEl) statsEl.textContent = "댓글 " + (cc != null ? cc : 0);
+            if (viewsBadgeEl) {
+              var vv = Number(views != null ? views : 0) || 0;
+              viewsBadgeEl.textContent = String(vv);
+              viewsBadgeEl.setAttribute("title", "조회 " + vv);
+              viewsBadgeEl.setAttribute("aria-label", "조회수 " + vv);
+              viewsBadgeEl.className =
+                "board-row__views" +
+                (vv >= 120 ? " board-row__views--hot" : vv >= 40 ? " board-row__views--warm" : "");
+            }
           }
           var pView = Promise.resolve();
           if (!threadEl.dataset.viewSent) {
@@ -1076,14 +1112,17 @@
               })
             : raw;
 
+          var sortLabel = boardSort === "popular" ? "인기순(조회)" : "최신순";
           if (posts.length === 0 && raw.length > 0 && q) {
-            status.textContent = "검색에 맞는 글이 없어요. (이 구역 글 " + raw.length + "개 중)";
+            status.textContent =
+              "검색에 맞는 글이 없어요. (이 구역 글 " + raw.length + "개 중 · " + sortLabel + ")";
           } else if (posts.length === 0) {
             status.textContent = "아직 글이 없어요. 첫 이야기를 남겨 보시겠어요?";
           } else if (q) {
-            status.textContent = "검색 결과 " + posts.length + "개 · 이 구역 전체 " + raw.length + "개";
+            status.textContent =
+              "검색 결과 " + posts.length + "개 · 전체 " + raw.length + "개 · " + sortLabel;
           } else {
-            status.textContent = "총 " + posts.length + "개의 글이 있어요";
+            status.textContent = "총 " + posts.length + "개 · " + sortLabel;
           }
 
           list.innerHTML = "";
@@ -1101,12 +1140,25 @@
             var id = p._id ? String(p._id) : "";
             var li = document.createElement("li");
             li.className = "board-row";
+            var vCount = Number(p.views != null ? p.views : 0) || 0;
             var title = document.createElement("p");
             title.className = "board-row__title";
+            var titleText = document.createElement("span");
+            titleText.className = "board-row__title-text";
             var a = document.createElement("a");
             a.href = "#post-" + id;
             a.textContent = p.title || "(제목 없음)";
-            title.appendChild(a);
+            titleText.appendChild(a);
+
+            var viewsBadge = document.createElement("span");
+            viewsBadge.className =
+              "board-row__views" + (vCount >= 120 ? " board-row__views--hot" : vCount >= 40 ? " board-row__views--warm" : "");
+            viewsBadge.setAttribute("title", "조회 " + vCount);
+            viewsBadge.setAttribute("aria-label", "조회수 " + vCount);
+            viewsBadge.textContent = String(vCount);
+
+            title.appendChild(titleText);
+            title.appendChild(viewsBadge);
 
             var sub = document.createElement("p");
             sub.className = "board-row__sub";
@@ -1115,10 +1167,7 @@
             var stats = document.createElement("p");
             stats.className = "board-row__stats";
             stats.textContent =
-              "조회 " +
-              (p.views != null ? p.views : 0) +
-              " · 댓글 " +
-              (p.comment_count != null ? p.comment_count : 0);
+              "댓글 " + (p.comment_count != null ? p.comment_count : 0);
 
             var toggleBtn = document.createElement("button");
             toggleBtn.type = "button";
@@ -1132,7 +1181,7 @@
               if (!open) {
                 threadEl.style.display = "block";
                 toggleBtn.textContent = "접기";
-                openBoardThread(p, threadEl, stats, toggleBtn);
+                openBoardThread(p, threadEl, stats, toggleBtn, viewsBadge);
                 open = true;
               } else {
                 threadEl.style.display = "none";
@@ -1187,8 +1236,11 @@
           status.textContent = "불러오는 중이에요…";
           list.innerHTML = "";
           lastListData = null;
-          var url = API + "/api/posts";
-          if (currentCat) url += "?category=" + encodeURIComponent(currentCat);
+          syncBoardSortFromSelect();
+          var q = [];
+          if (currentCat) q.push("category=" + encodeURIComponent(currentCat));
+          q.push("sort=" + encodeURIComponent(boardSort === "popular" ? "popular" : "new"));
+          var url = API + "/api/posts?" + q.join("&");
           var req = window.HappyUX && HappyUX.fetchWithRetry ? HappyUX.fetchWithRetry(url, { cache: "no-store", headers: authGetHeaders() }, 2) : fetch(url, { cache: "no-store", headers: authGetHeaders() });
           req
             .then(function (r) {
@@ -1218,6 +1270,14 @@
         if (boardSearchEl) {
           boardSearchEl.addEventListener("input", function () {
             if (lastListData) applySearchOrPaint();
+          });
+        }
+
+        var boardSortEl = getBoardSortSelect();
+        if (boardSortEl) {
+          boardSortEl.addEventListener("change", function () {
+            syncBoardSortFromSelect();
+            loadPosts();
           });
         }
 

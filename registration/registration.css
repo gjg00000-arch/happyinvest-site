@@ -151,3 +151,58 @@
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
 }
+
+.sms-addon-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10020;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: rgba(20, 18, 16, 0.48);
+  box-sizing: border-box;
+}
+
+.sms-addon-modal-overlay.is-open {
+  display: flex;
+}
+
+.sms-addon-modal-dialog {
+  max-width: 32rem;
+  width: 100%;
+  max-height: calc(100vh - 3rem);
+  overflow: auto;
+  background: #fffdf9;
+  border-radius: 12px;
+  border: 1px solid rgba(74, 53, 40, 0.22);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+  padding: 1.15rem 1.25rem 1.35rem;
+}
+
+.sms-addon-modal-dialog h3 {
+  margin: 0 0 0.65rem;
+  font-size: 1.1rem;
+  color: var(--ci-brown, #4a3528);
+}
+
+.sms-addon-modal-dialog .sms-sample {
+  margin: 0.5rem 0 0;
+  padding: 0.65rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(61, 122, 150, 0.08);
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.88rem;
+  word-break: break-all;
+}
+
+.reg-linklike {
+  border: none;
+  background: transparent;
+  color: var(--ci-green-dk, #2f6f4f);
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+  padding: 0 0.15rem;
+  vertical-align: baseline;
+}

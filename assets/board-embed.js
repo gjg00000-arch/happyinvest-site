@@ -111,10 +111,12 @@
 
     function userHeaders() {
       MagicAuth.set(emailIn.value, roleIn.value);
-      return {
+      var h = {
         "X-User-Id": MagicAuth.get().email,
         "X-User-Role": MagicAuth.get().role,
       };
+      if (window.HappyUX && HappyUX.getVisitorId) h["X-Visitor-Id"] = HappyUX.getVisitorId();
+      return h;
     }
     function postHeaders() {
       return Object.assign({ "Content-Type": "application/json" }, userHeaders());
