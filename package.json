@@ -10,7 +10,8 @@
     "lint:html": "node scripts/lint-html.mjs",
     "lint:links": "node scripts/check-links.mjs",
     "build": "npm run build:nav && npm run build:seo && npm run build:og && npm run lint:html && npm run lint:links",
-    "verify": "npm run build"
+    "verify": "npm run build",
+    "deploy:s3": "powershell -ExecutionPolicy Bypass -File scripts/deploy-s3-cloudfront.ps1"
   },
   "devDependencies": {
     "html-validate": "^9.5.5"

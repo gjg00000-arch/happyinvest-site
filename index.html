@@ -9,11 +9,19 @@
     <meta name="api-base" content="https://magicindicatorglobal.com" />
     <title>Magic 지표 — 메인</title>
     <meta name="description" content="Magic 지표 가이드·가입·모임터 — 주식회사 행복도담 인베스트" />
+    <meta
+      name="keywords"
+      content="Magic 지표, Magic Indicator, 행복도담 인베스트, Haengbokdodam Invest, magicindicatorglobal, TradingView, Pine Script, 트레이딩뷰, MT5, MQL5, 지표 알림, 웹훅, 구독 결제, 모임터"
+    />
+    <meta name="theme-color" content="#2f6f4f" />
     <meta property="og:title" content="Magic 지표 — 행복도담 인베스트" />
     <meta property="og:description" content="Magic 지표 가이드·가입·모임터" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://magicindicatorglobal.com/assets/haengbokdam-company-ci.png" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Magic 지표 — 행복도담 인베스트" />
+    <meta name="twitter:description" content="Magic 지표 가이드·가입·모임터 — TradingView·MT5 안내" />
+    <meta name="twitter:image" content="https://magicindicatorglobal.com/assets/haengbokdam-company-ci.png" />
     <meta property="og:url" content="https://magicindicatorglobal.com/" />
     <link rel="canonical" href="https://magicindicatorglobal.com/" />
     <script type="application/ld+json">
@@ -74,6 +82,13 @@
       <a href="admin/index.html">관리자</a>
       <a href="integrations/index.html">연동</a>
     </nav>
+    <aside class="official-site-banner layout-home-official-banner" aria-label="공식 홈페이지 주소 안내">
+      <p class="official-site-banner__inner">
+        <span class="official-site-banner__label">공식 홈페이지</span>
+        <a href="https://magicindicatorglobal.com/" class="official-site-banner__link">https://magicindicatorglobal.com/</a>
+        <span class="official-site-banner__hint">외부 안내·북마크 시 이 주소인지 확인하세요.</span>
+      </p>
+    </aside>
     <main class="wrap layout-home-main" id="main-content">
       <!-- 관리자가 저장한 HTML이 있으면 API에서 주입(없으면 숨김). 드래그 편집기 아님·마크업 직접 입력. -->
       <div id="cms-home-slot" class="cms-home-slot" hidden></div>
@@ -84,6 +99,47 @@
           매직라인 방향만 확인하세요.
         </p>
       </header>
+
+      <section class="ml-must-read" id="must-read-philosophy" aria-labelledby="must-read-title">
+        <p class="ml-must-read__badge">필독 · 매우 중요</p>
+        <h2 class="ml-must-read__title" id="must-read-title">지표를 쓰기 전에 꼭 읽어 주세요</h2>
+        <p class="ml-must-read__lede">
+          이 지표는 <strong>신호만 따라가면</strong> 되는 도구가 아닙니다. 아래를 갖추지 않으면
+          <strong>수익을 내기 매우 어렵습니다.</strong> 짧게 읽고, 차트 앞에서 다시 떠올려 보세요.
+        </p>
+        <ul class="ml-must-read__list">
+          <li>
+            <strong>진입은 자주 할 필요가 없습니다.</strong> 오히려 <strong>늦어도 괜찮고</strong>, 횟수를 줄여도 됩니다.
+            대신 <strong>안전마진이 가장 높다고 느껴질 때</strong>—밴드·R·상황이 맞을 때—<strong>최고의 한 방에 가깝게</strong> 들어가려는 쪽이 이 지표와 맞습니다.
+          </li>
+          <li>
+            그래도 시장이 아니면 <strong>손절은 해야 합니다.</strong> 그건 실패가 아니라
+            <strong>준거점이 바뀌었다는 걸 인정하고 자리를 비우는 것</strong>(준거점 이동)에 가깝습니다.
+          </li>
+          <li>
+            <strong>욕심을 줄입니다.</strong> 이익을 크게 한 번 가져가려 하기보다,
+            <strong>매직라인(평균·중심) 근처</strong>나 <strong>트레일링 스탑</strong>이 정한 자리에서
+            <strong>작은 수익이라도 쌓아 가는 것</strong>이—준거가 옮겨갈 때마다 계좌를 지키는 길에 가깝습니다.
+          </li>
+          <li>
+            <strong>평균회귀</strong>는 특정 종목만의 이야기가 아닙니다.
+            <strong>어느 시장·어느 종목이든</strong> “한번 갔다가 결국 평균 쪽으로 되돌아오려는 힘”을 염두에 두는
+            <strong>보편적인 시각</strong>입니다. 이 지표도 그 전제 위에 있습니다.
+          </li>
+          <li>
+            차트에서 <strong>매수·매도 표식은 밴드 하선·상단(진입 기준선)</strong>에 맞춰 보이고, 청산·스탑은
+            <strong>매직라인 근처·목표·트레일 가격</strong>에 맞춰 보입니다. (체결·리포트 숫자와 1:1은 아닐 수 있습니다.)
+          </li>
+        </ul>
+        <p class="ml-must-read__warn">
+          <strong>이해하지 않은 채</strong> 설정만 건드리거나 <strong>신호만</strong> 쫓아가면 손실을 키우기 쉽습니다.
+          <a href="guide/magictrading-strategy-inputs-ko.html">MagicTrading 입력·파인튜닝 안내</a>와
+          <a href="guide/usage.html">지표 사용법</a>을 <strong>반드시</strong> 함께 읽어 주세요.
+        </p>
+        <p class="ml-must-read__foot small">
+          교육·참고용 안내이며, 수익을 약속하지 않습니다. 레버리지 상품은 손실이 클 수 있습니다.
+        </p>
+      </section>
 
       <section class="ml-quick-start" aria-labelledby="ml-quick-start-title">
         <p class="ml-quick-start__badge">MagicLine 시작하기 · 3초 가이드</p>
@@ -130,7 +186,8 @@
         </p>
         <ol class="notice-list" style="max-width: 44rem; line-height: 1.72; padding-left: 1.35rem">
           <li style="margin-bottom: 0.5rem">
-            <strong>Whop</strong> 등에서 안내하는 링크를 눌러 <strong>이 홈페이지</strong>(공식 사이트)로 들어옵니다.
+            <strong>Whop</strong> 등에서 안내하는 링크를 눌러
+            <strong>공식 홈페이지 <a href="https://magicindicatorglobal.com/">https://magicindicatorglobal.com/</a></strong> 로 들어와 주세요.
           </li>
           <li style="margin-bottom: 0.5rem">
             <strong>준회원 가입</strong>(SMS 없음, 최소 정보) —
@@ -199,9 +256,8 @@
           <article class="home-payment-draft__card" role="listitem">
             <h3 class="home-payment-draft__card-title">USD 은행송금</h3>
             <p class="home-payment-draft__card-body">
-              <strong>고액·정규·해외 고객</strong>은 하나은행의 <strong>외화 수취계좌</strong>로 직접 송금합니다.
-              은행명은 KEB Hana Bank, 계좌번호는 <span class="home-payment-draft__mono">444-910014-96138</span>이며
-              SWIFT 정보는 결제 페이지와 인보이스를 따릅니다.
+              <strong>고액·정규·해외 고객</strong>은 <strong>글로벌 수취 계좌</strong>(구독·결제 페이지에서 통화·지역 선택)로 직접 송금합니다.
+              구체 은행명·계좌·SWIFT(IBAN 등)는 <a href="billing/index.html#wire-route-picker">결제 페이지 안내</a>와 인보이스를 따릅니다.
             </p>
           </article>
           <article class="home-payment-draft__card" role="listitem">
@@ -356,7 +412,7 @@
           <a href="downloads/index.html">다운로드 <small>지표·MT5(틱 전용) 패키지</small></a>
           <a href="registration/index.html">가입·등록 <small>회원 계정</small></a>
           <a href="verify/index.html">본인 인증 <small>계정 보호</small></a>
-          <a href="billing/index.html#payment-dual">구독·결제 <small>PayPal · 하나은행 외화 · 크립토 · 원화</small></a>
+          <a href="billing/index.html#payment-dual">구독·결제 <small>PayPal · 글로벌 계좌 송금 · 크립토 · 원화</small></a>
           <a href="events/index.html">이벤트 <small>체험·요금</small></a>
           <a href="membership/index.html">회원 혜택 <small>추천 쿠폰</small></a>
           <a href="reflection/index.html">실전 후기 <small>승인 시 1달 쿠폰</small></a>
@@ -475,7 +531,7 @@
               </div>
               <p style="margin: 0; font-size: 0.88rem; color: #5a4034">
                 정규 접근권은 마켓과 플랫폼별 확정가로 판매합니다. 고액 정규 결제는 <a href="contact/index.html">상담·인보이스</a>와
-                하나은행 외화송금 루트를 함께 안내합니다.
+                <a href="billing/index.html#wire-route-picker">글로벌 계좌 직접 송금 안내</a>를 함께 안내합니다.
               </p>
             </div>
           </div>
@@ -506,7 +562,7 @@
               <h3>TRV Regular</h3>
               <p class="market-license-card__price">$5,499 <span class="plan-price-suffix">/ 월 (USD)</span></p>
               <p>
-                TradingView 중심 사용자용 정규 접근권입니다. 정규 결제는 상담·인보이스·하나은행 외화송금 루트를 함께 안내합니다.
+                TradingView 중심 사용자용 정규 접근권입니다. 정규 결제는 상담·인보이스·<a href="billing/index.html#wire-route-picker">글로벌 계좌 송금</a> 안내를 함께 제공합니다.
               </p>
             </article>
             <article class="market-license-card market-license-card--business">

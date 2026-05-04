@@ -2,7 +2,7 @@
   "name": "Magic 지표 — 행복도담 인베스트",
   "short_name": "Magic 지표",
   "description": "Magic 지표 가이드, 가입, 모임터",
-  "start_url": "./index.html",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#f6f3ef",
   "theme_color": "#2f6f4f",

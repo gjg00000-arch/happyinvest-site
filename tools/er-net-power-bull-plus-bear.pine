@@ -1,0 +1,85 @@
+//@version=5
+// This Pine Script™ code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © 사용자 정의 — Elder-Ray Net Power (막대 + 옅은 0선 + 선택 얇은 라인) · 웹훅
+// NetPower = (high - EMA) + (low - EMA). 차트 알림: "alert() 함수 호출" + Webhook URL.
+indicator(
+     title                = "Elder-Ray Net Power",
+     shorttitle           = "ER Net Power",
+     format               = format.price,
+     precision            = 4,
+     overlay              = false,
+     explicit_plot_zorder = true,
+     max_bars_back        = 5000,
+     max_lines_count      = 500,
+     max_labels_count     = 500
+     )
+
+webhookUrl = input.string(
+     "https://magicindicatorglobal.com/YOUR_WEBHOOK_PATH",
+     "Webhook URL (알림 설정에 동일하게 입력)",
+     group = "웹훅",
+     tooltip = "Pine은 HTTP 불가. 차트 → 알림 → Webhook에 이 URL을 입력."
+     )
+
+period = input.int(13, "EMA 기간", minval = 1, group = "계산")
+colUp = input.color(color.red, "양(+) 색", group = "표시")
+colDown = input.color(color.blue, "음(-) 색", group = "표시")
+colTransp = input.int(48, "막대 투명도 (0=진함 · 100=투명)", minval = 0, maxval = 92, group = "표시")
+zeroTransp = input.int(86, "0선 투명도 (높을수록 옅음)", minval = 50, maxval = 96, group = "표시")
+thinLineTransp = input.int(76, "보조 라인 투명도", minval = 0, maxval = 96, group = "표시")
+showThinLine = input.bool(false, "막대가 안 보일 때 보조 라인 표시", group = "표시")
+
+sendOnStart = true
+alsoEveryClose = false
+evtName = "er_netpower_online"
+
+e = ta.ema(close, period)
+bullLeg = high - e
+bearLeg = low - e
+netPower = bullLeg + bearLeg
+
+histColor = netPower >= 0 ? color.new(colUp, colTransp) : color.new(colDown, colTransp)
+plot(netPower, title = "Net Power", style = plot.style_columns, color = histColor)
+
+plot(
+     showThinLine ? netPower : na,
+     title = "Net Power (thin)",
+     color = netPower >= 0 ? color.new(colUp, thinLineTransp) : color.new(colDown, thinLineTransp),
+     linewidth = 1,
+     style = plot.style_line)
+
+hline(0, title = "Zero", color = color.new(color.gray, zeroTransp), linestyle = hline.style_dotted)
+
+jsonEsc(string s) =>
+    str.replace_all(str.replace_all(s, "\\", "\\\\"), "\"", "\\\"")
+
+closeNumJson() =>
+    na(close) ? "null" : str.tostring(close, format.mintick)
+
+indNumJson(float v) =>
+    na(v) ? "null" : str.tostring(v, "#.######")
+
+tfStr = timeframe.period
+
+varip bool _startSent = false
+
+string jStart =
+     "{\"event\":\"" + evtName +
+     "\",\"kind\":\"indicator_start\",\"indicator\":\"ER_NetPower\",\"formula\":\"bull_plus_bear\"," +
+     "\"ticker\":\"" + jsonEsc(syminfo.ticker) + "\",\"exchange\":\"" + jsonEsc(syminfo.prefix) + "\"}"
+
+string jBar =
+     "{\"event\":\"er_netpower_bar\",\"kind\":\"bar_close\",\"indicator\":\"ER_NetPower\",\"formula\":\"bull_plus_bear\"," +
+     "\"ticker\":\"" + jsonEsc(syminfo.ticker) + "\",\"exchange\":\"" + jsonEsc(syminfo.prefix) + "\",\"tf\":\"" +
+     jsonEsc(tfStr) + "\",\"period\":" + str.tostring(period) + ",\"close\":" + closeNumJson() +
+     ",\"ema\":" + indNumJson(e) + ",\"high_minus_ema\":" + indNumJson(bullLeg) + ",\"low_minus_ema\":" + indNumJson(bearLeg) +
+     ",\"net_power\":" + indNumJson(netPower) + ",\"high\":" + indNumJson(high) + ",\"low\":" + indNumJson(low) +
+     ",\"show_thin_line\":" + (showThinLine ? "true" : "false") +
+     ",\"bar_time\":" + str.tostring(time) + "}"
+
+if sendOnStart and barstate.isconfirmed and barstate.isrealtime and not _startSent
+    alert(jStart, alert.freq_once_per_bar_close)
+    _startSent := true
+
+if alsoEveryClose and barstate.isconfirmed
+    alert(jBar, alert.freq_once_per_bar_close)

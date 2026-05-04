@@ -11,6 +11,35 @@
     <link rel="stylesheet" href="../assets/common.css" />
     <link rel="stylesheet" href="../assets/site-ux.css" />
     <link rel="stylesheet" href="../assets/guide-docs.css" />
+    <style>
+      .doc-figure {
+        margin: 1.25rem 0;
+        text-align: center;
+      }
+      .doc-figure img {
+        max-width: 100%;
+        height: auto;
+        border: 1px solid rgba(139, 120, 96, 0.35);
+        border-radius: 8px;
+        background: var(--surface-2, #111);
+      }
+      .doc-figure figcaption {
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        color: var(--ci-brown-muted);
+        text-align: left;
+      }
+      .doc-dl dt {
+        font-weight: 600;
+        margin-top: 0.75rem;
+        color: var(--text-strong, inherit);
+      }
+      .doc-dl dd {
+        margin: 0.25rem 0 0 0;
+        padding-left: 0;
+        color: var(--text-muted);
+      }
+    </style>
   </head>
   <body>
     <header class="site-header" role="banner">
@@ -85,7 +114,9 @@
       <article class="doc-section" id="mode">
         <h2>MODE — Entry Mode(Input Mode)</h2>
         <p>
-          <strong>Conservative</strong>는 가격이 밴드(상·하단)를 <strong>확실히 교차할 때</strong> 진입하는 쪽에 가깝고,
+          <strong>Conservative</strong>는 밴드(상·하단)를 가격이 넘나드는 흐름에서 진입합니다.
+          <strong>①</strong> 직전 봉과 이번 봉 <strong>종가</strong> 기준으로 하단/상단을 뚫고 들어오는 경우(<code>crossover/crossunder(close, …)</code>),
+          <strong>②</strong> <strong>같은 봉 안에서만</strong> 시가·저가가 하단 아래(또는 상단 위)로 갔다가 종가(실시간에서는 현재가에 해당)가 밴드 안쪽으로 회복하는 경우도 함께 봅니다.
           <strong>Attack</strong>은 밴드 근처만 와도(설정 비율 이내) 더 이른 진입을 허용합니다. 같은 시장이라도 신호 빈도·승패 패턴이 달라질 수
           있으므로, <strong>먼저 차트 종류·주기를 고른 뒤</strong> 한쪽 모드로만 충분히 익혀 보는 것이 좋습니다.
         </p>
@@ -195,35 +226,6 @@
         </div>
       </div>
     </footer>
-    <style>
-      .doc-figure {
-        margin: 1.25rem 0;
-        text-align: center;
-      }
-      .doc-figure img {
-        max-width: 100%;
-        height: auto;
-        border: 1px solid rgba(139, 120, 96, 0.35);
-        border-radius: 8px;
-        background: var(--surface-2, #111);
-      }
-      .doc-figure figcaption {
-        margin-top: 0.5rem;
-        font-size: 0.9rem;
-        color: var(--ci-brown-muted);
-        text-align: left;
-      }
-      .doc-dl dt {
-        font-weight: 600;
-        margin-top: 0.75rem;
-        color: var(--text-strong, inherit);
-      }
-      .doc-dl dd {
-        margin: 0.25rem 0 0 0;
-        padding-left: 0;
-        color: var(--text-muted);
-      }
-    </style>
     <script src="../assets/site-ux.js"></script>
   </body>
 </html>

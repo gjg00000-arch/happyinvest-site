@@ -7,6 +7,71 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* 메인: 공식 홈페이지 URL 강조 스트립 (내비 바로 아래) */
+.official-site-banner {
+  margin: 0 auto;
+  max-width: min(72rem, calc(100vw - 2rem));
+  padding: 0.65rem 1rem 0.75rem;
+  border-radius: 0 0 1rem 1rem;
+  border: 2px solid var(--ci-green-deep, #2f6f4f);
+  border-top: none;
+  background: linear-gradient(180deg, rgba(47, 111, 79, 0.14) 0%, rgba(255, 255, 255, 0.92) 55%);
+  box-shadow: 0 8px 24px rgba(47, 111, 79, 0.12);
+}
+
+.official-site-banner__inner {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.45rem 0.75rem;
+  text-align: center;
+  line-height: 1.45;
+}
+
+.official-site-banner__label {
+  font-weight: 950;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ci-green-deep, #2f6f4f);
+}
+
+.official-site-banner__link {
+  font-weight: 950;
+  font-size: clamp(0.95rem, 2.4vw, 1.12rem);
+  letter-spacing: -0.02em;
+  color: #0d3d2a;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+  word-break: break-all;
+}
+
+.official-site-banner__link:hover,
+.official-site-banner__link:focus-visible {
+  color: var(--ci-green-deep, #2f6f4f);
+  outline: none;
+}
+
+.official-site-banner__link:focus-visible {
+  box-shadow: 0 0 0 3px rgba(47, 111, 79, 0.35);
+  border-radius: 2px;
+}
+
+.official-site-banner__hint {
+  flex-basis: 100%;
+  font-size: 0.82rem;
+  color: rgba(47, 40, 35, 0.72);
+}
+
+@media (min-width: 48rem) {
+  .official-site-banner__hint {
+    flex-basis: auto;
+  }
+}
+
 .layout-home-main {
   position: relative;
 }
@@ -1257,7 +1322,107 @@ html[data-theme="dark"] .ml-cloud-care__notice {
   opacity: 0.93;
 }
 
+/* 메인: 필독 — 매우 중요 (운용 전제 안내) */
+.ml-must-read {
+  position: relative;
+  margin: 1.15rem 0 1.35rem;
+  padding: clamp(1.15rem, 3.2vw, 1.65rem) clamp(1rem, 3vw, 1.5rem);
+  border: 3px solid var(--ci-green-deep, #2f6f4f);
+  border-radius: 1.1rem;
+  background:
+    linear-gradient(145deg, rgba(255, 230, 200, 0.45) 0%, rgba(255, 252, 245, 0.98) 45%, rgba(220, 240, 228, 0.55) 100%);
+  box-shadow:
+    0 0 0 1px rgba(47, 111, 79, 0.12),
+    0 14px 36px rgba(47, 111, 79, 0.2);
+}
+
+.ml-must-read__badge {
+  display: inline-flex;
+  margin: 0 0 0.5rem;
+  padding: 0.32rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 950;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+  background: linear-gradient(90deg, #c0362c 0%, #b91c1c 40%, #8b2e2e 100%);
+  box-shadow: 0 2px 8px rgba(185, 28, 28, 0.35);
+}
+
+.ml-must-read__title {
+  margin: 0 0 0.75rem;
+  font-size: clamp(1.25rem, 3.8vw, 1.75rem);
+  font-weight: 950;
+  letter-spacing: -0.045em;
+  line-height: 1.25;
+  color: var(--ci-green-deep, #1a4d3a);
+}
+
+.ml-must-read__lede {
+  margin: 0 0 1rem;
+  font-size: clamp(1.02rem, 2.5vw, 1.14rem);
+  line-height: 1.72;
+  color: rgba(35, 28, 22, 0.95);
+}
+
+.ml-must-read__lede strong {
+  font-weight: 950;
+  color: #1a1a18;
+}
+
+.ml-must-read__list {
+  margin: 0 0 1.05rem;
+  padding-left: 1.2rem;
+  max-width: 52rem;
+  line-height: 1.72;
+  color: rgba(40, 34, 28, 0.94);
+}
+
+.ml-must-read__list li {
+  margin-bottom: 0.62rem;
+}
+
+.ml-must-read__list li strong {
+  font-weight: 950;
+  color: var(--ci-green-deep, #2f6f4f);
+}
+
+.ml-must-read__warn {
+  margin: 0 0 0.65rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: 0.65rem;
+  border-left: 4px solid #b91c1c;
+  background: rgba(255, 245, 238, 0.92);
+  font-size: clamp(0.98rem, 2.2vw, 1.05rem);
+  line-height: 1.68;
+  color: rgba(45, 30, 22, 0.96);
+}
+
+.ml-must-read__warn strong {
+  font-weight: 950;
+}
+
+.ml-must-read__warn a {
+  font-weight: 800;
+  color: var(--ci-green-deep, #2f6f4f);
+  text-underline-offset: 0.15em;
+}
+
+.ml-must-read__foot {
+  margin: 0;
+  color: var(--ci-brown-muted, rgba(74, 53, 40, 0.78));
+  line-height: 1.55;
+}
+
 @media (max-width: 720px) {
+  .ml-must-read {
+    margin-left: -0.25rem;
+    margin-right: -0.25rem;
+    padding-left: 0.9rem;
+    padding-right: 0.9rem;
+  }
+
   .ml-principles {
     grid-template-columns: 1fr;
   }

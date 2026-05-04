@@ -1,0 +1,521 @@
+//@version=5
+// Dodam_MagicTrading_CryptoMarket — 마켓 잠금: crypto
+// MagicIndicator Core Rule Strategy + MagicPremium TSF 레인보우 (오버레이) — 안정화 빌드
+// 진입(Conservative): 평균회귀 후 밴드 재돌파 = ta.crossover(close,lower) / ta.crossunder(close,upper). process_orders_on_close 는 input 불가 → 상수 false(봉 중 체결). 알림만 봉 마감: Signals「알림만 봉 마감에 맞추기」.
+// Webhook: Signals →「알림 본문 형식」에서 "JSON (webhook)" 선택 시 아래 alert() 바디가 유효 JSON (이스케이프·magic_signal·license_pack·bar_index).
+// Telegram·SMS: 중계 서버에서 text / close / bar_time / license_pack / tickerid / magic_signal / side 등 파싱 (TRV 로그인 사용자명은 Pine에서 직접 읽을 수 없음 → 서버에서 계정·초대와 매칭).
+// alertcondition() 메시지는 고정 문자열이라 웹훅 JSON은 alert() 경로를 권장합니다.
+entryMode = input.string("Conservative", "Entry Mode", options = ["Conservative", "Attack"], group = "Mode")
+strategy(
+     "Dodam_MagicTrading_CryptoMarket",
+     shorttitle       = "DMT_Crypto",
+     overlay          = true,
+     process_orders_on_close = false,
+     pyramiding       = 0,
+     initial_capital  = 100000,
+     default_qty_type = strategy.fixed,
+     default_qty_value = 1,
+     commission_type  = strategy.commission.percent,
+     commission_value = 0.04,
+     max_lines_count  = 500,
+     max_labels_count = 500
+     )
+
+// ——— Core Rule 입력 ———
+baseRManual = input.float(0.0, "Manual BaseR (0=Auto)", minval = 0.0, step = 0.01, group = "Adjust")
+useAutoFineTune = input.bool(false, "Auto Fine Tune", group = "Adjust", tooltip = "켜면 ATR 기반 자동 배율(약 0.75~1.5×)만 사용. Manual Fine Tune 슬라이더는 끈 뒤 적용됩니다.")
+manualFineTune = input.float(1.0, "Manual Fine Tune", minval = 0.25, maxval = 30.0, step = 0.01, group = "Adjust", tooltip = "밴드 폭 배수.R = BaseR×VolMult×FineTune 에 곱해짐. 과도하게 올리면 밴드가 매우 넓어집니다.")
+showSignals = input.bool(true, "Show Signals", group = "Signals")
+useAlerts = input.bool(true, "Use alert() Messages", group = "Signals")
+alertOnBarCloseOnly = input.bool(false, "알림만 봉 마감에 맞추기", group = "Signals", tooltip = "TradingView 제한으로 strategy()의 process_orders_on_close는 상수만 허용됩니다. 전략 체결은 봉 중(false)으로 고정되어 있습니다. 이 옵션은 alert()·웹훅 알림이 봉 확정(barstate.isconfirmed)에서만 나가게 할 때 사용하세요.")
+alertPayload = input.string("Text", "알림 본문 형식", options = ["Text", "JSON (webhook)"], group = "Signals", tooltip = "웹훅·텔레그램·SMS 중계: JSON 권장. 알림 생성 시 'alert() 함수 호출' 선택. 필드: magic_signal, side, license_pack, tickerid, close, bar_time, text, bar_index.")
+attackEntryNearHalfBandPct = input.float(15.0, "Attack Entry Near Band (% of half band)", minval = 0.0, step = 0.5, group = "Signals")
+exitNearHalfBandPct = input.float(15.0, "Exit Near Center (% of half band)", minval = 0.0, step = 0.5, group = "Signals")
+stopBufferHalfBandPct = input.float(30.0, "Stop Buffer (% of half band)", minval = 0.0, step = 1.0, group = "Risk")
+reentryCooldownBars = input.int(3, "Re-entry Cooldown Bars After Stop", minval = 0, group = "Risk")
+useTrailingStop = input.bool(true, "Use Trailing Stop", group = "Risk")
+trailStartHalfBandPct = input.float(35.0, "Trail Start (% of half band)", minval = 0.0, step = 1.0, group = "Risk")
+trailOffsetHalfBandPct = input.float(20.0, "Trail Offset (% of half band)", minval = 0.0, step = 1.0, group = "Risk")
+
+// ——— 마켓 잠금 (마켓별 배포 빌드마다 아래 문자열만 바꿔 컴파일) ———
+// 허용 키: stocks | funds | futures | forex | crypto | indices | bonds | economy | options | marketfree | marketfree_1weekfree
+// bonds: 일부 채권 상품은 TV에서 syminfo.type이 stock 등으로 표시될 수 있음 — 로드 오류 시 Pine 콘솔에서 실제 타입 확인 후 분기 수정.
+// marketfree / marketfree_1weekfree: syminfo.type 무관·전 마켓 허용 (license_pack JSON에 문자열 그대로 노출; 서버에서 플랜 구분).
+LICENSE_FIELD = "crypto"
+
+f_license_ok(string field) =>
+    string t = str.lower(syminfo.type)
+    switch str.lower(field)
+        "stocks" => t == "stock"
+        "funds" => t == "fund"
+        "futures" => t == "futures"
+        "forex" => t == "forex"
+        "crypto" => t == "crypto"
+        "indices" => t == "index"
+        "bonds" => t == "bond"
+        "economy" => t == "economic" or t == "fundamental"
+        "options" => t == "cfd" or t == "derivative"
+        "marketfree" => true
+        "marketfree_1weekfree" => true
+        => false
+
+licenseOk = f_license_ok(LICENSE_FIELD)
+
+if barstate.isfirst and not licenseOk
+    runtime.error(
+         "MagicTrading: 이 빌드는 [" + LICENSE_FIELD +
+         "] 전용입니다. syminfo.type=" + syminfo.type + " tickerid=" + syminfo.tickerid +
+         ". 차트 종류 또는 배포 빌드를 확인하세요."
+     )
+
+// ——— 레인보우 시작 웹훅 (설정값 코드 고정) ———
+sendRainbowStart = true
+rbStartEvent = "magic_core_rb_online"
+
+// ——— TSF 레인보우 / 점 — 표시값 코드 고정 ———
+showTsfHighDots = true
+showTsfLowDots = true
+latchDotsOnClose = true
+colTsfHigh = color.rgb(255, 0, 0)
+colTsfLow = color.rgb(0, 200, 83)
+dotWidth = 4
+
+showRainbow = true
+tPeriod = 12
+maPeriod = 3
+cT4 = color.rgb(101, 227, 13)
+cT3 = color.rgb(255, 230, 0)
+cT2 = color.rgb(255, 140, 0)
+cT = color.rgb(255, 45, 45)
+cT2m = color.rgb(204, 85, 0)
+
+showRbFill = true
+fillTranspRb = 38
+lineWRb = 2
+useGrayDown = true
+trendMode = "T3"
+cBear4 = color.rgb(230, 230, 236)
+cBear3 = color.rgb(191, 196, 204)
+cBear2 = color.rgb(142, 149, 160)
+cBearT = color.rgb(94, 102, 112)
+cBear2m = color.rgb(74, 85, 104)
+
+// =========================
+// Hidden automatic values
+// =========================
+autoWidenThresholdPct = 0.12
+autoWidenTargetPct = 0.18
+baseRMinPct = 0.08
+baseRMaxPct = 6.0
+stockBaseRPct = 1.0
+cryptoBaseRPct = 0.5
+btcBaseRPct = 0.5
+ethBaseRPct = 0.5
+solBaseRPct = 0.45
+xrpBaseRPct = 0.40
+bnbBaseRPct = 0.45
+esBaseRPct = 0.18
+nqBaseRPct = 0.20
+ymBaseRPct = 0.18
+rtyBaseRPct = 0.45
+clBaseRPct = 1.5
+gcBaseRPct = 1.0
+siBaseRPct = 2.8
+znBaseRPct = 0.2
+k2BaseRPct = 1.0
+sixEBaseRPct = 0.27
+sixJBaseRPct = 0.27
+
+volLen = 14
+volRefLen = 100
+volWeight = 0.08
+vRatioClampLo = 0.82
+vRatioClampHi = 1.18
+volMultMin = 0.96
+volMultMax = 1.12
+autoTuneLen = 14
+autoTuneRefLen = 100
+autoTuneStrength = 0.50
+autoTuneMin = 0.75
+autoTuneMax = 1.50
+autoTuneRatioLo = 0.70
+autoTuneRatioHi = 1.60
+
+px = close
+tickSize = syminfo.mintick > 0.0 ? syminfo.mintick : math.max(px * 0.00001, 0.01)
+tickPctRaw = px > 0.0 ? tickSize / px * 100.0 : na
+baseRAutoLifted = not na(tickPctRaw) and tickPctRaw < autoWidenThresholdPct ? autoWidenTargetPct : tickPctRaw
+baseRAutoCommon = not na(baseRAutoLifted) ? math.min(baseRMaxPct, math.max(baseRMinPct, baseRAutoLifted)) : na
+
+tickerUpper = str.upper(syminfo.ticker)
+isBTC = str.startswith(tickerUpper, "BTC")
+isETH = str.startswith(tickerUpper, "ETH")
+isSOL = str.startswith(tickerUpper, "SOL")
+isXRP = str.startswith(tickerUpper, "XRP")
+isBNB = str.startswith(tickerUpper, "BNB")
+isES = str.startswith(tickerUpper, "ES")
+isNQ = str.startswith(tickerUpper, "NQ")
+isYM = str.startswith(tickerUpper, "YM")
+isRTY = str.startswith(tickerUpper, "RTY")
+isCL = str.startswith(tickerUpper, "CL")
+isGC = str.startswith(tickerUpper, "GC")
+isSI = str.startswith(tickerUpper, "SI")
+isZN = str.startswith(tickerUpper, "ZN")
+isK2 = str.startswith(tickerUpper, "K2")
+is6E = str.startswith(tickerUpper, "6E")
+is6J = str.startswith(tickerUpper, "6J")
+
+baseRAuto = isBTC ? btcBaseRPct : isETH ? ethBaseRPct : isSOL ? solBaseRPct : isXRP ? xrpBaseRPct : isBNB ? bnbBaseRPct : syminfo.type == "crypto" ? cryptoBaseRPct : isES ? esBaseRPct : isNQ ? nqBaseRPct : isYM ? ymBaseRPct : isRTY ? rtyBaseRPct : isCL ? clBaseRPct : isGC ? gcBaseRPct : isSI ? siBaseRPct : isZN ? znBaseRPct : isK2 ? k2BaseRPct : is6E ? sixEBaseRPct : is6J ? sixJBaseRPct : syminfo.type == "stock" ? stockBaseRPct : baseRAutoCommon
+baseR = baseRManual > 0.0 ? baseRManual : nz(baseRAuto, autoWidenTargetPct)
+
+retPct = px[1] > 0.0 ? math.abs((px - px[1]) / px[1]) * 100.0 : 0.0
+v = ta.sma(retPct, volLen)
+vRef = ta.sma(v, volRefLen)
+vRatio = vRef > 0.0 ? v / vRef : 1.0
+vRatioVol = math.max(vRatioClampLo, math.min(vRatioClampHi, vRatio))
+volMultRaw = 1.0 + volWeight * (vRatioVol - 1.0)
+volMult = math.max(volMultMin, math.min(volMultMax, volMultRaw))
+
+atrNow = ta.atr(autoTuneLen)
+atrRef = ta.sma(atrNow, autoTuneRefLen)
+autoTuneRatioRaw = atrRef > 0.0 ? atrNow / atrRef : 1.0
+autoTuneRatio = math.max(autoTuneRatioLo, math.min(autoTuneRatioHi, autoTuneRatioRaw))
+autoFineTuneRaw = 1.0 + autoTuneStrength * (autoTuneRatio - 1.0)
+autoFineTune = math.max(autoTuneMin, math.min(autoTuneMax, autoFineTuneRaw))
+fineTune = useAutoFineTune ? autoFineTune : manualFineTune
+
+rPct = baseR * volMult * fineTune
+
+// center: SMA 4개는 각각 한 번만 계산 (동일 식 반복 억제)
+smaCt5 = ta.sma(close, 5)
+smaCt20 = ta.sma(close, 20)
+smaCt60 = ta.sma(close, 60)
+smaCt240 = ta.sma(close, 240)
+center = (smaCt240 + smaCt60 + smaCt20 + smaCt5) / 4.0
+upper = center * (1.0 + rPct / 100.0)
+lower = center * (1.0 - rPct / 100.0)
+
+// =========================
+// TSF 레인보우 계산 (MagicPremium)
+// =========================
+lr0 = ta.linreg(close, tPeriod, 0)
+lr1 = ta.linreg(close, tPeriod, 1)
+T_raw = lr0 + (lr0 - lr1)
+T2_val = ta.ema(T_raw, maPeriod)
+T3_val = ta.ema(T2_val, maPeriod)
+T4_val = ta.ema(T3_val, maPeriod)
+T2m_val = T2_val < T_raw ? T2_val : T_raw
+
+var float tsfStepHigh = na
+var float tsfStepLow = na
+doLatch = latchDotsOnClose ? barstate.isconfirmed : true
+if doLatch
+    if na(tsfStepHigh)
+        tsfStepHigh := T_raw
+        tsfStepLow := T_raw
+    else
+        tsfStepHigh := T_raw > T_raw[1] ? T_raw : tsfStepHigh
+        tsfStepLow := T_raw < T_raw[1] ? T_raw : tsfStepLow
+
+trendRefSeries() =>
+    switch trendMode
+        "T" => T_raw
+        "T2" => T2_val
+        "T3" => T3_val
+        "T4" => T4_val
+        "T_기울기3" => T_raw
+        => T3_val
+
+trRef = trendRefSeries()
+tUpDir = na(trRef[1]) ? true : trRef > trRef[1]
+tUpSlope3 = ta.linreg(T_raw, 3, 0) > ta.linreg(T_raw, 3, 1)
+trendUp = trendMode == "T_기울기3" ? tUpSlope3 : tUpDir
+
+lineColRb(bull, bear) =>
+    useGrayDown and not trendUp ? bear : bull
+
+bandColRb(bull, bear) =>
+    base = lineColRb(bull, bear)
+    showRbFill ? color.new(base, fillTranspRb) : color(na)
+
+useJsonAlerts = alertPayload == "JSON (webhook)"
+
+// JSON 문자열 안전 이스케이프 (invite-only 웹훅 파싱 오류 방지)
+jsonEsc(string s) =>
+    str.replace_all(str.replace_all(s, "\\", "\\\\"), "\"", "\\\"")
+
+closeNumJson() =>
+    na(close) ? "null" : str.tostring(close, format.mintick)
+
+licenseJsonFrag() =>
+    ',"license_pack":"' + jsonEsc(LICENSE_FIELD) + '","instrument_type":"' + jsonEsc(syminfo.type) + '","tickerid":"' + jsonEsc(syminfo.tickerid) + '","pos_qty":' + str.tostring(strategy.position_size) + ',"bar_index":' + str.tostring(bar_index)
+
+tfStr = timeframe.period
+
+f_jsonBuy() =>
+    string msg = "MagicCore BUY " + entryMode + " " + syminfo.ticker + " " + tfStr + " C=" + str.tostring(close, format.mintick)
+    '{"event":"magic_core_buy","kind":"signal","magic_signal":"buy","side":"long","entry_mode":"' + jsonEsc(entryMode) + '","ticker":"' + jsonEsc(syminfo.ticker) + '","exchange":"' + jsonEsc(syminfo.prefix) + '","tf":"' + jsonEsc(tfStr) + '","close":' + closeNumJson() + ',"band_edge":' + str.tostring(lower, format.mintick) + ',"bar_time":' + str.tostring(time) + ',"text":"' + jsonEsc(msg) + '"' + licenseJsonFrag() + '}'
+
+f_jsonSell() =>
+    string msg = "MagicCore SELL " + entryMode + " " + syminfo.ticker + " " + tfStr + " C=" + str.tostring(close, format.mintick)
+    '{"event":"magic_core_sell","kind":"signal","magic_signal":"sell","side":"short","entry_mode":"' + jsonEsc(entryMode) + '","ticker":"' + jsonEsc(syminfo.ticker) + '","exchange":"' + jsonEsc(syminfo.prefix) + '","tf":"' + jsonEsc(tfStr) + '","close":' + closeNumJson() + ',"band_edge":' + str.tostring(upper, format.mintick) + ',"bar_time":' + str.tostring(time) + ',"text":"' + jsonEsc(msg) + '"' + licenseJsonFrag() + '}'
+
+// =========================
+// Core Rule — 포지션·청산
+// =========================
+isLong = strategy.position_size > 0
+isShort = strategy.position_size < 0
+isFlat = strategy.position_size == 0
+
+halfBand = upper - center
+attackEntryNearDist = math.max(halfBand * attackEntryNearHalfBandPct / 100.0, syminfo.mintick * 5.0)
+maxNearDist = math.max(halfBand * exitNearHalfBandPct / 100.0, syminfo.mintick * 5.0)
+distNearestCenter = math.min(math.abs(low - center), math.min(math.abs(high - center), math.abs(close - center)))
+
+stopBuffer = halfBand * stopBufferHalfBandPct / 100.0
+trailStart = halfBand * trailStartHalfBandPct / 100.0
+trailOffset = halfBand * trailOffsetHalfBandPct / 100.0
+
+dynamicLongStop = lower - stopBuffer
+dynamicShortStop = upper + stopBuffer
+longTarget = center - maxNearDist
+shortTarget = center + maxNearDist
+
+// Conservative: (1) 직전→이번 봉 종가 크로스 ta.crossover(close, lower)  (2) 같은 봉에서 하단 이탈 후 종가(실시간=close)가 하단 위로 회복 — 한 봉·여러 봉 모두 규칙만 맞으면 진입·이어서 청산 조건 평가(process_orders_on_close=false).
+conservativeBuyRaw = ta.crossover(close, lower) or ((low < lower or open <= lower) and close > lower)
+conservativeSellRaw = ta.crossunder(close, upper) or ((high > upper or open >= upper) and close < upper)
+attackBuyRaw = low <= lower + attackEntryNearDist
+attackSellRaw = high >= upper - attackEntryNearDist
+
+entryBuyRaw = entryMode == "Attack" ? attackBuyRaw : conservativeBuyRaw
+entrySellRaw = entryMode == "Attack" ? attackSellRaw : conservativeSellRaw
+
+var float longBest = na
+var float shortBest = na
+var float fixedLongStop = na
+var float fixedShortStop = na
+
+if isLong
+    longBest := na(longBest) ? high : math.max(longBest, high)
+else
+    longBest := na
+
+if isShort
+    shortBest := na(shortBest) ? low : math.min(shortBest, low)
+else
+    shortBest := na
+
+if isFlat
+    fixedLongStop := na
+    fixedShortStop := na
+
+longTrailActive = useTrailingStop and isLong and not na(longBest) and longBest >= strategy.position_avg_price + trailStart
+shortTrailActive = useTrailingStop and isShort and not na(shortBest) and shortBest <= strategy.position_avg_price - trailStart
+
+longTrailStopRaw = longBest - trailOffset
+shortTrailStopRaw = shortBest + trailOffset
+longTrailStop = longTrailActive ? math.max(strategy.position_avg_price + tickSize, longTrailStopRaw) : na
+shortTrailStop = shortTrailActive ? math.min(strategy.position_avg_price - tickSize, shortTrailStopRaw) : na
+
+baseLongStop = not na(fixedLongStop) ? fixedLongStop : dynamicLongStop
+baseShortStop = not na(fixedShortStop) ? fixedShortStop : dynamicShortStop
+
+longProtectStop = longTrailActive ? math.max(baseLongStop, longTrailStop) : baseLongStop
+shortProtectStop = shortTrailActive ? math.min(baseShortStop, shortTrailStop) : baseShortStop
+
+exitCrossCenter = (isShort and ta.crossunder(close, center)) or (isLong and ta.crossover(close, center))
+exitSpanCenter = not isFlat and low <= center and high >= center
+exitNearCenter = not isFlat and exitNearHalfBandPct > 0.0 and distNearestCenter <= maxNearDist
+exitLongNearCenter = isLong and high >= center - maxNearDist
+exitShortNearCenter = isShort and low <= center + maxNearDist
+
+trailStopLong = longTrailActive and low <= longTrailStop
+trailStopShort = shortTrailActive and high >= shortTrailStop
+magicTrailStop = trailStopLong or trailStopShort
+
+stopLong = isLong and low <= longProtectStop
+stopShort = isShort and high >= shortProtectStop
+magicStop = not magicTrailStop and (stopLong or stopShort)
+
+// 매직·목표 익절: 고가/저가가 매직(center)에 닿으면(닫힌 봉에서 확인 가능한 범위) 종가 교차 없이도 익절. 청산 분기에서 트레일보다 먼저 평가.
+touchMagicLineLong = isLong and high >= center
+touchMagicLineShort = isShort and low <= center
+profitExitLong = isLong and not magicStop and (touchMagicLineLong or high >= longTarget or exitCrossCenter or exitSpanCenter or exitNearCenter or exitLongNearCenter)
+profitExitShort = isShort and not magicStop and (touchMagicLineShort or low <= shortTarget or exitCrossCenter or exitSpanCenter or exitNearCenter or exitShortNearCenter)
+magicProfitExit = profitExitLong or profitExitShort
+
+// 차트 마커 Y: 매직 터치 시 center, 아니면 목표가(longTarget/shortTarget)
+signalExitY = magicProfitExit and not magicStop ? (profitExitLong ? (touchMagicLineLong ? center : high >= longTarget ? longTarget : center) : profitExitShort ? (touchMagicLineShort ? center : low <= shortTarget ? shortTarget : center) : na) : na
+signalTrailY = magicTrailStop and not (isLong and profitExitLong) and not (isShort and profitExitShort) ? (trailStopLong ? longTrailStop : shortTrailStop) : na
+signalFixedStopY = magicStop ? (stopLong ? longProtectStop : shortProtectStop) : na
+
+magicExitAlert = magicProfitExit
+
+// 익절이 트레일보다 먼저 체결되는 봉에서는 트레일 웹훅 생략
+trailAlertThisBar = magicTrailStop and not ((isLong and profitExitLong) or (isShort and profitExitShort))
+
+f_jsonExit() =>
+    float exitAnchor = profitExitLong ? (touchMagicLineLong ? center : high >= longTarget ? longTarget : center) : profitExitShort ? (touchMagicLineShort ? center : low <= shortTarget ? shortTarget : center) : center
+    string msg = "MagicCore EXIT " + syminfo.ticker + " " + tfStr + " C=" + str.tostring(close, format.mintick)
+    '{"event":"magic_core_exit","kind":"signal","magic_signal":"exit","side":"flat","ticker":"' + jsonEsc(syminfo.ticker) + '","exchange":"' + jsonEsc(syminfo.prefix) + '","tf":"' + jsonEsc(tfStr) + '","close":' + closeNumJson() + ',"magic_line":' + str.tostring(center, format.mintick) + ',"exit_anchor":' + str.tostring(exitAnchor, format.mintick) + ',"bar_time":' + str.tostring(time) + ',"text":"' + jsonEsc(msg) + '"' + licenseJsonFrag() + '}'
+
+f_jsonStop() =>
+    float sp = stopLong ? longProtectStop : shortProtectStop
+    string msg = "MagicCore STOP fixed " + syminfo.ticker + " " + tfStr + " C=" + str.tostring(close, format.mintick)
+    '{"event":"magic_core_stop","kind":"signal","magic_signal":"stop_fixed","stop_type":"fixed","ticker":"' + jsonEsc(syminfo.ticker) + '","exchange":"' + jsonEsc(syminfo.prefix) + '","close":' + closeNumJson() + ',"stop_price":' + str.tostring(sp, format.mintick) + ',"bar_time":' + str.tostring(time) + ',"text":"' + jsonEsc(msg) + '"' + licenseJsonFrag() + '}'
+
+f_jsonTrail() =>
+    float sp = trailStopLong ? longTrailStop : shortTrailStop
+    string msg = "MagicCore STOP trail " + syminfo.ticker + " " + tfStr + " C=" + str.tostring(close, format.mintick)
+    '{"event":"magic_core_stop","kind":"signal","magic_signal":"stop_trail","stop_type":"trail","ticker":"' + jsonEsc(syminfo.ticker) + '","exchange":"' + jsonEsc(syminfo.prefix) + '","close":' + closeNumJson() + ',"stop_price":' + str.tostring(sp, format.mintick) + ',"bar_time":' + str.tostring(time) + ',"text":"' + jsonEsc(msg) + '"' + licenseJsonFrag() + '}'
+
+f_jsonRainbowStart() =>
+    string msg = "MagicCore RAINBOW START " + syminfo.ticker + " " + tfStr + " C=" + str.tostring(close, format.mintick)
+    '{"event":"' + rbStartEvent + '","kind":"strategy_rainbow_start","magic_signal":"rainbow_online","script":"MagicCore_Strategy_RB","ticker":"' + jsonEsc(syminfo.ticker) + '","exchange":"' + jsonEsc(syminfo.prefix) + '","tf":"' + jsonEsc(tfStr) + '","close":' + closeNumJson() + ',"bar_time":' + str.tostring(time) + ',"text":"' + jsonEsc(msg) + '"' + licenseJsonFrag() + '}'
+
+var int lastStopBar = na
+if magicStop or magicTrailStop
+    lastStopBar := bar_index
+
+cooldownActive = not na(lastStopBar) and bar_index - lastStopBar <= reentryCooldownBars
+canEnter = isFlat and not cooldownActive and not magicProfitExit and not magicStop and not magicTrailStop
+
+magicBuy = entryBuyRaw and canEnter
+magicSell = entrySellRaw and canEnter
+
+if licenseOk and magicSell
+    fixedShortStop := dynamicShortStop
+    strategy.entry("S", strategy.short, qty = 1, comment = entryMode == "Attack" ? "Attack Short" : "Short Entry")
+else if licenseOk and magicBuy
+    fixedLongStop := dynamicLongStop
+    strategy.entry("L", strategy.long, qty = 1, comment = entryMode == "Attack" ? "Attack Long" : "Long Entry")
+
+// 청산: 손절 → 매직·목표 익절 → 트레일 (같은 봉에서 익절 조건이면 트레일보다 먼저 체결)
+// strategy.exit(limit+stop)는 TV가 차트에 익절/손절 가격선 2개를 그림 → strategy.close만 사용.
+if licenseOk and isLong
+    if magicStop
+        strategy.close("L", comment = "FixedStop Long")
+    else if profitExitLong
+        strategy.close("L", comment = "MagicExit Long")
+    else if magicTrailStop
+        strategy.close("L", comment = "Trail Long")
+
+if licenseOk and isShort
+    if magicStop
+        strategy.close("S", comment = "FixedStop Short")
+    else if profitExitShort
+        strategy.close("S", comment = "MagicExit Short")
+    else if magicTrailStop
+        strategy.close("S", comment = "Trail Short")
+
+// ——— 알림 (텍스트 / JSON) + 레인보우 시작 웹훅 ———
+// 알림만: 꺼짐 = 봉 안에서 조건 충족 시 freq_once_per_bar. 켜짐 = 봉 확정 + freq_once_per_bar_close (전략 체결 타이밍과 다를 수 있음).
+freqAlert = alertOnBarCloseOnly ? alert.freq_once_per_bar_close : alert.freq_once_per_bar
+alertTickOk = alertOnBarCloseOnly ? barstate.isconfirmed : true
+if licenseOk and useAlerts and alertTickOk
+    if useJsonAlerts
+        if magicBuy
+            alert(f_jsonBuy(), freqAlert)
+        if magicSell
+            alert(f_jsonSell(), freqAlert)
+        if magicExitAlert
+            alert(f_jsonExit(), freqAlert)
+        if magicStop
+            alert(f_jsonStop(), freqAlert)
+        if trailAlertThisBar
+            alert(f_jsonTrail(), freqAlert)
+    else
+        if magicBuy
+            alert("MagicCore · " + entryMode + " Buy signal", freqAlert)
+        if magicSell
+            alert("MagicCore · " + entryMode + " Sell signal", freqAlert)
+        if magicExitAlert
+            alert("MagicCore · Exit signal", freqAlert)
+        if magicStop
+            alert("MagicCore · Fixed stop signal", freqAlert)
+        if trailAlertThisBar
+            alert("MagicCore · Trailing stop signal", freqAlert)
+
+varip bool _rbStartSent = false
+if licenseOk and sendRainbowStart and useAlerts and showRainbow and barstate.isconfirmed and barstate.isrealtime and not _rbStartSent
+    if useJsonAlerts
+        alert(f_jsonRainbowStart(), alert.freq_once_per_bar_close)
+    else
+        alert("MagicCore · Rainbow online (TSF rainbow loaded)", alert.freq_once_per_bar_close)
+    _rbStartSent := true
+
+alertcondition(licenseOk and useAlerts and magicBuy, "MagicCore Buy", "MagicCore · Buy signal — webhook: prefer alert() + JSON webhook")
+alertcondition(licenseOk and useAlerts and magicSell, "MagicCore Sell", "MagicCore · Sell signal — webhook: prefer alert() + JSON webhook")
+alertcondition(licenseOk and useAlerts and magicExitAlert, "MagicCore Exit", "MagicCore · Exit signal — webhook: prefer alert() + JSON webhook")
+alertcondition(licenseOk and useAlerts and magicStop, "MagicCore Fixed Stop", "MagicCore · Fixed stop — webhook: prefer alert() + JSON webhook")
+alertcondition(licenseOk and useAlerts and trailAlertThisBar, "MagicCore Trail Stop", "MagicCore · Trailing stop — webhook: prefer alert() + JSON webhook")
+
+// ——— 플롯: Core 밴드 ———
+plot(center, "Center", color = color.green, linewidth = 5)
+plot(upper, "Upper", color = color.red, linewidth = 2)
+plot(lower, "Lower", color = color.blue, linewidth = 2)
+
+// ——— 플롯: 레인보우 ———
+rb4 = plot(showRainbow ? T4_val : na, title = "RB T4", color = lineColRb(cT4, cBear4), linewidth = lineWRb)
+rb3 = plot(showRainbow ? T3_val : na, title = "RB T3", color = lineColRb(cT3, cBear3), linewidth = lineWRb)
+rb2 = plot(showRainbow ? T2_val : na, title = "RB T2", color = lineColRb(cT2, cBear2), linewidth = lineWRb)
+rbT = plot(showRainbow ? T_raw : na, title = "RB T", color = lineColRb(cT, cBearT), linewidth = lineWRb)
+rb2m = plot(showRainbow ? T2m_val : na, title = "RB T2-", color = lineColRb(cT2m, cBear2m), linewidth = lineWRb)
+fill(rb4, rb3, color = showRainbow ? bandColRb(cT4, cBear4) : na)
+fill(rb3, rb2, color = showRainbow ? bandColRb(cT3, cBear3) : na)
+fill(rb2, rbT, color = showRainbow ? bandColRb(cT2, cBear2) : na)
+fill(rbT, rb2m, color = showRainbow ? bandColRb(cT, cBearT) : na)
+
+plot(showTsfHighDots ? tsfStepHigh : na, title = "TSF 고점 (점)", color = colTsfHigh, style = plot.style_circles, linewidth = dotWidth)
+plot(showTsfLowDots ? tsfStepLow : na, title = "TSF 저점 (점)", color = colTsfLow, style = plot.style_circles, linewidth = dotWidth)
+
+// ——— 시그널 모양 ———
+// 진입: 밴드 돌파선(lower/upper). EXIT: 매직라인 근처(center) 또는 익절 목표(longTarget/shortTarget). STOP/TRAIL: 실제 스탑 가격.
+plotshape(showSignals and magicBuy ? lower : na, title = "MagicBuy", style = shape.triangleup, location = location.absolute, size = size.small, color = color.lime, text = "BUY", textcolor = color.white)
+plotshape(showSignals and magicSell ? upper : na, title = "MagicSell", style = shape.triangledown, location = location.absolute, size = size.small, color = color.red, text = "SELL", textcolor = color.white)
+plotshape(showSignals and not na(signalExitY) ? signalExitY : na, title = "MagicExit", style = shape.xcross, location = location.absolute, size = size.small, color = color.yellow, text = "EXIT", textcolor = color.white)
+plotshape(showSignals and not na(signalFixedStopY) ? signalFixedStopY : na, title = "MagicFixedStop", style = shape.xcross, location = location.absolute, size = size.small, color = color.orange, text = "STOP", textcolor = color.white)
+plotshape(showSignals and not na(signalTrailY) ? signalTrailY : na, title = "MagicTrailStop", style = shape.xcross, location = location.absolute, size = size.small, color = color.aqua, text = "TRAIL", textcolor = color.white)
+
+plot(baseR, "Applied BaseR (%)", display = display.status_line)
+plot(baseRAuto, "Auto BaseR (%)", display = display.status_line)
+plot(fineTune, "Applied Fine Tune (x)", display = display.status_line)
+plot(rPct, "Applied R (%)", display = display.status_line)
+
+// ——— 정보 패널 ———
+panelBg = color.rgb(19, 23, 34)
+autoBlue = color.rgb(79, 195, 247)
+manualOrange = color.rgb(255, 183, 77)
+
+var table info = table.new(position.bottom_right, 2, 9, border_width = 1, frame_color = color.new(color.gray, 50), bgcolor = color.new(panelBg, 15))
+var label infoLabel = na
+
+if barstate.islast
+    table.cell(info, 0, 0, "Entry Mode", text_color = color.silver, text_size = size.small)
+    table.cell(info, 1, 0, entryMode, text_color = entryMode == "Attack" ? color.orange : color.aqua, text_size = size.small)
+    table.cell(info, 0, 1, "Attack Near", text_color = color.silver, text_size = size.small)
+    table.cell(info, 1, 1, str.tostring(attackEntryNearHalfBandPct, "#.##") + "%", text_color = color.aqua, text_size = size.small)
+    table.cell(info, 0, 2, "Stop Type", text_color = color.silver, text_size = size.small)
+    table.cell(info, 1, 2, "Fixed at Entry", text_color = color.orange, text_size = size.small)
+    table.cell(info, 0, 3, "Auto BaseR", text_color = color.silver, text_size = size.small)
+    table.cell(info, 1, 3, str.tostring(baseRAuto, "#.######") + "%", text_color = color.new(autoBlue, 0), text_size = size.small)
+    table.cell(info, 0, 4, "Applied BaseR", text_color = color.silver, text_size = size.small)
+    table.cell(info, 1, 4, (baseRManual > 0.0 ? "Manual " : "Auto ") + str.tostring(baseR, "#.######") + "%", text_color = baseRManual > 0.0 ? color.new(manualOrange, 0) : color.new(autoBlue, 0), text_size = size.small)
+    table.cell(info, 0, 5, "Fine Tune Mode", text_color = color.silver, text_size = size.small)
+    table.cell(info, 1, 5, useAutoFineTune ? "Auto" : "Manual", text_color = useAutoFineTune ? color.new(autoBlue, 0) : color.new(manualOrange, 0), text_size = size.small)
+    table.cell(info, 0, 6, "Applied Fine Tune", text_color = color.silver, text_size = size.small)
+    table.cell(info, 1, 6, str.tostring(fineTune, "#.##") + "x", text_color = fineTune != 1.0 ? color.new(manualOrange, 0) : color.new(autoBlue, 0), text_size = size.small)
+    table.cell(info, 0, 7, "Applied R", text_color = color.silver, text_size = size.small)
+    table.cell(info, 1, 7, str.tostring(rPct, "#.######") + "%", text_color = color.new(autoBlue, 0), text_size = size.small)
+    table.cell(info, 0, 8, "Fills / alerts", text_color = color.silver, text_size = size.small)
+    table.cell(info, 1, 8, "Intrabar / " + (alertOnBarCloseOnly ? "알림 마감" : "알림 봉중"), text_color = color.aqua, text_size = size.small)
+
+    labelText = "Mode " + entryMode + "\n" + "Fills intrabar (fixed)\n" + "Stop Fixed at Entry\nBaseR " + str.tostring(baseR, "#.######") + "%\nR " + str.tostring(rPct, "#.######") + "%"
+
+    if na(infoLabel)
+        infoLabel := label.new(bar_index, upper, labelText, style = label.style_label_left, textcolor = color.white, color = color.new(panelBg, 10), size = size.small)
+    else
+        label.set_xy(infoLabel, bar_index, upper)
+        label.set_text(infoLabel, labelText)
+        label.set_textcolor(infoLabel, color.white)
+        label.set_color(infoLabel, color.new(panelBg, 10))

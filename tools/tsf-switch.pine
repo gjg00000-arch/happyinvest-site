@@ -1,0 +1,96 @@
+//@version=5
+// This Pine Script™ code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © 사용자 정의 — HTS "TSF전환" 이식 (LinearRegression 근사) — valuewhen 제거 경량판 · 웹훅
+// 차트 알림에서 "alert() 함수 호출" + Webhook URL. 메시지는 {{message}} 권장.
+indicator(
+     title                = "TSF 전환",
+     shorttitle           = "TSF전환",
+     format               = format.price,
+     precision            = 4,
+     overlay              = false,
+     explicit_plot_zorder = true,
+     max_bars_back        = 5000,
+     max_lines_count      = 500,
+     max_labels_count     = 500
+     )
+
+webhookUrl = input.string(
+     "https://magicindicatorglobal.com/YOUR_WEBHOOK_PATH",
+     "Webhook URL (알림 설정에 동일하게 입력)",
+     group = "웹훅",
+     tooltip = "Pine은 HTTP 불가. 차트 → 알림 → Webhook에 이 URL을 입력."
+     )
+
+periodInput = input.int(12, "기간 (Period)", minval = 2, group = "계산")
+
+lr0 = ta.linreg(close, periodInput, 0)
+lr1 = ta.linreg(close, periodInput, 1)
+slope = lr0 - lr1
+a = lr0 + slope
+
+var float lastUpA = na
+var float lastDnA = na
+if barstate.isfirst
+    lastUpA := na
+    lastDnA := na
+if not na(a[1])
+    if a > a[1]
+        lastUpA := a
+    if a < a[1]
+        lastDnA := a
+
+h = lastUpA
+l = lastDnA
+d = na(h) or na(l) ? na : (h - l)
+
+histRaw = na(a[1]) or na(d) ? na : (a[1] >= a ? -d : d)
+hist = histRaw
+
+colUp = input.color(color.rgb(255, 0, 255), "상승 색", group = "표시")
+colDown = input.color(color.rgb(0, 255, 255), "하락 색", group = "표시")
+barStyle = input.string("columns (거래량형)", "막대 유형", options = ["columns (거래량형)", "histogram"], group = "표시")
+colEdgeW = input.int(1, "막대 테두리 두께 (1~4)", minval = 1, maxval = 4, group = "표시")
+barTransp = input.int(58, "막대 투명도 (0=진함 · 100=투명)", minval = 0, maxval = 95, group = "표시")
+zeroTransp = input.int(84, "0선 투명도", minval = 50, maxval = 96, group = "표시")
+
+histCol = na(hist) ? color.new(color.gray, 92) : (hist >= 0 ? color.new(colUp, barTransp) : color.new(colDown, barTransp))
+plotStyle = barStyle == "histogram" ? plot.style_histogram : plot.style_columns
+
+plot(hist, title = "TSF전환", style = plotStyle, color = histCol, linewidth = colEdgeW)
+hline(0, "0 기준선", color = color.new(color.gray, zeroTransp), linestyle = hline.style_dotted)
+
+sendOnStart = true
+alsoEveryClose = false
+evtName = "tsf_switch_online"
+
+jsonEsc(string s) =>
+    str.replace_all(str.replace_all(s, "\\", "\\\\"), "\"", "\\\"")
+
+closeNumJson() =>
+    na(close) ? "null" : str.tostring(close, format.mintick)
+
+indNumJson(float v) =>
+    na(v) ? "null" : str.tostring(v, "#.######")
+
+tfStr = timeframe.period
+
+varip bool _startSent = false
+
+string js =
+     "{\"event\":\"" + evtName +
+     "\",\"kind\":\"indicator_start\",\"indicator\":\"TSF_Switch\",\"ticker\":\"" +
+     jsonEsc(syminfo.ticker) + "\",\"exchange\":\"" + jsonEsc(syminfo.prefix) + "\"}"
+
+string jb =
+     "{\"event\":\"tsf_switch_bar\",\"kind\":\"bar_close\",\"indicator\":\"TSF_Switch\",\"ticker\":\"" +
+     jsonEsc(syminfo.ticker) + "\",\"exchange\":\"" + jsonEsc(syminfo.prefix) + "\",\"tf\":\"" +
+     jsonEsc(tfStr) + "\",\"period\":" + str.tostring(periodInput) + ",\"close\":" + closeNumJson() +
+     ",\"a\":" + indNumJson(a) + ",\"hist\":" + indNumJson(hist) + ",\"refHighA\":" + indNumJson(h) +
+     ",\"refLowA\":" + indNumJson(l) + ",\"spanD\":" + indNumJson(d) + ",\"bar_time\":" + str.tostring(time) + "}"
+
+if sendOnStart and barstate.isconfirmed and barstate.isrealtime and not _startSent
+    alert(js, alert.freq_once_per_bar_close)
+    _startSent := true
+
+if alsoEveryClose and barstate.isconfirmed
+    alert(jb, alert.freq_once_per_bar_close)

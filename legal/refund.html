@@ -81,7 +81,8 @@
       <h2 id="sec-payment-channels">결제 수단·채널(고지)</h2>
       <p>
         당사가 안내·연동하는 <strong>전자결제</strong>는 대략 다음과 같이 운용합니다.
-        <strong>①</strong> 국제 신용·체크카드·<strong>PayPal</strong> 등 및 달러(USD) 은행 직접 송금 — <strong>하나은행 외화 수취계좌</strong>(SWIFT, 당시
+        <strong>①</strong> 국제 신용·체크카드·<strong>PayPal</strong> 등 및 달러(USD)·기타 통화 <strong>은행 직접 송금</strong> —
+        <a href="../billing/index.html#wire-route-picker">구독·결제의 글로벌 수취 계좌</a>·인보이스(SWIFT 등, 당시
         <a href="../billing/index.html">구독·결제</a> 안내).
         <strong>②</strong> 암호화폐 — 메이저 코인은 우선 지원하고, 기타 Ledger 지원 코인·저유동성 코인은 <strong>수동 견적</strong>으로만 접수합니다. 네트워크·주소·메모/Tag·Destination 등은
         당시 결제 화면·인보이스 안내에 따르며, 기타/잡코인은 운영 견적 전 선송금하지 않아야 합니다. 허니팟·매도 불가·저유동성 토큰은 접수 후에도 거절될 수 있고, 실제 <strong>USDT 스왑 완료액</strong>에서 네트워크 수수료·스왑 수수료·슬리피지를 반영한 금액이 정산 기준임을 이해해 주십니다. Ledger는 수취·보관용이며 자동 스왑·자동 출금 승인을 제공하지 않고, 운영 확인 후 수동 승인합니다.
@@ -121,56 +122,20 @@
 
       <h2 id="sec-company-bank">당사로 입금(송금)할 때 — 회사 수취 계좌</h2>
       <p>
-        고액·비즈니스(조직)·계좌이체·해외 송금 등 <strong>고객이 당사 계좌로 직접 납부</strong>하는 경우, 아래 정보를 사용합니다.
-        <strong>국내(원화) 입금</strong>은 보통 <strong>은행명(한글) + 계좌번호 + 예금주</strong>로 충분할 수 있습니다.
+        고액·비즈니스(조직)·계좌이체·해외 송금 등 <strong>고객이 당사 계좌로 직접 납부</strong>하는 경우, 인보이스·
+        <a href="../billing/index.html#wire-route-picker">구독·결제 페이지(현금 송금 계좌 선택)</a> 및 운영이 안내한 경로를 사용합니다.
+        <strong>국내(원화) 입금</strong>은 보통 <strong>은행명(한글) + 계좌번호 + 예금주</strong>로 충분할 수 있습니다 —
+        원화 세부는 <a href="../billing/index.html#krw-corporate">구독·결제 · 원화(법인) 섹션</a>을 따릅니다.
       </p>
       <p>
-        <strong>해외에서 SWIFT(국제전신)로 외화를 보낼 때</strong>는 발행은행·경유은행이 수취인·수취 은행을 정확히 식별해야 하므로,
-        통상 <strong>아래 표의 항목을 빠짐없이</strong> (수취인(예금주) · 계좌번호 · Bank name · Branch · SWIFT/BIC · Bank address · Bank telephone 등)
-        송금 신청서에 <strong>한 세트</strong>로 기재해야 합니다. <strong>일부만 넣거나 오탈자</strong>가 있으면 지연·수수료·반려(송금 실패)가 날 수 있으니,
-        은행 창구·인터넷뱅킹에는 가능하면 <strong>이 표를 그대로</strong> 넣고, 중계은행(Intermediary)을 요구하면 은행 안내에 따릅니다.
-        수수료·환율은 경로·시점에 따릅니다. 예금주는 상담·인보이스·계약서의 법인명과 일치해야 합니다.
+        공개 고지 페이지에는 특정 금융기관별 계좌번호·코드를 모두 게시하지 않을 수 있습니다. <strong>해외 외화</strong>는 위 구독·결제 페이지의
+        <strong>통화·수취 지역 선택</strong>과 인보이스에 명시된 <strong>수취인·은행 정보·코드(IBAN 등)·통화</strong>를 우선 확인해 주세요.
       </p>
-      <div class="legal-scroll" style="overflow-x: auto; margin: 0.6rem 0 0.8rem" role="region" aria-label="KEB 하나은행 수취 정보">
-        <table class="data-table" style="min-width: 18rem; margin-top: 0.35rem">
-          <tbody>
-            <tr>
-              <th scope="row">은행(한글)</th>
-              <td>하나은행 (KEB 하나은행)</td>
-            </tr>
-            <tr>
-              <th scope="row">수취인(예금주) · Beneficiary</th>
-              <td>주식회사행복도담 인베스트 / Haengbokdodam Invest co., Ltd. (인보이스·계약·은행 지시에 맞춤)</td>
-            </tr>
-            <tr>
-              <th scope="row">계좌번호</th>
-              <td><code>444-910014-96138</code> (입금 시 하이픈·공백 없이 입력해도 됩니다.)</td>
-            </tr>
-            <tr>
-              <th scope="row">Bank name</th>
-              <td>KEB Hana Bank</td>
-            </tr>
-            <tr>
-              <th scope="row">Branch</th>
-              <td>Singjungdong-yeok (시 안내: 필요 시 은행 확인)</td>
-            </tr>
-            <tr>
-              <th scope="row">SWIFT / BIC</th>
-              <td><code>KOEXKRSE</code></td>
-            </tr>
-            <tr>
-              <th scope="row">Bank address</th>
-              <td>284, Gilju-ro, Wonmi-gu, Bucheon-si, Gyeonggi-do, Republic of Korea</td>
-            </tr>
-            <tr>
-              <th scope="row">Bank telephone</th>
-              <td>032-341-1111</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <p>
+        필요 시 다음 항목(수취인 예금주 · 계좌 식별자 · SWIFT/BIC 또는 해당 규격 · 은행 주소 등)은 <strong>인보이스·운영 확인 자료와 동일한 세트</strong>로 입력해야 송금이 지연·반려 없이 접수되는 경우가 많습니다.
+      </p>
       <p class="small" style="color: var(--ci-brown-muted); margin-top: 0.25rem">
-        책·리커버리·프로모 등 <strong>이벤트성 혜택</strong>의 대가를 송금으로 정산하는 경우에도, 동일 계좌 안내를 따를 수 있으며(별도
+        책·리커버리·프로모 등 <strong>이벤트성 혜택</strong>의 대가를 송금으로 정산하는 경우에도, 운영이 안내하는 수취 경로·인보이스를 따를 수 있으며(별도
         견적·고지), <strong>환불·취소 가능 여부는 각 이벤트·총괄 약관</strong>에 따릅니다(정규와 혼동하지 마세요).
       </p>
 
