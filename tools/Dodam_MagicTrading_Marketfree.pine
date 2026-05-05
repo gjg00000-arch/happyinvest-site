@@ -17,7 +17,7 @@ strategy(
      )
 STRAT_INIT_CAP = 100000.0
 
-entryMode = input.string("Conservative", "Entry Mode", options = ["Conservative", "Attack"], group = "Mode", tooltip = "진입 신호는 항상 ML crossup / MH crossdown. 여기 값은 알림·JSON entry_mode 라벨만 구분.")
+entryMode = input.string("Conservative", "Entry Mode", options = ["Conservative", "Attack"], group = "Mode", tooltip = "진입은 한 봉 high>ML>low 롱(limit ML), high>MH>low 숏(limit MH). 여기 값은 알림·JSON entry_mode 라벨만 구분.")
 baseRManual = input.float(0.0, "Manual BaseR (0=Auto)", minval = 0.0, step = 0.01, group = "Adjust")
 useAutoFineTune = input.bool(true, "Auto Fine Tune", group = "Adjust")
 manualFineTune = input.float(1.0, "Manual Fine Tune", minval = 0.25, maxval = 3.0, step = 0.01, group = "Adjust")
@@ -202,11 +202,11 @@ useJsonAlerts = alertPayload == "JSON (webhook)"
 jsonEsc(string x) =>
     str.replace_all(str.replace_all(x, "\\", "\\\\"), "\"", "\\\"")
 f_jsonBuy() =>
-    string msg = "MagicCore BUY ML(limit) " + entryMode + " " + syminfo.ticker + " " + timeframe.period + " ML=" + str.tostring(ML, format.mintick) + " C=" + str.tostring(close, format.mintick)
-    "{\"event\":\"magic_core_buy\",\"kind\":\"signal\",\"entry_kind\":\"cross_ml\",\"limit_ml\":" + str.tostring(ML, format.mintick) + ",\"entry_mode\":\"" + entryMode + "\",\"license_pack\":\"" + LICENSE_FIELD + "\",\"pos_state\":" + str.tostring(posState) + ",\"ticker\":\"" + syminfo.ticker + "\",\"exchange\":\"" + syminfo.prefix + "\",\"tf\":\"" + timeframe.period + "\",\"close\":" + str.tostring(close) + ",\"bar_time\":" + str.tostring(time) + ",\"text\":\"" + jsonEsc(msg) + "\"}"
+    string msg = "MagicCore BUY ML(limit) " + entryMode + " " + syminfo.ticker + " " + timeframe.period + " ML=" + str.tostring(ML, format.mintick) + " (한봉 high>ML>low)"
+    "{\"event\":\"magic_core_buy\",\"kind\":\"signal\",\"entry_kind\":\"straddle_ml\",\"limit_ml\":" + str.tostring(ML, format.mintick) + ",\"entry_mode\":\"" + entryMode + "\",\"license_pack\":\"" + LICENSE_FIELD + "\",\"pos_state\":" + str.tostring(posState) + ",\"ticker\":\"" + syminfo.ticker + "\",\"exchange\":\"" + syminfo.prefix + "\",\"tf\":\"" + timeframe.period + "\",\"close\":" + str.tostring(close) + ",\"bar_time\":" + str.tostring(time) + ",\"text\":\"" + jsonEsc(msg) + "\"}"
 f_jsonSell() =>
-    string msg = "MagicCore SELL MH(limit) " + entryMode + " " + syminfo.ticker + " " + timeframe.period + " MH=" + str.tostring(MH, format.mintick) + " C=" + str.tostring(close, format.mintick)
-    "{\"event\":\"magic_core_sell\",\"kind\":\"signal\",\"entry_kind\":\"cross_mh\",\"limit_mh\":" + str.tostring(MH, format.mintick) + ",\"entry_mode\":\"" + entryMode + "\",\"license_pack\":\"" + LICENSE_FIELD + "\",\"pos_state\":" + str.tostring(posState) + ",\"ticker\":\"" + syminfo.ticker + "\",\"exchange\":\"" + syminfo.prefix + "\",\"tf\":\"" + timeframe.period + "\",\"close\":" + str.tostring(close) + ",\"bar_time\":" + str.tostring(time) + ",\"text\":\"" + jsonEsc(msg) + "\"}"
+    string msg = "MagicCore SELL MH(limit) " + entryMode + " " + syminfo.ticker + " " + timeframe.period + " MH=" + str.tostring(MH, format.mintick) + " (한봉 high>MH>low)"
+    "{\"event\":\"magic_core_sell\",\"kind\":\"signal\",\"entry_kind\":\"straddle_mh\",\"limit_mh\":" + str.tostring(MH, format.mintick) + ",\"entry_mode\":\"" + entryMode + "\",\"license_pack\":\"" + LICENSE_FIELD + "\",\"pos_state\":" + str.tostring(posState) + ",\"ticker\":\"" + syminfo.ticker + "\",\"exchange\":\"" + syminfo.prefix + "\",\"tf\":\"" + timeframe.period + "\",\"close\":" + str.tostring(close) + ",\"bar_time\":" + str.tostring(time) + ",\"text\":\"" + jsonEsc(msg) + "\"}"
 f_jsonExit() =>
     string msg = "MagicCore EXIT " + syminfo.ticker + " " + timeframe.period + " C=" + str.tostring(close, format.mintick)
     "{\"event\":\"magic_core_exit\",\"kind\":\"signal\",\"license_pack\":\"" + LICENSE_FIELD + "\",\"pos_state\":" + str.tostring(posState) + ",\"ticker\":\"" + syminfo.ticker + "\",\"exchange\":\"" + syminfo.prefix + "\",\"tf\":\"" + timeframe.period + "\",\"close\":" + str.tostring(close) + ",\"bar_time\":" + str.tostring(time) + ",\"text\":\"" + jsonEsc(msg) + "\"}"
@@ -234,11 +234,11 @@ dynamicLongStop = lower - stopBuffer
 dynamicShortStop = upper + stopBuffer
 longTarget = center - maxNearDist
 shortTarget = center + maxNearDist
-// 진입: 봉형 무시. close 가 ML 상향 돌파 / MH 하향 돌파일 때 각 밴드 가격에 리밋 시그널·주문(entryMode 레이블만 유지).
-crossUpML = ta.crossover(close, ML)
-crossDownMH = ta.crossunder(close, MH)
-entryBuyRaw = crossUpML
-entrySellRaw = crossDownMH
+// 진입: 종가(close) cross 사용 안 함. 한 봉의 가격 범위가 ML/MH 를 양쪽으로 가름 → 리밋 ML(롱) / MH(숏). (TV는 봉 단위 high·low로 표현)
+rangeStraddlesML = high > ML and ML > low
+rangeStraddlesMH = high > MH and MH > low
+entryBuyRaw = rangeStraddlesML
+entrySellRaw = rangeStraddlesMH
 var float longBest = na
 var float shortBest = na
 var float fixedLongStop = na
@@ -287,10 +287,10 @@ magicBuyOnce = magicBuy and not magicBuy[1]
 magicSellOnce = magicSell and not magicSell[1]
 if licenseOk and magicSell
     fixedShortStop := dynamicShortStop
-    strategy.entry("S", strategy.short, qty = 1, limit = MH, comment = "MH-cross Short")
+    strategy.entry("S", strategy.short, qty = 1, limit = MH, comment = "MH-straddle Short")
 else if licenseOk and magicBuy
     fixedLongStop := dynamicLongStop
-    strategy.entry("L", strategy.long, qty = 1, limit = ML, comment = "ML-cross Long")
+    strategy.entry("L", strategy.long, qty = 1, limit = ML, comment = "ML-straddle Long")
 if isLong
     strategy.exit("LX", from_entry = "L", limit = longTarget, stop = longProtectStop, comment_profit = "MagicExit Long", comment_loss = longTrailActive ? "Trail Long" : "FixedStop Long")
 if isShort
@@ -433,7 +433,7 @@ if isChartLastForUi
     table.cell(info, 0, 0, "Entry Mode", text_color = color.silver, text_size = size.small)
     table.cell(info, 1, 0, entryMode, text_color = entryMode == "Attack" ? color.orange : color.aqua, text_size = size.small)
     table.cell(info, 0, 1, "진입 트리거", text_color = color.silver, text_size = size.small)
-    table.cell(info, 1, 1, "cross c·ML·MH", text_color = color.aqua, text_size = size.small)
+    table.cell(info, 1, 1, "H>ML>L / H>MH>L", text_color = color.aqua, text_size = size.small)
     table.cell(info, 0, 2, "Stop Type", text_color = color.silver, text_size = size.small)
     table.cell(info, 1, 2, "Fixed at Entry", text_color = color.orange, text_size = size.small)
     table.cell(info, 0, 3, "Auto BaseR", text_color = color.silver, text_size = size.small)
