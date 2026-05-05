@@ -32,7 +32,7 @@ alertPayload = input.string("Text", "알림 본문 형식", options = ["Text", "
 attackEntryNearHalfBandPct = input.float(15.0, "Attack Entry Near Band (% of half band)", minval = 0.0, step = 0.5, group = "Signals")
 exitNearHalfBandPct = input.float(15.0, "Exit Near Center (% of half band)", minval = 0.0, step = 0.5, group = "Signals")
 stopBufferHalfBandPct = input.float(30.0, "Stop Buffer (% of half band)", minval = 0.0, step = 1.0, group = "Risk")
-reentryCooldownBars = input.int(3, "Re-entry Cooldown Bars After Stop", minval = 0, group = "Risk")
+reentryCooldownBars = input.int(3, "Re-entry Cooldown Bars After Stop", minval = 0, group = "Risk", tooltip = "스탑(손절·트레일 등 익절 MagicExit 외 청산) 체결 봉 이후 부가 조건 없이 이 봉 수만큼 재진입 금지.")
 useTrailingStop = input.bool(true, "Use Trailing Stop", group = "Risk")
 trailStartHalfBandPct = input.float(35.0, "Trail Start (% of half band)", minval = 0.0, step = 1.0, group = "Risk")
 trailOffsetHalfBandPct = input.float(20.0, "Trail Offset (% of half band)", minval = 0.0, step = 1.0, group = "Risk")
@@ -289,7 +289,8 @@ if isShort
 // 손절/트레일 청산이 strategy로 체결된 봉 → 재진입 쿨다운(magicStop 플래그만으로는 같은 봉에서 누락되는 경우가 있어 체결 코멘트 기준)
 tradeJustClosed = strategy.closedtrades > nz(strategy.closedtrades[1], 0)
 lastExitComment = tradeJustClosed ? strategy.closedtrades.exit_comment(strategy.closedtrades - 1) : ""
-if tradeJustClosed and (str.contains(lastExitComment, "FixedStop") or str.contains(lastExitComment, "Trail"))
+// 스탑 체결(손절·트레일)이면 익절 여부와 무관하게 쿨다운만 적용: 리밋 익절(MagicExit*)은 제외
+if tradeJustClosed and not str.contains(lastExitComment, "MagicExit")
     lastStopBar := bar_index
 cooldownActive = not na(lastStopBar) and bar_index - lastStopBar <= reentryCooldownBars
 canEnter = isFlat and not cooldownActive and not magicExit and not magicStop and not magicTrailStop
