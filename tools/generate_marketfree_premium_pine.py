@@ -1,4 +1,9 @@
-//@version=5
+# one-shot: writes Dodam_MagicTrading_Marketfree.pine (Premium 백업 + posState + 테이블)
+from pathlib import Path
+
+OUT = Path(__file__).resolve().parent / "Dodam_MagicTrading_Marketfree.pine"
+
+S = r"""//@version=5
 // Dodam_MagicTrading_Marketfree — 마켓 잠금: marketfree (MagicPremium TSF 레인보우 백업 · 수동 유지, 생성기 미덮어쓰기)
 // posState: +1 롱 / -1 숏 / 0 무포지션 = strategy.position_size 동기
 strategy(
@@ -452,3 +457,8 @@ if isChartLastForUi
         label.set_text(infoLabel, labelText)
         label.set_textcolor(infoLabel, color.white)
         label.set_color(infoLabel, color.new(panelBg, 10))
+"""
+
+if __name__ == "__main__":
+    OUT.write_text(S, encoding="utf-8")
+    print("wrote", OUT.name, len(S))

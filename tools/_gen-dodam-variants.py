@@ -35,8 +35,14 @@ VARIANTS_SHEET_NINE = VARIANTS_MONTHLY_MARKETS + [
     ("Dodam_MagicTrading_Marketfree", "DMT_Free", "marketfree"),
 ]
 
+# magic-core 템플릿으로 덮어쓰면 안 됨 (레포는 Premium 백업 기반 수동 파일 유지)
+FROZEN_MANUAL_FROM_TEMPLATE = {"Dodam_MagicTrading_Marketfree"}
+
 
 def build_one(fname: str, shorttitle: str, lic: str, tmpl: str) -> None:
+    if fname in FROZEN_MANUAL_FROM_TEMPLATE:
+        print("skip (frozen manual)", fname + ".pine")
+        return
     if len(shorttitle) > 10:
         raise SystemExit(f"shorttitle too long ({len(shorttitle)}): {shorttitle}")
     t = (
