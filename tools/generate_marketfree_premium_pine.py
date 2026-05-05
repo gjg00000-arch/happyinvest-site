@@ -279,6 +279,11 @@ stopLong = isLong and low <= longProtectStop
 stopShort = isShort and high >= shortProtectStop
 magicStop = not magicTrailStop and (stopLong or stopShort)
 magicExit = not magicStop and not magicTrailStop and (exitCrossCenter or exitSpanCenter or exitNearCenter or exitLongNearCenter or exitShortNearCenter)
+magicTrailStopOnce = magicTrailStop and not magicTrailStop[1]
+magicStopOnce = magicStop and not magicStop[1]
+magicExitOnce = magicExit and not magicExit[1]
+magicBuyOnce = magicBuy and not magicBuy[1]
+magicSellOnce = magicSell and not magicSell[1]
 var int lastStopBar = na
 if magicStop or magicTrailStop
     lastStopBar := bar_index
@@ -298,36 +303,36 @@ if isShort
     strategy.exit("SX", from_entry = "S", limit = shortTarget, stop = shortProtectStop, comment_profit = "MagicExit Short", comment_loss = shortTrailActive ? "Trail Short" : "FixedStop Short")
 if useAlerts and barstate.isconfirmed and licenseOk
     if useJsonAlerts
-        if magicBuy
+        if magicBuyOnce
             alert(f_jsonBuy(), alert.freq_once_per_bar_close)
-        if magicSell
+        if magicSellOnce
             alert(f_jsonSell(), alert.freq_once_per_bar_close)
-        if magicExit
+        if magicExitOnce
             alert(f_jsonExit(), alert.freq_once_per_bar_close)
-        if magicStop
+        if magicStopOnce
             alert(f_jsonStop(), alert.freq_once_per_bar_close)
-        if magicTrailStop
+        if magicTrailStopOnce
             alert(f_jsonTrail(), alert.freq_once_per_bar_close)
     else
-        if magicBuy
+        if magicBuyOnce
             alert("MagicCore · " + entryMode + " Buy signal", alert.freq_once_per_bar_close)
-        if magicSell
+        if magicSellOnce
             alert("MagicCore · " + entryMode + " Sell signal", alert.freq_once_per_bar_close)
-        if magicExit
+        if magicExitOnce
             alert("MagicCore · Exit signal", alert.freq_once_per_bar_close)
-        if magicStop
+        if magicStopOnce
             alert("MagicCore · Fixed stop signal", alert.freq_once_per_bar_close)
-        if magicTrailStop
+        if magicTrailStopOnce
             alert("MagicCore · Trailing stop signal", alert.freq_once_per_bar_close)
 varip bool _rbStartSent = false
 if sendRainbowStart and showRainbow and barstate.isconfirmed and barstate.isrealtime and licenseOk and not _rbStartSent
     alert(f_jsonRainbowStart(), alert.freq_once_per_bar_close)
     _rbStartSent := true
-alertcondition(licenseOk and useAlerts and magicBuy, "MagicCore Buy", "MagicCore · Buy signal")
-alertcondition(licenseOk and useAlerts and magicSell, "MagicCore Sell", "MagicCore · Sell signal")
-alertcondition(licenseOk and useAlerts and magicExit, "MagicCore Exit", "MagicCore · Exit signal")
-alertcondition(licenseOk and useAlerts and magicStop, "MagicCore Fixed Stop", "MagicCore · Fixed stop signal")
-alertcondition(licenseOk and useAlerts and magicTrailStop, "MagicCore Trail Stop", "MagicCore · Trailing stop signal")
+alertcondition(licenseOk and useAlerts and magicBuyOnce, "MagicCore Buy", "MagicCore · Buy signal")
+alertcondition(licenseOk and useAlerts and magicSellOnce, "MagicCore Sell", "MagicCore · Sell signal")
+alertcondition(licenseOk and useAlerts and magicExitOnce, "MagicCore Exit", "MagicCore · Exit signal")
+alertcondition(licenseOk and useAlerts and magicStopOnce, "MagicCore Fixed Stop", "MagicCore · Fixed stop signal")
+alertcondition(licenseOk and useAlerts and magicTrailStopOnce, "MagicCore Trail Stop", "MagicCore · Trailing stop signal")
 
 closedRealizedApprox = strategy.netprofit - nz(strategy.openprofit, 0.0)
 var float simEqPeak = 0.0
@@ -361,11 +366,11 @@ fill(rb2, rbT, color = showRainbow ? bandColRb(cT2, cBear2) : na)
 fill(rbT, rb2m, color = showRainbow ? bandColRb(cT, cBearT) : na)
 plot(showTsfHighDots ? tsfStepHigh : na, title = "TSF 고점 (점)", color = colTsfHigh, style = plot.style_circles, linewidth = dotWidth)
 plot(showTsfLowDots ? tsfStepLow : na, title = "TSF 저점 (점)", color = colTsfLow, style = plot.style_circles, linewidth = dotWidth)
-plotshape(showSignals and magicBuy, title = "MagicBuy", style = shape.triangleup, location = location.belowbar, size = size.small, color = color.lime, text = "BUY", textcolor = color.white)
-plotshape(showSignals and magicSell, title = "MagicSell", style = shape.triangledown, location = location.abovebar, size = size.small, color = color.red, text = "SELL", textcolor = color.white)
-plotshape(showSignals and magicExit ? close : na, title = "MagicExit", style = shape.xcross, location = location.absolute, size = size.small, color = color.yellow, text = "EXIT", textcolor = color.white)
-plotshape(showSignals and magicStop ? close : na, title = "MagicFixedStop", style = shape.xcross, location = location.absolute, size = size.small, color = color.orange, text = "STOP", textcolor = color.white)
-plotshape(showSignals and magicTrailStop ? close : na, title = "MagicTrailStop", style = shape.xcross, location = location.absolute, size = size.small, color = color.aqua, text = "TRAIL", textcolor = color.white)
+plotshape(showSignals and magicBuyOnce, title = "MagicBuy", style = shape.triangleup, location = location.belowbar, size = size.small, color = color.lime, text = "BUY", textcolor = color.white)
+plotshape(showSignals and magicSellOnce, title = "MagicSell", style = shape.triangledown, location = location.abovebar, size = size.small, color = color.red, text = "SELL", textcolor = color.white)
+plotshape(showSignals and magicExitOnce ? close : na, title = "MagicExit", style = shape.xcross, location = location.absolute, size = size.small, color = color.yellow, text = "EXIT", textcolor = color.white)
+plotshape(showSignals and magicStopOnce ? close : na, title = "MagicFixedStop", style = shape.xcross, location = location.absolute, size = size.small, color = color.orange, text = "STOP", textcolor = color.white)
+plotshape(showSignals and magicTrailStopOnce ? close : na, title = "MagicTrailStop", style = shape.xcross, location = location.absolute, size = size.small, color = color.aqua, text = "TRAIL", textcolor = color.white)
 plot(baseR, "Applied BaseR (%)", display = display.status_line)
 plot(baseRAuto, "Auto BaseR (%)", display = display.status_line)
 plot(fineTune, "Applied Fine Tune (x)", display = display.status_line)
