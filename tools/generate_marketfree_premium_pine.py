@@ -164,6 +164,9 @@ smaCt240 = ta.sma(close, 240)
 center = (smaCt240 + smaCt60 + smaCt20 + smaCt5) / 4.0
 upper = center * (1.0 + rPct / 100.0)
 lower = center * (1.0 - rPct / 100.0)
+// 밴드 명칭: MH = 상단, ML = 하단 (동일 시리즈: upper / lower)
+MH = upper
+ML = lower
 
 lr0 = ta.linreg(close, tPeriod, 0)
 lr1 = ta.linreg(close, tPeriod, 1)
@@ -236,10 +239,12 @@ dynamicLongStop = lower - stopBuffer
 dynamicShortStop = upper + stopBuffer
 longTarget = center - maxNearDist
 shortTarget = center + maxNearDist
-conservativeBuyRaw = ta.crossover(close, lower)
-conservativeSellRaw = ta.crossunder(close, upper)
-attackBuyRaw = low <= lower + attackEntryNearDist
-attackSellRaw = high >= upper - attackEntryNearDist
+// Conservative 롱: 직전 음봉이 ML(lower) 아래까지 lowest 돌파 → 현재 봉 종가가 ML 상향 돌파(crossover)
+bearishPiercedML = close[1] < open[1] and low[1] < ML[1]
+conservativeBuyRaw = bearishPiercedML and ta.crossover(close, ML)
+conservativeSellRaw = ta.crossunder(close, MH)
+attackBuyRaw = low <= ML + attackEntryNearDist
+attackSellRaw = high >= MH - attackEntryNearDist
 entryBuyRaw = entryMode == "Attack" ? attackBuyRaw : conservativeBuyRaw
 entrySellRaw = entryMode == "Attack" ? attackSellRaw : conservativeSellRaw
 var float longBest = na
@@ -293,7 +298,7 @@ if licenseOk and magicSell
     strategy.entry("S", strategy.short, qty = 1, comment = entryMode == "Attack" ? "Attack Short" : "Short Entry")
 else if licenseOk and magicBuy
     fixedLongStop := dynamicLongStop
-    strategy.entry("L", strategy.long, qty = 1, comment = entryMode == "Attack" ? "Attack Long" : "Long Entry")
+    strategy.entry("L", strategy.long, qty = 1, comment = entryMode == "Attack" ? "Attack Long" : "ML-Reclaim Long")
 if isLong
     strategy.exit("LX", from_entry = "L", limit = longTarget, stop = longProtectStop, comment_profit = "MagicExit Long", comment_loss = longTrailActive ? "Trail Long" : "FixedStop Long")
 if isShort
@@ -355,8 +360,8 @@ f_fmtChartTime(int t) =>
     str.format_time(t, "yyyy-MM-dd HH:mm", syminfo.timezone)
 
 plot(center, "Center", color = color.green, linewidth = 5, trackprice = false)
-plot(upper, "Upper", color = color.red, linewidth = 2, trackprice = false)
-plot(lower, "Lower", color = color.blue, linewidth = 2, trackprice = false)
+plot(upper, "MH (upper)", color = color.red, linewidth = 2, trackprice = false)
+plot(lower, "ML (lower)", color = color.blue, linewidth = 2, trackprice = false)
 rb4 = plot(showRainbow ? T4_val : na, title = "RB T4", color = lineColRb(cT4, cBear4), linewidth = lineWRb, trackprice = false)
 rb3 = plot(showRainbow ? T3_val : na, title = "RB T3", color = lineColRb(cT3, cBear3), linewidth = lineWRb, trackprice = false)
 rb2 = plot(showRainbow ? T2_val : na, title = "RB T2", color = lineColRb(cT2, cBear2), linewidth = lineWRb, trackprice = false)
