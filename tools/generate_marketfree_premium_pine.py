@@ -288,13 +288,6 @@ magicBuy = entryBuyRaw and canEnter
 magicSell = entrySellRaw and canEnter
 magicBuyOnce = magicBuy and not magicBuy[1]
 magicSellOnce = magicSell and not magicSell[1]
-positionJustClosed = strategy.position_size == 0 and nz(strategy.position_size[1], 0) != 0
-trailMark = positionJustClosed and magicTrailStop
-stopMark = positionJustClosed and magicStop and not magicTrailStop
-profitMarkRaw = positionJustClosed and magicExit and not magicTrailStop and not magicStop
-showTrailExit = trailMark
-showStopExit = stopMark
-showProfitExit = profitMarkRaw or (positionJustClosed and not trailMark and not stopMark)
 if licenseOk and magicSell
     fixedShortStop := dynamicShortStop
     strategy.entry("S", strategy.short, qty = 1, comment = entryMode == "Attack" ? "Attack Short" : "Short Entry")
@@ -305,6 +298,11 @@ if isLong
     strategy.exit("LX", from_entry = "L", limit = longTarget, stop = longProtectStop, comment_profit = "MagicExit Long", comment_loss = longTrailActive ? "Trail Long" : "FixedStop Long")
 if isShort
     strategy.exit("SX", from_entry = "S", limit = shortTarget, stop = shortProtectStop, comment_profit = "MagicExit Short", comment_loss = shortTrailActive ? "Trail Short" : "FixedStop Short")
+tradeJustClosed = strategy.closedtrades > nz(strategy.closedtrades[1], 0)
+lastExitComment = tradeJustClosed ? strategy.closedtrades.exit_comment(strategy.closedtrades - 1) : ""
+showTrailExit = tradeJustClosed and str.contains(lastExitComment, "Trail")
+showStopExit = tradeJustClosed and str.contains(lastExitComment, "FixedStop")
+showProfitExit = tradeJustClosed and str.contains(lastExitComment, "MagicExit")
 if useAlerts and barstate.isconfirmed and licenseOk
     if useJsonAlerts
         if magicBuyOnce

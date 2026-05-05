@@ -390,7 +390,7 @@ signalTrailY = magicTrailStop ? (trailStopLong ? longTrailStop : shortTrailStop)
 signalFixedStopY = magicStop ? (stopLong ? longProtectStop : shortProtectStop) : na
 
 // 트레일 청산 시에는 매직 익절 웹훅 생략(트레일 JSON만).
-trailAlertThisBar = magicTrailStop
+// trailAlertThisBar 는 청산 체결 확인 후(tbNewClosed + exit 코멘트)에만 설정 — 아래 trade-band 블록 근처 참고.
 
 f_jsonExit() =>
     float exitAnchor = center
@@ -609,6 +609,11 @@ else if tbEnteredShortSnap
 
 
 bool tbNewClosed = strategy.closedtrades > nz(strategy.closedtrades[1])
+lastExitComment = tbNewClosed ? strategy.closedtrades.exit_comment(strategy.closedtrades - 1) : ""
+showMarkerTrail = tbNewClosed and str.contains(lastExitComment, "Trail")
+showMarkerStop = tbNewClosed and str.contains(lastExitComment, "FixedStop")
+showMarkerProfit = tbNewClosed and str.contains(lastExitComment, "MagicExit")
+trailAlertThisBar = showMarkerTrail
 
 
 if licenseOk and showTradeBandArrows and tbNewClosed and not na(tbSnapBandPx)
@@ -738,9 +743,9 @@ plot(showTsfLowDots ? tsfStepLow : na, title = "TSF 저점 (점)", color = colTs
 // 진입 표기 Y = 해당 봉 lower / upper (=플롯 밴드·JSON entry_anchor·band_edge·limit 주문가). 전략 기본 삼각형은 제외 후 본 신호만 권장.
 plotshape(showSignals and magicBuy ? lower : na, title = "MagicBuy", style = shape.triangleup, location = location.absolute, size = size.normal, color = color.rgb(255, 152, 0), text = "BUY", textcolor = color.rgb(38, 50, 56))
 plotshape(showSignals and magicSell ? upper : na, title = "MagicSell", style = shape.triangledown, location = location.absolute, size = size.normal, color = color.rgb(238, 255, 80), text = "SELL", textcolor = color.rgb(38, 50, 56))
-plotshape(showSignals and not na(signalExitY) ? signalExitY : na, title = "MagicExit", style = shape.xcross, location = location.absolute, size = size.small, color = color.yellow, text = "EXIT", textcolor = color.white)
-plotshape(showSignals and not na(signalFixedStopY) ? signalFixedStopY : na, title = "MagicFixedStop", style = shape.xcross, location = location.absolute, size = size.small, color = color.orange, text = "STOP", textcolor = color.white)
-plotshape(showSignals and not na(signalTrailY) ? signalTrailY : na, title = "MagicTrailStop", style = shape.xcross, location = location.absolute, size = size.small, color = color.aqua, text = "TRAIL", textcolor = color.white)
+plotshape(showSignals and showMarkerProfit ? close : na, title = "MagicExit", style = shape.xcross, location = location.absolute, size = size.small, color = color.yellow, text = "EXIT", textcolor = color.white)
+plotshape(showSignals and showMarkerStop ? close : na, title = "MagicFixedStop", style = shape.xcross, location = location.absolute, size = size.small, color = color.orange, text = "STOP", textcolor = color.white)
+plotshape(showSignals and showMarkerTrail ? close : na, title = "MagicTrailStop", style = shape.xcross, location = location.absolute, size = size.small, color = color.aqua, text = "TRAIL", textcolor = color.white)
 
 plot(baseR, "Applied BaseR (%)", display = display.status_line, trackprice = false)
 plot(baseRAuto, "Auto BaseR (%)", display = display.status_line, trackprice = false)
