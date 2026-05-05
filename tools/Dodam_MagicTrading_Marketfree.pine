@@ -14,8 +14,7 @@ strategy(
      commission_type  = strategy.commission.percent,
      commission_value = 0.0,
      max_lines_count  = 500,
-     max_labels_count = 500,
-     max_tables_count = 20
+     max_labels_count = 500
      )
 // 시뮬 MDD% 분모·전략 초기자본과 동일 값 유지
 STRAT_INIT_CAP = 100000.0
