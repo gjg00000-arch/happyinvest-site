@@ -279,9 +279,6 @@ stopLong = isLong and low <= longProtectStop
 stopShort = isShort and high >= shortProtectStop
 magicStop = not magicTrailStop and (stopLong or stopShort)
 magicExit = not magicStop and not magicTrailStop and (exitCrossCenter or exitSpanCenter or exitNearCenter or exitLongNearCenter or exitShortNearCenter)
-magicTrailStopOnce = magicTrailStop and not magicTrailStop[1]
-magicStopOnce = magicStop and not magicStop[1]
-magicExitOnce = magicExit and not magicExit[1]
 var int lastStopBar = na
 if magicStop or magicTrailStop
     lastStopBar := bar_index
@@ -291,18 +288,13 @@ magicBuy = entryBuyRaw and canEnter
 magicSell = entrySellRaw and canEnter
 magicBuyOnce = magicBuy and not magicBuy[1]
 magicSellOnce = magicSell and not magicSell[1]
-// 보유 중 청산 표시 1회 — 무포지션(포지션=0)에서만 리셋
-var bool exitConsumed = false
-if strategy.position_size == 0
-    exitConsumed := false
-exitRaw = magicTrailStopOnce or magicStopOnce or magicExitOnce
-holding = strategy.position_size != 0
-exitTrigger = holding and not exitConsumed and exitRaw
-if exitTrigger
-    exitConsumed := true
-showTrailExit = exitTrigger and magicTrailStopOnce
-showStopExit = exitTrigger and magicStopOnce and not magicTrailStopOnce
-showProfitExit = exitTrigger and magicExitOnce and not magicTrailStopOnce and not magicStopOnce
+positionJustClosed = strategy.position_size == 0 and nz(strategy.position_size[1], 0) != 0
+trailMark = positionJustClosed and magicTrailStop
+stopMark = positionJustClosed and magicStop and not magicTrailStop
+profitMarkRaw = positionJustClosed and magicExit and not magicTrailStop and not magicStop
+showTrailExit = trailMark
+showStopExit = stopMark
+showProfitExit = profitMarkRaw or (positionJustClosed and not trailMark and not stopMark)
 if licenseOk and magicSell
     fixedShortStop := dynamicShortStop
     strategy.entry("S", strategy.short, qty = 1, comment = entryMode == "Attack" ? "Attack Short" : "Short Entry")
