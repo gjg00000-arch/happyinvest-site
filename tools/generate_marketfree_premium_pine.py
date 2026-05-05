@@ -282,7 +282,14 @@ stopShort = isShort and high >= shortProtectStop
 magicStop = not magicTrailStop and (stopLong or stopShort)
 magicExit = not magicStop and not magicTrailStop and (exitCrossCenter or exitSpanCenter or exitNearCenter or exitLongNearCenter or exitShortNearCenter)
 var int lastStopBar = na
-if magicStop or magicTrailStop
+if isLong
+    strategy.exit("LX", from_entry = "L", limit = longTarget, stop = longProtectStop, comment_profit = "MagicExit Long", comment_loss = longTrailActive ? "Trail Long" : "FixedStop Long")
+if isShort
+    strategy.exit("SX", from_entry = "S", limit = shortTarget, stop = shortProtectStop, comment_profit = "MagicExit Short", comment_loss = shortTrailActive ? "Trail Short" : "FixedStop Short")
+// 손절/트레일 청산이 strategy로 체결된 봉 → 재진입 쿨다운(magicStop 플래그만으로는 같은 봉에서 누락되는 경우가 있어 체결 코멘트 기준)
+tradeJustClosed = strategy.closedtrades > nz(strategy.closedtrades[1], 0)
+lastExitComment = tradeJustClosed ? strategy.closedtrades.exit_comment(strategy.closedtrades - 1) : ""
+if tradeJustClosed and (str.contains(lastExitComment, "FixedStop") or str.contains(lastExitComment, "Trail"))
     lastStopBar := bar_index
 cooldownActive = not na(lastStopBar) and bar_index - lastStopBar <= reentryCooldownBars
 canEnter = isFlat and not cooldownActive and not magicExit and not magicStop and not magicTrailStop
@@ -296,12 +303,7 @@ if licenseOk and magicSell
 else if licenseOk and magicBuy
     fixedLongStop := dynamicLongStop
     strategy.entry("L", strategy.long, qty = 1, limit = ML, comment = "ML-straddle Long")
-if isLong
-    strategy.exit("LX", from_entry = "L", limit = longTarget, stop = longProtectStop, comment_profit = "MagicExit Long", comment_loss = longTrailActive ? "Trail Long" : "FixedStop Long")
-if isShort
-    strategy.exit("SX", from_entry = "S", limit = shortTarget, stop = shortProtectStop, comment_profit = "MagicExit Short", comment_loss = shortTrailActive ? "Trail Short" : "FixedStop Short")
-tradeJustClosed = strategy.closedtrades > nz(strategy.closedtrades[1], 0)
-lastExitComment = tradeJustClosed ? strategy.closedtrades.exit_comment(strategy.closedtrades - 1) : ""
+// 청산 표시·알림: 위와 동일 exit 코멘트
 showTrailExit = tradeJustClosed and str.contains(lastExitComment, "Trail")
 showStopExit = tradeJustClosed and str.contains(lastExitComment, "FixedStop")
 showProfitExit = tradeJustClosed and str.contains(lastExitComment, "MagicExit")
