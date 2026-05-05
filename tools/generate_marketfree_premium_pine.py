@@ -291,10 +291,9 @@ magicBuy = entryBuyRaw and canEnter
 magicSell = entrySellRaw and canEnter
 magicBuyOnce = magicBuy and not magicBuy[1]
 magicSellOnce = magicSell and not magicSell[1]
+// 보유 중 청산 표시 1회 — 무포지션(포지션=0)에서만 리셋
 var bool exitConsumed = false
 if strategy.position_size == 0
-    exitConsumed := false
-else if strategy.position_size != 0 and strategy.position_size[1] == 0
     exitConsumed := false
 exitRaw = magicTrailStopOnce or magicStopOnce or magicExitOnce
 holding = strategy.position_size != 0
