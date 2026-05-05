@@ -22,7 +22,7 @@ strategy(
      )
 STRAT_INIT_CAP = 100000.0
 
-entryMode = input.string("Conservative", "Entry Mode", options = ["Conservative", "Attack"], group = "Mode")
+entryMode = input.string("Conservative", "Entry Mode", options = ["Conservative", "Attack"], group = "Mode", tooltip = "진입 신호는 항상 ML crossup / MH crossdown. 여기 값은 알림·JSON entry_mode 라벨만 구분.")
 baseRManual = input.float(0.0, "Manual BaseR (0=Auto)", minval = 0.0, step = 0.01, group = "Adjust")
 useAutoFineTune = input.bool(true, "Auto Fine Tune", group = "Adjust")
 manualFineTune = input.float(1.0, "Manual Fine Tune", minval = 0.25, maxval = 3.0, step = 0.01, group = "Adjust")
@@ -207,11 +207,11 @@ useJsonAlerts = alertPayload == "JSON (webhook)"
 jsonEsc(string x) =>
     str.replace_all(str.replace_all(x, "\\", "\\\\"), "\"", "\\\"")
 f_jsonBuy() =>
-    string msg = "MagicCore BUY " + entryMode + " " + syminfo.ticker + " " + timeframe.period + " C=" + str.tostring(close, format.mintick)
-    "{\"event\":\"magic_core_buy\",\"kind\":\"signal\",\"entry_mode\":\"" + entryMode + "\",\"license_pack\":\"" + LICENSE_FIELD + "\",\"pos_state\":" + str.tostring(posState) + ",\"ticker\":\"" + syminfo.ticker + "\",\"exchange\":\"" + syminfo.prefix + "\",\"tf\":\"" + timeframe.period + "\",\"close\":" + str.tostring(close) + ",\"bar_time\":" + str.tostring(time) + ",\"text\":\"" + jsonEsc(msg) + "\"}"
+    string msg = "MagicCore BUY ML(limit) " + entryMode + " " + syminfo.ticker + " " + timeframe.period + " ML=" + str.tostring(ML, format.mintick) + " C=" + str.tostring(close, format.mintick)
+    "{\"event\":\"magic_core_buy\",\"kind\":\"signal\",\"entry_kind\":\"cross_ml\",\"limit_ml\":" + str.tostring(ML, format.mintick) + ",\"entry_mode\":\"" + entryMode + "\",\"license_pack\":\"" + LICENSE_FIELD + "\",\"pos_state\":" + str.tostring(posState) + ",\"ticker\":\"" + syminfo.ticker + "\",\"exchange\":\"" + syminfo.prefix + "\",\"tf\":\"" + timeframe.period + "\",\"close\":" + str.tostring(close) + ",\"bar_time\":" + str.tostring(time) + ",\"text\":\"" + jsonEsc(msg) + "\"}"
 f_jsonSell() =>
-    string msg = "MagicCore SELL " + entryMode + " " + syminfo.ticker + " " + timeframe.period + " C=" + str.tostring(close, format.mintick)
-    "{\"event\":\"magic_core_sell\",\"kind\":\"signal\",\"entry_mode\":\"" + entryMode + "\",\"license_pack\":\"" + LICENSE_FIELD + "\",\"pos_state\":" + str.tostring(posState) + ",\"ticker\":\"" + syminfo.ticker + "\",\"exchange\":\"" + syminfo.prefix + "\",\"tf\":\"" + timeframe.period + "\",\"close\":" + str.tostring(close) + ",\"bar_time\":" + str.tostring(time) + ",\"text\":\"" + jsonEsc(msg) + "\"}"
+    string msg = "MagicCore SELL MH(limit) " + entryMode + " " + syminfo.ticker + " " + timeframe.period + " MH=" + str.tostring(MH, format.mintick) + " C=" + str.tostring(close, format.mintick)
+    "{\"event\":\"magic_core_sell\",\"kind\":\"signal\",\"entry_kind\":\"cross_mh\",\"limit_mh\":" + str.tostring(MH, format.mintick) + ",\"entry_mode\":\"" + entryMode + "\",\"license_pack\":\"" + LICENSE_FIELD + "\",\"pos_state\":" + str.tostring(posState) + ",\"ticker\":\"" + syminfo.ticker + "\",\"exchange\":\"" + syminfo.prefix + "\",\"tf\":\"" + timeframe.period + "\",\"close\":" + str.tostring(close) + ",\"bar_time\":" + str.tostring(time) + ",\"text\":\"" + jsonEsc(msg) + "\"}"
 f_jsonExit() =>
     string msg = "MagicCore EXIT " + syminfo.ticker + " " + timeframe.period + " C=" + str.tostring(close, format.mintick)
     "{\"event\":\"magic_core_exit\",\"kind\":\"signal\",\"license_pack\":\"" + LICENSE_FIELD + "\",\"pos_state\":" + str.tostring(posState) + ",\"ticker\":\"" + syminfo.ticker + "\",\"exchange\":\"" + syminfo.prefix + "\",\"tf\":\"" + timeframe.period + "\",\"close\":" + str.tostring(close) + ",\"bar_time\":" + str.tostring(time) + ",\"text\":\"" + jsonEsc(msg) + "\"}"
@@ -239,13 +239,11 @@ dynamicLongStop = lower - stopBuffer
 dynamicShortStop = upper + stopBuffer
 longTarget = center - maxNearDist
 shortTarget = center + maxNearDist
-// Conservative 롱(현재 봉만): 음봉 + 그 봉의 low가 ML 관통 + 종가는 ML 위(ML reclaim)
-conservativeBuyRaw = close < open and low < ML and close > ML
-conservativeSellRaw = ta.crossunder(close, MH)
-attackBuyRaw = low <= ML + attackEntryNearDist
-attackSellRaw = high >= MH - attackEntryNearDist
-entryBuyRaw = entryMode == "Attack" ? attackBuyRaw : conservativeBuyRaw
-entrySellRaw = entryMode == "Attack" ? attackSellRaw : conservativeSellRaw
+// 진입: 봉형 무시. close 가 ML 상향 돌파 / MH 하향 돌파일 때 각 밴드 가격에 리밋 시그널·주문(entryMode 레이블만 유지).
+crossUpML = ta.crossover(close, ML)
+crossDownMH = ta.crossunder(close, MH)
+entryBuyRaw = crossUpML
+entrySellRaw = crossDownMH
 var float longBest = na
 var float shortBest = na
 var float fixedLongStop = na
@@ -294,10 +292,10 @@ magicBuyOnce = magicBuy and not magicBuy[1]
 magicSellOnce = magicSell and not magicSell[1]
 if licenseOk and magicSell
     fixedShortStop := dynamicShortStop
-    strategy.entry("S", strategy.short, qty = 1, comment = entryMode == "Attack" ? "Attack Short" : "Short Entry")
+    strategy.entry("S", strategy.short, qty = 1, limit = MH, comment = "MH-cross Short")
 else if licenseOk and magicBuy
     fixedLongStop := dynamicLongStop
-    strategy.entry("L", strategy.long, qty = 1, comment = entryMode == "Attack" ? "Attack Long" : "ML-Reclaim Long")
+    strategy.entry("L", strategy.long, qty = 1, limit = ML, comment = "ML-cross Long")
 if isLong
     strategy.exit("LX", from_entry = "L", limit = longTarget, stop = longProtectStop, comment_profit = "MagicExit Long", comment_loss = longTrailActive ? "Trail Long" : "FixedStop Long")
 if isShort
@@ -372,8 +370,8 @@ fill(rb2, rbT, color = showRainbow ? bandColRb(cT2, cBear2) : na)
 fill(rbT, rb2m, color = showRainbow ? bandColRb(cT, cBearT) : na)
 plot(showTsfHighDots ? tsfStepHigh : na, title = "TSF 고점 (점)", color = colTsfHigh, style = plot.style_circles, linewidth = dotWidth, trackprice = false)
 plot(showTsfLowDots ? tsfStepLow : na, title = "TSF 저점 (점)", color = colTsfLow, style = plot.style_circles, linewidth = dotWidth, trackprice = false)
-plotshape(showSignals and magicBuyOnce, title = "MagicBuy", style = shape.triangleup, location = location.belowbar, size = size.small, color = color.lime, text = "BUY", textcolor = color.white)
-plotshape(showSignals and magicSellOnce, title = "MagicSell", style = shape.triangledown, location = location.abovebar, size = size.small, color = color.red, text = "SELL", textcolor = color.white)
+plotshape(showSignals and magicBuyOnce ? ML : na, title = "MagicBuy", style = shape.triangleup, location = location.absolute, size = size.small, color = color.lime, text = "BUY", textcolor = color.white)
+plotshape(showSignals and magicSellOnce ? MH : na, title = "MagicSell", style = shape.triangledown, location = location.absolute, size = size.small, color = color.red, text = "SELL", textcolor = color.white)
 plotshape(showSignals and showProfitExit ? close : na, title = "MagicExit", style = shape.xcross, location = location.absolute, size = size.small, color = color.yellow, text = "EXIT", textcolor = color.white)
 plotshape(showSignals and showStopExit ? close : na, title = "MagicFixedStop", style = shape.xcross, location = location.absolute, size = size.small, color = color.orange, text = "STOP", textcolor = color.white)
 plotshape(showSignals and showTrailExit ? close : na, title = "MagicTrailStop", style = shape.xcross, location = location.absolute, size = size.small, color = color.aqua, text = "TRAIL", textcolor = color.white)
