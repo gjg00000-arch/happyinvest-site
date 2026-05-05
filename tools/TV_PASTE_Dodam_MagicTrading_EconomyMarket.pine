@@ -14,10 +14,11 @@ strategy(
      default_qty_type = strategy.fixed,
      default_qty_value = 1,
      commission_type  = strategy.commission.percent,
-     commission_value = 0.04,
+     commission_value = 0.0,
      max_lines_count  = 500,
      max_labels_count = 500
      )
+// TV 시뮬 수수료 0%. 실매 수수료·슬리피지는 유저 감안.
 
 // ——— Core Rule 입력 ———
 entryMode = input.string("Conservative", "Entry Mode", options = ["Conservative", "Attack"], group = "Mode")

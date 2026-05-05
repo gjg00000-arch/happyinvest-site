@@ -113,6 +113,8 @@ def main() -> None:
     variants = VARIANTS_MONTHLY_MARKETS + [
         ("Dodam_MagicTrading_Marketfree", "DMT_Free", "marketfree"),
         ("Dodam_MagicTrading_Marketfree_1weekfree", "DMT_Free1w", "marketfree_1weekfree"),
+        # TV에서 "새 인디케이터"로 만들면 ~ 아이콘만 나옴 — 반드시 strategy() 템플릿(본 레포 .pine)을 붙여넣을 것
+        ("Dodam_MagicTrading_Marketfree_Position", "DMT_FrPos", "marketfree"),
     ]
     for row in variants:
         build_one(*row, tmpl)

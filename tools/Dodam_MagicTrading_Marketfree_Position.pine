@@ -1,10 +1,10 @@
 //@version=5
-// Dodam_MagicTrading_StocksMarket — 마켓 잠금: stocks
+// Dodam_MagicTrading_Marketfree_Position — 마켓 잠금: marketfree
 // MagicIndicator Core — 진입: 밴드 바깥 돌파 후 종가가 밴드 안쪽으로 재진입(숏=상단·롱=하단). 청산: 고정손절 / 트레일 / 종가·매직선 근접만.
 // Webhook·license_pack 등은 기존과 동일.
 strategy(
-     "Dodam_MagicTrading_StocksMarket",
-     shorttitle       = "DMT_Stk",
+     "Dodam_MagicTrading_Marketfree_Position",
+     shorttitle       = "DMT_FrPos",
      overlay          = true,
      process_orders_on_close = false,
      pyramiding       = 0,
@@ -51,7 +51,7 @@ sessionCloseBlockMinutes = input.int(30, "장마감 전 (분) 진입 금지", mi
 // 허용 키: stocks | funds | futures | forex | crypto | indices | bonds | economy | options | marketfree | marketfree_1weekfree
 // bonds: 일부 채권 상품은 TV에서 syminfo.type이 stock 등으로 표시될 수 있음 — 로드 오류 시 Pine 콘솔에서 실제 타입 확인 후 분기 수정.
 // marketfree / marketfree_1weekfree: syminfo.type 무관·전 마켓 허용 (license_pack JSON에 문자열 그대로 노출; 서버에서 플랜 구분).
-LICENSE_FIELD = "stocks"
+LICENSE_FIELD = "marketfree"
 
 // JSON / 알림용 진입 방식 라벨(단일 규칙)
 ENTRY_MODE_LABEL = "BandReturn"
