@@ -798,10 +798,10 @@ if isChartLastForUi and showSimStatsTable
     pvStr = na(syminfo.pointvalue) or syminfo.pointvalue == 0 ? "— (na)" : str.tostring(syminfo.pointvalue, "#.######")
     mddCell = str.tostring(simMaxDdAbs, "#.##") + " · 초기대비 " + str.tostring(nz(mddPctOfInit, 0.0), "#.##") + "%"
 
-    table.clear(simStatTR)
-    table.clear(simStatTL)
-    table.clear(simStatBR)
-    table.clear(simStatBL)
+    table.clear(simStatTR, 0, 0, 1, 7)
+    table.clear(simStatTL, 0, 0, 1, 7)
+    table.clear(simStatBR, 0, 0, 1, 7)
+    table.clear(simStatBL, 0, 0, 1, 7)
 
     if simStatPosOpt == "자동"
         if autoStatUseBottomLeft
@@ -818,10 +818,10 @@ if isChartLastForUi and showSimStatsTable
         fillSimStatTable(simStatBL, periodTxt, pvStr, mddCell)
 
 if isChartLastForUi and not showSimStatsTable
-    table.clear(simStatTR)
-    table.clear(simStatTL)
-    table.clear(simStatBR)
-    table.clear(simStatBL)
+    table.clear(simStatTR, 0, 0, 1, 7)
+    table.clear(simStatTL, 0, 0, 1, 7)
+    table.clear(simStatBR, 0, 0, 1, 7)
+    table.clear(simStatBL, 0, 0, 1, 7)
 
 if isChartLastForUi
     table.cell(info, 0, 0, "진입", text_color = color.silver, text_size = size.small)
