@@ -50,6 +50,7 @@ sessionCloseBlockMinutes = input.int(30, "장마감 전 (분) 진입 금지", mi
 // 허용 키: stocks | funds | futures | forex | crypto | indices | bonds | economy | options | marketfree | marketfree_1weekfree
 // bonds: 일부 채권 상품은 TV에서 syminfo.type이 stock 등으로 표시될 수 있음 — 로드 오류 시 Pine 콘솔에서 실제 타입 확인 후 분기 수정.
 // marketfree / marketfree_1weekfree: syminfo.type 무관·전 마켓 허용 (license_pack JSON에 문자열 그대로 노출; 서버에서 플랜 구분).
+// 이 파일의 기본값은 marketfree(소스 붙여넣기·선물 등 테스트). Dodam_*.pine 은 _gen-dodam-variants.py 가 마켓별로 치환함.
 LICENSE_FIELD = "marketfree_1weekfree"
 
 // JSON / 알림용 진입 방식 라벨(단일 규칙)

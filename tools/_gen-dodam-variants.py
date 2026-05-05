@@ -42,7 +42,7 @@ def build_one(fname: str, shorttitle: str, lic: str, tmpl: str) -> None:
     t = (
         tmpl.replace('"MagicIndicator Core Rule Strategy"', f'"{fname}"')
         .replace('shorttitle       = "MagicTrading"', f'shorttitle       = "{shorttitle}"')
-        .replace('LICENSE_FIELD = "bonds"', f'LICENSE_FIELD = "{lic}"')
+        .replace('LICENSE_FIELD = "marketfree"', f'LICENSE_FIELD = "{lic}"')
     )
     head = "// " + fname + " — 마켓 잠금: " + lic + "\n"
     if not t.startswith("//@version=5"):
