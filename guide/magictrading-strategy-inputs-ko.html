@@ -6,7 +6,7 @@
     <title>MagicTrading(TRV) 입력·파인튜닝 사용법 — 지표 가이드</title>
     <meta
       name="description"
-      content="TradingView MagicTrading 전략 — Entry Mode, Adjust(Fine Tune), Signals, Risk 인풋별 의미와 추천 순서"
+      content="TradingView MagicTrading 전략 — Mode, Adjust, Signals, Risk, Filters 입력 의미 및 신호 미발생 시점(canEnter·FAQ)"
     />
     <link rel="stylesheet" href="../assets/common.css" />
     <link rel="stylesheet" href="../assets/site-ux.css" />
@@ -83,8 +83,10 @@
         <p class="doc-hero__eyebrow">TradingView · Pine Strategy · MagicTrading</p>
         <h1 class="doc-hero__title">MagicTrading 입력·파인튜닝 안내</h1>
         <p class="doc-hero__lead">
-          차트에 붙인 뒤 <strong>설정 → Inputs</strong>에서 바꿀 수 있는 네 블록 — <strong>Mode / Adjust(Fine Tune) / Signals /
-          Risk</strong> — 의 역할과 권장 사용 순서를 정리했습니다. 아래 예시 도해는 교육용이며, 실제 TV 화면과 동일할 필요는 없습니다.
+          차트에 붙인 뒤 <strong>설정 → Inputs</strong>에서 바꿀 수 있는 블록 — <strong>Mode / Adjust(Fine Tune) / Signals / Risk /
+          Filters</strong> — 의 역할과 권장 순서를 정리했습니다. 신호가 예상보다 적을 때는 하단의
+          <a href="#faq-no-signal">FAQ — 왜 지금 Buy/Sell이 안 나오나요?</a>도 함께 보세요. 아래 예시 도해는 교육용이며,
+          실제 TV 화면과 동일할 필요는 없습니다.
         </p>
       </header>
 
@@ -108,16 +110,16 @@
           <li><a href="#signals">Signals — 표시와 알림·웹훅</a></li>
           <li><a href="#risk">Risk — 손절·쿨다운·트레일</a></li>
           <li><a href="#workflow">권장 작업 순서</a></li>
+          <li><a href="#faq-no-signal">FAQ — 왜 지금 Buy/Sell이 안 나오나요?</a></li>
         </ol>
       </nav>
 
       <article class="doc-section" id="mode">
         <h2>MODE — Entry Mode(Input Mode)</h2>
         <p>
-          <strong>Conservative</strong>는 밴드(상·하단)를 가격이 넘나드는 흐름에서 진입합니다.
-          <strong>①</strong> 직전 봉과 이번 봉 <strong>종가</strong> 기준으로 하단/상단을 뚫고 들어오는 경우(<code>crossover/crossunder(close, …)</code>),
-          <strong>②</strong> <strong>같은 봉 안에서만</strong> 시가·저가가 하단 아래(또는 상단 위)로 갔다가 종가(실시간에서는 현재가에 해당)가 밴드 안쪽으로 회복하는 경우도 함께 봅니다.
-          <strong>Attack</strong>은 밴드 근처만 와도(설정 비율 이내) 더 이른 진입을 허용합니다. 같은 시장이라도 신호 빈도·승패 패턴이 달라질 수
+          <strong>Conservative</strong>는 완성·진행 봉의 <strong>OHLC</strong>가 밴드(상·하단)를 한 봉 안에서 위·아래로 모두 관통하는
+          <strong>가로지름(straddle)</strong>일 때만 진입 조건을 봅니다(롱: <code>high &gt; lower</code> 이고 <code>low &lt; lower</code>, 숏은 상단 밴드에 대칭).
+          <strong>Attack</strong>은 밴드 근처(반밴딩 대비 %)만 와도 더 이른 진입을 허용합니다. 같은 시장이라도 신호 빈도·승패 패턴이 달라질 수
           있으므로, <strong>먼저 차트 종류·주기를 고른 뒤</strong> 한쪽 모드로만 충분히 익혀 보는 것이 좋습니다.
         </p>
         <ul class="doc-steps" style="list-style: disc; padding-left: 1.25rem">
@@ -208,6 +210,40 @@
           질문·개선 요청은 <a href="../boards/index.html?board=qa">모임터 · 질문과 답변</a> 또는
           <a href="../contact/index.html">문의</a>로 남겨 주세요.
         </p>
+      </article>
+
+      <article class="doc-section doc-section--soft" id="faq-no-signal">
+        <h2>FAQ — 왜 지금 Buy/Sell이 안 나오나요?</h2>
+        <p>
+          전략은 OHLC·밴드 조건만 본다고 해서 매수/매도가 무조건 나오지는 않습니다. TV 스크립트 안에서
+          <strong>진입 허용 여부(<code>canEnter</code>)</strong>를 한 번에 검사합니다. 차트 우측 하단 정보 패널과 요약 레이블의 <strong>Filters</strong>
+          줄(예: <em>volatile window</em>는 개장·아침 초 변동 창 차단 설정)과 맞춰 보시면 됩니다.
+        </p>
+        <dl class="doc-dl">
+          <dt>같은 봉에 청산 조건이 켜진 경우</dt>
+          <dd>
+            해당 봉에서 익절·고정 스탑·트레일 스탑 중 하나라도 발생 조건을 만족하면, 과도한 즉시 재진입을 막기 위해
+            <strong>그 봉에서는 신규 진입이 허용되지 않습니다</strong>. 패턴이 빗나가거나 “바로 빠져나가는 장”에서는 이 때문에 기대 신호와 어긋나 보일 수 있습니다.
+          </dd>
+          <dt>포지션이 비어 있지 않을 때</dt>
+          <dd>한 방향 포지션(<code>pyramiding=0</code>)이 있는 동안에는 반대쪽 진입 신호 규칙과 별개로 <strong>신규 진입이 성립하지 않습니다</strong>.</dd>
+          <dt>그 밖의 Filters</dt>
+          <dd>
+            <strong>변동 큰 장 시작 구간 진입 차단</strong>, <strong>고정 손절 후 재진입 금지(봉 수)</strong>, <strong>진입 신호 최소 간격</strong>,
+            <strong>연속 손실 후 봉 쿨다운</strong>, <strong>당일 손실 합산 N회 후 시그널 정지</strong> 등이 켜져 있거나 조건을 만족하면 그때도 진입은 막힙니다.
+            당일 손실 집계는 <strong>스크립트를 차트에 붙인 시점 이후 새로 완결된 종료 순번부터</strong> 셉니다.
+          </dd>
+        </dl>
+
+        <h3 style="margin-top: 1.25rem; font-size: 1.05rem">보안·연동 참고</h3>
+        <ul class="doc-steps" style="list-style: disc; padding-left: 1.25rem; margin-bottom: 0">
+          <li>
+            <strong>웹훅 URL·중계 서버 주소는 비공개로 관리</strong>하세요. 알림 채널에 URL이 노출되면 타인 트래픽이 들어올 수 있습니다.
+          </li>
+          <li>
+            JSON 본문의 <code>license_pack</code> 등은 배포 빌드를 구분하는 용도이며 API 비밀키가 아닙니다. 브로커·거래소 API 키는 알림 설정에 두지 마세요.
+          </li>
+        </ul>
       </article>
 
       <div class="terms-box" style="margin-top: 1.5rem">

@@ -643,6 +643,93 @@ html[data-theme="dark"] .ml-cloud-care__notice {
   background: #fffef9;
 }
 
+/* 매직 차트 이미지 아래 · 옵티마이징·손절·당일 손실 합산 안내 */
+.ml-chart-guide {
+  margin: 0 0 1.08rem;
+  padding: clamp(1rem, 2.8vw, 1.18rem);
+  border-radius: 15px;
+  background:
+    radial-gradient(circle at 100% -8%, rgba(47, 111, 79, 0.1), transparent 52%),
+    rgba(253, 255, 252, 0.96);
+  border: 1px solid rgba(47, 111, 79, 0.11);
+  box-shadow:
+    0 10px 28px rgba(47, 111, 79, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88);
+}
+
+.ml-chart-guide > .ml-subh:first-child {
+  margin-top: 0;
+}
+
+.ml-chart-guide p {
+  margin: 0 0 0.62rem;
+  font-size: 0.935rem;
+  line-height: 1.67;
+  color: #38322c;
+}
+
+.ml-chart-guide p:last-child {
+  margin-bottom: 0;
+}
+
+.ml-chart-guide strong {
+  color: #244a3d;
+  font-weight: 900;
+}
+
+.ml-chart-guide a {
+  color: #237355;
+  font-weight: 800;
+}
+
+.ml-chart-guide a:hover,
+.ml-chart-guide a:focus-visible {
+  color: #1a5942;
+}
+
+.ml-chart-guide a:focus-visible {
+  outline: 2px solid rgba(47, 111, 79, 0.45);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.ml-chart-guide__lead {
+  font-weight: 540;
+}
+
+.ml-chart-guide__note {
+  font-weight: 540;
+}
+
+.ml-chart-guide__footnote {
+  padding: 0.68rem 0.74rem;
+  margin-top: -0.1rem !important;
+  margin-bottom: 0.55rem !important;
+  font-size: 0.9rem !important;
+  line-height: 1.62 !important;
+  color: #4f433b;
+  background: rgba(255, 255, 250, 0.88);
+  border-radius: 10px;
+  border-left: 3px solid rgba(47, 111, 79, 0.35);
+}
+
+.ml-chart-guide__books-note {
+  margin: 0 0 0;
+  padding: 0.75rem 0.82rem;
+  font-size: 0.895rem !important;
+  line-height: 1.7 !important;
+  font-weight: 520;
+  color: #473d36;
+  background: rgba(252, 248, 240, 0.95);
+  border-radius: 10px;
+  border: 1px solid rgba(199, 91, 74, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+
+.ml-chart-guide__books-note strong {
+  color: #284034;
+}
+
 .ml-manifesto__body {
   padding: 1.2rem 1.2rem 1.28rem;
   border-radius: 16px;
@@ -1371,6 +1458,48 @@ html[data-theme="dark"] .ml-cloud-care__notice {
   color: #1a1a18;
 }
 
+/* 필독: 거래량·틱 차트 원칙(핵심 안내) */
+.ml-must-read__volume-callout {
+  margin: 0 0 1.2rem;
+  padding: clamp(1rem, 3vw, 1.35rem) clamp(1rem, 2.8vw, 1.35rem);
+  border-radius: 0.9rem;
+  border: 2px solid rgba(47, 111, 79, 0.42);
+  border-left: 8px solid var(--ci-green-deep, #2f6f4f);
+  background:
+    linear-gradient(135deg, rgba(225, 248, 235, 0.96) 0%, rgba(255, 255, 255, 0.96) 50%, rgba(210, 235, 220, 0.55) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.88),
+    0 8px 24px rgba(47, 111, 79, 0.14);
+}
+
+.ml-must-read__volume-callout__quote {
+  margin: 0 0 0.72rem;
+  padding: 0;
+  font-size: clamp(1.12rem, 3.35vw, 1.52rem);
+  font-weight: 950;
+  letter-spacing: -0.04em;
+  line-height: 1.32;
+  color: #113528;
+}
+
+.ml-must-read__volume-callout__body {
+  margin: 0;
+  font-size: clamp(1rem, 2.4vw, 1.09rem);
+  line-height: 1.74;
+  color: rgba(35, 28, 22, 0.95);
+}
+
+.ml-must-read__volume-callout__body strong {
+  font-weight: 950;
+  color: var(--ci-green-deep, #1a4d3a);
+}
+
+.ml-must-read__volume-callout__body a {
+  font-weight: 800;
+  color: var(--ci-green-deep, #2f6f4f);
+  text-underline-offset: 0.15em;
+}
+
 .ml-must-read__list {
   margin: 0 0 1.05rem;
   padding-left: 1.2rem;
@@ -1421,6 +1550,11 @@ html[data-theme="dark"] .ml-cloud-care__notice {
     margin-right: -0.25rem;
     padding-left: 0.9rem;
     padding-right: 0.9rem;
+  }
+
+  .ml-must-read__volume-callout {
+    padding-left: 0.88rem;
+    padding-right: 0.88rem;
   }
 
   .ml-principles {

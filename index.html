@@ -107,6 +107,19 @@
           이 지표는 <strong>신호만 따라가면</strong> 되는 도구가 아닙니다. 아래를 갖추지 않으면
           <strong>수익을 내기 매우 어렵습니다.</strong> 짧게 읽고, 차트 앞에서 다시 떠올려 보세요.
         </p>
+        <aside class="ml-must-read__volume-callout" role="region" aria-labelledby="volume-tick-callout-quote">
+          <p class="ml-must-read__volume-callout__quote" id="volume-tick-callout-quote">
+            가격은 속일 수 있어도, 거래량은 속일 수 없다.
+          </p>
+          <p class="ml-must-read__volume-callout__body">
+            시장을 볼 때도 그 전제가 가까울 때가 많습니다—의미 있는 축은
+            <strong>체결·활동이 쌓이는 틱(Tick)</strong> 쪽입니다. 시간봉만 고정해 두기보다
+            <strong>틱 차트를 가급적 쓰시길 적극 권장</strong>합니다. 특히 바 단위 해석에서는
+            <strong>1000틱 봉</strong> 조합을 <strong>특별히 적극 권장</strong>합니다.
+            설정은 <a href="guide/usage.html">TradingView 안내</a>와
+            <a href="guide/usage-mt5.html#tick-chart">MT5 틱 차트</a>를 함께 확인해 주세요.
+          </p>
+        </aside>
         <ul class="ml-must-read__list">
           <li>
             <strong>진입은 자주 할 필요가 없습니다.</strong> 오히려 <strong>늦어도 괜찮고</strong>, 횟수를 줄여도 됩니다.
@@ -312,6 +325,67 @@
           </figcaption>
         </figure>
 
+        <div class="ml-chart-guide" aria-labelledby="ml-chart-settings-h">
+          <h3 class="ml-subh" id="ml-chart-settings-h">매직 차트 · 세팅을 어떻게 잡나요?</h3>
+          <p class="ml-chart-guide__lead">
+            TradingView 스크립트의 <strong>Adjust</strong>·<strong>Risk</strong>·<strong>Filters</strong> 그룹과 직결된 내용이에요.
+            특히 Filters에는 한국·미국 현물처럼 <strong>장 시작 무렵 노이즈가 큰 시간대 진입만 막는 «volatile window»</strong>(변동 시작 창) 옵션과 손실 쿨다운·당일 합산 정지 등이 들어 있습니다.
+            숫자 한 번에 크게 바꾸기보다 시간대·종목 특성을 보며 조금씩 맞추는 걸 추천합니다.
+            같은 항목은 <a href="guide/magictrading-strategy-inputs-ko.html">MagicTrading 입력 가이드</a>와
+            <a href="guide/magictrading-strategy-inputs-ko.html#faq-no-signal">신호가 안 나올 때 FAQ</a>에서도 이어 집니다.
+          </p>
+          <h3 class="ml-subh" id="ml-chart-opt-h">차트 옵티마이징(반밴딩·반응 속도)</h3>
+          <p>
+            <strong>Entry Mode</strong>에서 완성봉 기준 교차 규칙(Conservative)과 밴드 근처 슬라이더(Attack)를 고릅니다.
+            간격 조절의 핵심은 <strong>Base R</strong>와 <strong>Fine Tune</strong>예요 — 수동으로 <strong>Manual BaseR</strong>을 넣거나 0으로 두고 자동에 맡긴 뒤, <strong>Auto Fine Tune</strong> 또는 <strong>Manual Fine Tune 슬라이더</strong>로 변동 구간(ATR 성격) 반영 정도만 조입니다.
+            틱 차트에서는 봉 간격 해석이 달라져 밴드가 넓거나 좁게 느껴질 수 있어, 한 종목 안에서 소구간 테스트 후 고정하는 편이 안전합니다.
+          </p>
+          <h3 class="ml-subh" id="ml-chart-stop-h">손절 쪽 세팅</h3>
+          <p>
+            <strong>Risk</strong>에서 밴드 밖으로 얼마나 두고 손절선을 깔지(<strong>손절 라인 · 반밴딩 %</strong>)를 정하고,
+            필요하면 <strong>평단 대비 손절 한도(%)</strong>로 “그릇”을 더 못 줄입니다(0이면 밴드 규칙만 사용).
+            <strong>손절 후 재진입 금지(봉 수)</strong>는 고정 스탑이 난 직후 연속 까먹임을 줄이려는 가드이고,
+            <strong>진입 신호 최소 간격(봉 수)</strong>은 같은 방향 신호 폭발을 줄입니다.
+            <strong>Use Trailing Stop</strong>을 쓰실 때는 Trail Start·Offset(반밴딩 비율)로 초반 변동 속 이탈과 추세 유지 사이 균형을 맞춥니다.
+          </p>
+          <h3 class="ml-subh" id="ml-chart-filters-volatile-h">Filters · 변동 시작 창(volatile window)</h3>
+          <p>
+            스크립트 입력의 <strong>「변동 큰 장 시작 구간 진입 차단」</strong>은 차트 시간대가 아니라
+            <strong>개장·동시호가 직후 같은 «노이즈가 많은 구간만» 새 진입을 잠깐 막는</strong> 용도입니다.
+            TV 차트 레이블 요약 줄에는 같은 의미가 <strong>volatile window</strong>로 적혀 있습니다(예전처럼 “세션” 전체가 막히는 기능이 아니라고 보시면 됩니다).
+          </p>
+          <p class="ml-soft-note" style="margin-top: 0.5rem">
+            패턴과 맞아도 매수·매도가 안 뜰 때에는 같은 봉에 청산이 겹치는지·쿨다운·당일 손실 합산까지
+            함께 보셔야 합니다. 묶어서 설명해 둔 <a href="guide/magictrading-strategy-inputs-ko.html#faq-no-signal">FAQ(왜 신호가 안 나오나요?)</a>를 참고하세요.
+          </p>
+          <h3 class="ml-subh" id="ml-chart-daily-loss-h">연속 손실 쿨다운과 당일 손실 합산 차단(Risk first)</h3>
+          <p class="ml-chart-guide__note">
+            <strong>두 단이 다른 계층</strong>이에요.
+            하나는 같은 날이라도 시간이 좀 걸린 뒤 다시 들어오기 전 쉬라는 “<strong>연속 손실 후 진입 금지(봉 쿨다운)</strong>”입니다 —
+            이쪽은 패배가 <strong>연속으로</strong> 쌓이는 조건(전략 <strong>청산 손익</strong> 기준)·몇 번이면 멈출지·멈춘 뒤 금지 봉 수를 세팅합니다.
+            다른 하나는 <strong>당일 안에서 손실이 몇 번 났는지</strong>만 봅니다. 중간에 <strong>수익 청산</strong>이 몇 번이든 있어도 상관 없고,
+            같은 거래일(선택한 타임존의 자정 기준)·<strong>손실로 끝난 청산</strong>(순손 기준 마이너스)만 <strong>하루 통틀어 합산</strong>합니다.
+            이 집계는 <strong>스크립트를 차트에 붙였을 때의 초기 상태 이후 새로 완결된 종료 순번</strong>부터만 씁니다—예전 깊숙히 시뮬된 과거 종료건을 뒤져서 미리 카운팅하지 않으며, 실제 주문 실행 여부가 아니라 <strong>시그널·전략 청산</strong> 기준입니다.
+            예를 들어 기본 목표가 3이라면 하루에 손실 청산만 세 번이면 그날 <strong>잔여 시그널이 멈춥니다.</strong>
+            수익으로 다시 카운터를 깎거나 0으로 돌려놓지 않습니다.
+          </p>
+          <p class="ml-chart-guide__footnote">
+            <strong>목표 회수</strong>는 보통 기본값 <strong>3회 손실 합산</strong>으로 두되, 사용자가 <strong>2~6회</strong>까지 올릴 수 있습니다.
+            빌드·시스템에서는 <strong>6회 초과가 불가</strong>(입력 최대값·코드 상한 재캡)하고,
+            하루에 손실이 반복되는 날 <strong>과매매와 도박성 진입을 끊는 계좌 보호용 브레이크</strong>로 이해하면 됩니다. 다음 거래일(자정 넘김)에 합산 카운터와 당일 차단 상태가 초기화됩니다.
+          </p>
+          <p class="ml-chart-guide__books-note">
+            실전 교재에서는 <strong>하루 손실 한도, 일주 단위 한도, 한 달 단위 한도</strong>, 그리고 <strong>손실 나면 무조건 멈추고 쉬라</strong>는 말을 자주 접합니다.
+            또 <strong>알렉산더 엘더</strong> 등이 논하는 식으로, <strong>자본금 대비 이번에 얼마만 깎을지</strong>를 박음질처럼 정해 두려는 접근(<strong>4% 같은 틀로 자주 회자되는 비율 제한 아이디어</strong>)도 많이 나옵니다.
+            문제는 TradingView 차트 한개의 지표나 전략이 <strong>개인별 계좌 잔고·레버리지·랏</strong>을 알 수 없다는 거예요. 그래서 “그 계좌엔 비율 X%”처럼 <strong>누구에게나 통일 적용 가능한 숫자</strong>는 여기 세팅으로 대신 줄 수 없고,
+            <strong>강제 거래 한도 없이 놔두면</strong> 감으로만 무너지기도 쉬워서,
+
+            현재 버전에서는 <strong>당일 안 손실 청산 횟수</strong>로 가장 두께가 얇은 <strong>강제 휴식(시그널 정지)</strong>을 거는 쪽으로 기울였습니다.
+            카운팅은 <strong>차트에 적용된 뒤</strong>, 그 순간부터 이후에 닫히는 종료 순번부터만 포함하고, 왼쪽에 깔려 있는 옛 시뮬 결과는 집계에 섞지 않습니다.
+            일·주·월 전체 피라미드와 레버별 % 한도는 <strong>여전히 종이 규칙과 포지 크기</strong>로 본인이 메워 넣어 주셔야 합니다.
+          </p>
+        </div>
+
         <div class="ml-manifesto__body">
           <h3 class="ml-subh">이런 분께 읽히면 좋겠어요</h3>
           <p>
@@ -365,6 +439,7 @@
             <ul class="ml-details__books">
               <li>벤저민 그레이엄 — 『지적 투자자』</li>
               <li>안드레 코스톨라니 — 『증권시장의 심리』 등</li>
+              <li>알렉산더 엘더 — 「자금·위험·멈출 타이밍」을 많이 논함(실전 기록·판본마다 번역 제목 상이함)</li>
               <li>대니얼 카너먼 — 『생각에 관한 생각』</li>
               <li>마크 더글라스 — 『트레이딩 인 더 존』</li>
             </ul>
