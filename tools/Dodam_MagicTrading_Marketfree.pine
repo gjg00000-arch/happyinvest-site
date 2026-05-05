@@ -278,8 +278,6 @@ magicExit = not magicStop and not magicTrailStop and (exitCrossCenter or exitSpa
 magicTrailStopOnce = magicTrailStop and not magicTrailStop[1]
 magicStopOnce = magicStop and not magicStop[1]
 magicExitOnce = magicExit and not magicExit[1]
-magicBuyOnce = magicBuy and not magicBuy[1]
-magicSellOnce = magicSell and not magicSell[1]
 var int lastStopBar = na
 if magicStop or magicTrailStop
     lastStopBar := bar_index
@@ -287,6 +285,22 @@ cooldownActive = not na(lastStopBar) and bar_index - lastStopBar <= reentryCoold
 canEnter = isFlat and not cooldownActive and not magicExit and not magicStop and not magicTrailStop
 magicBuy = entryBuyRaw and canEnter
 magicSell = entrySellRaw and canEnter
+magicBuyOnce = magicBuy and not magicBuy[1]
+magicSellOnce = magicSell and not magicSell[1]
+// 같은 보유 라운드에서 청산(TRAIL/STOP/EXIT) 표시·알림은 최초 1회만 — 무포지션 또는 신규 진입 시 리셋
+var bool exitConsumed = false
+if strategy.position_size == 0
+    exitConsumed := false
+else if strategy.position_size != 0 and strategy.position_size[1] == 0
+    exitConsumed := false
+exitRaw = magicTrailStopOnce or magicStopOnce or magicExitOnce
+holding = strategy.position_size != 0
+exitTrigger = holding and not exitConsumed and exitRaw
+if exitTrigger
+    exitConsumed := true
+showTrailExit = exitTrigger and magicTrailStopOnce
+showStopExit = exitTrigger and magicStopOnce and not magicTrailStopOnce
+showProfitExit = exitTrigger and magicExitOnce and not magicTrailStopOnce and not magicStopOnce
 if licenseOk and magicSell
     fixedShortStop := dynamicShortStop
     strategy.entry("S", strategy.short, qty = 1, comment = entryMode == "Attack" ? "Attack Short" : "Short Entry")
@@ -303,32 +317,32 @@ if useAlerts and barstate.isconfirmed and licenseOk
             alert(f_jsonBuy(), alert.freq_once_per_bar_close)
         if magicSellOnce
             alert(f_jsonSell(), alert.freq_once_per_bar_close)
-        if magicExitOnce
-            alert(f_jsonExit(), alert.freq_once_per_bar_close)
-        if magicStopOnce
-            alert(f_jsonStop(), alert.freq_once_per_bar_close)
-        if magicTrailStopOnce
+        if showTrailExit
             alert(f_jsonTrail(), alert.freq_once_per_bar_close)
+        else if showStopExit
+            alert(f_jsonStop(), alert.freq_once_per_bar_close)
+        else if showProfitExit
+            alert(f_jsonExit(), alert.freq_once_per_bar_close)
     else
         if magicBuyOnce
             alert("MagicCore · " + entryMode + " Buy signal", alert.freq_once_per_bar_close)
         if magicSellOnce
             alert("MagicCore · " + entryMode + " Sell signal", alert.freq_once_per_bar_close)
-        if magicExitOnce
-            alert("MagicCore · Exit signal", alert.freq_once_per_bar_close)
-        if magicStopOnce
-            alert("MagicCore · Fixed stop signal", alert.freq_once_per_bar_close)
-        if magicTrailStopOnce
+        if showTrailExit
             alert("MagicCore · Trailing stop signal", alert.freq_once_per_bar_close)
+        else if showStopExit
+            alert("MagicCore · Fixed stop signal", alert.freq_once_per_bar_close)
+        else if showProfitExit
+            alert("MagicCore · Exit signal", alert.freq_once_per_bar_close)
 varip bool _rbStartSent = false
 if sendRainbowStart and showRainbow and barstate.isconfirmed and barstate.isrealtime and licenseOk and not _rbStartSent
     alert(f_jsonRainbowStart(), alert.freq_once_per_bar_close)
     _rbStartSent := true
 alertcondition(licenseOk and useAlerts and magicBuyOnce, "MagicCore Buy", "MagicCore · Buy signal")
 alertcondition(licenseOk and useAlerts and magicSellOnce, "MagicCore Sell", "MagicCore · Sell signal")
-alertcondition(licenseOk and useAlerts and magicExitOnce, "MagicCore Exit", "MagicCore · Exit signal")
-alertcondition(licenseOk and useAlerts and magicStopOnce, "MagicCore Fixed Stop", "MagicCore · Fixed stop signal")
-alertcondition(licenseOk and useAlerts and magicTrailStopOnce, "MagicCore Trail Stop", "MagicCore · Trailing stop signal")
+alertcondition(licenseOk and useAlerts and showTrailExit, "MagicCore Trail Stop", "MagicCore · Trailing stop signal")
+alertcondition(licenseOk and useAlerts and showStopExit, "MagicCore Fixed Stop", "MagicCore · Fixed stop signal")
+alertcondition(licenseOk and useAlerts and showProfitExit, "MagicCore Exit", "MagicCore · Exit signal")
 
 closedRealizedApprox = strategy.netprofit - nz(strategy.openprofit, 0.0)
 var float simEqPeak = 0.0
@@ -364,9 +378,9 @@ plot(showTsfHighDots ? tsfStepHigh : na, title = "TSF 고점 (점)", color = col
 plot(showTsfLowDots ? tsfStepLow : na, title = "TSF 저점 (점)", color = colTsfLow, style = plot.style_circles, linewidth = dotWidth)
 plotshape(showSignals and magicBuyOnce, title = "MagicBuy", style = shape.triangleup, location = location.belowbar, size = size.small, color = color.lime, text = "BUY", textcolor = color.white)
 plotshape(showSignals and magicSellOnce, title = "MagicSell", style = shape.triangledown, location = location.abovebar, size = size.small, color = color.red, text = "SELL", textcolor = color.white)
-plotshape(showSignals and magicExitOnce ? close : na, title = "MagicExit", style = shape.xcross, location = location.absolute, size = size.small, color = color.yellow, text = "EXIT", textcolor = color.white)
-plotshape(showSignals and magicStopOnce ? close : na, title = "MagicFixedStop", style = shape.xcross, location = location.absolute, size = size.small, color = color.orange, text = "STOP", textcolor = color.white)
-plotshape(showSignals and magicTrailStopOnce ? close : na, title = "MagicTrailStop", style = shape.xcross, location = location.absolute, size = size.small, color = color.aqua, text = "TRAIL", textcolor = color.white)
+plotshape(showSignals and showProfitExit ? close : na, title = "MagicExit", style = shape.xcross, location = location.absolute, size = size.small, color = color.yellow, text = "EXIT", textcolor = color.white)
+plotshape(showSignals and showStopExit ? close : na, title = "MagicFixedStop", style = shape.xcross, location = location.absolute, size = size.small, color = color.orange, text = "STOP", textcolor = color.white)
+plotshape(showSignals and showTrailExit ? close : na, title = "MagicTrailStop", style = shape.xcross, location = location.absolute, size = size.small, color = color.aqua, text = "TRAIL", textcolor = color.white)
 plot(baseR, "Applied BaseR (%)", display = display.status_line)
 plot(baseRAuto, "Auto BaseR (%)", display = display.status_line)
 plot(fineTune, "Applied Fine Tune (x)", display = display.status_line)
