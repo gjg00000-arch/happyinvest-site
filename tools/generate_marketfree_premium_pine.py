@@ -239,9 +239,8 @@ dynamicLongStop = lower - stopBuffer
 dynamicShortStop = upper + stopBuffer
 longTarget = center - maxNearDist
 shortTarget = center + maxNearDist
-// Conservative 롱: 직전 음봉이 ML(lower) 아래까지 lowest 돌파 → 현재 봉 종가가 ML 상향 돌파(crossover)
-bearishPiercedML = close[1] < open[1] and low[1] < ML[1]
-conservativeBuyRaw = bearishPiercedML and ta.crossover(close, ML)
+// Conservative 롱(현재 봉만): 음봉 + 그 봉의 low가 ML 관통 + 종가는 ML 위(ML reclaim)
+conservativeBuyRaw = close < open and low < ML and close > ML
 conservativeSellRaw = ta.crossunder(close, MH)
 attackBuyRaw = low <= ML + attackEntryNearDist
 attackSellRaw = high >= MH - attackEntryNearDist
