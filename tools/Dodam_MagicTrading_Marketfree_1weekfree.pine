@@ -716,23 +716,23 @@ alertcondition(licenseOk and useAlerts and magicStop, "MagicCore Fixed Stop", "M
 alertcondition(licenseOk and useAlerts and trailAlertThisBar, "MagicCore Trail Stop", "MagicCore · Trailing stop — webhook: prefer alert() + JSON webhook")
 
 // ——— 플롯: Core 밴드 ———
-plot(center, "Center", color = color.green, linewidth = 5)
-plot(upper, "Upper", color = color.red, linewidth = 2)
-plot(lower, "Lower", color = color.rgb(0, 172, 193), linewidth = 2)
+plot(center, "Center", color = color.green, linewidth = 5, trackprice = false)
+plot(upper, "Upper", color = color.red, linewidth = 2, trackprice = false)
+plot(lower, "Lower", color = color.rgb(0, 172, 193), linewidth = 2, trackprice = false)
 
 // ——— 플롯: 레인보우 ———
-rb4 = plot(showRainbow ? T4_val : na, title = "RB T4", color = lineColRb(cT4, cBear4), linewidth = lineWRb)
-rb3 = plot(showRainbow ? T3_val : na, title = "RB T3", color = lineColRb(cT3, cBear3), linewidth = lineWRb)
-rb2 = plot(showRainbow ? T2_val : na, title = "RB T2", color = lineColRb(cT2, cBear2), linewidth = lineWRb)
-rbT = plot(showRainbow ? T_raw : na, title = "RB T", color = lineColRb(cT, cBearT), linewidth = lineWRb)
-rb2m = plot(showRainbow ? T2m_val : na, title = "RB T2-", color = lineColRb(cT2m, cBear2m), linewidth = lineWRb)
+rb4 = plot(showRainbow ? T4_val : na, title = "RB T4", color = lineColRb(cT4, cBear4), linewidth = lineWRb, trackprice = false)
+rb3 = plot(showRainbow ? T3_val : na, title = "RB T3", color = lineColRb(cT3, cBear3), linewidth = lineWRb, trackprice = false)
+rb2 = plot(showRainbow ? T2_val : na, title = "RB T2", color = lineColRb(cT2, cBear2), linewidth = lineWRb, trackprice = false)
+rbT = plot(showRainbow ? T_raw : na, title = "RB T", color = lineColRb(cT, cBearT), linewidth = lineWRb, trackprice = false)
+rb2m = plot(showRainbow ? T2m_val : na, title = "RB T2-", color = lineColRb(cT2m, cBear2m), linewidth = lineWRb, trackprice = false)
 fill(rb4, rb3, color = showRainbow ? bandColRb(cT4, cBear4) : na)
 fill(rb3, rb2, color = showRainbow ? bandColRb(cT3, cBear3) : na)
 fill(rb2, rbT, color = showRainbow ? bandColRb(cT2, cBear2) : na)
 fill(rbT, rb2m, color = showRainbow ? bandColRb(cT, cBearT) : na)
 
-plot(showTsfHighDots ? tsfStepHigh : na, title = "TSF 고점 (점)", color = colTsfHigh, style = plot.style_circles, linewidth = dotWidth)
-plot(showTsfLowDots ? tsfStepLow : na, title = "TSF 저점 (점)", color = colTsfLow, style = plot.style_circles, linewidth = dotWidth)
+plot(showTsfHighDots ? tsfStepHigh : na, title = "TSF 고점 (점)", color = colTsfHigh, style = plot.style_circles, linewidth = dotWidth, trackprice = false)
+plot(showTsfLowDots ? tsfStepLow : na, title = "TSF 저점 (점)", color = colTsfLow, style = plot.style_circles, linewidth = dotWidth, trackprice = false)
 
 // ——— 시그널 모양 ———
 // 진입 표기 Y = 해당 봉 lower / upper (=플롯 밴드·JSON entry_anchor·band_edge·limit 주문가). 전략 기본 삼각형은 제외 후 본 신호만 권장.
@@ -742,10 +742,10 @@ plotshape(showSignals and not na(signalExitY) ? signalExitY : na, title = "Magic
 plotshape(showSignals and not na(signalFixedStopY) ? signalFixedStopY : na, title = "MagicFixedStop", style = shape.xcross, location = location.absolute, size = size.small, color = color.orange, text = "STOP", textcolor = color.white)
 plotshape(showSignals and not na(signalTrailY) ? signalTrailY : na, title = "MagicTrailStop", style = shape.xcross, location = location.absolute, size = size.small, color = color.aqua, text = "TRAIL", textcolor = color.white)
 
-plot(baseR, "Applied BaseR (%)", display = display.status_line)
-plot(baseRAuto, "Auto BaseR (%)", display = display.status_line)
-plot(fineTune, "Applied Fine Tune (x)", display = display.status_line)
-plot(rPct, "Applied R (%)", display = display.status_line)
+plot(baseR, "Applied BaseR (%)", display = display.status_line, trackprice = false)
+plot(baseRAuto, "Auto BaseR (%)", display = display.status_line, trackprice = false)
+plot(fineTune, "Applied Fine Tune (x)", display = display.status_line, trackprice = false)
+plot(rPct, "Applied R (%)", display = display.status_line, trackprice = false)
 
 // ——— 정보 패널 (posState·시뮬 손익) ———
 unrealPnl = posState == 0 or na(simEntryBandPx) ? 0.0 : posState == 1 ? f_pnlOneContract(simEntryBandPx, close, true) : f_pnlOneContract(simEntryBandPx, close, false)
