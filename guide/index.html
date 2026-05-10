@@ -85,6 +85,11 @@
           <span class="doc-summary-card__t">시그널 · 연동</span>
           <span class="doc-summary-card__d">웹훅 개요</span>
         </a>
+        <a class="doc-summary-card" href="../integrations/index.html#econ-calendar-cron">
+          <span class="doc-summary-card__k">04b</span>
+          <span class="doc-summary-card__t">경제 지표 알림</span>
+          <span class="doc-summary-card__d">Cron 웹훅 · 텔레그램</span>
+        </a>
       </div>
 
       <nav class="doc-toc" aria-label="목차">
@@ -98,6 +103,7 @@
           <li><a href="#mt5">MT5 — 파일 설치 · 틱 차트에 붙이기</a></li>
           <li><a href="#tg">텔레그램 Chat ID</a></li>
           <li><a href="#signals">시그널 웹훅 (선택)</a></li>
+          <li><a href="../integrations/index.html#econ-calendar-cron">경제 지표 사전 알림 — Cron 웹훅</a></li>
           <li><a href="#tips">매직라인 운용 팁</a></li>
           <li><a href="#support">모임터 · 약관 · 문의</a></li>
         </ol>
@@ -188,6 +194,11 @@
           <li>인증: 헤더 <code>X-Webhook-Secret</code>, <code>Authorization: Bearer …</code>, 또는 쿼리 <code>?secret=</code> (서버 환경변수와 동일 값)</li>
           <li>본문은 JSON·텍스트 등 raw 수신을 전제로 합니다. 응답의 <code>telegram.*</code> 필드로 전달 결과를 확인합니다.</li>
         </ul>
+        <p style="margin-top: 1rem">
+          <strong>경제 지표(고임팩트) 텔레그램 사전 알림</strong>은 TRV 시그널과 별도입니다. Finnhub 캘린더를 당겨오고, 스케줄러가
+          <code>POST /v1/cron/economic-calendar</code>로 백엔드를 깨우는 방식입니다. 절차·Docker·Nginx·<code>curl</code> 예시는
+          <a href="../integrations/index.html#econ-calendar-cron">연동 — 경제 지표 Cron 웹훅</a>과 저장소 <code>server/economic-cron/DEPLOY.md</code>를 보세요.
+        </p>
       </article>
 
       <article class="doc-section" id="tips">

@@ -1,0 +1,14 @@
+{
+  "name": "economic-cron-webhook",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "dependencies": {
+    "luxon": "^3.5.0"
+  }
+}

@@ -46,6 +46,26 @@ trailOffsetHalfBandPct = input.float(18.0, "Trail Offset (% of half band)", minv
 blockEntryNearSessionClose = input.bool(true, "장마감 전 진입 금지", group = "Session", tooltip = "해당 일의 정규장 일봉 마감 시각까지 남은 시간이 아래 분 이하면 신규 진입만 막습니다. 청산은 유지.")
 sessionCloseBlockMinutes = input.int(30, "장마감 전 (분) 진입 금지", minval = 5, maxval = 180, group = "Session")
 
+// ——— 진입 제한 필터 (시간대=IANA, 서머타임 자동) ———
+useEntryTzWindowFilters = input.bool(false, "시간대 창 진입 금지(개장·정산)", group = "Entry filters", tooltip = "켜면 아래 분 단위 창에서만 신규 진입을 막습니다. 24x7·크립토·포렉스는 Session과 동일하게 자동 스킵. 심볼별 정산·개장 시각은 직접 맞추세요.")
+sessionFilterTz = input.string("America/New_York", "기준 타임존 (IANA)", group = "Entry filters", tooltip = "예: 미국 선물·주식 서머타임 반영은 America/New_York")
+postOpenBlockMinutes = input.int(30, "개장/정산 직후 진입 금지 (분)", minval = 1, maxval = 120, group = "Entry filters", tooltip = "정산 마감 직후·정산 후 재개장·정규장 개장 각각 이 길이만큼 막음.")
+useBlockAfterSettleClose = input.bool(true, "정산 마감 시각 이후 N분 진입 금지", group = "Entry filters")
+settleCloseHour = input.int(17, "정산 마감 시각 (시, 0–23)", minval = 0, maxval = 23, group = "Entry filters")
+settleCloseMinute = input.int(0, "정산 마감 시각 (분, 0–59)", minval = 0, maxval = 59, group = "Entry filters", tooltip = "예: ES 일 종가 17:00 ET → 17 / 0. 상품·거래소에 맞게 조정.")
+useBlockAfterReopen = input.bool(true, "정산 후 재개장 시각 이후 N분 진입 금지", group = "Entry filters", tooltip = "전일 정산·휴장 후 전자장 등 재오픈 시각.")
+reopenHour = input.int(18, "재개장 시각 (시)", minval = 0, maxval = 23, group = "Entry filters", tooltip = "예: CME Globex 일요일/월요일 18:00 ET 근처 → 18")
+reopenMinute = input.int(0, "재개장 시각 (분)", minval = 0, maxval = 59, group = "Entry filters")
+useBlockAfterRthOpen = input.bool(true, "정규장 개장 시각 이후 N분 진입 금지", group = "Entry filters")
+rthOpenHour = input.int(9, "정규장 개장 (시)", minval = 0, maxval = 23, group = "Entry filters", tooltip = "예: 미국 주식·RTH 9:30 ET → 시 9, 분 30")
+rthOpenMinute = input.int(30, "정규장 개장 (분)", minval = 0, maxval = 59, group = "Entry filters")
+
+useLossBarCooldown = input.bool(true, "실현 손실 후 봉 쿨다운", group = "Entry filters", tooltip = "한 번이라도 손실로 청산되면 이후 N봉 동안 신규 진입 금지.")
+lossCooldownBars = input.int(5, "손실 후 쿨다운 (봉 수)", minval = 1, maxval = 50, group = "Entry filters")
+
+useFiveLossDayHalt = input.bool(true, "당일 연속 손실 N회 시 진입 중지", group = "Entry filters", tooltip = "같은 달력일(기준 타임존)에 연속으로 손실 청산이 N회면 그날은 더 이상 신규 진입 없음. 익절·무손익 청산 시 연속 카운트 리셋.")
+maxConsecLossHalt = input.int(5, "연속 손실 허용 횟수", minval = 2, maxval = 20, group = "Entry filters", tooltip = "이 횟수에 도달하면 당일 진입 중지.")
+
 // ——— 마켓 잠금 (마켓별 배포 빌드마다 아래 문자열만 바꿔 컴파일) ———
 // 허용 키: stocks | funds | futures | forex | crypto | indices | bonds | economy | options | marketfree | marketfree_1weekfree
 // bonds: 일부 채권 상품은 TV에서 syminfo.type이 stock 등으로 표시될 수 있음 — 로드 오류 시 Pine 콘솔에서 실제 타입 확인 후 분기 수정.
@@ -219,6 +239,47 @@ minsToRegularDayClose = (dayBarCloseTime - time_close) / 60000.0
 entryBlockedNearSessionEnd =
      blockEntryNearSessionClose and not f_skip_session_close_filter() and not na(minsToRegularDayClose) and minsToRegularDayClose >= 0.0 and minsToRegularDayClose <= sessionCloseBlockMinutes
 
+// ——— IANA 타임존: 정산 마감 직후 / 정산 후 재개장 / 정규 개장 각각 N분 진입 금지 (서머타임은 타임존 DB에 따름) ———
+f_minutesFromMidnight(int t, string tz) =>
+    hour(t, tz) * 60 + minute(t, tz)
+
+f_inBlockedWindowAfter(int eventMin, int blockMins, int modNow) =>
+    eventMin >= 0 and modNow >= eventMin and modNow < eventMin + blockMins
+
+settleMinOfDay = settleCloseHour * 60 + settleCloseMinute
+reopenMinOfDay = reopenHour * 60 + reopenMinute
+rthMinOfDay = rthOpenHour * 60 + rthOpenMinute
+modNowTz = f_minutesFromMidnight(time, sessionFilterTz)
+
+entryBlockedTzWindows =
+     useEntryTzWindowFilters and not f_skip_session_close_filter() and postOpenBlockMinutes > 0 and (
+         (useBlockAfterSettleClose and f_inBlockedWindowAfter(settleMinOfDay, postOpenBlockMinutes, modNowTz)) or
+         (useBlockAfterReopen and f_inBlockedWindowAfter(reopenMinOfDay, postOpenBlockMinutes, modNowTz)) or
+         (useBlockAfterRthOpen and f_inBlockedWindowAfter(rthMinOfDay, postOpenBlockMinutes, modNowTz))
+     )
+
+// 손실 필터 상태 (청산 시 cumRealizedPnl 직후 인라인으로 갱신 — 사용자 함수는 전역 var를 수정할 수 없음)
+var int lastLossExitBar = na
+var int filtConsecLoss = 0
+var string filtDayKeyStr = ""
+var bool filtDayHalt = false
+
+curFiltDay = str.format_time(time, "yyyyMMdd", sessionFilterTz)
+if curFiltDay != filtDayKeyStr
+    filtDayKeyStr := curFiltDay
+    filtConsecLoss := 0
+    filtDayHalt := false
+
+// flatSessionOk(이번 봉 초반·청산 전 lastLoss) / canEnter(청산 후 lastLoss) 각각에서 재평가
+f_lossCooldownActive() =>
+    useLossBarCooldown and not na(lastLossExitBar) and bar_index <= lastLossExitBar + lossCooldownBars
+
+f_fiveLossDayHaltActive() =>
+    useFiveLossDayHalt and filtDayHalt
+
+entryBlockedForEntry() =>
+    entryBlockedNearSessionEnd or entryBlockedTzWindows or f_lossCooldownActive() or f_fiveLossDayHaltActive()
+
 // 로직·손익 기준 포지션: -1 숏, 0 플랫, +1 롱 (최대 1계약, 보유 중 재진입 무시)
 var int posState = 0
 var float simEntryBandPx = na
@@ -331,7 +392,7 @@ entrySellRaw = bar_index > 0 and high[1] > upper[1] and ta.crossunder(close, upp
 entryBuyRaw = bar_index > 0 and low[1] < lower[1] and ta.crossover(close, lower)
 
 // 이번 봉 예정 롱·숏 진입 후보(트레일용 고점/저점 — 진입 봉부터 누적)
-flatSessionOk = posState == 0 and not entryBlockedNearSessionEnd
+flatSessionOk = posState == 0 and not entryBlockedForEntry()
 rawLongBestBar = posState == 1 or (entryBuyRaw and flatSessionOk)
 rawShortBestBar = posState == -1 or (entrySellRaw and flatSessionOk)
 
@@ -420,17 +481,41 @@ var tbTradeConnLines = array.new_line(0)
 // strategy.exit(limit+stop)는 TV가 차트에 익절/손절 가격선 2개를 그림 → strategy.close만 사용.
 if licenseOk and isLong
     if magicStop
-        cumRealizedPnl += f_pnlOneContract(simEntryBandPx, longProtectStop, true)
+        pnlRegStep = f_pnlOneContract(simEntryBandPx, longProtectStop, true)
+        cumRealizedPnl += pnlRegStep
+        if pnlRegStep < -1e-8
+            lastLossExitBar := bar_index
+            filtConsecLoss += 1
+            if filtConsecLoss >= maxConsecLossHalt
+                filtDayHalt := true
+        else if pnlRegStep > 1e-8
+            filtConsecLoss := 0
         posState := 0
         simEntryBandPx := na
         strategy.close("L", comment = "FixedStop Long")
     else if magicTrailStop
-        cumRealizedPnl += f_pnlOneContract(simEntryBandPx, longTrailStop, true)
+        pnlRegStep = f_pnlOneContract(simEntryBandPx, longTrailStop, true)
+        cumRealizedPnl += pnlRegStep
+        if pnlRegStep < -1e-8
+            lastLossExitBar := bar_index
+            filtConsecLoss += 1
+            if filtConsecLoss >= maxConsecLossHalt
+                filtDayHalt := true
+        else if pnlRegStep > 1e-8
+            filtConsecLoss := 0
         posState := 0
         simEntryBandPx := na
         strategy.close("L", comment = "Trail Long")
     else if profitExitLong
-        cumRealizedPnl += f_pnlOneContract(simEntryBandPx, close, true)
+        pnlRegStep = f_pnlOneContract(simEntryBandPx, close, true)
+        cumRealizedPnl += pnlRegStep
+        if pnlRegStep < -1e-8
+            lastLossExitBar := bar_index
+            filtConsecLoss += 1
+            if filtConsecLoss >= maxConsecLossHalt
+                filtDayHalt := true
+        else if pnlRegStep > 1e-8
+            filtConsecLoss := 0
         posState := 0
         simEntryBandPx := na
         strategy.close("L", comment = "MagicExit Long")
@@ -438,24 +523,48 @@ if licenseOk and isLong
 
 if licenseOk and isShort
     if magicStop
-        cumRealizedPnl += f_pnlOneContract(simEntryBandPx, shortProtectStop, false)
+        pnlRegStep = f_pnlOneContract(simEntryBandPx, shortProtectStop, false)
+        cumRealizedPnl += pnlRegStep
+        if pnlRegStep < -1e-8
+            lastLossExitBar := bar_index
+            filtConsecLoss += 1
+            if filtConsecLoss >= maxConsecLossHalt
+                filtDayHalt := true
+        else if pnlRegStep > 1e-8
+            filtConsecLoss := 0
         posState := 0
         simEntryBandPx := na
         strategy.close("S", comment = "FixedStop Short")
     else if magicTrailStop
-        cumRealizedPnl += f_pnlOneContract(simEntryBandPx, shortTrailStop, false)
+        pnlRegStep = f_pnlOneContract(simEntryBandPx, shortTrailStop, false)
+        cumRealizedPnl += pnlRegStep
+        if pnlRegStep < -1e-8
+            lastLossExitBar := bar_index
+            filtConsecLoss += 1
+            if filtConsecLoss >= maxConsecLossHalt
+                filtDayHalt := true
+        else if pnlRegStep > 1e-8
+            filtConsecLoss := 0
         posState := 0
         simEntryBandPx := na
         strategy.close("S", comment = "Trail Short")
     else if profitExitShort
-        cumRealizedPnl += f_pnlOneContract(simEntryBandPx, close, false)
+        pnlRegStep = f_pnlOneContract(simEntryBandPx, close, false)
+        cumRealizedPnl += pnlRegStep
+        if pnlRegStep < -1e-8
+            lastLossExitBar := bar_index
+            filtConsecLoss += 1
+            if filtConsecLoss >= maxConsecLossHalt
+                filtDayHalt := true
+        else if pnlRegStep > 1e-8
+            filtConsecLoss := 0
         posState := 0
         simEntryBandPx := na
         strategy.close("S", comment = "MagicExit Short")
 
 
 // 진입 허용: 반드시 청산 처리(strategy.close) 이후의 posState — 보유(+1/-1) 중 동일 신호 재발동 시 추가 진입 불가
-canEnter = posState == 0 and not entryBlockedNearSessionEnd
+canEnter = posState == 0 and not entryBlockedForEntry()
 
 
 magicBuy = entryBuyRaw and canEnter
@@ -488,7 +597,15 @@ if licenseOk and posState == 0 and sameBarShortMagicExit
     strategy.entry("S", strategy.short, qty = 1, limit = upper, comment = "Short Entry")
 
 
-    cumRealizedPnl += f_pnlOneContract(upper, close, false)
+    pnlRegStep = f_pnlOneContract(upper, close, false)
+    cumRealizedPnl += pnlRegStep
+    if pnlRegStep < -1e-8
+        lastLossExitBar := bar_index
+        filtConsecLoss += 1
+        if filtConsecLoss >= maxConsecLossHalt
+            filtDayHalt := true
+    else if pnlRegStep > 1e-8
+        filtConsecLoss := 0
 
 
     posState := 0
@@ -530,7 +647,15 @@ else if licenseOk and posState == 0 and sameBarLongMagicExit
     strategy.entry("L", strategy.long, qty = 1, limit = lower, comment = "Long Entry")
 
 
-    cumRealizedPnl += f_pnlOneContract(lower, close, true)
+    pnlRegStep = f_pnlOneContract(lower, close, true)
+    cumRealizedPnl += pnlRegStep
+    if pnlRegStep < -1e-8
+        lastLossExitBar := bar_index
+        filtConsecLoss += 1
+        if filtConsecLoss >= maxConsecLossHalt
+            filtDayHalt := true
+    else if pnlRegStep > 1e-8
+        filtConsecLoss := 0
 
 
     posState := 0

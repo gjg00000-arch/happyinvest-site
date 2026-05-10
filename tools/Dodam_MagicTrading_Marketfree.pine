@@ -1,5 +1,6 @@
 //@version=5
 // Dodam_MagicTrading_Marketfree — 마켓 잠금: marketfree (MagicPremium TSF 레인보우 백업 · 수동 유지, 생성기 미덮어쓰기)
+// 진입 필터: 장마감 전·IANA 개장/정산 창·실현 손실 봉 쿨다운·당일 연속 손실 중지(Session / Entry filters)
 // posState: +1 롱 / -1 숏 / 0 무포지션 = strategy.position_size 동기
 strategy(
      "Dodam_MagicTrading_Marketfree",
@@ -28,6 +29,24 @@ attackEntryNearHalfBandPct = input.float(15.0, "Attack Entry Near Band (% of hal
 exitNearHalfBandPct = input.float(15.0, "Exit Near Center (% of half band)", minval = 0.0, step = 0.5, group = "Signals")
 stopBufferHalfBandPct = input.float(30.0, "Stop Buffer (% of half band)", minval = 0.0, step = 1.0, group = "Risk")
 reentryCooldownBars = input.int(3, "Re-entry Cooldown Bars After Stop", minval = 0, group = "Risk", tooltip = "스탑(손절·트레일 등 익절 MagicExit 외 청산) 체결 봉 이후 부가 조건 없이 이 봉 수만큼 재진입 금지.")
+blockEntryNearSessionClose = input.bool(true, "장마감 전 진입 금지", group = "Session", tooltip = "해당 일의 정규장 일봉 마감 시각까지 남은 시간이 아래 분 이하면 신규 진입만 막습니다. 청산은 유지.")
+sessionCloseBlockMinutes = input.int(30, "장마감 전 (분) 진입 금지", minval = 5, maxval = 180, group = "Session")
+useEntryTzWindowFilters = input.bool(false, "시간대 창 진입 금지(개장·정산)", group = "Entry filters", tooltip = "켜면 아래 분 단위 창에서만 신규 진입을 막습니다. 24x7·크립토·포렉스는 Session과 동일하게 자동 스킵.")
+sessionFilterTz = input.string("America/New_York", "기준 타임존 (IANA)", group = "Entry filters")
+postOpenBlockMinutes = input.int(30, "개장/정산 직후 진입 금지 (분)", minval = 1, maxval = 120, group = "Entry filters")
+useBlockAfterSettleClose = input.bool(true, "정산 마감 시각 이후 N분 진입 금지", group = "Entry filters")
+settleCloseHour = input.int(17, "정산 마감 시각 (시, 0–23)", minval = 0, maxval = 23, group = "Entry filters")
+settleCloseMinute = input.int(0, "정산 마감 시각 (분, 0–59)", minval = 0, maxval = 59, group = "Entry filters")
+useBlockAfterReopen = input.bool(true, "정산 후 재개장 시각 이후 N분 진입 금지", group = "Entry filters")
+reopenHour = input.int(18, "재개장 시각 (시)", minval = 0, maxval = 23, group = "Entry filters")
+reopenMinute = input.int(0, "재개장 시각 (분)", minval = 0, maxval = 59, group = "Entry filters")
+useBlockAfterRthOpen = input.bool(true, "정규장 개장 시각 이후 N분 진입 금지", group = "Entry filters")
+rthOpenHour = input.int(9, "정규장 개장 (시)", minval = 0, maxval = 23, group = "Entry filters")
+rthOpenMinute = input.int(30, "정규장 개장 (분)", minval = 0, maxval = 59, group = "Entry filters")
+useLossBarCooldown = input.bool(true, "실현 손실 후 봉 쿨다운", group = "Entry filters", tooltip = "체결된 거래가 손실이면 이후 N봉 동안 신규 진입 금지.")
+lossCooldownBars = input.int(5, "손실 후 쿨다운 (봉 수)", minval = 1, maxval = 50, group = "Entry filters")
+useFiveLossDayHalt = input.bool(true, "당일 연속 손실 N회 시 진입 중지", group = "Entry filters", tooltip = "같은 달력일(기준 타임존)에 연속 손실이 N회면 그날 신규 진입 없음. 익절 시 연속 카운트 리셋.")
+maxConsecLossHalt = input.int(5, "연속 손실 허용 횟수", minval = 2, maxval = 20, group = "Entry filters")
 useTrailingStop = input.bool(true, "Use Trailing Stop", group = "Risk")
 trailStartHalfBandPct = input.float(35.0, "Trail Start (% of half band)", minval = 0.0, step = 1.0, group = "Risk")
 trailOffsetHalfBandPct = input.float(20.0, "Trail Offset (% of half band)", minval = 0.0, step = 1.0, group = "Risk")
@@ -47,6 +66,54 @@ if barstate.isfirst and not licenseOk
 
 // 웹훅 JSON에서 사용 — 전략 엔진 포지션과 동일 부호
 posState = strategy.position_size > 0 ? 1 : strategy.position_size < 0 ? -1 : 0
+
+// ——— 장마감 전·IANA 창·손실 쿨다운 (진입 필터) ———
+f_skip_session_close_filter() =>
+    string sl = str.lower(syminfo.session)
+    str.contains(sl, "24x7") or str.contains(sl, "24/7") or syminfo.type == "crypto" or syminfo.type == "forex"
+
+dayBarCloseTime = request.security(syminfo.tickerid, "D", time_close, barmerge.gaps_off, barmerge.lookahead_off)
+minsToRegularDayClose = (dayBarCloseTime - time_close) / 60000.0
+entryBlockedNearSessionEnd =
+     blockEntryNearSessionClose and not f_skip_session_close_filter() and not na(minsToRegularDayClose) and minsToRegularDayClose >= 0.0 and minsToRegularDayClose <= sessionCloseBlockMinutes
+
+f_minutesFromMidnight(int t, string tz) =>
+    hour(t, tz) * 60 + minute(t, tz)
+
+f_inBlockedWindowAfter(int eventMin, int blockMins, int modNow) =>
+    eventMin >= 0 and modNow >= eventMin and modNow < eventMin + blockMins
+
+settleMinOfDay = settleCloseHour * 60 + settleCloseMinute
+reopenMinOfDay = reopenHour * 60 + reopenMinute
+rthMinOfDay = rthOpenHour * 60 + rthOpenMinute
+modNowTz = f_minutesFromMidnight(time, sessionFilterTz)
+
+entryBlockedTzWindows =
+     useEntryTzWindowFilters and not f_skip_session_close_filter() and postOpenBlockMinutes > 0 and (
+         (useBlockAfterSettleClose and f_inBlockedWindowAfter(settleMinOfDay, postOpenBlockMinutes, modNowTz)) or
+         (useBlockAfterReopen and f_inBlockedWindowAfter(reopenMinOfDay, postOpenBlockMinutes, modNowTz)) or
+         (useBlockAfterRthOpen and f_inBlockedWindowAfter(rthMinOfDay, postOpenBlockMinutes, modNowTz))
+     )
+
+var int lastLossExitBar = na
+var int filtConsecLoss = 0
+var string filtDayKeyStr = ""
+var bool filtDayHalt = false
+
+curFiltDay = str.format_time(time, "yyyyMMdd", sessionFilterTz)
+if curFiltDay != filtDayKeyStr
+    filtDayKeyStr := curFiltDay
+    filtConsecLoss := 0
+    filtDayHalt := false
+
+f_lossCooldownActive() =>
+    useLossBarCooldown and not na(lastLossExitBar) and bar_index <= lastLossExitBar + lossCooldownBars
+
+f_fiveLossDayHaltActive() =>
+    useFiveLossDayHalt and filtDayHalt
+
+entryBlockedForEntry() =>
+    entryBlockedNearSessionEnd or entryBlockedTzWindows or f_lossCooldownActive() or f_fiveLossDayHaltActive()
 
 sendRainbowStart = true
 rbStartEvent = "magic_core_rb_online"
@@ -284,11 +351,22 @@ if isShort
 // 손절/트레일 청산이 strategy로 체결된 봉 → 재진입 쿨다운(magicStop 플래그만으로는 같은 봉에서 누락되는 경우가 있어 체결 코멘트 기준)
 tradeJustClosed = strategy.closedtrades > nz(strategy.closedtrades[1], 0)
 lastExitComment = tradeJustClosed ? strategy.closedtrades.exit_comment(strategy.closedtrades - 1) : ""
+// 실현 손익 기준 진입 필터(연속 손실·봉 쿨다운): TV 청산 확정 봉에서 직전 청산 거래 손익 반영
+if tradeJustClosed
+    idxLast = strategy.closedtrades - 1
+    pnlStep = strategy.closedtrades.profit(idxLast)
+    if pnlStep < -1e-8
+        lastLossExitBar := bar_index
+        filtConsecLoss += 1
+        if filtConsecLoss >= maxConsecLossHalt
+            filtDayHalt := true
+    else if pnlStep > 1e-8
+        filtConsecLoss := 0
 // 스탑 체결(손절·트레일)이면 익절 여부와 무관하게 쿨다운만 적용: 리밋 익절(MagicExit*)은 제외
 if tradeJustClosed and not str.contains(lastExitComment, "MagicExit")
     lastStopBar := bar_index
 cooldownActive = not na(lastStopBar) and bar_index - lastStopBar <= reentryCooldownBars
-canEnter = isFlat and not cooldownActive and not magicExit and not magicStop and not magicTrailStop
+canEnter = isFlat and not cooldownActive and not magicExit and not magicStop and not magicTrailStop and not entryBlockedForEntry()
 magicBuy = entryBuyRaw and canEnter
 magicSell = entrySellRaw and canEnter
 magicBuyOnce = magicBuy and not magicBuy[1]
