@@ -1,12 +1,13 @@
 //@version=5
 // Dodam_MagicTrading_Marketfree — 마켓 잠금: marketfree (MagicPremium TSF 레인보우 백업 · 수동 유지, 생성기 미덮어쓰기)
-// 진입 필터: 장마감 전·IANA 개장/정산 창·실현 손실 봉 쿨다운·당일 연속 손실 중지(Session / Entry filters)
+// 진입: 저가<ML<고가 → ML 리밋 롱 · 저가<MH<고가 → MH 리밋 숏(한 봉·틱 구간이 기준선을 가름 = 돌파·재돌파와 동일 의미). calc_on_every_tick. 진입 필터는 장마감·IANA·손실 쿨다운 등.
 // posState: +1 롱 / -1 숏 / 0 무포지션 = strategy.position_size 동기
 strategy(
      "Dodam_MagicTrading_Marketfree",
      shorttitle       = "DMT_Free",
      overlay          = true,
-     process_orders_on_close = true,
+     calc_on_every_tick      = true,
+     process_orders_on_close = false,
      pyramiding       = 0,
      initial_capital  = 100000,
      default_qty_type = strategy.fixed,
@@ -18,7 +19,7 @@ strategy(
      )
 STRAT_INIT_CAP = 100000.0
 
-entryMode = input.string("Conservative", "Entry Mode", options = ["Conservative", "Attack"], group = "Mode", tooltip = "진입은 한 봉 high>ML>low 롱(limit ML), high>MH>low 숏(limit MH). 여기 값은 알림·JSON entry_mode 라벨만 구분.")
+entryMode = input.string("Conservative", "Entry Mode", options = ["Conservative", "Attack"], group = "Mode", tooltip = "롱: 저가<ML<고가면 ML 가격 리밋. 숏: 저가<MH<고가면 MH 가격 리밋. Attack=추가로 종가가 밴드 안쪽 최소 거리(Signals Near Band %).")
 baseRManual = input.float(0.0, "Manual BaseR (0=Auto)", minval = 0.0, step = 0.01, group = "Adjust")
 useAutoFineTune = input.bool(true, "Auto Fine Tune", group = "Adjust")
 manualFineTune = input.float(1.0, "Manual Fine Tune", minval = 0.25, maxval = 3.0, step = 0.01, group = "Adjust")
@@ -29,9 +30,9 @@ attackEntryNearHalfBandPct = input.float(15.0, "Attack Entry Near Band (% of hal
 exitNearHalfBandPct = input.float(15.0, "Exit Near Center (% of half band)", minval = 0.0, step = 0.5, group = "Signals")
 stopBufferHalfBandPct = input.float(30.0, "Stop Buffer (% of half band)", minval = 0.0, step = 1.0, group = "Risk")
 reentryCooldownBars = input.int(3, "Re-entry Cooldown Bars After Stop", minval = 0, group = "Risk", tooltip = "스탑(손절·트레일 등 익절 MagicExit 외 청산) 체결 봉 이후 부가 조건 없이 이 봉 수만큼 재진입 금지.")
-blockEntryNearSessionClose = input.bool(true, "장마감 전 진입 금지", group = "Session", tooltip = "해당 일의 정규장 일봉 마감 시각까지 남은 시간이 아래 분 이하면 신규 진입만 막습니다. 청산은 유지.")
+blockEntryNearSessionClose = input.bool(true, "장마감 전 진입 금지", group = "Session", tooltip = "해당 심볼 일봉 마감 시각(time_close)까지 남은 분이 아래 값 이하면 신규 진입만 막습니다. 거래소·세션 캘린더를 따르므로 서머타임 등은 TV 세션에 맞춰집니다. 청산은 유지.")
 sessionCloseBlockMinutes = input.int(30, "장마감 전 (분) 진입 금지", minval = 5, maxval = 180, group = "Session")
-useEntryTzWindowFilters = input.bool(false, "시간대 창 진입 금지(개장·정산)", group = "Entry filters", tooltip = "켜면 아래 분 단위 창에서만 신규 진입을 막습니다. 24x7·크립토·포렉스는 Session과 동일하게 자동 스킵.")
+useEntryTzWindowFilters = input.bool(true, "시간대 창 진입 금지(개장·정산)", group = "Entry filters", tooltip = "켜면 아래 분 단위 창에서만 신규 진입을 막습니다. 시·분은 IANA 타임존 기준이라 서머타임이 자동 반영됩니다. 24x7·크립토·포렉스는 Session과 동일하게 자동 스킵.")
 sessionFilterTz = input.string("America/New_York", "기준 타임존 (IANA)", group = "Entry filters")
 postOpenBlockMinutes = input.int(30, "개장/정산 직후 진입 금지 (분)", minval = 1, maxval = 120, group = "Entry filters")
 useBlockAfterSettleClose = input.bool(true, "정산 마감 시각 이후 N분 진입 금지", group = "Entry filters")
@@ -45,8 +46,8 @@ rthOpenHour = input.int(9, "정규장 개장 (시)", minval = 0, maxval = 23, gr
 rthOpenMinute = input.int(30, "정규장 개장 (분)", minval = 0, maxval = 59, group = "Entry filters")
 useLossBarCooldown = input.bool(true, "실현 손실 후 봉 쿨다운", group = "Entry filters", tooltip = "체결된 거래가 손실이면 이후 N봉 동안 신규 진입 금지.")
 lossCooldownBars = input.int(5, "손실 후 쿨다운 (봉 수)", minval = 1, maxval = 50, group = "Entry filters")
-useFiveLossDayHalt = input.bool(true, "당일 연속 손실 N회 시 진입 중지", group = "Entry filters", tooltip = "같은 달력일(기준 타임존)에 연속 손실이 N회면 그날 신규 진입 없음. 익절 시 연속 카운트 리셋.")
-maxConsecLossHalt = input.int(5, "연속 손실 허용 횟수", minval = 2, maxval = 20, group = "Entry filters")
+useFiveLossDayHalt = input.bool(true, "당일 연속 손실 N회 시 진입·시그널 중지", group = "Entry filters", tooltip = "같은 달력일(기준 타임존)에 실현 손실이 연속으로 N회(아래 정수)에 도달하면 그날 신규 진입·진입 시그널 없음. 청산 시그널은 그대로. 익절 시 연속 카운트 리셋. N은 3~6만 설정 가능(TV 입력 상한).")
+maxConsecLossHalt = input.int(3, "연속 손실 N (당일 중지)", minval = 3, maxval = 6, group = "Entry filters", tooltip = "연속 실현 손실이 이 횟수에 도달하면 당일 진입 차단. 기본 3, 최대 6.")
 useTrailingStop = input.bool(true, "Use Trailing Stop", group = "Risk")
 trailStartHalfBandPct = input.float(35.0, "Trail Start (% of half band)", minval = 0.0, step = 1.0, group = "Risk")
 trailOffsetHalfBandPct = input.float(20.0, "Trail Offset (% of half band)", minval = 0.0, step = 1.0, group = "Risk")
@@ -58,7 +59,6 @@ LICENSE_FIELD = "marketfree"
 f_license_ok(string field) =>
     switch str.lower(field)
         "marketfree" => true
-        "marketfree_1weekfree" => true
         => false
 licenseOk = f_license_ok(LICENSE_FIELD)
 if barstate.isfirst and not licenseOk
@@ -265,28 +265,6 @@ bandColRb(bull, bear) =>
     base = lineColRb(bull, bear)
     showRbFill ? color.new(base, fillTranspRb) : color(na)
 
-useJsonAlerts = alertPayload == "JSON (webhook)"
-jsonEsc(string x) =>
-    str.replace_all(str.replace_all(x, "\\", "\\\\"), "\"", "\\\"")
-f_jsonBuy() =>
-    string msg = "MagicCore BUY ML(limit) " + entryMode + " " + syminfo.ticker + " " + timeframe.period + " ML=" + str.tostring(ML, format.mintick) + " (한봉 high>ML>low)"
-    "{\"event\":\"magic_core_buy\",\"kind\":\"signal\",\"entry_kind\":\"straddle_ml\",\"limit_ml\":" + str.tostring(ML, format.mintick) + ",\"entry_mode\":\"" + entryMode + "\",\"license_pack\":\"" + LICENSE_FIELD + "\",\"pos_state\":" + str.tostring(posState) + ",\"ticker\":\"" + syminfo.ticker + "\",\"exchange\":\"" + syminfo.prefix + "\",\"tf\":\"" + timeframe.period + "\",\"close\":" + str.tostring(close) + ",\"bar_time\":" + str.tostring(time) + ",\"text\":\"" + jsonEsc(msg) + "\"}"
-f_jsonSell() =>
-    string msg = "MagicCore SELL MH(limit) " + entryMode + " " + syminfo.ticker + " " + timeframe.period + " MH=" + str.tostring(MH, format.mintick) + " (한봉 high>MH>low)"
-    "{\"event\":\"magic_core_sell\",\"kind\":\"signal\",\"entry_kind\":\"straddle_mh\",\"limit_mh\":" + str.tostring(MH, format.mintick) + ",\"entry_mode\":\"" + entryMode + "\",\"license_pack\":\"" + LICENSE_FIELD + "\",\"pos_state\":" + str.tostring(posState) + ",\"ticker\":\"" + syminfo.ticker + "\",\"exchange\":\"" + syminfo.prefix + "\",\"tf\":\"" + timeframe.period + "\",\"close\":" + str.tostring(close) + ",\"bar_time\":" + str.tostring(time) + ",\"text\":\"" + jsonEsc(msg) + "\"}"
-f_jsonExit() =>
-    string msg = "MagicCore EXIT " + syminfo.ticker + " " + timeframe.period + " C=" + str.tostring(close, format.mintick)
-    "{\"event\":\"magic_core_exit\",\"kind\":\"signal\",\"license_pack\":\"" + LICENSE_FIELD + "\",\"pos_state\":" + str.tostring(posState) + ",\"ticker\":\"" + syminfo.ticker + "\",\"exchange\":\"" + syminfo.prefix + "\",\"tf\":\"" + timeframe.period + "\",\"close\":" + str.tostring(close) + ",\"bar_time\":" + str.tostring(time) + ",\"text\":\"" + jsonEsc(msg) + "\"}"
-f_jsonStop() =>
-    string msg = "MagicCore STOP fixed " + syminfo.ticker + " " + timeframe.period + " C=" + str.tostring(close, format.mintick)
-    "{\"event\":\"magic_core_stop\",\"kind\":\"signal\",\"stop_type\":\"fixed\",\"license_pack\":\"" + LICENSE_FIELD + "\",\"pos_state\":" + str.tostring(posState) + ",\"ticker\":\"" + syminfo.ticker + "\",\"exchange\":\"" + syminfo.prefix + "\",\"close\":" + str.tostring(close) + ",\"bar_time\":" + str.tostring(time) + ",\"text\":\"" + jsonEsc(msg) + "\"}"
-f_jsonTrail() =>
-    string msg = "MagicCore STOP trail " + syminfo.ticker + " " + timeframe.period + " C=" + str.tostring(close, format.mintick)
-    "{\"event\":\"magic_core_stop\",\"kind\":\"signal\",\"stop_type\":\"trail\",\"license_pack\":\"" + LICENSE_FIELD + "\",\"pos_state\":" + str.tostring(posState) + ",\"ticker\":\"" + syminfo.ticker + "\",\"exchange\":\"" + syminfo.prefix + "\",\"close\":" + str.tostring(close) + ",\"bar_time\":" + str.tostring(time) + ",\"text\":\"" + jsonEsc(msg) + "\"}"
-f_jsonRainbowStart() =>
-    string msg = "MagicCore RAINBOW START " + syminfo.ticker + " " + timeframe.period + " C=" + str.tostring(close, format.mintick)
-    "{\"event\":\"" + rbStartEvent + "\",\"kind\":\"strategy_rainbow_start\",\"license_pack\":\"" + LICENSE_FIELD + "\",\"script\":\"Dodam_MagicTrading_Marketfree\",\"ticker\":\"" + syminfo.ticker + "\",\"exchange\":\"" + syminfo.prefix + "\",\"tf\":\"" + timeframe.period + "\",\"close\":" + str.tostring(close) + ",\"bar_time\":" + str.tostring(time) + ",\"text\":\"" + jsonEsc(msg) + "\"}"
-
 isLong = posState == 1
 isShort = posState == -1
 isFlat = posState == 0
@@ -301,11 +279,11 @@ dynamicLongStop = lower - stopBuffer
 dynamicShortStop = upper + stopBuffer
 longTarget = center - maxNearDist
 shortTarget = center + maxNearDist
-// 진입: 종가(close) cross 사용 안 함. 한 봉의 가격 범위가 ML/MH 를 양쪽으로 가름 → 리밋 ML(롱) / MH(숏). (TV는 봉 단위 high·low로 표현)
+// 진입: L<하단< H → ML 리밋 매수 · L<상단< H → MH 리밋 매도 (high>ML>low, high>MH>low)
 rangeStraddlesML = high > ML and ML > low
 rangeStraddlesMH = high > MH and MH > low
-entryBuyRaw = rangeStraddlesML
-entrySellRaw = rangeStraddlesMH
+entryBuyRaw = entryMode == "Attack" ? rangeStraddlesML and close >= ML + attackEntryNearDist : rangeStraddlesML
+entrySellRaw = entryMode == "Attack" ? rangeStraddlesMH and close <= MH - attackEntryNearDist : rangeStraddlesMH
 var float longBest = na
 var float shortBest = na
 var float fixedLongStop = na
@@ -343,6 +321,36 @@ stopLong = isLong and low <= longProtectStop
 stopShort = isShort and high >= shortProtectStop
 magicStop = not magicTrailStop and (stopLong or stopShort)
 magicExit = not magicStop and not magicTrailStop and (exitCrossCenter or exitSpanCenter or exitNearCenter or exitLongNearCenter or exitShortNearCenter)
+// 웹훅 JSON — Magic Core(marketfree) 공통 스키마. stop/trail 가격 참조로 이 블록은 보호가 계산된 뒤에 둠.
+useJsonAlerts = alertPayload == "JSON (webhook)"
+jsonEsc(string x) =>
+    str.replace_all(str.replace_all(x, "\\", "\\\\"), "\"", "\\\"")
+closeNumJson() =>
+    na(close) ? "null" : str.tostring(close, format.mintick)
+licenseJsonFrag() =>
+    ',"license_pack":"' + jsonEsc(LICENSE_FIELD) + '","instrument_type":"' + jsonEsc(syminfo.type) + '","tickerid":"' + jsonEsc(syminfo.tickerid) + '","pos_state":' + str.tostring(posState) + ',"bar_index":' + str.tostring(bar_index)
+tfStr = timeframe.period
+f_jsonBuy() =>
+    string msg = "MagicCore BUY ML(limit) " + entryMode + " " + syminfo.ticker + " " + tfStr + " ML=" + str.tostring(ML, format.mintick) + " (저가<ML<고가)"
+    '{"event":"magic_core_buy","kind":"signal","magic_signal":"buy","side":"long","entry_mode":"' + jsonEsc(entryMode) + '","ticker":"' + jsonEsc(syminfo.ticker) + '","exchange":"' + jsonEsc(syminfo.prefix) + '","tf":"' + jsonEsc(tfStr) + '","close":' + closeNumJson() + ',"band_edge":' + str.tostring(ML, format.mintick) + ',"entry_anchor":' + str.tostring(ML, format.mintick) + ',"bar_time":' + str.tostring(time) + ',"text":"' + jsonEsc(msg) + '"' + licenseJsonFrag() + '}'
+f_jsonSell() =>
+    string msg = "MagicCore SELL MH(limit) " + entryMode + " " + syminfo.ticker + " " + tfStr + " MH=" + str.tostring(MH, format.mintick) + " (저가<MH<고가)"
+    '{"event":"magic_core_sell","kind":"signal","magic_signal":"sell","side":"short","entry_mode":"' + jsonEsc(entryMode) + '","ticker":"' + jsonEsc(syminfo.ticker) + '","exchange":"' + jsonEsc(syminfo.prefix) + '","tf":"' + jsonEsc(tfStr) + '","close":' + closeNumJson() + ',"band_edge":' + str.tostring(MH, format.mintick) + ',"entry_anchor":' + str.tostring(MH, format.mintick) + ',"bar_time":' + str.tostring(time) + ',"text":"' + jsonEsc(msg) + '"' + licenseJsonFrag() + '}'
+f_jsonExit() =>
+    float exitAnchor = center
+    string msg = "MagicCore EXIT " + syminfo.ticker + " " + tfStr + " C=" + str.tostring(close, format.mintick)
+    '{"event":"magic_core_exit","kind":"signal","magic_signal":"exit","side":"flat","ticker":"' + jsonEsc(syminfo.ticker) + '","exchange":"' + jsonEsc(syminfo.prefix) + '","tf":"' + jsonEsc(tfStr) + '","close":' + closeNumJson() + ',"magic_line":' + str.tostring(center, format.mintick) + ',"exit_anchor":' + str.tostring(exitAnchor, format.mintick) + ',"bar_time":' + str.tostring(time) + ',"text":"' + jsonEsc(msg) + '"' + licenseJsonFrag() + '}'
+f_jsonStop() =>
+    float sp = stopLong ? longProtectStop : shortProtectStop
+    string msg = "MagicCore STOP fixed " + syminfo.ticker + " " + tfStr + " C=" + str.tostring(close, format.mintick)
+    '{"event":"magic_core_stop","kind":"signal","magic_signal":"stop_fixed","stop_type":"fixed","ticker":"' + jsonEsc(syminfo.ticker) + '","exchange":"' + jsonEsc(syminfo.prefix) + '","close":' + closeNumJson() + ',"stop_price":' + str.tostring(sp, format.mintick) + ',"bar_time":' + str.tostring(time) + ',"text":"' + jsonEsc(msg) + '"' + licenseJsonFrag() + '}'
+f_jsonTrail() =>
+    float sp = trailStopLong ? longTrailStop : shortTrailStop
+    string msg = "MagicCore STOP trail " + syminfo.ticker + " " + tfStr + " C=" + str.tostring(close, format.mintick)
+    '{"event":"magic_core_stop","kind":"signal","magic_signal":"stop_trail","stop_type":"trail","ticker":"' + jsonEsc(syminfo.ticker) + '","exchange":"' + jsonEsc(syminfo.prefix) + '","close":' + closeNumJson() + ',"stop_price":' + str.tostring(sp, format.mintick) + ',"bar_time":' + str.tostring(time) + ',"text":"' + jsonEsc(msg) + '"' + licenseJsonFrag() + '}'
+f_jsonRainbowStart() =>
+    string msg = "MagicCore RAINBOW START " + syminfo.ticker + " " + tfStr + " C=" + str.tostring(close, format.mintick)
+    '{"event":"' + rbStartEvent + '","kind":"strategy_rainbow_start","magic_signal":"rainbow_online","script":"Dodam_MagicTrading_Marketfree","ticker":"' + jsonEsc(syminfo.ticker) + '","exchange":"' + jsonEsc(syminfo.prefix) + '","tf":"' + jsonEsc(tfStr) + '","close":' + closeNumJson() + ',"bar_time":' + str.tostring(time) + ',"text":"' + jsonEsc(msg) + '"' + licenseJsonFrag() + '}'
 var int lastStopBar = na
 if isLong
     strategy.exit("LX", from_entry = "L", limit = longTarget, stop = longProtectStop, comment_profit = "MagicExit Long", comment_loss = longTrailActive ? "Trail Long" : "FixedStop Long")
@@ -371,39 +379,41 @@ magicBuy = entryBuyRaw and canEnter
 magicSell = entrySellRaw and canEnter
 magicBuyOnce = magicBuy and not magicBuy[1]
 magicSellOnce = magicSell and not magicSell[1]
-if licenseOk and magicSell
+// 진입 주문도 스트래들이 처음 성립한 틱에만(매 틱 반복 호출 방지)
+if licenseOk and magicSellOnce
     fixedShortStop := dynamicShortStop
-    strategy.entry("S", strategy.short, qty = 1, limit = MH, comment = "MH-straddle Short")
-else if licenseOk and magicBuy
+    strategy.entry("S", strategy.short, qty = 1, limit = MH, comment = "MH-limit Short")
+else if licenseOk and magicBuyOnce
     fixedLongStop := dynamicLongStop
-    strategy.entry("L", strategy.long, qty = 1, limit = ML, comment = "ML-straddle Long")
+    strategy.entry("L", strategy.long, qty = 1, limit = ML, comment = "ML-limit Long")
 // 청산 표시·알림: 위와 동일 exit 코멘트
 showTrailExit = tradeJustClosed and str.contains(lastExitComment, "Trail")
 showStopExit = tradeJustClosed and str.contains(lastExitComment, "FixedStop")
 showProfitExit = tradeJustClosed and str.contains(lastExitComment, "MagicExit")
-if useAlerts and barstate.isconfirmed and licenseOk
+// 알림: 진입·청산은 조건이 처음 참이 되는 틱에 맞춤(freq_once_per_bar = 봉당 1회·인트라바 허용). 웹훅은 TV 알림 설정도 “Once per bar” 권장.
+if useAlerts and licenseOk
     if useJsonAlerts
         if magicBuyOnce
-            alert(f_jsonBuy(), alert.freq_once_per_bar_close)
+            alert(f_jsonBuy(), alert.freq_once_per_bar)
         if magicSellOnce
-            alert(f_jsonSell(), alert.freq_once_per_bar_close)
+            alert(f_jsonSell(), alert.freq_once_per_bar)
         if showTrailExit
-            alert(f_jsonTrail(), alert.freq_once_per_bar_close)
+            alert(f_jsonTrail(), alert.freq_once_per_bar)
         else if showStopExit
-            alert(f_jsonStop(), alert.freq_once_per_bar_close)
+            alert(f_jsonStop(), alert.freq_once_per_bar)
         else if showProfitExit
-            alert(f_jsonExit(), alert.freq_once_per_bar_close)
+            alert(f_jsonExit(), alert.freq_once_per_bar)
     else
         if magicBuyOnce
-            alert("MagicCore · " + entryMode + " Buy signal", alert.freq_once_per_bar_close)
+            alert("MagicCore · " + entryMode + " Buy signal", alert.freq_once_per_bar)
         if magicSellOnce
-            alert("MagicCore · " + entryMode + " Sell signal", alert.freq_once_per_bar_close)
+            alert("MagicCore · " + entryMode + " Sell signal", alert.freq_once_per_bar)
         if showTrailExit
-            alert("MagicCore · Trailing stop signal", alert.freq_once_per_bar_close)
+            alert("MagicCore · Trailing stop signal", alert.freq_once_per_bar)
         else if showStopExit
-            alert("MagicCore · Fixed stop signal", alert.freq_once_per_bar_close)
+            alert("MagicCore · Fixed stop signal", alert.freq_once_per_bar)
         else if showProfitExit
-            alert("MagicCore · Exit signal", alert.freq_once_per_bar_close)
+            alert("MagicCore · Exit signal", alert.freq_once_per_bar)
 varip bool _rbStartSent = false
 if sendRainbowStart and showRainbow and barstate.isconfirmed and barstate.isrealtime and licenseOk and not _rbStartSent
     alert(f_jsonRainbowStart(), alert.freq_once_per_bar_close)

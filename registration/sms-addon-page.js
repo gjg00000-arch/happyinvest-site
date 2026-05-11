@@ -56,7 +56,7 @@
         topOff.textContent =
           u.sms_addon_self_topup_enabled === true
             ? "활성화 후 아래에서 테스트용 충전을 사용할 수 있습니다."
-            : "추가 문자 충전은 구독·결제 안내 또는 고객 문의 후 반영됩니다.";
+            : "추가 문자 충전은 billing@happyinvest.com 또는 구독·결제 안내 후 반영됩니다.";
       }
       return;
     }
@@ -110,7 +110,7 @@
       if (topOff) {
         topOff.hidden = false;
         topOff.textContent =
-          "추가 문자 충전은 구독·결제 안내(billing) 또는 고객 문의 후 운영에서 반영합니다. 내부 테스트 시에만 서버에서 자가 충전 API를 켤 수 있습니다.";
+          "추가 문자 충전은 billing@happyinvest.com 또는 구독·결제 페이지 안내 후 운영에서 반영합니다. 내부 테스트 시에만 서버에서 자가 충전 API를 켤 수 있습니다.";
       }
     }
   }

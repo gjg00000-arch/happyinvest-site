@@ -110,6 +110,56 @@
         </div>
       </section>
 
+      <section id="trv-signal-webhook" class="card-like" style="max-width: 48rem; padding: 1rem 1.1rem; margin: 1.25rem 0; border: 1px solid rgba(74, 53, 40, 0.15); border-radius: 8px; background: rgba(255, 255, 255, 0.65)" aria-labelledby="trv-signal-webhook-title">
+        <h2 id="trv-signal-webhook-title" class="page-title" style="font-size: 1.15rem; margin-top: 0">TRV 시그널 웹훅 (TradingView → API)</h2>
+        <p class="lead" style="font-size: 0.95rem; margin-top: 0.5rem">
+          이 저장소의 정적 사이트(S3·CloudFront)는 <strong>POST 본문을 받는 백엔드가 아닙니다</strong>. TradingView 알림의 Webhook URL은
+          <strong>magic-indicator-api</strong> 등 별도 서버의 공개 엔드포인트를 가리켜야 하며, 본문은 Pine <code>alert()</code>가 내보낸 JSON(또는 텍스트)이 그대로 전달됩니다.
+        </p>
+        <h3 class="page-title" style="font-size: 1rem; margin: 1rem 0 0.4rem">엔드포인트·설정</h3>
+        <ul class="doc-steps" style="margin: 0.35rem 0 0.75rem; padding-left: 1.25rem">
+          <li>
+            기본 API 호스트(메타): <code>&lt;meta name="api-base" content="https://magicindicatorglobal.com" /&gt;</code> — Webhook URL 예:
+            <code id="trv-webhook-url-example">https://magicindicatorglobal.com/api/webhooks/signals/tradingview</code>
+          </li>
+          <li>상태 확인: <code>GET …/api/webhooks/signals/health</code> (배포 환경에 따라 경로는 API README 기준)</li>
+          <li>인증: <code>X-Webhook-Secret</code>, <code>Authorization: Bearer …</code>, 또는 <code>?secret=</code> — 서버 환경 변수와 동일한 값</li>
+          <li>
+            차트 알림에서 <strong>“Webhook URL”</strong>에 위 URL을 넣고, 전략이 <code>alert()</code>로 JSON을 보내는 경우 메시지는
+            <code>{{strategy.order.alert_message}}</code>(또는 문서화된 TV 플레이스홀더)로 JSON이 그대로 나가게 맞춥니다. 지표 전용 플레이스홀더는
+            <code>{{message}}</code>를 씁니다.
+          </li>
+        </ul>
+        <h3 class="page-title" style="font-size: 1rem; margin: 0.85rem 0 0.35rem">Magic Core JSON 필드 (요약)</h3>
+        <p class="small" style="margin: 0 0 0.5rem; color: var(--ci-brown-muted)">
+          <code>tools/Dodam_MagicTrading_Marketfree.pine</code> 등은 아래와 같이 <code>magic_signal</code>·<code>licenseJsonFrag</code>(<code>tickerid</code>,
+          <code>instrument_type</code>, <code>pos_state</code> 등)를 포함합니다. 구형 <code>entry_kind</code>·<code>limit_ml</code> 전용 파서는 갱신이 필요합니다.
+        </p>
+        <div style="overflow-x: auto; margin: 0.35rem 0 0.65rem">
+          <table class="small" style="width: 100%; border-collapse: collapse; font-size: 0.88rem">
+            <thead>
+              <tr style="border-bottom: 1px solid rgba(74, 53, 40, 0.2)">
+                <th style="text-align: left; padding: 0.35rem 0.5rem 0.35rem 0">필드</th>
+                <th style="text-align: left; padding: 0.35rem">설명</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding: 0.3rem 0.5rem 0.3rem 0; vertical-align: top"><code>event</code></td><td style="padding: 0.3rem"><code>magic_core_buy</code> · <code>magic_core_sell</code> · <code>magic_core_exit</code> · <code>magic_core_stop</code> · <code>magic_core_rb_online</code> 등</td></tr>
+              <tr><td style="padding: 0.3rem 0.5rem 0.3rem 0; vertical-align: top"><code>magic_signal</code></td><td style="padding: 0.3rem"><code>buy</code> · <code>sell</code> · <code>exit</code> · <code>stop_fixed</code> · <code>stop_trail</code> · <code>rainbow_online</code></td></tr>
+              <tr><td style="padding: 0.3rem 0.5rem 0.3rem 0; vertical-align: top"><code>side</code></td><td style="padding: 0.3rem">진입·청산 의미 (<code>long</code> / <code>short</code> / <code>flat</code>)</td></tr>
+              <tr><td style="padding: 0.3rem 0.5rem 0.3rem 0; vertical-align: top"><code>band_edge</code> · <code>entry_anchor</code></td><td style="padding: 0.3rem">리밋 밴드(ML/MH) — Marketfree는 스트래들 진입</td></tr>
+              <tr><td style="padding: 0.3rem 0.5rem 0.3rem 0; vertical-align: top"><code>magic_line</code> · <code>exit_anchor</code></td><td style="padding: 0.3rem">익절 종료 시 중심선 기준</td></tr>
+              <tr><td style="padding: 0.3rem 0.5rem 0.3rem 0; vertical-align: top"><code>stop_price</code></td><td style="padding: 0.3rem">고정·트레일 스탑 JSON</td></tr>
+              <tr><td style="padding: 0.3rem 0.5rem 0.3rem 0; vertical-align: top"><code>license_pack</code> · <code>tickerid</code></td><td style="padding: 0.3rem">라이선스·심볼 해상도</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="small" style="margin: 0.5rem 0 0; color: var(--ci-brown-muted)">
+          <strong>경제 지표 Cron</strong>(<code>POST /v1/cron/economic-calendar</code>)은 Finnhub·텔레그램용이며, TRV 시그널 웹훅과는 별 경로입니다 —
+          <a href="#econ-calendar-cron">아래 섹션</a>.
+        </p>
+      </section>
+
       <section id="econ-calendar-cron" class="card-like" style="max-width: 48rem; padding: 1rem 1.1rem; margin: 1.25rem 0; border: 1px solid rgba(74, 53, 40, 0.15); border-radius: 8px; background: rgba(255, 255, 255, 0.65)" aria-labelledby="econ-calendar-cron-title">
         <h2 id="econ-calendar-cron-title" class="page-title" style="font-size: 1.15rem; margin-top: 0">경제 지표 사전 알림 — 서버(Cron 웹훅)</h2>
         <p class="lead" style="font-size: 0.95rem; margin-top: 0.5rem">
@@ -189,7 +239,9 @@
       <div class="integration-grid">
         <div class="integration-card">
           <h3>TRV</h3>
-          <p>알림·웹훅 URL, Pine 연동 범위. 시그널 발생 시 서버 또는 텔레그램으로 전달하는 흐름을 여기에 정리합니다.</p>
+          <p>
+            알림·Webhook URL, Pine JSON 스키마는 <a href="#trv-signal-webhook">위 — TRV 시그널 웹훅</a>을 참고하세요. 시그널은 API 서버가 받아 텔레그램 등으로 넘깁니다.
+          </p>
         </div>
         <div class="integration-card">
           <h3>MetaTrader 5</h3>

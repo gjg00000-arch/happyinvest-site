@@ -15,10 +15,10 @@ indicator(
      )
 
 webhookUrl = input.string(
-     "https://magicindicatorglobal.com/YOUR_WEBHOOK_PATH",
+     "https://magicindicatorglobal.com/api/webhooks/signals/tradingview",
      "Webhook URL (알림 설정에 동일하게 입력)",
      group = "웹훅",
-     tooltip = "Pine은 HTTP 불가. 차트 → 알림 → Webhook에 이 URL을 입력."
+     tooltip = "Pine은 HTTP 불가. 차트 → 알림 → Webhook에 API 엔드포인트를 넣고, 서버가 요구하면 URL에 ?secret= 또는 헤더를 맞춥니다. integrations 페이지 TRV 시그널 웹훅 참고."
      )
 
 periodInput = input.int(12, "기간 (Period)", minval = 2, group = "계산")

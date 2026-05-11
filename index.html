@@ -277,7 +277,11 @@
           <article class="home-payment-draft__card" role="listitem">
             <h3 class="home-payment-draft__card-title">크립토(온체인)</h3>
             <p class="home-payment-draft__card-body">
-              메이저 코인은 우선 지원하고, 기타 Ledger 지원 코인·저유동성 코인은 <strong>견적 후 송금</strong>을 원칙으로 합니다. 입금 구분에는 <strong>주문별로 다른 소수까지 맞춘 명목금</strong>(예: 99.9998 과 99.999997 구분)처럼 <a href="billing/index.html#crypto-amount-signature">개인별 정밀 금액 매칭</a>과 꼬리표를 함께 씁니다(<a href="billing/index.html#crypto-price-basis">환산 안내</a>).
+              메이저 코인은 우선 지원하고, 기타 Ledger 지원 코인·저유동성 코인은 <strong>견적 후 송금</strong>을 원칙으로 합니다.
+              <strong>가상자산</strong> 수취 주소(BTC·ETH·XRP·Tron·Solana·Polygon·BNB·Base·Arbitrum·Optimism·Avalanche·DOGE·LTC 등)는
+              <a href="billing/index.html#crypto-deposit">결제 페이지</a> 표와 <code>assets/crypto-public-addresses.json</code>을 기준으로 합니다(수수료·확인 속도는 네트워크·거래소마다 다릅니다). 입금 구분에는
+              <strong>주문별로 다른 소수까지 맞춘 명목금</strong>(예: 99.9998 과 99.999997 구분)처럼
+              <a href="billing/index.html#crypto-amount-signature">개인별 정밀 금액 매칭</a>과 꼬리표를 함께 씁니다(<a href="billing/index.html#crypto-price-basis">환산 안내</a>).
             </p>
           </article>
           <article class="home-payment-draft__card" role="listitem">
@@ -497,7 +501,7 @@
           <a href="boards/index.html">모임터 홈 <small>전체 구역</small></a>
           <a href="boards/index.html?board=event_promo_shoutout">추천·홍보 <small>책구매·인증</small></a>
           <a href="legal/index.html">약관·정책 <small>이용·환불·개인정보</small></a>
-          <a href="integrations/index.html">연동 <small>웹훅·경제지표 Cron</small></a>
+          <a href="integrations/index.html#trv-signal-webhook">연동 <small>TRV 웹훅·경제 Cron</small></a>
           <a href="admin/index.html">관리자 <small>운영 보드</small></a>
         </nav>
       </section>
@@ -519,6 +523,10 @@
             </li>
             <li>라이선스: <strong>정규</strong>는 <strong>단일 상품</strong>이며 판매 마켓과 플랫폼에 따라 <strong>Whop TRV · Whop MT5 · MQL MT5</strong>로 구분해요(가격·세부는 <a href="legal/terms-magictrading-regular.html">정규 약관</a>·상담). 이벤트·무료체험은 약관이 따로 있어요.</li>
             <li>로그인 후 MT5 계좌·MQL5·TRV ID를 연결하면, 라이선스·알림 연동에 쓸 수 있습니다.</li>
+            <li>
+              TradingView 시그널 웹훅은 이 정적 사이트가 아니라 <strong>API 서버</strong>가 받습니다. Webhook URL·JSON 필드·Cron 경제 알림 구분은
+              <a href="integrations/index.html#trv-signal-webhook">연동 — TRV 시그널 웹훅</a>을 참고하세요.
+            </li>
           </ul>
         </section>
 
