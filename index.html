@@ -187,6 +187,68 @@
           <a class="btn btn--ghost" href="registration/sms-addon.html">문자 시그널 월패키지</a>
           <a class="btn btn--ghost" href="guide/usage.html">사용법 보기</a>
           <a class="btn btn--ghost" href="guide/magictrading-strategy-inputs-ko.html">MagicTrading 입력 안내</a>
+          <a class="btn btn--ghost" href="#telegram-tv-signals">텔레그램 시그널 안내</a>
+        </p>
+      </section>
+
+      <section class="ml-quick-start" id="telegram-tv-signals" aria-labelledby="telegram-tv-signals-title" style="margin-top: 2rem">
+        <p class="ml-quick-start__badge">텔레그램 시그널 · TradingView 알림</p>
+        <h2 id="telegram-tv-signals-title">텔레그램으로 시그널 받기 — 꼭 읽어 주세요</h2>
+        <p class="small" style="margin: -0.25rem 0 1rem; max-width: 48rem; line-height: 1.72; color: var(--ci-brown-muted)">
+          <strong>웹훅</strong>은 TradingView가 신호를 <strong>우리 서버로 보내는 주소</strong>입니다. 서버가 받은 뒤 <strong>텔레그램 DM</strong>으로
+          전달합니다. <strong>회원마다 차트·종목이 다르므로</strong>, 관리자 차트 하나만 연결된다고 모든 분에게 자동 전달되지는 않습니다.
+          <strong>본인 TradingView에서 알림을 만들어야</strong> 합니다.
+        </p>
+        <div class="ml-quick-start__why" style="margin-bottom: 1rem">
+          <strong>웹훅이 있어도 TV 알림이 필요한 이유</strong>
+          <span
+            >Pine 스크립트는 신호가 났을 때 보낼 <strong>JSON 내용</strong>만 만듭니다. <strong>언제·어느 차트에서</strong> 서버로 보낼지는
+            TradingView <strong>알림 만들기</strong>에서 정합니다. 알림이 없으면 서버로 POST가 나가지 않습니다.</span
+          >
+        </div>
+        <ol class="notice-list" style="max-width: 48rem; line-height: 1.72; padding-left: 1.35rem; margin: 0 0 1rem">
+          <li>
+            <strong>① 회원 정보</strong> — <a href="registration/index.html">가입·등록</a>에서 <strong>텔레그램 Chat ID(숫자)</strong>를
+            넣습니다. <code>@username</code>이 아닙니다. 확인 방법은
+            <a href="telegram-chat-id/index.html">텔레그램 Chat ID 확인</a>을 보세요.
+          </li>
+          <li>
+            <strong>② 공식 봇</strong> — 안내드린 <strong>회사 텔레그램 봇</strong>을 검색해 <strong>대화 시작</strong> 또는
+            <code>/start</code>를 보냅니다. 봇이 채팅창에 답하지 않아도, <strong>DM을 받으려면 이 단계가 필요</strong>할 수 있습니다.
+          </li>
+          <li>
+            <strong>③ 내 차트에 지표·전략 적용</strong> — <strong>본인이 보는 종목·틱/봉</strong> 차트에 Magic 지표(전략)를 켭니다. 다른 사람 차트와
+            종목은 서로 다릅니다.
+          </li>
+          <li>
+            <strong>④ 전략 입력</strong> — 설정에서 <strong>알림 본문 형식</strong>을 <strong>JSON (webhook)</strong>으로 둡니다.
+          </li>
+          <li>
+            <strong>⑤ TradingView 알림 만들기</strong> — 차트에서 <strong>알림 만들기</strong> → 조건은 전략의
+            <strong>MagicCore Buy / Sell / Exit / Stop</strong> 등과 맞춥니다. <strong>웹훅 URL</strong>에는 아래 주소를 넣습니다.
+            <br />
+            <code style="word-break: break-all">https://api.magicindicatorglobal.com/api/webhooks/signals/tradingview</code>
+          </li>
+          <li>
+            <strong>⑥ 웹훅 보안 값</strong> — 회원 안내·운영 쪽에서 받은 <strong>웹훅 시크릿</strong>을 넣습니다. TradingView에서
+            <strong>헤더 <code>X-Webhook-Secret</code></strong>을 쓸 수 있으면 그렇게 하고, <strong>헤더가 없으면</strong> URL 끝에
+            <code>?secret=받은값</code> 형태로 붙일 수 있습니다. <strong>시크릿은 공개 게시판·채팅에 올리지 마세요.</strong>
+          </li>
+          <li>
+            <strong>⑦ 신호가 나면</strong> — TradingView가 JSON을 서버로 보냅니다. 서버는 <strong>종목·매수/매도·시간</strong> 등을 읽고, 가입 시
+            등록한 Chat ID 등 <strong>회원 정보와 매칭</strong>해 텔레그램으로 보냅니다.
+          </li>
+        </ol>
+        <p class="small" style="margin: 0 0 1rem; max-width: 48rem; line-height: 1.65; color: var(--ci-brown-muted)">
+          <strong>자주 헷갈리는 점</strong> — Nginx·웹훅 서버는 <strong>신호를 받아 전달하는 길</strong>이지, TV 차트를 대신 켜 주지 않습니다.
+          <strong>암호화폐 전용 Nginx 가입</strong> 같은 별도 상품이 아니라, <strong>회사 서버 + 공식 도메인</strong>으로 연동합니다. 연동 개요는
+          <a href="integrations/index.html">연동</a> 페이지도 참고하세요.
+        </p>
+        <p class="ml-quick-start__actions">
+          <a class="btn" href="telegram-chat-id/index.html">Chat ID 확인</a>
+          <a class="btn btn--ghost" href="guide/usage-trv.html">TRV 알림 설정</a>
+          <a class="btn btn--ghost" href="registration/index.html">가입·등록</a>
+          <a class="btn btn--ghost" href="integrations/index.html">연동 개요</a>
         </p>
       </section>
 
@@ -342,7 +404,9 @@
           <h3 class="ml-subh" id="ml-chart-opt-h">차트 옵티마이징(반밴딩·반응 속도)</h3>
           <p>
             <strong>Entry Mode</strong>에서 완성봉 기준 교차 규칙(Conservative)과 밴드 근처 슬라이더(Attack)를 고릅니다.
-            간격 조절의 핵심은 <strong>Base R</strong>와 <strong>Fine Tune</strong>예요 — 수동으로 <strong>Manual BaseR</strong>을 넣거나 0으로 두고 자동에 맡긴 뒤, <strong>Auto Fine Tune</strong> 또는 <strong>Manual Fine Tune 슬라이더</strong>로 변동 구간(ATR 성격) 반영 정도만 조입니다.
+            간격 조절의 핵심은 <strong>Base R</strong>와 <strong>Fine Tune</strong>예요 — 수동으로 <strong>Manual BaseR</strong>을 넣거나 0으로 두고 자동에 맡긴 뒤, <strong>Auto Fine Tune</strong> 또는 <strong>Manual Fine Tune Mult</strong>로 변동 구간(ATR 성격) 반영 정도를 조입니다.
+            <strong>Applied R (%)</strong>은 <a href="guide/magictrading-strategy-inputs-ko.html#r-two-axes">권장(원리·대략 0.2%)</a>과
+            <a href="guide/magictrading-strategy-inputs-ko.html#r-two-axes">수익 극대화(매직선 근접)</a> 두 축으로 이해하고, 본인 차트에서 선택하세요.
             틱 차트에서는 봉 간격 해석이 달라져 밴드가 넓거나 좁게 느껴질 수 있어, 한 종목 안에서 소구간 테스트 후 고정하는 편이 안전합니다.
           </p>
           <h3 class="ml-subh" id="ml-chart-stop-h">손절 쪽 세팅</h3>
