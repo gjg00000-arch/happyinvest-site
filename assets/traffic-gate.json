@@ -1,0 +1,10 @@
+{
+  "enabled": false,
+  "headline": "접속이 많아 잠시 대기 중입니다",
+  "message": "원활한 이용을 위해 순서대로 입장하고 있습니다. 새로고침을 반복하지 말고 아래 버튼으로 상태를 확인해 주세요.",
+  "approxQueueAhead": 800,
+  "etaMinutesMin": 2,
+  "etaMinutesMax": 12,
+  "pollSeconds": 5,
+  "opsNote": "긴급 시 enabled=true 로 바꾼 뒤 배포·캐시 무효화. approxQueueAhead·eta는 수동 조정 가능. 끝나면 enabled=false."
+}

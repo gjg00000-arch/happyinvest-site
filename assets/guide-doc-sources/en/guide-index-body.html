@@ -1,0 +1,185 @@
+      <header class="doc-hero">
+        <p class="doc-hero__eyebrow">User Guide · Documentation</p>
+        <h1 class="doc-hero__title">User Guide</h1>
+        <p class="doc-hero__lead">
+          Magic Indicator and MagicLine are delivered for <strong>TradingView (TRV, Pine)</strong> and <strong>MetaTrader 5</strong>
+          (distributed <strong>tick-chart-only <code>.ex5</code></strong>). Below is a compact map of
+          <strong>order and links</strong> for first-time setup—add screenshots or GIFs when you expand it.
+        </p>
+      </header>
+
+      <div class="doc-summary-grid" aria-label="Shortcuts">
+        <a class="doc-summary-card" href="usage.html">
+          <span class="doc-summary-card__k">00</span>
+          <span class="doc-summary-card__t">Using the indicators</span>
+          <span class="doc-summary-card__d">How to read · TRV / MT5</span>
+        </a>
+        <a class="doc-summary-card" href="usage-trv.html">
+          <span class="doc-summary-card__k">01</span>
+          <span class="doc-summary-card__t">TRV</span>
+          <span class="doc-summary-card__d">Indicator usage (detailed)</span>
+        </a>
+        <a class="doc-summary-card" href="usage-mt5.html">
+          <span class="doc-summary-card__k">02</span>
+          <span class="doc-summary-card__t">MT5</span>
+          <span class="doc-summary-card__d">Detailed usage · tick-chart only</span>
+        </a>
+        <a class="doc-summary-card" href="magictrading-strategy-inputs-ko.html">
+          <span class="doc-summary-card__k">02b</span>
+          <span class="doc-summary-card__t">MagicTrading inputs</span>
+          <span class="doc-summary-card__d">Mode · Fine Tune · Risk</span>
+        </a>
+        <a class="doc-summary-card" href="#account">
+          <span class="doc-summary-card__k">03</span>
+          <span class="doc-summary-card__t">Account · verification</span>
+          <span class="doc-summary-card__d">Sign up → KYC → billing</span>
+        </a>
+        <a class="doc-summary-card" href="../integrations/index.html#trv-signal-webhook">
+          <span class="doc-summary-card__k">04</span>
+          <span class="doc-summary-card__t">Signals · integrations</span>
+          <span class="doc-summary-card__d">TRV webhook specification</span>
+        </a>
+        <a class="doc-summary-card" href="../integrations/index.html#econ-calendar-cron">
+          <span class="doc-summary-card__k">04b</span>
+          <span class="doc-summary-card__t">Economic calendar alerts</span>
+          <span class="doc-summary-card__d">Cron webhook · Telegram</span>
+        </a>
+      </div>
+
+      <nav class="doc-toc" aria-label="Table of contents">
+        <h2>Table of contents</h2>
+        <ol>
+          <li><a href="usage.html">Indicators hub</a> — <a href="usage-trv.html">TRV</a> · <a href="usage-mt5.html">MT5</a></li>
+          <li><a href="magictrading-strategy-inputs-ko.html">MagicTrading (TRV) inputs &amp; tuning</a> — Mode · Adjust · Signals · Risk</li>
+          <li><a href="#overview">What you can do on this site</a></li>
+          <li><a href="#account">Sign-up · verification · billing</a></li>
+          <li><a href="#tv">Installing on TRV</a></li>
+          <li><a href="#mt5">MT5 — install files · attach on tick charts</a></li>
+          <li><a href="#tg">Finding your Telegram chat ID</a></li>
+          <li><a href="../integrations/index.html#trv-signal-webhook">Signal webhook — TRV → API</a> · <a href="#signals">overview</a></li>
+          <li><a href="../integrations/index.html#econ-calendar-cron">Economic calendar preload — Cron webhook</a></li>
+          <li><a href="#tips">Operating MagicLine (summary)</a></li>
+          <li><a href="#support">Community · policies · contact</a></li>
+        </ol>
+      </nav>
+
+      <article class="doc-section doc-section--soft" id="overview">
+        <h2>What you can do on this site</h2>
+        <p>
+          <strong>Guides, onboarding, and the community hub</strong> live in one place. The indicators are
+          <strong>not guaranteed profit vehicles</strong>—they are
+          <strong>reference aids</strong> for reading charts. Plans and perks are summarized on <a href="../events/index.html">Events</a> and <a href="../membership/index.html">Membership perks</a>;
+          board privileges follow the <a href="../legal/access-matrix.html">access matrix</a>.
+        </p>
+        <div class="doc-pill-row">
+          <span class="doc-pill">TRV</span>
+          <span class="doc-pill">MT5</span>
+          <span class="doc-pill">Telegram</span>
+          <span class="doc-pill">Webhook</span>
+        </div>
+      </article>
+
+      <article class="doc-section" id="account">
+        <h2>Sign-up · verification · billing</h2>
+        <p>Typical sequence; screens differ by release.</p>
+        <ol class="doc-steps">
+          <li>Create an account via <a href="../registration/index.html">Registration</a>.</li>
+          <li>Protect your account via <a href="../verify/index.html">Verification</a> (SMS and related policies vary by rollout).</li>
+          <li>Choose a plan in <a href="../billing/index.html">Billing</a>; follow pinned notices while integrations stabilize.</li>
+          <li>After login you can attach <strong>MT5 login · MQL5 · TRV IDs</strong> in your profile to match licences and alerts.</li>
+        </ol>
+      </article>
+
+      <article class="doc-section" id="tv">
+        <h2>Adding the indicator on TRV</h2>
+        <p>
+          TV delivery is usually via <strong>invite links</strong> or published <strong>Pine scripts</strong>.
+          Open <strong>Indicators</strong> on the chart, browse community or invite links, then add what we provide.
+        </p>
+        <ol class="doc-steps">
+          <li>Open a chart on TRV.</li>
+          <li>Add the Pine script per release notes, or tap the invite URL we share.</li>
+          <li>Tune lengths and colors in Properties; alerts and screen quotas depend on plan.</li>
+        </ol>
+        <p class="small" style="color: var(--ci-brown-muted); margin-top: 0.75rem">
+Unlike the MQL5 Market, TradingView runs in the browser or app. Saving your <strong>mql5.com login email</strong> in membership details helps reconcile licences later.
+        </p>
+        <div class="figure-placeholder">Screenshot / GIF place: Indicator add UI</div>
+      </article>
+
+      <article class="doc-section" id="mt5">
+        <h2>MT5 — download, deploy, attach on tick charts</h2>
+        <p>Flow: <strong>① Drop the compiled file → ② refresh MT’s lists → ③ Open a tick chart and attach.</strong>
+        Shipments are <strong>tick-chart-only <code>.ex5</code></strong>.</p>
+        <ol class="doc-steps">
+          <li>Install MetaTrader 5 from your broker.</li>
+          <li>Copy the bundled <code>.ex5</code> into <code>MQL5\Indicators</code> (use <strong>File → Open Data Folder</strong>).</li>
+          <li>Restart MT or refresh Navigator—the indicator appears under Custom Indicators.</li>
+          <li>Open a Tick chart first, drag the indicator onto it, or use <strong>Insert → Indicators → Custom</strong>.</li>
+        </ol>
+        <p class="small" style="color: var(--ci-brown-muted)">
+          Sources <code>.mq5</code> are typically not shipped; brokers and OS locales may tweak folder paths slightly.
+        </p>
+      </article>
+
+      <article class="doc-section" id="tg">
+        <h2>Telegram Chat ID checklist</h2>
+        <p>Alerts/webhooks usually need your <strong>numeric chat ID</strong>. Invite the bot per instructions, combine its token with
+        <code>getUpdates</code> helpers, then store only the authorised channel/group ID.</p>
+        <ol class="doc-steps">
+          <li>Add the announced bot or start its DM conversation.</li>
+          <li>DM, group and channel IDs differ—register only where operations say it is permitted.</li>
+          <li>Do not expose IDs casually.</li>
+        </ol>
+        <p class="small" style="margin-top: 0.75rem">
+Architecture notes live under <a href="../integrations/index.html">Integrations</a>. KR SMS OTP may require outbound sender IDs—follow <a href="../verify/index.html">Verification</a> notices.
+        </p>
+      </article>
+
+      <article class="doc-section doc-section--soft" id="signals">
+        <h2>Signal webhooks (optional)</h2>
+        <p>
+          With <strong>magic-indicator-api</strong> you may capture TRV/MT5 payloads over HTTP and fan them out—URL templates, JSON hints, and how this differs from the static brochure site are spelled out under
+          <a href="../integrations/index.html#trv-signal-webhook">TRV webhook integration</a> alongside API README excerpts.
+        </p>
+        <ul class="doc-steps" style="list-style: disc">
+          <li>
+            Typical endpoints include <code>POST /api/webhooks/signals/tradingview</code>, <code>POST /api/webhooks/signals/mt5</code>;
+            health probes use <code>GET …/api/webhooks/signals/health</code>.
+          </li>
+          <li>Auth variants: headers <code>X-Webhook-Secret</code>, <code>Authorization: Bearer …</code>, or <code>?secret=</code> matching server env vars.</li>
+          <li>Payloads arrive as JSON or plaintext; Telegram delivery status often surfaces inside <code>telegram.*</code> fields.</li>
+        </ul>
+        <p style="margin-top: 1rem">
+          <strong>High-impact FX calendar pings</strong> are separate from TRV signals—they fetch Finnhub, then a scheduler calls
+          <code>POST /v1/cron/economic-calendar</code>. Scripts, Docker, Nginx snippets: see
+          <a href="../integrations/index.html#econ-calendar-cron">Economic Cron webhook</a> and <code>server/economic-cron/DEPLOY.md</code>.
+        </p>
+      </article>
+
+      <article class="doc-section" id="tips">
+        <h2>MagicLine tips (abbreviated)</h2>
+        <p>
+          Built for derivatives/tick-heavy workloads. <strong>R</strong> trims signal chatter; no indicator removes risk altogether—maintain stops and sizing separately and read the
+          <a href="../index.html#magicline-message">home-preamble</a> in parallel.
+        </p>
+        <p class="small" style="color: var(--ci-brown-muted); margin-bottom: 0">
+          <a href="../index.html#magicline-message">Home — before you trade with MagicLine</a>
+        </p>
+      </article>
+
+      <article class="doc-section" id="support">
+        <h2>Community · policies · contact</h2>
+        <p>Questions, stories, and notices sit in the <a href="../boards/index.html">community boards</a>, split by area. Legal, refunds, and privacy live under <a href="../legal/index.html">Legal</a>; bugs and concierge mail land on <a href="../contact/index.html">Contact</a>.</p>
+        <div class="doc-link-grid">
+          <a href="../boards/index.html">Community hub</a>
+          <a href="../legal/index.html">Policies</a>
+          <a href="../contact/index.html">Contact</a>
+          <a href="../reflection/index.html">Field notes</a>
+        </div>
+      </article>
+
+      <div class="terms-box" style="margin-top: 1.5rem">
+        <strong>Subscriptions &amp; licences</strong><br />
+        Paid durations lock in after billing is wired—follow confirmation emails / account pages—and until then follow banners on Events.
+      </div>

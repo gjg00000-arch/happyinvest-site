@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420" role="img" aria-labelledby="t1">
+  <title id="t1">MagicTrading $= Inputs �(�t)</title>
+  <rect fill="#1e222d" width="640" height="420" rx="8"/>
+  <text x="320" y="36" fill="#d1d4dc" font-family="system-ui,sans-serif" font-size="18" font-weight="600" text-anchor="middle">MagicTrading � Inputs</text>
+  <rect x="40" y="56" width="560" height="340" fill="#131722" stroke="#363a45" rx="6"/>
+  <text x="56" y="84" fill="#787b86" font-family="system-ui,sans-serif" font-size="11">MODE</text>
+  <rect x="56" y="92" width="240" height="26" fill="#2a2e39" rx="4"/>
+  <text x="68" y="109" fill="#fff" font-family="system-ui,sans-serif" font-size="12">Entry Mode � Conservative / Attack</text>
+  <text x="56" y="144" fill="#787b86" font-family="system-ui,sans-serif" font-size="11">ADJUST � Fine Tune</text>
+  <rect x="56" y="152" width="528" height="72" fill="#2a2e39" rx="4"/>
+  <text x="68" y="174" fill="#ddd" font-family="system-ui,sans-serif" font-size="12">Manual BaseR (0=Auto)</text>
+  <text x="68" y="194" fill="#bbb" font-family="system-ui,sans-serif" font-size="11"> Auto Fine TuneManual Fine Tune � 0</text>
+  <text x="56" y="246" fill="#787b86" font-family="system-ui,sans-serif" font-size="11">SIGNALS / RISK</text>
+  <rect x="56" y="254" width="528" height="118" fill="#2a2e39" rx="4"/>
+  <text x="68" y="278" fill="#ddd" font-family="system-ui,sans-serif" font-size="11">L� � Text / JSON(webhook) � Attack/Exit % � �ѷ�| %</text>
+</svg>

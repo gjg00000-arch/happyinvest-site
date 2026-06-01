@@ -1,0 +1,3 @@
+# Copy to cloudfront-distribution-id (same folder) and put only the distribution ID on one line, e.g.
+# E1ABCDEFG2H3I4
+# Or set environment variable CLOUDFRONT_DISTRIBUTION_ID before deploy.

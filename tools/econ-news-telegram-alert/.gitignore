@@ -1,0 +1,4 @@
+.env
+sent_state.json
+__pycache__/
+.venv/

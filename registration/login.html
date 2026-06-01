@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Magic 지표 행복도담 인베스트 — 회원 로그인(이메일·비밀번호·Google)" />
+    <link rel="canonical" href="https://magicindicatorglobal.com/registration/login.html" />
+    <meta property="og:title" content="Magic 지표 — 회원 로그인" />
+    <meta property="og:url" content="https://magicindicatorglobal.com/registration/login.html" />
+    <meta property="og:image" content="https://magicindicatorglobal.com/assets/haengbokdam-company-ci.png" />
+    <title>Magic 지표 — 회원 로그인</title>
+    <meta name="api-base" content="https://api.magicindicatorglobal.com" />
+    <meta name="google-client-id" content="987937579183-4mrq96rt0rqofvsb8hmp353s48np9j2a.apps.googleusercontent.com" />
+    <link rel="stylesheet" href="../assets/common.css" />
+    <link rel="stylesheet" href="../assets/site-ux.css" />
+    <link rel="stylesheet" href="registration.css" />
+  </head>
+  <body>
+    <header class="site-header" role="banner">
+      <div class="ci-wrap">
+        <a class="ci-home-link" href="/" aria-label="메인 페이지로 이동">
+        <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="280" height="140" alt="주식회사 행복도담 인베스트 CI" />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+        </a>
+      </div>
+    </header>
+    <nav class="site-nav" aria-label="주요 메뉴">
+      <a href="../index.html">메인</a>
+      <a href="../guide/index.html">설치 안내</a>
+      <a href="../guide/usage.html">사용법</a>
+      <a href="../guide/usage-trv.html">TRV 설정</a>
+      <a href="../guide/usage-mt5.html">MT5 설정</a>
+      <a href="../downloads/index.html">다운로드</a>
+      <a href="index.html">가입·등록</a>
+      <a href="login.html" aria-current="page">로그인</a>
+      <a href="../verify/index.html">본인인증</a>
+      <a href="../billing/index.html">구독·결제</a>
+      <a href="../events/index.html">이벤트</a>
+      <a href="../membership/index.html">회원혜택</a>
+      <a href="../reflection/index.html">실전후기</a>
+      <a href="../contact/index.html">문의</a>
+      <a href="/boards/index.html">모임터</a>
+      <a href="/boards/index.html?board=developer_journal">개발자 일지</a>
+      <a href="/boards/index.html?board=event_promo_shoutout">추천·홍보</a>
+      <a href="../legal/index.html">약관·정책</a>
+      <a href="../head-daily-report/index.html">본부 데일리</a>
+      <a href="../admin/index.html">관리자</a>
+      <a href="../integrations/index.html">연동</a>
+    </nav>
+    <main class="wrap registration-wrap" id="main-content">
+      <h1 class="page-title">회원 로그인</h1>
+      <p class="lead">
+        가입 시 사용한 <strong>이메일과 비밀번호</strong> 또는 <strong>Google 계정</strong>으로 로그인합니다. 브라우저에 세션이 저장되며, 연동·결제·모임터 등 회원 기능에 활용됩니다.
+      </p>
+      <span id="api-base-label" class="visually-hidden" aria-hidden="true">https://api.magicindicatorglobal.com</span>
+
+      <div id="login-alert" class="reg-alert" role="status" aria-live="polite" hidden></div>
+
+      <section class="reg-fieldset" aria-label="Google 로그인">
+        <h2 class="reg-legend" style="margin: 0 0 0.4rem">Google로 로그인</h2>
+        <div id="google-signin-button"></div>
+        <span id="google-prefill-status" class="reg-hint" aria-live="polite"></span>
+      </section>
+
+      <form id="member-login-form" class="reg-form" novalidate autocomplete="on">
+        <fieldset class="reg-fieldset">
+          <legend class="reg-legend">이메일 로그인</legend>
+          <div class="reg-field">
+            <label for="login-email">이메일</label>
+            <input type="email" id="login-email" name="email" autocomplete="username email" required maxlength="200" placeholder="가입 이메일" />
+          </div>
+          <div class="reg-field">
+            <label for="login-password">비밀번호</label>
+            <input type="password" id="login-password" name="password" autocomplete="current-password" required minlength="8" maxlength="128" />
+          </div>
+        </fieldset>
+        <div class="reg-actions">
+          <button type="submit" class="reg-submit" id="login-submit">로그인</button>
+          <p class="small" style="margin-top: 1rem">
+            아직 계정이 없으신가요?
+            <a href="associate.html">준회원 가입</a> · <a href="index.html">정회원 가입</a>
+          </p>
+        </div>
+      </form>
+    </main>
+
+    <footer class="site-footer" role="contentinfo">
+      <div class="ci-wrap ci-wrap--footer">
+        <img class="ci-logo-img" src="../assets/haengbokdam-company-ci.png" width="220" height="110" alt="" />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </footer>
+    <script src="../assets/site-ux.js"></script>
+    <script src="../assets/magic-auth.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="login-page.js"></script>
+  </body>
+</html>

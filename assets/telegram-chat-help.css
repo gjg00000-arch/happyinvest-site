@@ -1,0 +1,92 @@
+/* telegram-chat-id/index.html — 챗 ID 확인 안내 */
+
+.tg-help-lead {
+  margin-bottom: 1rem;
+  color: var(--ci-brown-muted);
+}
+
+.tg-help-card {
+  margin: 1.25rem 0;
+  padding: 1.1rem 1.15rem 1.2rem;
+  border-radius: 14px;
+  background: linear-gradient(165deg, #fffef9 0%, #f2faf5 100%);
+  border: 1px solid rgba(47, 111, 79, 0.2);
+  box-shadow: 0 4px 18px rgba(47, 111, 79, 0.06);
+}
+
+.tg-help-card__title {
+  margin: 0 0 0.65rem;
+  font-size: 1.05rem;
+  color: var(--ci-brown);
+}
+
+.tg-help-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  margin: 0 0 0.85rem;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: #3d342e;
+  cursor: pointer;
+}
+
+.tg-help-check input {
+  margin-top: 0.2rem;
+  flex-shrink: 0;
+}
+
+.tg-help-open-btn {
+  margin-bottom: 0.35rem;
+}
+
+.tg-help-open-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.tg-help-panel {
+  margin-top: 1rem;
+  padding: 1rem 1.05rem;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid rgba(74, 53, 40, 0.1);
+}
+
+.tg-help-panel[hidden] {
+  display: none !important;
+}
+
+.tg-help-steps {
+  margin: 0;
+  padding-left: 1.2rem;
+  line-height: 1.65;
+  font-size: 0.93rem;
+  color: #333;
+}
+
+.tg-help-steps li {
+  margin-bottom: 0.55rem;
+}
+
+.tg-help-steps code {
+  font-size: 0.86rem;
+  background: #f0f4f8;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+}
+
+.tg-help-note {
+  margin: 0.85rem 0 0;
+  padding: 0.65rem 0.75rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--ci-brown-muted);
+  background: rgba(199, 91, 74, 0.06);
+  border-radius: 8px;
+  border: 1px solid rgba(199, 91, 74, 0.15);
+}
+
+.tg-help-back {
+  margin-top: 1.25rem;
+}

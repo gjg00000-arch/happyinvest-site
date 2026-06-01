@@ -1,0 +1,17 @@
+---
+description: magic-indicator-site — 공개 정적 파일을 수정하면 verify 후 deploy:s3까지 같은 세션에서 마친다
+globs: "**/*.{html,css,js,mjs}"
+alwaysApply: true
+---
+
+# 수정 → 검증 → S3/CloudFront 배포
+
+이 저장소를 작업 루트로 열었을 때 항상 적용한다. 다만 **실제로 S3에 올라가는 정적 파일을 손댄 경우**에만 아래 배포 절차를 실행한다(규칙·README만 고친 경우 등은 생략).
+
+`magic-indicator-site`에서 **프로덕션 정적 파일**(HTML, boards/guide/assets JS·CSS, 루트 index 등 S3 동기화 대상)을 바꿨다면, 사용자가 «배포하지 마」「로컬만»을 말하지 않는 한 **같은 세션**에서 다음을 끝낸다.
+
+1. 프로젝트 루트에서 `npm run verify` — 실패 시 원인 수정 후 재시도, 배포 금지.
+2. `npm run deploy:s3` — AWS CLI·자격 필요.
+3. 답변에 성공/실패와 CloudFront 무효화 안내를 짧게 적는다.
+
+**Git 커밋·푸시**는 사용자가 명시 요청한 경우에만(전역 규칙 우선). 배포 대상이 아닌 변경만 있으면 `deploy:s3` 생략 가능.

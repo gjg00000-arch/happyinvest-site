@@ -1,0 +1,271 @@
+/* 게시판 본문 리치 에디터 — 모임터·메인 등 임베드 게시판 공통 */
+
+.board-rte-shell {
+  margin: 0.4rem 0 0;
+  border-radius: 12px;
+  border: 1px solid rgba(74, 53, 40, 0.13);
+  overflow: hidden;
+  background: rgba(255, 255, 253, 0.95);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 1px 10px rgba(47, 92, 112, 0.05);
+}
+
+.magic-board__compose .board-rte-shell {
+  margin-top: 0.35rem;
+}
+
+.board-rte-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  row-gap: 0.42rem;
+  padding: 0.45rem 0.52rem;
+  background: linear-gradient(160deg, #1f2428 0%, #15181d 72%, #1a2730 108%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.35);
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+
+/* 두 줄 레이아웃 — 글꼴/색 줄이 줄바꿈으로 안 보이게 분리 */
+.board-rte-toolbar--stack {
+  flex-direction: column;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  overflow-x: visible;
+  row-gap: 0;
+}
+
+.board-rte-toolbar--stack > .board-rte-toolbar-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  row-gap: 0.42rem;
+}
+
+.board-rte-toolbar--stack > .board-rte-toolbar-row + .board-rte-toolbar-row {
+  margin-top: 0.42rem;
+  padding-top: 0.42rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.board-rte-toolbar-row {
+  flex-shrink: 0;
+}
+
+.board-rte-toolbar--stack > .board-rte-toolbar-row {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.board-rte-btn {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.2;
+  padding: 0.22rem 0.48rem;
+  min-height: 1.9rem;
+  border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #e9efec;
+  background: rgba(255, 255, 255, 0.08);
+  transition:
+    background 0.16s ease,
+    border-color 0.16s ease,
+    color 0.16s ease;
+}
+
+.board-rte-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.board-rte-btn:active {
+  background: rgba(47, 111, 79, 0.45);
+  border-color: rgba(148, 255, 207, 0.22);
+}
+
+.board-rte-select {
+  flex-shrink: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.2rem 1.85rem 0.2rem 0.52rem;
+  border-radius: 7px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #eaf2ee;
+  background:
+    rgba(255, 255, 255, 0.08)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none' viewBox='0 0 10 6'%3E%3Cpath stroke='%2399eec4' stroke-width='1.2' stroke-linecap='round' d='m1 1 4 4 4-4'/%3E%3C/svg%3E")
+    no-repeat right 0.5rem center / 10px auto;
+}
+
+.board-rte-select option {
+  color: #171a17;
+}
+
+.board-rte-color-chip {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  margin: 0;
+  padding: 0.12rem 0.35rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.09);
+  color: #d5eade;
+  font-size: 0.68rem;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+}
+
+.board-rte-color-chip-text {
+  max-width: 3.9em;
+  line-height: 1.05;
+}
+
+.board-rte-color-chip input[type="color"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.55rem;
+  height: 1.45rem;
+  padding: 0;
+  margin: 0;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 5px;
+  background: transparent;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.board-rte-color-chip input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 1px;
+}
+
+.board-rte-color-chip input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 3px;
+}
+
+.board-rte-editor {
+  box-sizing: border-box;
+  min-height: clamp(176px, 28vh, 320px);
+  max-height: 70vh;
+  overflow: auto;
+  padding: 0.75rem 1rem;
+  margin: 0;
+  outline: none;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--ci-brown, #3a332a);
+  background: #fcfbf9;
+}
+
+.board-rte-editor:focus {
+  box-shadow:
+    inset 0 0 0 2px rgba(47, 111, 79, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.board-rte-editor:empty::before {
+  content: attr(data-placeholder);
+  color: rgba(90, 80, 70, 0.45);
+  pointer-events: none;
+}
+
+.board-rte-editor h2 {
+  font-size: 1.35rem;
+  margin: 0.6rem 0 0.35rem;
+  color: var(--ci-green, #2f6f4f);
+}
+
+.board-rte-editor blockquote {
+  margin: 0.55rem 0;
+  padding: 0.45rem 0.75rem;
+  border-left: 4px solid rgba(47, 111, 79, 0.45);
+  background: rgba(47, 111, 79, 0.07);
+}
+
+.board-rte-editor pre {
+  font-family:
+    ui-monospace,
+    Consolas,
+    monospace;
+  font-size: 0.86rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  background: rgba(40, 45, 50, 0.07);
+  overflow: auto;
+}
+
+.board-rte-editor hr {
+  border: none;
+  border-top: 1px dashed rgba(74, 53, 40, 0.22);
+  margin: 0.85rem 0;
+}
+
+.board-rte-editor a {
+  color: var(--ci-green, #26734e);
+}
+
+.board-rte-editor img {
+  max-width: 100%;
+  height: auto;
+}
+
+.magic-board--compact .board-rte-editor {
+  min-height: 140px;
+  max-height: 48vh;
+  font-size: 0.93rem;
+}
+
+/*
+ * boards/index 등: 에디터가 .field 블록 안에 있어 common.css의
+ * `.field select { width:100% }`가 툴바 select에도 적용되면 글자 크기 드롭다운만
+ * 가로 전체로 늘어나 한 줄 레이아웃이 깨져 보입니다. 툴바 범위에서만 폭을 되돌립니다.
+ */
+.field .board-rte-shell .board-rte-toolbar select.board-rte-select {
+  width: auto;
+  min-width: 7.35rem;
+  max-width: 100%;
+}
+
+/* .field label { display:block } 과 겹치지 않도록 명시 유지 */
+.field .board-rte-shell .board-rte-toolbar label.board-rte-color-chip {
+  display: inline-flex;
+}
+
+.board-rte-select--font {
+  min-width: 8.85rem !important;
+}
+
+.board-rte-btn--inline-tool {
+  min-width: auto;
+}
+
+.field .board-rte-shell .board-rte-toolbar--stack select.board-rte-select,
+.field .board-rte-shell .board-rte-toolbar--stack .board-rte-toolbar-row select.board-rte-select {
+  width: auto;
+  min-width: 7.35rem;
+  max-width: 100%;
+}
+
+.field .board-rte-shell .board-rte-toolbar--stack label.board-rte-color-chip,
+.field .board-rte-shell .board-rte-toolbar--stack .board-rte-toolbar-row label.board-rte-color-chip {
+  display: inline-flex;
+}
+
+.field .board-rte-shell .board-rte-toolbar--stack .board-rte-btn--wide {
+  min-width: 5.25rem;
+  font-weight: 700;
+}

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta
+      name="description"
+      content="PayPal 결제 링크 테스트 — 대시보드에서 만든 호스티드 링크로 체크아웃 확인용(내부)."
+    />
+    <link rel="canonical" href="https://magicindicatorglobal.com/billing/paypal-test.html" />
+    <title>PayPal 결제 링크 테스트 — Magic 지표</title>
+    <link rel="stylesheet" href="../assets/common.css" />
+    <link rel="stylesheet" href="../assets/site-ux.css" />
+    <style>
+      .pp-test-box {
+        max-width: 38rem;
+        margin: 1.25rem auto 2rem;
+        padding: 1.25rem 1.35rem;
+        border-radius: 14px;
+        border: 1px solid rgba(47, 111, 79, 0.28);
+        background: linear-gradient(165deg, #fffef9 0%, #f4faf6 100%);
+      }
+      .pp-test-box h2 {
+        margin: 0 0 0.65rem;
+        font-size: 1.15rem;
+      }
+      .pp-test-box p {
+        margin: 0 0 0.75rem;
+        line-height: 1.6;
+        font-size: 0.95rem;
+        color: var(--ci-brown-muted);
+      }
+      .pp-test-box textarea {
+        width: 100%;
+        min-height: 4.5rem;
+        padding: 0.6rem 0.7rem;
+        border: 1px solid #cfd6e0;
+        border-radius: 8px;
+        font: inherit;
+        font-size: 0.9rem;
+        box-sizing: border-box;
+      }
+      .pp-test-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.85rem;
+        align-items: center;
+      }
+      .pp-test-hint {
+        margin: 0.85rem 0 0;
+        padding: 0.65rem 0.75rem;
+        font-size: 0.82rem;
+        line-height: 1.55;
+        border-radius: 8px;
+        background: rgba(47, 111, 79, 0.08);
+        border: 1px solid rgba(47, 111, 79, 0.22);
+      }
+      .pp-test-code {
+        margin-top: 0.75rem;
+        font-size: 0.78rem;
+        color: var(--ci-brown-muted);
+        word-break: break-all;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header" role="banner">
+      <div class="ci-wrap">
+        <a class="ci-home-link" href="/" aria-label="메인 페이지로 이동">
+        <img
+          class="ci-logo-img"
+          src="../assets/haengbokdam-company-ci.png"
+          width="280"
+          height="140"
+          alt="주식회사 행복도담 인베스트 CI"
+        />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+        </a>
+      </div>
+    </header>
+    <nav class="site-nav" aria-label="주요 메뉴">
+      <a href="../index.html">메인</a>
+      <a href="../guide/index.html">설치 안내</a>
+      <a href="../guide/usage.html">사용법</a>
+      <a href="../guide/usage-trv.html">TRV 설정</a>
+      <a href="../guide/usage-mt5.html">MT5 설정</a>
+      <a href="../downloads/index.html">다운로드</a>
+      <a href="../registration/index.html">가입·등록</a>
+      <a href="../registration/login.html">로그인</a>
+      <a href="../verify/index.html">본인인증</a>
+      <a href="index.html">구독·결제</a>
+      <a href="../events/index.html">이벤트</a>
+      <a href="../membership/index.html">회원혜택</a>
+      <a href="../reflection/index.html">실전후기</a>
+      <a href="../contact/index.html">문의</a>
+      <a href="/boards/index.html">모임터</a>
+      <a href="/boards/index.html?board=developer_journal">개발자 일지</a>
+      <a href="/boards/index.html?board=event_promo_shoutout">추천·홍보</a>
+      <a href="../legal/index.html">약관·정책</a>
+      <a href="../head-daily-report/index.html">본부 데일리</a>
+      <a href="../admin/index.html">관리자</a>
+      <a href="../integrations/index.html">연동</a>
+    </nav>
+
+    <main class="wrap" id="main-content">
+      <p class="small" style="margin: 0 0 0.25rem; color: var(--ci-brown-muted)">
+        <span class="en">noindex</span> — 운영·테스트용. 검색 노출 최소화.
+      </p>
+      <h1 class="page-title">PayPal 결제 링크 테스트</h1>
+      <p class="lead" style="max-width: 40rem">
+        페이팔 비즈니스 대시보드에서 <strong>결제 링크(또는 QR)</strong>를 만들면 발급되는
+        <strong>https://…</strong> 주소를 아래에 넣고 열면, 페이팔 호스티드 결제 화면으로 이동합니다. 별도 서버
+        API 없이 동작합니다.
+      </p>
+
+      <div class="pp-test-box">
+        <h2>1) 링크 한 줄 붙여 넣기</h2>
+        <p>
+          PayPal &gt; 결제 링크 및 버튼 구현 &gt; 생성한 상품의 <strong>결제 링크 URL</strong>을 복사해 넣으세요. (샌드박스/
+          라이브는 페이팔 계정 모드에 따릅니다.)
+        </p>
+        <label class="visually-hidden" for="pp-link-input">PayPal 결제 링크 URL</label>
+        <textarea
+          id="pp-link-input"
+          placeholder="https://www.paypal.com/invoice/p/#/… 또는 checkout 링크"
+          spellcheck="false"
+          autocomplete="off"
+        ></textarea>
+        <div class="pp-test-actions">
+          <button type="button" class="btn" id="pp-open-same">이 창에서 결제 열기</button>
+          <button type="button" class="btn btn--ghost" id="pp-open-tab">새 탭에서 열기</button>
+          <a class="btn btn--ghost" href="index.html#paypal-sdk-test">구독·결제 · PayPal US$1 테스트</a>
+          <a class="btn btn--ghost" href="index.html#paypal-checkout">구독·결제로 돌아가기</a>
+        </div>
+        <p class="pp-test-hint">
+          <strong>주소줄로 바로 테스트:</strong>
+          <code style="font-size: 0.78rem">billing/paypal-test.html?url=</code> 뒤에 인코딩된 결제 링크를 붙여 요청할 수도
+          있습니다(팀 공유 시 URL 길이·노출 주의).
+        </p>
+        <p class="pp-test-code" id="pp-embed-note"></p>
+      </div>
+
+      <article class="pay-dual__panel" style="max-width: 40rem; margin: 0 auto 2.5rem">
+        <span class="pay-dual__eyebrow">참고</span>
+        <h2 class="visually-hidden">설명</h2>
+        <ul class="doc-steps" style="margin: 0; padding-left: 1.2rem; line-height: 1.65">
+          <li>이 페이지는 <strong>가입 플랜 체크아웃(API)</strong>과 별개입니다. 본사 서버의 <code>/api/payments/paypal/…</code> 를 쓰지 않습니다.</li>
+          <li>실매매 연동 전에는 소액·샌드박스 규칙에 맞춰 먼저 확인하세요.</li>
+          <li>환불·약관은 <a href="../legal/refund.html">환불·결제 안내</a>·당시 인보이스를 따릅니다.</li>
+        </ul>
+      </article>
+    </main>
+
+    <footer class="site-footer" role="contentinfo" style="margin-top: 2rem">
+      <div class="ci-wrap ci-wrap--footer">
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        /** 테스트 시 기본으로 채워 둘 결제 링크(선택). 배포 시 비워도 됨. */
+        var DEFAULT_CHECKOUT_URL = "";
+
+        var input = document.getElementById("pp-link-input");
+        var note = document.getElementById("pp-embed-note");
+        var q = new URLSearchParams(window.location.search);
+        var fromQuery = q.get("url") || q.get("link") || "";
+        if (fromQuery) {
+          input.value = decodeURIComponent(fromQuery);
+        } else if (DEFAULT_CHECKOUT_URL) {
+          input.value = DEFAULT_CHECKOUT_URL;
+        }
+
+        function getUrl() {
+          var raw = (input.value || "").trim();
+          if (!raw) {
+            alert("PayPal 결제 링크 URL을 붙여 넣어 주세요.");
+            return null;
+          }
+          try {
+            var u = new URL(raw);
+            if (u.protocol !== "https:" && u.protocol !== "http:") {
+              alert("http(s) URL만 열 수 있습니다.");
+              return null;
+            }
+            if (!/paypal\.com/i.test(u.hostname) && u.hostname !== "paypal.me" && !/\.paypal\.me$/i.test(u.hostname)) {
+              if (!confirm("페이팔·PayPal.Me 도메인이 아닙니다. 그래도 열까요?")) return null;
+            }
+            return u.href;
+          } catch (e) {
+            alert("올바른 URL 형식이 아닙니다.");
+            return null;
+          }
+        }
+
+        document.getElementById("pp-open-same").addEventListener("click", function () {
+          var href = getUrl();
+          if (href) window.location.href = href;
+        });
+        document.getElementById("pp-open-tab").addEventListener("click", function () {
+          var href = getUrl();
+          if (href) window.open(href, "_blank", "noopener,noreferrer");
+        });
+
+        if (note) {
+          note.textContent =
+            "소스 상단 script의 DEFAULT_CHECKOUT_URL 에 링크를 넣어 두면, 이 페이지를 열 때 입력란에 자동으로 채울 수 있습니다.";
+        }
+      })();
+    </script>
+    <script src="../assets/site-ux.js"></script>
+  </body>
+</html>

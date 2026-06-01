@@ -1,0 +1,10 @@
+Windows Registry Editor Version 5.00
+
+; Excel.Sheet.12 / Sheet.8 DDE 열기 문자열을 고전 형식으로 통일 (일부 환경에서 /ou "%u" 조합 이슈 완화)
+; 관리자 병합 필요
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Excel.Sheet.12\shell\Open\ddeexec]
+@="[open(\"%1\")]"
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Excel.Sheet.8\shell\Open\ddeexec]
+@="[open(\"%1\")]"

@@ -1,0 +1,6 @@
+[
+  {"id":"tron-trc20","label":"TRX (TRC-20)","search":"trx tron trc 트론"},
+  {"id":"solana-spl","label":"SOL (Solana)","search":"solana sol 솔 솔라나"},
+  {"id":"polygon-pos","label":"POLY (Polygon)","search":"polygon matic 폴리곤 poly"},
+  {"id":"arbitrum-one","label":"ARB · Arbitrum One (USDC)","search":"arb arbitrum 아비트럼"}
+]

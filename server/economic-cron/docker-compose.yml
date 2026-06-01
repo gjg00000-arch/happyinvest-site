@@ -1,0 +1,15 @@
+# 사용: server/economic-cron 디렉터리에서
+#   copy env.example .env  후 값 입력
+#   mkdir -p data
+#   docker compose up -d --build
+services:
+  economic-cron:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8787:8787"
+    env_file: .env
+    environment:
+      STATE_FILE: /app/data/sent_state.json
+    volumes:
+      - ./data:/app/data

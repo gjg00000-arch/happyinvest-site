@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <meta name="api-base" content="https://magicindicatorglobal.com" />
+    <title>Magic 지표 — 메인</title>
+    <meta name="description" content="Magic 지표 가이드·가입·모임터 — 주식회사 행복도담 인베스트" />
+    <meta
+      name="keywords"
+      content="Magic 지표, Magic Indicator, 행복도담 인베스트, Haengbokdodam Invest, magicindicatorglobal, TradingView, Pine Script, 트레이딩뷰, MT5, MQL5, 지표 알림, 웹훅, 구독 결제, 모임터"
+    />
+    <meta name="theme-color" content="#2f6f4f" />
+    <meta property="og:title" content="Magic 지표 — 행복도담 인베스트" />
+    <meta property="og:description" content="Magic 지표 가이드·가입·모임터" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://magicindicatorglobal.com/assets/haengbokdam-company-ci.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Magic 지표 — 행복도담 인베스트" />
+    <meta name="twitter:description" content="Magic 지표 가이드·가입·모임터 — TradingView·MT5 안내" />
+    <meta name="twitter:image" content="https://magicindicatorglobal.com/assets/haengbokdam-company-ci.png" />
+    <meta property="og:url" content="https://magicindicatorglobal.com/" />
+    <link rel="canonical" href="https://magicindicatorglobal.com/" />
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"Organization","name":"주식회사 행복도담 인베스트","alternateName":"Haengbokdodam Invest co.ltd","url":"https://magicindicatorglobal.com/"}
+    </script>
+    <link rel="manifest" href="assets/site.webmanifest" />
+    <link rel="stylesheet" href="assets/common.css" />
+    <link rel="stylesheet" href="assets/board-embed.css?v=20260523rteFonts" />
+    <link rel="stylesheet" href="assets/site-ux.css?v=20260528loginonly" />
+    <link rel="stylesheet" href="assets/home-philosophy.css" />
+  </head>
+  <body class="layout-home">
+    <div class="main-top-banner">
+      <img
+        class="main-top-banner__img"
+        src="assets/main-top-banner.webp"
+        width="1800"
+        height="520"
+        alt="Magic Indicator 차트 신호와 추세선 예시"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </div>
+    <header class="site-header" role="banner">
+      <div class="ci-wrap">
+        <a class="ci-home-link" href="/" aria-label="메인 페이지로 이동">
+        <img
+          class="ci-logo-img"
+          src="assets/haengbokdam-company-ci.png"
+          width="280"
+          height="140"
+          alt="주식회사 행복도담 인베스트 CI"
+        />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+        </a>
+      </div>
+    </header>
+    <nav class="site-nav" aria-label="주요 메뉴">
+      <a href="index.html" aria-current="page">메인</a>
+      <a href="guide/index.html">설치 안내</a>
+      <a href="guide/usage.html">사용법</a>
+      <a href="guide/usage-trv.html">TRV 설정</a>
+      <a href="guide/usage-mt5.html">MT5 설정</a>
+      <a href="downloads/index.html">다운로드</a>
+      <a href="registration/index.html">가입·등록</a>
+      <a href="registration/login.html">로그인</a>
+      <a href="verify/index.html">본인인증</a>
+      <a href="billing/index.html#payment-dual">구독·결제</a>
+      <a href="events/index.html">이벤트</a>
+      <a href="membership/index.html">회원혜택</a>
+      <a href="reflection/index.html">실전후기</a>
+      <a href="contact/index.html">문의</a>
+      <a href="/boards/index.html">모임터</a>
+      <a href="/boards/index.html?board=developer_journal">개발자 일지</a>
+      <a href="/boards/index.html?board=event_promo_shoutout">추천·홍보</a>
+      <a href="legal/index.html">약관·정책</a>
+      <a href="head-daily-report/index.html">본부 데일리</a>
+      <a href="admin/index.html">관리자</a>
+      <a href="integrations/index.html">연동</a>
+    </nav>
+    <aside class="official-site-banner layout-home-official-banner" aria-label="공식 홈페이지 주소 안내">
+      <p class="official-site-banner__inner">
+        <span class="official-site-banner__label" data-i18n="officialSiteBannerLabel">공식 홈페이지</span>
+        <a href="https://magicindicatorglobal.com/" class="official-site-banner__link">https://magicindicatorglobal.com/</a>
+        <span class="official-site-banner__hint" data-i18n="officialSiteBannerHint">외부 안내·북마크 시 이 주소인지 확인하세요.</span>
+      </p>
+    </aside>
+    <main class="wrap layout-home-main" id="main-content">
+      <!-- 관리자가 저장한 HTML이 있으면 API에서 주입(없으면 숨김). 드래그 편집기 아님·마크업 직접 입력. -->
+      <div id="cms-home-slot" class="cms-home-slot" hidden></div>
+      <header>
+        <h1 class="page-title" data-i18n="indexTitle">Magic 지표 · 매직라인</h1>
+        <p class="lead" id="index-lead">
+          복잡한 분석보다 <strong>방향·구간·대응</strong>을 빠르게 보는 지표입니다. 차트에 입히고, 내 플랜을 고르고,
+          매직라인 방향만 확인하세요.
+        </p>
+      </header>
+
+      <section class="home-visitor-strip" id="home-visitor-strip" aria-label="방문자 집계">
+        <div class="home-visitor-strip__inner">
+          <span class="home-visitor-strip__item"
+            ><span class="home-visitor-strip__lbl" id="home-visit-today-label">오늘</span>
+            <strong class="home-visitor-strip__num" id="home-visit-today">-</strong></span
+          >
+          <span class="home-visitor-strip__sep" aria-hidden="true">/</span>
+          <span class="home-visitor-strip__item"
+            ><span class="home-visitor-strip__lbl" id="home-visit-total-label">누적</span>
+            <strong class="home-visitor-strip__num" id="home-visit-total">-</strong></span
+          >
+          <span class="home-visitor-strip__hint" data-i18n="homeVisitorHint"
+            >사이트 방문 고유 방문자 수(KST 일자·브라우저 ID 기준).</span
+          >
+        </div>
+      </section>
+
+      <section class="ml-must-read" id="must-read-philosophy" data-magic-auto-translate="1" aria-labelledby="must-read-title">
+        <p class="ml-must-read__badge">필독 · 매우 중요</p>
+        <h2 class="ml-must-read__title" id="must-read-title">지표를 쓰기 전에 꼭 읽어 주세요</h2>
+        <p class="ml-must-read__lede">
+          이 지표는 <strong>신호만 따라가면</strong> 되는 도구가 아닙니다. 아래를 갖추지 않으면
+          <strong>수익을 내기 매우 어렵습니다.</strong> 짧게 읽고, 차트 앞에서 다시 떠올려 보세요.
+        </p>
+        <aside class="ml-must-read__volume-callout" role="region" aria-labelledby="volume-tick-callout-quote">
+          <p class="ml-must-read__volume-callout__quote" id="volume-tick-callout-quote">
+            가격은 속일 수 있어도, 거래량은 속일 수 없다.
+          </p>
+          <p class="ml-must-read__volume-callout__body">
+            시장을 볼 때도 그 전제가 가까울 때가 많습니다—의미 있는 축은
+            <strong>체결·활동이 쌓이는 틱(Tick)</strong> 쪽입니다. 시간봉만 고정해 두기보다
+            <strong>틱 차트를 가급적 쓰시길 적극 권장</strong>합니다. 특히 바 단위 해석에서는
+            <strong>1000틱 봉</strong> 조합을 <strong>특별히 적극 권장</strong>합니다.
+            설정은 <a href="guide/usage.html">TradingView 안내</a>와
+            <a href="guide/usage-mt5.html#tick-chart">MT5 틱 차트</a>를 함께 확인해 주세요.
+          </p>
+        </aside>
+        <ul class="ml-must-read__list">
+          <li>
+            <strong>진입은 자주 할 필요가 없습니다.</strong> 오히려 <strong>늦어도 괜찮고</strong>, 횟수를 줄여도 됩니다.
+            대신 <strong>안전마진이 가장 높다고 느껴질 때</strong>—밴드·R·상황이 맞을 때—<strong>최고의 한 방에 가깝게</strong> 들어가려는 쪽이 이 지표와 맞습니다.
+          </li>
+          <li>
+            그래도 시장이 아니면 <strong>손절은 해야 합니다.</strong> 그건 실패가 아니라
+            <strong>준거점이 바뀌었다는 걸 인정하고 자리를 비우는 것</strong>(준거점 이동)에 가깝습니다.
+          </li>
+          <li>
+            <strong>욕심을 줄입니다.</strong> 이익을 크게 한 번 가져가려 하기보다,
+            <strong>매직라인(평균·중심) 근처</strong>나 <strong>트레일링 스탑</strong>이 정한 자리에서
+            <strong>작은 수익이라도 쌓아 가는 것</strong>이—준거가 옮겨갈 때마다 계좌를 지키는 길에 가깝습니다.
+          </li>
+          <li>
+            <strong>평균회귀</strong>는 특정 종목만의 이야기가 아닙니다.
+            <strong>어느 시장·어느 종목이든</strong> “한번 갔다가 결국 평균 쪽으로 되돌아오려는 힘”을 염두에 두는
+            <strong>보편적인 시각</strong>입니다. 이 지표도 그 전제 위에 있습니다.
+          </li>
+          <li>
+            차트에서 <strong>매수·매도 표식은 밴드 하선·상단(진입 기준선)</strong>에 맞춰 보이고, 청산·스탑은
+            <strong>매직라인 근처·목표·트레일 가격</strong>에 맞춰 보입니다. (체결·리포트 숫자와 1:1은 아닐 수 있습니다.)
+          </li>
+          <li>
+            <strong>TradingView · 마켓프리 등 배포 스크립트</strong>는 <strong>받아서 종목·시간축 차트마다 각각 적용</strong>되면,
+            그 차트 안에서 로직대로 신호가 나옵니다. JSON 등에 붙는 <code>license_pack</code> 같은 필드는
+            <strong>배포·웹훅이 어떤 빌드인지 구분하는 라벨</strong>일 뿐이며,
+            TradingView 계정 유료 여부와 막혔다는 뜻으로 읽으시면 안 됩니다. (계정 과금 요건은 TradingView 안내를 따릅니다.)
+          </li>
+          <li>
+            <strong>알림·웹훅은 사용자 설정입니다.</strong> 전략/지표를 차트에 붙인 뒤
+            우측 <strong>설정(톱니) → 속성 → Inputs → 「Use alert() Messages」</strong>를 끄면
+            <code>alert()</code> 호출이 나가지 않으므로 외부 서버·텔레그램으로도 전달되지 않습니다.
+            켠 다음에는 TradingView 상단 <strong>알림 종</strong>에서 알림 규칙을 만들고(웹훅 URL 등),
+            <a href="guide/magictrading-strategy-inputs-ko.html#signals">MagicTrading Signals 안내</a>를 참고해 주세요. 사용 여부·채널은 사용자 판단에 맡깁니다.
+          </li>
+          <li>
+            <strong>TradingView 전략 탭의 포지션·시뮬 체결</strong>과 <strong>실제 증권사·외부 자동매매 봇의 잔고</strong>는
+            별개입니다. 차트에는 시뮬 결과만 보일 수 있고, 실매매는 중계·봇·주문 라우팅 설정을 따라갑니다.
+          </li>
+        </ul>
+        <p class="ml-must-read__warn">
+          <strong>이해하지 않은 채</strong> 설정만 건드리거나 <strong>신호만</strong> 쫓아가면 손실을 키우기 쉽습니다.
+          <a href="guide/magictrading-strategy-inputs-ko.html">MagicTrading 입력·파인튜닝 안내</a>와
+          <a href="guide/usage.html">지표 사용법</a>을 <strong>반드시</strong> 함께 읽어 주세요.
+        </p>
+        <p class="ml-must-read__foot small">
+          교육·참고용 안내이며, 수익을 약속하지 않습니다. 레버리지 상품은 손실이 클 수 있습니다.
+        </p>
+      </section>
+
+      <section class="ml-quick-start" id="home-quick-start" data-magic-auto-translate="1" aria-labelledby="ml-quick-start-title">
+        <p class="ml-quick-start__badge">MagicLine 시작하기 · 3초 가이드</p>
+        <h2 id="ml-quick-start-title">심플하게, 세 단계만 기억하세요.</h2>
+        <div class="ml-quick-start__grid" role="list">
+          <article class="ml-quick-start__card" role="listitem">
+            <span class="ml-quick-start__num">1</span>
+            <h3>내 차트에 입히기</h3>
+            <p>
+              <strong>TradingView</strong>는 봉·틱 등 환경에 맞춰 MagicLine을 적용하고, <strong>MT5</strong>로 받는
+              <code>.ex5</code>는 <strong>틱(Tick) 차트 전용</strong>으로만 판매·배포합니다(일반 M1/M5 등 봉 전용 빌드는 제공하지 않습니다).
+            </p>
+          </article>
+          <article class="ml-quick-start__card" role="listitem">
+            <span class="ml-quick-start__num">2</span>
+            <h3>나에게 맞는 플랜 선택</h3>
+            <p>단타·스윙 등 매매 스타일에 맞는 플랜을 고르고 이용 절차를 진행합니다.</p>
+          </article>
+          <article class="ml-quick-start__card" role="listitem">
+            <span class="ml-quick-start__num">3</span>
+            <h3>시그널 확인 및 대응</h3>
+            <p>복잡한 해석보다 매직라인의 방향성과 구간을 먼저 확인합니다.</p>
+          </article>
+        </div>
+        <div class="ml-quick-start__why">
+          <strong>왜 심플이 정답인가요?</strong>
+          <span>고민 시간을 줄여야 실행이 빨라집니다. 핵심 로직에 자신이 있을수록 설명은 짧아집니다.</span>
+        </div>
+        <p class="ml-quick-start__actions">
+          <a class="btn" href="registration/index.html">지표 신청 시작하기</a>
+          <a class="btn btn--ghost" href="registration/sms-addon.html">문자 시그널 월패키지</a>
+          <a class="btn btn--ghost" href="guide/usage.html">사용법 보기</a>
+          <a class="btn btn--ghost" href="guide/magictrading-strategy-inputs-ko.html">MagicTrading 입력 안내</a>
+        </p>
+      </section>
+
+      <div id="magic-home-i18n-fold" class="magic-home-i18n-fold">
+      <section class="ml-quick-start" id="trv-1week-whop-flow" aria-labelledby="trv-1week-whop-title" style="margin-top: 2rem">
+        <p class="ml-quick-start__badge">Whop 등 외부 유입 · TRV 1주 체험</p>
+        <h2 id="trv-1week-whop-title">1주(7일) TradingView 체험 — 진행 순서</h2>
+        <p class="small" style="margin: -0.25rem 0 1rem; max-width: min(70rem, 100%); line-height: 1.62; color: var(--ci-brown-muted)">
+          Whop 광고·상품 등에서 안내된 링크로 들어오신 분을 위한 순서입니다. 세부 요금·약관은
+          <a href="events/index.html">이벤트·요금</a>과 <a href="legal/terms-magictrading-free-trial.html">7일 무료 체험 특약</a>을 참고하세요.
+          <strong>7일 체험 제출·완료에는 준회원 이상 로그인이 필요합니다.</strong>
+        </p>
+        <ol class="notice-list" style="max-width: min(70rem, 100%); line-height: 1.72; padding-left: 1.35rem">
+          <li style="margin-bottom: 0.5rem">
+            <strong>Whop</strong> 등에서 안내하는 링크를 눌러
+            <strong>공식 홈페이지 <a href="https://magicindicatorglobal.com/">https://magicindicatorglobal.com/</a></strong> 로 들어와 주세요.
+          </li>
+          <li style="margin-bottom: 0.5rem">
+            <strong>준회원 가입</strong>(SMS 없음, 최소 정보) —
+            <a href="registration/associate.html">준회원 가입 (1주 무상 프리)</a>
+          </li>
+          <li style="margin-bottom: 0.5rem">
+            로그인 후 <a href="billing/index.html?signup=1&amp;plan=event_1w_free">구독·결제 → 7일 무료 체험</a>에서 신청합니다.
+            <strong>TradingView(TRV) 사용자명</strong> 또는 <strong>MT5 계좌 번호+서버</strong>를 입력하고 약관·서명까지 제출합니다.
+          </li>
+          <li style="margin-bottom: 0.5rem">
+            제출이 완료되면 <strong>시스템 원장·회원 정보에 반영</strong>됩니다. 관리자는
+            <a href="admin/monitor.html">플랜 모니터(관리자)</a>의 최근 원장 등에서 접수 내역을 확인합니다.
+          </li>
+          <li style="margin-bottom: 0.5rem">
+            <strong>관리자</strong>가 신청 내용을 바탕으로 TradingView <strong>초대·스크립트 반영</strong> 등 후속 조치를 합니다.
+          </li>
+          <li style="margin-bottom: 0.5rem">
+            조치가 끝나면 <strong>가입해 둔 이메일로 안내</strong>를 보냅니다. 수신이 없으면 스팸함을 확인한 뒤
+            <a href="contact/index.html">문의</a>를 이용해 주세요.
+          </li>
+        </ol>
+        <p class="small" style="margin: 1rem 0 0; max-width: min(70rem, 100%); line-height: 1.62; color: var(--ci-brown-muted)">
+          플랜 모니터 첫 화면의 <strong>최근 7일 원장</strong> 표에서 TRV 사용자명·MT5 식별값·이메일 옆 <strong>복사</strong> 버튼으로 클립보드에 옮길 수 있습니다(관리자 로그인 필요).
+        </p>
+      </section>
+
+      <section class="ml-cloud-care" aria-labelledby="ml-cloud-care-title">
+        <p class="ml-cloud-care__badge">부가 옵션 · 기술 환경 관리</p>
+        <h2 id="ml-cloud-care-title">MagicLine 24/7 클라우드 케어</h2>
+        <p class="ml-cloud-care__lead">
+          차트를 계속 켜두기 어렵거나 설정 관리가 부담스러운 사용자를 위한 선택 옵션입니다.
+          MagicLine 이용 환경의 <strong>설정 보관·구동 점검·알림 연결</strong>을 기술적으로 지원합니다.
+          <strong>확정 옵션가(월·USD)</strong>: Whop 경로 <strong>$2,999</strong> · MQL 경로 <strong>$3,499</strong>(MT5 · MagicLine 24/7 클라우드 케어). 본 라이선스와 별도 과금입니다.
+        </p>
+        <div class="ml-cloud-care__grid" role="list">
+          <article class="ml-cloud-care__card" role="listitem">
+            <h3>설정 백업 및 관리</h3>
+            <p>고객님이 적용한 MagicLine 플랜과 차트 설정을 보관해 필요 시 복구를 돕습니다.</p>
+          </article>
+          <article class="ml-cloud-care__card" role="listitem">
+            <h3>환경 안정성 점검</h3>
+            <p>MT5 및 클라우드 실행 환경의 가동 상태를 주기적으로 확인합니다.</p>
+          </article>
+          <article class="ml-cloud-care__card" role="listitem">
+            <h3>알림 연결 지원</h3>
+            <p>설정된 MagicLine 알림이 지정 채널로 정상 송출되는지 기술적 연결 상태를 관리합니다.</p>
+          </article>
+        </div>
+        <p class="ml-cloud-care__notice">
+          본 서비스는 사용자의 기술적 이용 환경을 관리하는 보조 옵션이며, 투자의 최종 판단은 사용자에게 있습니다.
+        </p>
+      </section>
+
+      <section class="home-payment-draft" id="payment-draft" aria-labelledby="payment-draft-h2">
+        <p class="home-payment-draft__badge" role="presentation">운영 안내 · 결제 채널</p>
+        <h2 id="payment-draft-h2" class="home-payment-draft__title">납부·결제는 네 갈래</h2>
+        <p class="home-payment-draft__lead">
+          실제 이용 가능 수단·절차·수수료는 <a href="billing/index.html#payment-dual">구독·결제</a>와 제반 약관을 따릅니다. 아래는 홈페이지에 미리 밝히는 <strong>운영 기준</strong>입니다.
+        </p>
+        <div class="home-payment-draft__grid" role="list">
+          <article class="home-payment-draft__card" role="listitem">
+            <h3 class="home-payment-draft__card-title">PayPal</h3>
+            <p class="home-payment-draft__card-body">
+              소액·이벤트·가입 단계는 <strong>카드 결제</strong>를 우선 안내합니다. PayPal 잔액·페이류 사용 가능 여부와 수수료·제한은 PayPal 정책과 당시 결제 화면을 따릅니다.
+            </p>
+          </article>
+          <article class="home-payment-draft__card" role="listitem">
+            <h3 class="home-payment-draft__card-title">USD 은행송금</h3>
+            <p class="home-payment-draft__card-body">
+              <strong>고액·정규·해외 고객</strong>은 <strong>글로벌 수취 계좌</strong>(구독·결제 페이지에서 통화·지역 선택)로 직접 송금합니다.
+              구체 은행명·계좌·SWIFT(IBAN 등)는 <a href="billing/index.html#wire-route-picker">결제 페이지 안내</a>와 인보이스를 따릅니다.
+            </p>
+          </article>
+          <article class="home-payment-draft__card" role="listitem">
+            <h3 class="home-payment-draft__card-title">크립토(온체인)</h3>
+            <p class="home-payment-draft__card-body">
+              <strong>USDT · USDC</strong>는 결제 페이지에서 <strong>레저 지원 네트워크</strong>만 선택합니다(USDT: TRON·Solana·Polygon / USDC: 동일 + Arbitrum One).
+              <strong>TRON(TRC-20)</strong> 수취(동일 지갑, 예시):
+              <code style="font-size: 0.88em; word-break: break-all">TUBXMuAEGTN3WtM7NHVebe2MAYbuQTDjbw</code>
+              · 상세·다른 체인 주소는 <a href="billing/index.html#crypto-deposit">구독·결제 → 크립토 입금</a>을 따릅니다.
+              BTC·ETH 등 메이저는 네트워크 선택 없이 시세 환산되며, 그 외 코인은 견적 후 송금을 원칙으로 합니다.
+              입금 구분에는 <strong>주문별 정밀 소수</strong>와 꼬리표를 함께 씁니다(<a href="billing/index.html#crypto-amount-signature">정밀 금액</a>·<a href="billing/index.html#crypto-price-basis">환산 안내</a>).
+            </p>
+          </article>
+          <article class="home-payment-draft__card" role="listitem">
+            <h3 class="home-payment-draft__card-title">원화 법인 송금</h3>
+            <p class="home-payment-draft__card-body">
+              국내 원화 납부는 <strong>우리은행 · 주식회사행복도담 인베스트 · 61001073818213</strong> 법인 계좌와 인보이스 기준으로 안내합니다. USD 기준 금액을 원화로 환산할 때는 구매 당시 안내 환율·만 원 단위 절삭 등 결제 페이지의 기준을 따릅니다.
+            </p>
+          </article>
+        </div>
+        <p class="home-payment-draft__foot">
+          <a href="billing/index.html#payment-dual">구독·결제 페이지에서 채널별 상세 보기 →</a>
+        </p>
+        <p class="small" style="margin: 0.65rem 0 0; color: var(--ci-brown-muted); line-height: 1.62">
+          해외 <strong>국제 외화 송금</strong>(SWIFT 등)은 통상 며칠까지 걸릴 수 있습니다. 필요 시 금액·수취인이 명확한
+          <strong>은행 증빙(MT103·접수증 등)</strong>을 주시면 검토 후 <strong>입금 확인 전이라도</strong> 지표 이용 선승인이 가능하다고 안내합니다(통화별 동일 원칙).
+          <a href="billing/index.html#swift-gap-remedy"><strong>송금 공백기·증빙 선검증(공개 카피) →</strong></a>
+        </p>
+      </section>
+      </div>
+
+      <section class="ml-manifesto" id="magicline-message" aria-labelledby="mlm-h2">
+        <div class="ml-manifesto__head">
+          <h2 class="ml-manifesto__title" id="mlm-h2">매직라인을 쓰시기 전에</h2>
+          <p class="ml-manifesto__lead">
+            완벽한 지표는 없다고 믿습니다. 다만 차트 앞에 서실 때 조금 덜 헷갈리도록, <strong>선 하나의 동료</strong>가 되어 주고 싶었어요.
+            <strong>손절·자금 관리·스스로와의 약속</strong>이 함께할 때 이 도구도 오래 의지할 수 있습니다.
+          </p>
+        </div>
+
+        <figure class="ml-chart-figure">
+          <img
+            class="ml-chart-figure__img"
+            src="assets/magicline-chart-nq-example.png"
+            width="970"
+            height="1024"
+            loading="lazy"
+            decoding="async"
+            alt="나스닥 100 E-mini 선물 차트 예시. 매수·매도·청산 표시가 있는 다크 테마 화면"
+          />
+          <div class="ml-chart-signal-card" aria-label="MagicTrading 데이터 요약">
+            <span class="ml-chart-signal-card__label">LIVE STRUCTURE</span>
+            <strong>Magic R · Flow Scan</strong>
+            <small>Risk first · Signal second</small>
+          </div>
+          <figcaption class="ml-chart-figure__cap">
+            활용 예시(나스닥 100 선물 · 5분). 실제 신호는 <strong>종목·틱·R값</strong>마다 달라집니다.
+          </figcaption>
+        </figure>
+
+        <div class="ml-chart-guide" aria-labelledby="ml-chart-settings-h">
+          <h3 class="ml-subh" id="ml-chart-settings-h">매직 차트 · 세팅을 어떻게 잡나요?</h3>
+          <p class="ml-chart-guide__lead">
+            TradingView 스크립트의 <strong>Adjust</strong>·<strong>Risk</strong>·<strong>Filters</strong> 그룹과 직결된 내용이에요.
+            특히 Filters에는 한국·미국 현물처럼 <strong>장 시작 무렵 노이즈가 큰 시간대 진입만 막는 «volatile window»</strong>(변동 시작 창) 옵션과 손실 쿨다운·당일 합산 정지 등이 들어 있습니다.
+            숫자 한 번에 크게 바꾸기보다 시간대·종목 특성을 보며 조금씩 맞추는 걸 추천합니다.
+            같은 항목은 <a href="guide/magictrading-strategy-inputs-ko.html">MagicTrading 입력 가이드</a>와
+            <a href="guide/magictrading-strategy-inputs-ko.html#faq-no-signal">신호가 안 나올 때 FAQ</a>에서도 이어 집니다.
+            운영에서 남기는 <strong>튜닝·빌드 기록</strong>은
+          <a href="boards/index.html?board=developer_journal">모임터 — 개발자 일지</a>에서 같이 모읍니다.
+          </p>
+          <h3 class="ml-subh" id="ml-chart-opt-h">차트 옵티마이징(반밴딩·반응 속도)</h3>
+          <p>
+            <strong>Entry Mode</strong>에서 완성봉 기준 교차 규칙(Conservative)과 밴드 근처 슬라이더(Attack)를 고릅니다.
+            간격 조절의 핵심은 <strong>Base R</strong>와 <strong>Fine Tune</strong>예요 — 수동으로 <strong>Manual BaseR</strong>을 넣거나 0으로 두고 자동에 맡긴 뒤, <strong>Auto Fine Tune</strong> 또는 <strong>Manual Fine Tune 슬라이더</strong>로 변동 구간(ATR 성격) 반영 정도만 조입니다.
+            틱 차트에서는 봉 간격 해석이 달라져 밴드가 넓거나 좁게 느껴질 수 있어, 한 종목 안에서 소구간 테스트 후 고정하는 편이 안전합니다.
+            파라미터를 바꿀 때 참고할 <strong>실시간 작업 보드·게시 목록</strong>은
+            <a href="boards/index.html?board=developer_journal">개발자 일지</a> 탭과 위쪽 <strong>실시간 작업 보드</strong> 임베드에서 이어집니다.
+          </p>
+          <h3 class="ml-subh" id="ml-chart-stop-h">손절 쪽 세팅</h3>
+          <p>
+            <strong>Risk</strong>에서 밴드 밖으로 얼마나 두고 손절선을 깔지(<strong>손절 라인 · 반밴딩 %</strong>)를 정하고,
+            필요하면 <strong>평단 대비 손절 한도(%)</strong>로 “그릇”을 더 못 줄입니다(0이면 밴드 규칙만 사용).
+            <strong>손절 후 재진입 금지(봉 수)</strong>는 고정 스탑이 난 직후 연속 까먹임을 줄이려는 가드이고,
+            <strong>진입 신호 최소 간격(봉 수)</strong>은 같은 방향 신호 폭발을 줄입니다.
+            <strong>Use Trailing Stop</strong>을 쓰실 때는 Trail Start·Offset(반밴딩 비율)로 초반 변동 속 이탈과 추세 유지 사이 균형을 맞춥니다.
+          </p>
+          <h3 class="ml-subh" id="ml-chart-filters-volatile-h">Filters · 변동 시작 창(volatile window)</h3>
+          <p>
+            스크립트 입력의 <strong>「변동 큰 장 시작 구간 진입 차단」</strong>은 차트 시간대가 아니라
+            <strong>개장·동시호가 직후 같은 «노이즈가 많은 구간만» 새 진입을 잠깐 막는</strong> 용도입니다.
+            TV 차트 레이블 요약 줄에는 같은 의미가 <strong>volatile window</strong>로 적혀 있습니다(예전처럼 “세션” 전체가 막히는 기능이 아니라고 보시면 됩니다).
+          </p>
+          <p class="ml-soft-note" style="margin-top: 0.5rem">
+            패턴과 맞아도 매수·매도가 안 뜰 때에는 같은 봉에 청산이 겹치는지·쿨다운·당일 손실 합산까지
+            함께 보셔야 합니다. 묶어서 설명해 둔 <a href="guide/magictrading-strategy-inputs-ko.html#faq-no-signal">FAQ(왜 신호가 안 나오나요?)</a>를 참고하세요.
+          </p>
+          <h3 class="ml-subh" id="ml-chart-daily-loss-h">연속 손실 쿨다운과 당일 손실 합산 차단(Risk first)</h3>
+          <p class="ml-chart-guide__note">
+            <strong>두 단이 다른 계층</strong>이에요.
+            하나는 같은 날이라도 시간이 좀 걸린 뒤 다시 들어오기 전 쉬라는 “<strong>연속 손실 후 진입 금지(봉 쿨다운)</strong>”입니다 —
+            이쪽은 패배가 <strong>연속으로</strong> 쌓이는 조건(전략 <strong>청산 손익</strong> 기준)·몇 번이면 멈출지·멈춘 뒤 금지 봉 수를 세팅합니다.
+            다른 하나는 <strong>당일 안에서 손실이 몇 번 났는지</strong>만 봅니다. 중간에 <strong>수익 청산</strong>이 몇 번이든 있어도 상관 없고,
+            같은 거래일(선택한 타임존의 자정 기준)·<strong>손실로 끝난 청산</strong>(순손 기준 마이너스)만 <strong>하루 통틀어 합산</strong>합니다.
+            이 집계는 <strong>스크립트를 차트에 붙였을 때의 초기 상태 이후 새로 완결된 종료 순번</strong>부터만 씁니다—예전 깊숙히 시뮬된 과거 종료건을 뒤져서 미리 카운팅하지 않으며, 실제 주문 실행 여부가 아니라 <strong>시그널·전략 청산</strong> 기준입니다.
+            예를 들어 기본 목표가 3이라면 하루에 손실 청산만 세 번이면 그날 <strong>잔여 시그널이 멈춥니다.</strong>
+            수익으로 다시 카운터를 깎거나 0으로 돌려놓지 않습니다.
+          </p>
+          <p class="ml-chart-guide__footnote">
+            <strong>목표 회수</strong>는 보통 기본값 <strong>3회 손실 합산</strong>으로 두되, 사용자가 <strong>2~6회</strong>까지 올릴 수 있습니다.
+            빌드·시스템에서는 <strong>6회 초과가 불가</strong>(입력 최대값·코드 상한 재캡)하고,
+            하루에 손실이 반복되는 날 <strong>과매매와 도박성 진입을 끊는 계좌 보호용 브레이크</strong>로 이해하면 됩니다. 다음 거래일(자정 넘김)에 합산 카운터와 당일 차단 상태가 초기화됩니다.
+          </p>
+          <p class="ml-chart-guide__books-note">
+            실전 교재에서는 <strong>하루 손실 한도, 일주 단위 한도, 한 달 단위 한도</strong>, 그리고 <strong>손실 나면 무조건 멈추고 쉬라</strong>는 말을 자주 접합니다.
+            또 <strong>알렉산더 엘더</strong> 등이 논하는 식으로, <strong>자본금 대비 이번에 얼마만 깎을지</strong>를 박음질처럼 정해 두려는 접근(<strong>4% 같은 틀로 자주 회자되는 비율 제한 아이디어</strong>)도 많이 나옵니다.
+            문제는 TradingView 차트 한개의 지표나 전략이 <strong>개인별 계좌 잔고·레버리지·랏</strong>을 알 수 없다는 거예요. 그래서 “그 계좌엔 비율 X%”처럼 <strong>누구에게나 통일 적용 가능한 숫자</strong>는 여기 세팅으로 대신 줄 수 없고,
+            <strong>강제 거래 한도 없이 놔두면</strong> 감으로만 무너지기도 쉬워서,
+
+            현재 버전에서는 <strong>당일 안 손실 청산 횟수</strong>로 가장 두께가 얇은 <strong>강제 휴식(시그널 정지)</strong>을 거는 쪽으로 기울였습니다.
+            카운팅은 <strong>차트에 적용된 뒤</strong>, 그 순간부터 이후에 닫히는 종료 순번부터만 포함하고, 왼쪽에 깔려 있는 옛 시뮬 결과는 집계에 섞지 않습니다.
+            일·주·월 전체 피라미드와 레버별 % 한도는 <strong>여전히 종이 규칙과 포지 크기</strong>로 본인이 메워 넣어 주셔야 합니다.
+          </p>
+        </div>
+
+        <div class="ml-manifesto__body">
+          <h3 class="ml-subh">이런 분께 읽히면 좋겠어요</h3>
+          <p>
+            이미 여유 있게 잘하고 계시다면, 굳이 여기까지 읽지 않으셔도 괜찮아요. 마음이 바쁘거나, 같은 자리를 맴돌 때 잠깐 쉬어 가듯 읽어 주세요.
+            오늘은 규칙을 지키기 어렵다면, 그것도 괜찮습니다. 다음 번으로 넘기셔도 됩니다.
+          </p>
+
+          <h3 class="ml-subh">세 가지만 기억해 주세요</h3>
+          <ul class="ml-simple-list">
+            <li>욕심은 조금 내려놓기 — 천천히 해도 됩니다.</li>
+            <li>정한 룰은 오늘만큼은 지키기 — <strong>손절</strong>도 그 안에 두면 좋아요.</li>
+            <li>시간은 당신 편이 될 수도 있어요 — 인내가 곧 방패입니다.</li>
+          </ul>
+
+          <h3 class="ml-subh">매직라인은 이런 마음으로 만들었어요</h3>
+          <p>
+            오랜 실전과 수정을 거듭한 <strong>보조 지표</strong>입니다. 안전마진, 평균으로의 회귀, 가격이 머무는 구간을 읽는 생각을 염두에 두었어요.
+            가격에 맞춰 숨 쉬듯 움직이며, <strong>R값</strong>으로 간격을 조절합니다. <strong>틱 차트</strong>와 <strong>선물·옵션</strong>처럼 양방향 매매를 상정했습니다.
+            <strong>MT5</strong>로 내려받는 지표는 <strong>틱 차트 전용 빌드</strong>로만 제공합니다.
+            한 방을 약속하기보다, 반복 가능한 판단 기준을 차트 위에 남기는 방향으로 만들었습니다.
+          </p>
+          <div class="ml-principles" aria-label="MagicTrading 투자 원칙">
+            <article class="ml-principle-card">
+              <span>Margin of Safety</span>
+              <strong>안전마진</strong>
+              <p>무리한 확신보다 손실 폭을 먼저 줄입니다.</p>
+            </article>
+            <article class="ml-principle-card">
+              <span>Mean Reversion</span>
+              <strong>평균회귀</strong>
+              <p>과열과 이탈 뒤 가격이 돌아오는 힘을 봅니다.</p>
+            </article>
+            <article class="ml-principle-card">
+              <span>Reference Shift</span>
+              <strong>준거점 이동</strong>
+              <p>시장이 새 기준선을 만드는 순간을 추적합니다.</p>
+            </article>
+          </div>
+          <p class="ml-soft-note">
+            “그냥 밴드 아닌가요?”라고 하시면 — 선만 덧붙인 그림이 전부는 아니에요. 진입과 청산을 생각할 때 <strong>흐름을 한눈에</strong> 두기 위한 쪽에 가깝습니다. 마지막 선택은 언제나 본인 손안에 있습니다.
+          </p>
+        </div>
+
+        <details class="ml-details">
+          <summary>조금 더 읽기 · 제작자의 말과 책</summary>
+          <div class="ml-details__body">
+            <p>
+              1990년대 국내 시장을 거치며 저도 여러 번 넘어졌습니다. 지표만으로는 부족했고, <strong>마음·자금·손절</strong>이 같이 걸어와야 한다는 걸 천천히 배웠어요. 시장은 매일 새롭고, 완벽한 답은 없습니다.
+            </p>
+            <p>마음 다잡기에 도움이 된 책들이에요. (번역 제목은 출판사마다 달라질 수 있어요.)</p>
+            <ul class="ml-details__books">
+              <li>벤저민 그레이엄 — 『지적 투자자』</li>
+              <li>안드레 코스톨라니 — 『증권시장의 심리』 등</li>
+              <li>알렉산더 엘더 — 「자금·위험·멈출 타이밍」을 많이 논함(실전 기록·판본마다 번역 제목 상이함)</li>
+              <li>대니얼 카너먼 — 『생각에 관한 생각』</li>
+              <li>마크 더글라스 — 『트레이딩 인 더 존』</li>
+            </ul>
+            <p>
+              결제·회원은 <a href="billing/index.html">구독·결제</a>, 편한 연락은 <a href="contact/index.html">문의</a>나
+              <a href="mailto:happyinvest@magicindicatorglobal.com">happyinvest@magicindicatorglobal.com</a>으로 주세요.
+            </p>
+          </div>
+        </details>
+
+        <p class="ml-footnote">
+          교육·참고용 글이에요. 수익을 약속하지 않으며, 레버리지 상품은 손실이 클 수 있습니다.
+        </p>
+      </section>
+
+      <div id="magic-home-i18n-hub-maps" data-magic-home-chunk="hubMaps">
+      <section class="home-map home-map--boards" aria-labelledby="home-boards-title">
+        <h2 id="home-boards-title" class="home-map__title">모임터 구역 바로가기</h2>
+        <p class="home-map__lead">
+          게시판마다 읽기·쓰기 권한이 달라요. 모임터 맨 위에서 이메일·구역 권한만 맞춰 주시면 됩니다.
+        </p>
+        <nav class="main-hub main-hub--dense" aria-label="모임터 게시판 구역">
+          <a href="boards/index.html">전체 <small>모든 글·검색</small></a>
+          <a href="boards/index.html?board=developer_journal">개발자 일지 <small>작업 기록(실시간)</small></a>
+          <a href="guide/magictrading-strategy-inputs-ko.html">MagicTrading 입력 <small>Fine Tune 가이드</small></a>
+          <a href="boards/index.html?board=quickview">한눈에 보기 <small>요약·스냅샷</small></a>
+          <a href="boards/index.html?board=announcement">공지 <small>운영 알림</small></a>
+          <a href="boards/index.html?board=market_analysis">시황 분석 <small>차트·시황</small></a>
+          <a href="boards/index.html?board=qa">질문과 답변 <small>Q&amp;A</small></a>
+          <a href="boards/index.html?board=general">자유 이야기 <small>팁·잡담</small></a>
+          <a href="boards/index.html?board=beta">베타 소식 <small>시험·피드백</small></a>
+          <a href="boards/index.html?board=event">이벤트 <small>프로모션</small></a>
+          <a href="boards/index.html?board=membership">회원 혜택 <small>플랜·혜택</small></a>
+          <a href="boards/index.html?board=reflection">실전 이야기 <small>후기·승인 시 1달 쿠폰(1인1회)</small></a>
+          <a href="boards/index.html?board=event_promo_shoutout">책구매·추천·홍보 인증 <small>링크·캡처</small></a>
+        </nav>
+      </section>
+
+      </div>
+
+      <div class="home-primary">
+        <section class="home-indicator-opt" id="developer-journal" aria-labelledby="indicator-opt-h2">
+          <div data-magic-home-chunk="indicatorIntro">
+          <span class="home-indicator-opt__live" aria-hidden="true">
+            <span class="home-indicator-opt__pulse"></span>
+            약 10초마다 목록 새로고침
+          </span>
+          <h2 id="indicator-opt-h2" class="home-indicator-opt__h2">개발자 일지 · 실시간 작업 보드</h2>
+          <p class="home-indicator-opt__lead">
+            운영이 파라미터·튜닝·검증 과정을 기록하는 구역이에요.
+            <strong>새 글 작성은 관리자만</strong> 가능하고, <strong>댓글(답글)은 방문자 누구나</strong> 남길 수 있습니다.
+            전체 화면은 <a href="boards/index.html?board=developer_journal">모임터 — 개발자 일지</a> 탭에서도 같습니다.
+          </p>
+          </div>
+          <div
+            data-magic-board
+            data-category="developer_journal"
+            data-title="개발자 일지"
+            data-live="1"
+            data-live-ms="10000"
+          ></div>
+        </section>
+
+        <section id="quick-view" aria-labelledby="qv-heading">
+          <div data-magic-home-chunk="quickView">
+          <h2 id="qv-heading">퀵 뷰</h2>
+          <p>
+            <strong>매직라인(Magic Line)</strong>은 캔들·추세를 한눈에 정리해 주는 보조 지표입니다. 급한 매매를 부추기기보다, <em>잠깐 멈춰서 볼 수 있는 선</em>을 그어 드리는 쪽에 가깝습니다.
+          </p>
+          <ul class="notice-list">
+            <li>
+              지원 환경: TRV(Pine, 브라우저·앱 차트) · MetaTrader 5(
+              <strong>틱 차트 전용</strong> <code>.ex5</code> — 일반 봉 차트용 MT5 빌드는 판매하지 않음)
+            </li>
+            <li>
+              지표·MT5 패키지의 <strong>고객용 접근권·운영 조건</strong>은 <a href="downloads/index.html#dl-mt5-title">다운로드</a> 표를 따릅니다.
+              <strong>MT5 측은 틱(Tick) 전용</strong>으로만 안내·배포하며, 기간형 쿠폰·플랜 구분은 표와 약관을 보시면 됩니다.
+            </li>
+            <li>라이선스: <strong>정규</strong>는 <strong>단일 상품</strong>이며 판매 마켓과 플랫폼에 따라 <strong>Whop TRV · Whop MT5 · MQL MT5</strong>로 구분해요(가격·세부는 <a href="legal/terms-magictrading-regular.html">정규 약관</a>·상담). 이벤트·무료체험은 약관이 따로 있어요.</li>
+            <li>로그인 후 MT5 계좌·MQL5·TRV ID를 연결하면, 라이선스·알림 연동에 쓸 수 있습니다.</li>
+          </ul>
+          </div>
+        </section>
+
+        <section
+          class="public-snapshot"
+          id="public-snapshot-section"
+          aria-labelledby="public-snapshot-title"
+          style="margin: 1rem 0 1.25rem; padding: 0.9rem 1rem; border-radius: 12px; border: 1px solid rgba(74, 53, 40, 0.12); background: rgba(255, 254, 250, 0.95)"
+        >
+          <div data-magic-home-chunk="snapshotIntro">
+          <h2 id="public-snapshot-title" style="font-size: 1rem; margin: 0 0 0.5rem; color: var(--ci-brown, #4a3528)">
+            서비스 스냅샷
+          </h2>
+          <p class="small" style="margin: 0 0 0.55rem; color: var(--ci-brown-muted); line-height: 1.5">
+            아래 숫자는 회원·7일 무료 원장·결제 준비 건이 DB에 누적된 수치입니다(비인증 공개 API). 최신 시각은 응답 기준입니다.
+          </p>
+          </div>
+          <ul
+            id="public-snapshot-list"
+            style="margin: 0; padding-left: 1.1rem; font-size: 0.9rem; line-height: 1.55; color: #3a3028"
+          >
+            <li>불러오는 중…</li>
+          </ul>
+        </section>
+
+        <section class="magictrading-solution" aria-labelledby="magictrading-title">
+          <div class="magictrading-solution-inner" data-magic-home-chunk="magicTrading">
+          <div class="magictrading-solution__copy">
+            <span class="magictrading-solution__label">Membership Only</span>
+            <h2 id="magictrading-title">MagicTrading Solution</h2>
+            <p>
+              흔들림이 큰 구간에서 추세·밴드·R값을 함께 보며, 진입보다 먼저 리스크를 확인하도록 설계한 MagicTrading 전용 솔루션입니다.
+            </p>
+          </div>
+          <a class="magictrading-solution__cta" href="contact/index.html">라이선스 상담</a>
+          </div>
+        </section>
+
+        <section class="market-license market-license--all-plans" id="plan-prices" aria-labelledby="plan-prices-title">
+          <div data-magic-home-chunk="planPrices">
+          <div class="market-license__head">
+            <span class="market-license__eyebrow">MagicTrading — Whop · MQL 확정가 (USD)</span>
+            <h2 id="plan-prices-title">확정 가격표: 이벤트 · 정규(market applied / marketfree) · 옵션</h2>
+            <p>
+              아래 가격은 <strong>정가(확정)</strong> 기준입니다. <strong>1달 이벤트(marketfree)</strong> 3종,
+              <strong>정규 월</strong>은 마켓 조건에 따라 <strong>market applied</strong> / <strong>marketfree</strong>로 구분되며,
+              <strong>MagicLine 24/7 클라우드 케어(MT5)</strong>는 <strong>부가 옵션</strong>으로 Whop / MQL 각각 별도 금액입니다.
+              홈페이지·이벤트·다운로드·결제·약관 안내도 이 표에 맞춥니다.
+            </p>
+            <div
+              class="market-license__scope"
+              style="
+                margin: 0.75rem 0 0.5rem;
+                padding: 0.7rem 0.9rem;
+                border-radius: 12px;
+                border: 1px solid rgba(47, 111, 79, 0.28);
+                background: linear-gradient(165deg, rgba(255, 254, 249, 0.98) 0%, rgba(240, 248, 242, 0.55) 100%);
+                font-size: 0.9rem;
+                line-height: 1.55;
+                color: #3a3028;
+              "
+            >
+              <p style="margin: 0 0 0.5rem">
+                플랫폼마다 <strong>시장을 나눠</strong> 판매·신청받아요. <strong>TRV(TradingView)</strong>는 아래
+                <strong>9개 필드</strong> 중 <strong>신청 시 고른 필드</strong>에만 지표가 적용되도록 안내·배포합니다. <strong>MT5</strong>는
+                <strong>5개 시장 구간</strong>(외환 · 주식·지수 · 에너지·원자재 · 가상자산 · 채권) 중 <strong>신청 시 고른 구간</strong>에만 적용합니다(1달 이벤트부터 동일 원칙).
+                <strong>MT5 지표 파일은 틱(Tick) 차트 전용</strong>으로 빌드·판매합니다.
+              </p>
+              <div style="overflow-x: auto; margin: 0.4rem 0 0.45rem" role="region" aria-label="TRV·MT5 적용 구분">
+                <table class="data-table" style="font-size: 0.85rem; margin: 0; min-width: 17rem">
+                  <thead>
+                    <tr>
+                      <th scope="col">플랫폼</th>
+                      <th scope="col">나누는 기준(신청·적용)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>TRV</strong></td>
+                      <td>
+                        Stocks, Funds, Futures, Forex, Crypto, Indices, Bonds, Economy, Options — <strong>필드별</strong> (아래 칩과 동일 목록)
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>MT5</strong></td>
+                      <td>
+                        ① 외환 · ② 주식·지수 · ③ 에너지·원자재 · ④ 가상자산 · ⑤ 채권 — <strong>5구간 중 택1</strong>.
+                        제공 지표는 <strong>틱 차트 전용</strong>(일반 시간봉 전용 패키지는 판매하지 않음).
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p style="margin: 0; font-size: 0.88rem; color: #5a4034">
+                정규 접근권은 마켓과 플랫폼별 확정가로 판매합니다. 고액 정규 결제는 <a href="contact/index.html">상담·인보이스</a>와
+                <a href="billing/index.html#wire-route-picker">글로벌 계좌 직접 송금 안내</a>를 함께 안내합니다.
+              </p>
+            </div>
+          </div>
+
+          <div class="market-license__chips" aria-label="TRV 필드(9) 예시. MT5는 위 5시장 구간 별도">
+            <span>Stocks</span>
+            <span>Funds</span>
+            <span>Futures</span>
+            <span>Forex</span>
+            <span>Crypto</span>
+            <span>Indices</span>
+            <span>Bonds</span>
+            <span>Economy</span>
+            <span>Options</span>
+          </div>
+
+          <div class="market-license__matrix-wrap" role="region" aria-label="MagicTrading 확정 가격 요약">
+            <h3 class="market-license__matrix-title">① 1달 이벤트 (marketfree)</h3>
+            <div class="market-license__table-scroll">
+              <table class="market-license__matrix-table data-table">
+                <thead>
+                  <tr>
+                    <th scope="col">마켓 · 플랫폼</th>
+                    <th scope="col">플랜</th>
+                    <th scope="col">정가 (USD)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Whop</td>
+                    <td>TRV · 1month 이벤트</td>
+                    <td><strong>$119</strong></td>
+                  </tr>
+                  <tr>
+                    <td>Whop</td>
+                    <td>MT5 · 1month 이벤트</td>
+                    <td><strong>$129</strong></td>
+                  </tr>
+                  <tr>
+                    <td>MQL</td>
+                    <td>MT5 · 1month 이벤트</td>
+                    <td><strong>$149</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 class="market-license__matrix-title">② 정규 플랜 (월, USD)</h3>
+            <div class="market-license__table-scroll">
+              <table class="market-license__matrix-table data-table">
+                <thead>
+                  <tr>
+                    <th scope="col">마켓 · 플랫폼</th>
+                    <th scope="col">market applied</th>
+                    <th scope="col">marketfree</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Whop · TRV</td>
+                    <td><strong>$5,499</strong></td>
+                    <td><strong>$7,999</strong></td>
+                  </tr>
+                  <tr>
+                    <td>Whop · MT5</td>
+                    <td><strong>$5,999</strong></td>
+                    <td><strong>$8,499</strong></td>
+                  </tr>
+                  <tr>
+                    <td>MQL · MT5</td>
+                    <td><strong>$6,999</strong></td>
+                    <td>—</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 class="market-license__matrix-title">③ 부가 옵션 — MagicLine 24/7 클라우드 케어 (MT5)</h3>
+            <div class="market-license__table-scroll">
+              <table class="market-license__matrix-table data-table">
+                <thead>
+                  <tr>
+                    <th scope="col">마켓</th>
+                    <th scope="col">플랜</th>
+                    <th scope="col">정가 (USD / 월)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Whop</td>
+                    <td>MT5 · MagicLine 24/7 클라우드 케어 (옵션)</td>
+                    <td><strong>$2,999</strong></td>
+                  </tr>
+                  <tr>
+                    <td>MQL</td>
+                    <td>MT5 · MagicLine 24/7 클라우드 케어 (옵션)</td>
+                    <td><strong>$3,499</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p class="small market-license__matrix-foot">
+              클라우드 케어는 MagicTrading 본 라이선스와 <strong>별도 옵션</strong>입니다. 신청·과금은 상담·인보이스·
+              <a href="billing/index.html#payment-dual">구독·결제</a> 안내를 따릅니다.
+            </p>
+          </div>
+
+          <p class="market-license__note">
+            <strong>납부:</strong> 1개월(1회 청구)을 넘는 <strong>연·분기·다월 일시 선납</strong>이나 &ldquo;년회원&rdquo; 형태는 <strong>지원하지 않고</strong>,
+            <strong>월 1회 납부</strong>만 합니다(개인·조직 <strong>자금·도산</strong> 등을 고려한 정책이에요. <a href="legal/terms-magictrading-regular.html">정규 특약</a>·<a href="billing/index.html#monthly-billing">구독</a> 참고).
+            <strong>정규 고액</strong>은 <a href="billing/index.html#wire-route-picker">외화 계좌 직접 송금 안내</a> 등으로 맞출 수 있고,
+            카드·PG 수수료 구조와 비교해 유리한 경우가 있으면 <strong>권장</strong>해요(금액·조건은 인보이스·<a href="contact/index.html">상담</a>·송금·은행 수수료는 별도). 공유·재판매 금지, TRV/MT5·
+            <a href="legal/terms-magictrading-regular.html">정규 약관</a> ·
+            <a href="legal/plan-terms-nonrefund.html#sec-business">총괄(엔터프라이즈·조직)</a> · <strong>MT5 우선</strong> 식별 등은 그대로 적용돼요.
+          </p>
+          </div>
+        </section>
+
+        <section id="announcement" aria-label="공지">
+          <div data-magic-home-chunk="announceIntro">
+          <p class="small" style="margin-bottom: 0.75rem; color: var(--ci-brown-muted)">
+            서비스 공지·업데이트는 아래 모임터에 올라와요. 중요한 소식은 여기서 먼저 보시는 걸 권해 드려요.
+          </p>
+          </div>
+          <div
+            data-magic-board
+            data-category="announcement"
+            data-title="공지"
+          ></div>
+        </section>
+
+        <section id="discussion" aria-label="General Discussion">
+          <div data-magic-home-chunk="discussIntro">
+          <p class="small" style="margin-bottom: 0.75rem; color: var(--ci-brown-muted)">
+            자유롭게 의견·팁을 나누는 공간이에요. 모임터 위쪽에서 이메일·권한만 확인해 주세요.
+          </p>
+          </div>
+          <div
+            data-magic-board
+            data-category="general"
+            data-title="자유 이야기"
+          ></div>
+        </section>
+
+        <section id="beta" aria-label="Beta Tester&apos;s Board">
+          <div
+            data-magic-board
+            data-category="beta"
+            data-title="베타 소식"
+          ></div>
+        </section>
+
+        <section class="home-qa-bottom" id="qa" aria-labelledby="qa-heading">
+          <div data-magic-home-chunk="qaBlock">
+          <h2 id="qa-heading" class="home-qa-bottom__h2">Q&amp;A</h2>
+          <p class="home-qa-bottom__intro">
+            자주 묻는 질문을 짧게 모아 두었어요(누구나 읽을 수 있어요). 더 깊은 Q&amp;A·토론은
+            <a href="boards/index.html">모임터 · 질문과 답변</a>을 이용해 주시고, 이 구역은
+            <a href="legal/access-matrix.html">무료 회원 이상</a> 권한이 필요해요.
+          </p>
+
+          <p class="home-qa-bottom__punch">
+            말(호가)은 속일 수 있어도, 발자국(체결)은 못 속인다.
+          </p>
+          <ul class="home-qa-bottom__pitches" aria-label="틱 차트를 강조하는 한 줄들">
+            <li>시계로 보는 차트(분봉)보다, 발자국으로 보는 차트(틱)가 진짜 힘을 보여준다.</li>
+            <li>틱차트는 시간의 그림이 아니라, 돈이 움직인 흔적이다.</li>
+          </ul>
+
+          <details class="home-qa-bottom__featured" open>
+            <summary class="home-qa-bottom__q">이거 그냥 볼린저밴드 / 엔벨로프 아닌가요?</summary>
+            <div class="home-qa-bottom__a">
+              <p>
+                완전히 같지는 않아요. 볼밴·엔벨이 &lsquo;구간&rsquo;을 보여 주는 도구라면, 매직라인은 &lsquo;청산에 참고할 기준&rsquo;을 잡는 쪽에 가깝습니다. 극단 진입 뒤 회귀를 보고, 기준선 근방에서
+                탐욕을 끊는 흐름을 눈에 두었어요.
+              </p>
+            </div>
+          </details>
+
+          <ul class="qa-list home-qa-bottom__list">
+            <li>
+              <strong>Q.</strong> Whop에서 온 뒤 순서가 어떻게 되나요? →
+              <a href="#trv-1week-whop-flow">1주 TRV 체험 순서</a>
+              · <a href="events/index.html">이벤트</a>
+            </li>
+            <li><strong>Q.</strong> 체험·프로모션이 있나요? → <a href="events/index.html">이벤트</a> (TRV·MT5 조건이 다릅니다)</li>
+            <li>
+              <strong>Q.</strong> 지표를 어떻게 쓰나요? → <a href="guide/usage.html">지표 사용(허브)</a> ·
+              <a href="guide/usage-trv.html">TRV 상세</a> · <a href="guide/usage-mt5.html">MT5 상세</a>
+            </li>
+            <li><strong>Q.</strong> TRV에 어떻게 붙이나요? → <a href="guide/usage-trv.html">지표 사용 · TRV</a> / <a href="guide/index.html#tv">가이드 · 설치</a></li>
+            <li><strong>Q.</strong> MT5에는 파일을 어디에 넣나요? → <a href="guide/usage-mt5.html">지표 사용 · MT5</a>(<strong>틱 차트 전용</strong>)
+              / <a href="guide/index.html#mt5">가이드 · 설치</a></li>
+            <li><strong>Q.</strong> 결제는 언제 되나요? → <a href="billing/index.html">구독·결제</a> (연동 준비 중일 수 있음)</li>
+          </ul>
+          </div>
+        </section>
+
+        <section id="market-analysis" class="home-market-board" aria-labelledby="market-analysis-h2">
+          <div data-magic-home-chunk="marketIntro">
+          <h2 id="market-analysis-h2" class="home-market-board__h2">시황 분석</h2>
+          <p class="home-market-board__intro small" style="margin-bottom: 0.75rem; color: var(--ci-brown-muted)">
+            운영·구독·커뮤니티 VIP는 차트 캡처를 <strong>복사(Ctrl+C) 후 본문 칸에 붙여넣기(Ctrl+V)</strong>하거나, 위쪽
+            <strong>이미지 파일</strong>로 넣을 수 있어요. 방문·무료·체험 권한은 <strong>읽기만</strong> 가능합니다.
+            <a href="boards/index.html?board=market_analysis">모임터 전체</a>에서도 같은 구역을 씁니다.
+          </p>
+          </div>
+          <div
+            data-magic-board
+            data-category="market_analysis"
+            data-title="시황 분석"
+          ></div>
+        </section>
+      </div>
+    </main>
+    <footer class="site-footer" role="contentinfo">
+      <div class="ci-wrap ci-wrap--footer">
+        <img class="ci-logo-img" src="assets/haengbokdam-company-ci.png" width="220" height="110" alt="" />
+        <div class="ci-names">
+          <p class="ci-ko">주식회사 행복도담 인베스트</p>
+          <p class="ci-en">Haengbokdodam Invest co.ltd</p>
+        </div>
+      </div>
+    </footer>
+    <dialog
+      id="home-btdata-dialog"
+      class="home-btdata-dialog"
+      aria-labelledby="home-btdata-title"
+      aria-describedby="home-btdata-desc"
+    >
+      <div class="home-btdata-dialog__inner">
+        <button type="button" class="home-btdata-dialog__close" id="home-btdata-close-x" aria-label="닫기">
+          ×
+        </button>
+        <p class="home-btdata-dialog__urgent" role="status">긴급 안내</p>
+        <h2 id="home-btdata-title" class="home-btdata-dialog__title">백테스트용 분봉 데이터 협찬 — 쿠폰 보상</h2>
+        <div id="home-btdata-desc" class="home-btdata-dialog__desc">
+          <p style="margin: 0 0 0.65rem">
+            지금 TradingView(TRV) 쪽에서 확보·제공되는 히스토리는 <strong>약 2개월치 분량</strong>에 그칩니다. 정식 런칭 전 품질 검증을 위해,
+            아래 <strong>22개 종목</strong>에 대해 <strong>5 · 10 · 15 · 30분</strong> 봉 각각 <strong>최소 1년 이상</strong> 치 데이터를 보내 주실 수 있는 분을 찾습니다.
+            (<strong>2년 이상</strong> 치를 제공해 주시면 아래 보상에 <strong>1개월 무료 이용이 추가</strong>됩니다.)
+          </p>
+          <p style="margin: 0">
+            <strong>선착순 마감입니다.</strong> 필요한 자료 접수가 완료되는 대로 접수를 종료하며, <strong>마감 후에는 홈페이지에서 이 팝업 공지를 내립니다.</strong>
+          </p>
+        </div>
+        <div class="home-btdata-dialog__highlight" role="region" aria-label="보상 안내">
+          <p style="margin: 0 0 0.5rem">
+            <strong>기본 보상:</strong> 조건에 맞는 데이터를 제공해 주시면 <strong>3개월 무료 이용 쿠폰</strong>을 드립니다.
+          </p>
+          <p style="margin: 0">
+            <strong>런칭 전 제출(긴급):</strong> 공식 런칭 이전에 제공이 완료되면 <strong>4개월 무료 이용</strong>(<strong>1개월 추가 보상</strong>)으로 올려 드립니다.
+          </p>
+          <p style="margin: 0.5rem 0 0">
+            <strong>데이터 2년 이상:</strong> 위 기본·긴급 보상과 별도로 <strong>1개월 무료 이용</strong>을 <strong>추가</strong>로 드립니다(검수·적용 기준은 메일 협의).
+          </p>
+        </div>
+        <p class="home-btdata-dialog__note">
+          데이터 형식·전달 방식(파일·클라우드 링크 등)은 메일로 사전 협의합니다. 운영 검수 후 쿠폰 지급 여부가 확정됩니다.
+        </p>
+        <div class="home-btdata-dialog__table-wrap">
+          <table class="home-btdata-dialog__table">
+            <thead>
+              <tr>
+                <th scope="col">구분</th>
+                <th scope="col">심볼</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>선물</td>
+                <td><code>GC=F</code> <code>RTY=F</code> <code>ES=F</code> <code>SI=F</code> <code>CL=F</code> <code>K2=F</code> <code>NQ=F</code> <code>YM=F</code></td>
+              </tr>
+              <tr>
+                <td>지수</td>
+                <td><code>US100_CF</code></td>
+              </tr>
+              <tr>
+                <td>FX</td>
+                <td><code>EURUSD=X</code> <code>6E=F</code> <code>6J=F</code></td>
+              </tr>
+              <tr>
+                <td>채권</td>
+                <td><code>ZN=F</code></td>
+              </tr>
+              <tr>
+                <td>크립토</td>
+                <td><code>BTC-USD</code> <code>ETH-USD</code> <code>BNB-USD</code> <code>XRP-USD</code> <code>SOL-USD</code></td>
+              </tr>
+              <tr>
+                <td>주식</td>
+                <td><code>TSLA</code> <code>AAPL</code> <code>NVDA</code> <code>ETHA</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="home-btdata-dialog__actions">
+          <a
+            class="home-btdata-dialog__btn home-btdata-dialog__btn--primary"
+            id="home-btdata-mail"
+            href="mailto:happyinvest@magicindicatorglobal.com?subject=%5B%EB%B0%B1%ED%85%8C%EC%8A%A4%ED%8A%B8%20%EB%8D%B0%EC%9D%B4%ED%84%B0%5D%2022%EC%A2%85%EB%AA%A9%20%EB%B6%84%EB%B4%89%20%EC%A0%9C%EA%B3%B5%20%EC%8B%A0%EC%B2%AD"
+            >이메일로 연락하기</a>
+          <button type="button" class="home-btdata-dialog__btn home-btdata-dialog__btn--ghost" id="home-btdata-hide-day">
+            오늘 하루 안 보기
+          </button>
+          <button type="button" class="home-btdata-dialog__btn home-btdata-dialog__btn--ghost" id="home-btdata-close">닫기</button>
+        </div>
+        <p class="home-btdata-dialog__fine">
+          문의: <a href="mailto:happyinvest@magicindicatorglobal.com">happyinvest@magicindicatorglobal.com</a>
+        </p>
+      </div>
+    </dialog>
+    <script src="assets/magic-auth.js"></script>
+    <script src="assets/home-magicline-i18n.js?v=20260522magicline"></script>
+    <script src="assets/home-extra-i18n.js?v=20260527homeExtra"></script>
+    <script src="assets/site-ux.js?v=20260528loginonly"></script>
+    <script src="assets/board-rte.js?v=20260523rteFonts"></script>
+    <script src="assets/board-embed.js?v=20260527boardI18n"></script>
+    <script>
+      (function () {
+        function trustSnapshotLangIsKo() {
+          try {
+            if (typeof window !== "undefined" && window.HappyUX && HappyUX.getLang) {
+              return String(HappyUX.getLang()).toLowerCase() === "ko";
+            }
+          } catch (e) {}
+          return true;
+        }
+        var SNAP_KO = {
+          bad: "<li>스냅샷을 불러오지 못했습니다. (API 연결·캐시를 확인해 주세요.)</li>",
+          timeout: "<li>스냅샷 응답이 지연되어 중단했습니다. 잠시 후 새로고침해 주세요.</li>",
+          net: "<li>스냅샷을 불러오지 못했습니다.</li>",
+          asOf: "기준 시각",
+          members: "등록 회원 수",
+          ledger7:
+            "7일 무료 원장(누적·TRV/MT5 구분)",
+          paidLine:
+            "결제 준비 건 중 <code>paid</code>로 마감된 건수(누적)",
+        };
+        var SNAP_EN = {
+          bad:
+            "<li>Could not load the public snapshot. (Check API connectivity and caching.)</li>",
+          timeout: "<li>The snapshot request timed out. Please try refreshing in a moment.</li>",
+          net: "<li>Could not load the public snapshot.</li>",
+          asOf: "As of",
+          members: "Registered members",
+          ledger7:
+            "7-day free ledger total (cumulative; TRV / MT5 breakout)",
+          paidLine:
+            "Completions that reached paid status (`paid`, cumulative checkout finishes)",
+        };
+        var m = document.querySelector('meta[name="api-base"]');
+        var API = m && m.content ? String(m.content).replace(/\/$/, "") : "";
+        var listEl = document.getElementById("public-snapshot-list");
+        if (API && listEl) {
+          var L = trustSnapshotLangIsKo() ? SNAP_KO : SNAP_EN;
+          var snapCtrl = new AbortController();
+          var snapTimer = setTimeout(function () {
+            try {
+              snapCtrl.abort();
+            } catch (e) {}
+          }, 12000);
+          fetch(API + "/api/public/trust-snapshot", { signal: snapCtrl.signal })
+            .then(function (r) {
+              clearTimeout(snapTimer);
+              return r.ok ? r.json() : null;
+            })
+            .then(function (d) {
+              if (!d || !d.ok) {
+                listEl.innerHTML = L.bad;
+                return;
+              }
+              var t = d.generated_at ? new Date(d.generated_at).toISOString().replace("T", " ").slice(0, 19) + " UTC" : "—";
+              listEl.innerHTML =
+                "<li>" +
+                L.asOf +
+                ": <strong>" +
+                t +
+                "</strong></li>" +
+                "<li>" +
+                L.members +
+                ": <strong>" +
+                (d.users_registered != null ? d.users_registered : "—") +
+                "</strong></li>" +
+                "<li>" +
+                L.ledger7 +
+                ": <strong>" +
+                (d.free_7d_ledger_total != null ? d.free_7d_ledger_total : "—") +
+                "</strong> (TRV <strong>" +
+                (d.free_7d_trv != null ? d.free_7d_trv : "—") +
+                "</strong> / MT5 <strong>" +
+                (d.free_7d_mt5 != null ? d.free_7d_mt5 : "—") +
+                "</strong>)</li>" +
+                "<li>" +
+                L.paidLine +
+                ": <strong>" +
+                (d.payment_checkout_completions != null ? d.payment_checkout_completions : "—") +
+                "</strong></li>";
+            })
+            .catch(function (err) {
+              clearTimeout(snapTimer);
+              var timeout =
+                err &&
+                (err.name === "AbortError" || String(err.message || "").toLowerCase().indexOf("abort") >= 0);
+              listEl.innerHTML = timeout ? L.timeout : L.net;
+            });
+        }
+      })();
+    </script>
+    <script>
+      (function () {
+        var m = document.querySelector('meta[name="api-base"]');
+        var API = m && m.content ? String(m.content).replace(/\/$/, "") : "";
+        if (!API) return;
+        fetch(API + "/api/site/page-content?path=" + encodeURIComponent("index.html"))
+          .then(function (r) {
+            return r.ok ? r.json() : null;
+          })
+          .then(function (d) {
+            if (!d || !d.custom_html || !String(d.custom_html).trim()) return;
+            var el = document.getElementById("cms-home-slot");
+            if (!el) return;
+            el.innerHTML = d.custom_html;
+            el.removeAttribute("hidden");
+            if (window.HappyUX && window.MagicContentTranslate && window.MagicContentTranslate.refreshAfterLangSwitch) {
+              window.MagicContentTranslate.refreshAfterLangSwitch(window.HappyUX.getLang());
+            }
+          })
+          .catch(function () {});
+      })();
+    </script>
+    <script>
+      (function () {
+        var KEY = "home-btdata-suppress-until";
+        var dlg = document.getElementById("home-btdata-dialog");
+        if (!dlg || typeof dlg.showModal !== "function") return;
+
+        function todayYmd() {
+          var d = new Date();
+          var y = d.getFullYear();
+          var m = String(d.getMonth() + 1).padStart(2, "0");
+          var day = String(d.getDate()).padStart(2, "0");
+          return y + "-" + m + "-" + day;
+        }
+
+        function suppressedToday() {
+          try {
+            return window.localStorage.getItem(KEY) === todayYmd();
+          } catch (e) {
+            return false;
+          }
+        }
+
+        function closeDialog() {
+          try {
+            dlg.close();
+          } catch (e) {}
+        }
+
+        function openPopup() {
+          if (suppressedToday()) return;
+          try {
+            dlg.showModal();
+          } catch (e) {}
+
+          function onBackdrop(ev) {
+            if (ev.target === dlg) closeDialog();
+          }
+          dlg.addEventListener("click", onBackdrop);
+
+          var hideDay = document.getElementById("home-btdata-hide-day");
+          if (hideDay) {
+            hideDay.addEventListener("click", function () {
+              try {
+                window.localStorage.setItem(KEY, todayYmd());
+              } catch (e) {}
+              closeDialog();
+            });
+          }
+
+          ["home-btdata-close", "home-btdata-close-x"].forEach(function (id) {
+            var b = document.getElementById(id);
+            if (b) b.addEventListener("click", closeDialog);
+          });
+        }
+
+        if (document.readyState === "loading") {
+          document.addEventListener("DOMContentLoaded", openPopup);
+        } else {
+          openPopup();
+        }
+      })();
+    </script>
+  </body>
+</html>

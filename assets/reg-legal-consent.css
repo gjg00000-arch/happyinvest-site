@@ -1,0 +1,206 @@
+/* 약관·정책 팝업: iframe + 끝까지 스크롤 후 동의 (가입·결제 공통) */
+.reg-legal-open {
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-weight: 700;
+  color: var(--ci-green-dk, #24573e);
+  text-decoration: underline;
+  cursor: pointer;
+  text-align: left;
+}
+
+.reg-legal-open:hover {
+  color: var(--ci-brown, #4a3528);
+}
+
+.reg-check__legal-text {
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.reg-check__input--locked {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.reg-legal-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 101000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
+  box-sizing: border-box;
+}
+
+.reg-legal-modal[hidden] {
+  display: none !important;
+}
+
+.reg-legal-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(22, 18, 14, 0.52);
+  cursor: pointer;
+}
+
+.reg-legal-modal__dialog {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 42rem);
+  max-height: min(92vh, 52rem);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  background: #fffdf9;
+  border-radius: 14px 14px 0 0;
+  border: 1px solid rgba(74, 53, 40, 0.2);
+  box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+
+@media (min-width: 560px) {
+  .reg-legal-modal {
+    align-items: center;
+    padding: 1.25rem;
+  }
+
+  .reg-legal-modal__dialog {
+    border-radius: 14px;
+    max-height: min(90vh, 52rem);
+  }
+}
+
+.reg-legal-modal__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem 0.55rem;
+  border-bottom: 1px solid rgba(74, 53, 40, 0.12);
+  flex-shrink: 0;
+}
+
+.reg-legal-modal__title {
+  margin: 0;
+  font-size: 1.12rem;
+  font-weight: 800;
+  color: var(--ci-brown, #4a3528);
+}
+
+.reg-legal-modal__x {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  font-size: 1.65rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--ci-brown-muted, #6b5344);
+  padding: 0.15rem 0.35rem;
+  border-radius: 6px;
+}
+
+.reg-legal-modal__x:hover {
+  background: rgba(74, 53, 40, 0.08);
+}
+
+.reg-legal-modal__hint {
+  margin: 0;
+  padding: 0.55rem 1rem 0.65rem;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--ci-brown-muted, #6b5344);
+  border-bottom: 1px dashed rgba(47, 111, 79, 0.25);
+  flex-shrink: 0;
+}
+
+.reg-legal-modal__tablink {
+  font-weight: 650;
+  margin-left: 0.35rem;
+}
+
+.reg-legal-modal__frame {
+  width: 100%;
+  flex: 1;
+  min-height: 12rem;
+  height: min(48vh, 22rem);
+  border: 0;
+  background: #fff;
+}
+
+.reg-legal-modal__foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0.75rem 1rem 1rem;
+  border-top: 1px solid rgba(74, 53, 40, 0.12);
+  flex-shrink: 0;
+  background: linear-gradient(180deg, rgba(248, 252, 249, 0.92), #fffdf9);
+}
+
+.reg-legal-modal__confirm:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: grayscale(0.25);
+}
+
+.reg-legal-modal__cancel {
+  appearance: none;
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.92rem;
+  padding: 0.55rem 0.95rem;
+  border-radius: 999px;
+  border: 1px solid rgba(74, 53, 40, 0.28);
+  background: #fff;
+  color: var(--ci-brown, #4a3528);
+  cursor: pointer;
+}
+
+.reg-legal-modal__cancel:hover {
+  background: rgba(74, 53, 40, 0.06);
+}
+
+html[data-theme="dark"] .reg-legal-modal__dialog {
+  background: #161b22;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+html[data-theme="dark"] .reg-legal-modal__title {
+  color: #e6edf3;
+}
+
+html[data-theme="dark"] .reg-legal-modal__hint {
+  color: #8b949e;
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+html[data-theme="dark"] .reg-legal-modal__frame {
+  background: #0d1117;
+}
+
+html[data-theme="dark"] .reg-legal-modal__foot {
+  background: linear-gradient(180deg, rgba(22, 27, 34, 0.98), #161b22);
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+html[data-theme="dark"] .reg-legal-modal__cancel {
+  background: #21262d;
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #e6edf3;
+}
+
+html[data-theme="dark"] .reg-legal-modal__head {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.legal-sign-modal__docs .reg-legal-open {
+  font-size: inherit;
+}

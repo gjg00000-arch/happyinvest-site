@@ -1,0 +1,12 @@
+{
+  "_note": "지갑 «받기» 기준 공개 수취 주소. polygon_use_same_address_as_eth_mainnet 가 true 이고 usdt_polygon_pos 가 비어 있으면 Polygon USDT 칸에 eth_mainnet 과 동일 값을 넣습니다. BNB·Base·Arbitrum·Optimism·Avalanche 행은 페이지에서 eth_mainnet 을 미러합니다.",
+  "polygon_use_same_address_as_eth_mainnet": true,
+  "btc_native": "bc1q6e8m800z3pwhwsj4mr3d3d5purf6d5ql34y4sc",
+  "eth_mainnet": "0xB855ea3cAdAa8AA0CB7e6Dff470F4B2792E1e983",
+  "xrp_native": "rDz2z2iFGyjGwyM2AEPihWoo8SMoGgxwh3",
+  "usdt_tron_trc20": "TUBXMuAEGTN3WtM7NHVebe2MAYbuQTDjbw",
+  "usdt_solana_spl": "DGci4HGVoHiormuHcJvYA9T48sBpig3NzqPbVnscEnYm",
+  "usdt_polygon_pos": "",
+  "doge_native": "DMNxA8KEkVzb2xxG5M3isQfbVTkJ95yhMP",
+  "ltc_native": "ltc1qqy7uajhpza4zgmpmvf6lrlnd0jh3h8x56u6gvc"
+}

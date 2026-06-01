@@ -1,0 +1,29 @@
+symbol,tick_size,dollars_per_tick,instrument_name,source_notes
+ES=F,0.25,12.5,CME E-mini S&P 500,CME: $12.50/tick → $50/pt (1계약)
+NQ=F,0.25,5.0,CME E-mini Nasdaq-100,CME: $5/tick → $20/pt
+YM=F,1.0,5.0,CBOT Mini Dow,$5/tick → $5/pt
+RTY=F,0.1,5.0,CME E-mini Russell 2000,$5/tick (0.1pt) → $50/pt
+ZN=F,0.015625,15.625,CBOT 10Y T-note (가격표시 단위에 맞춤),1/64×32분의1 pt·$15.625/tick → $1000/pt 근사 (브로커 표시와 다르면 tick만 맞추고 조정)
+6E=F,0.00005,6.25,CME Euro FX,$6.25/tick (0.00005) → $125000/pt (12.5만유로 본)
+6J=F,0.0000005,6.25,CME Japanese Yen,$6.25/tick (0.0000005) → $/pt=dtick/tick
+CL=F,0.01,10.0,NYMEX WTI Crude,$10/tick (1000배럴) → $1000/pt
+GC=F,0.1,10.0,COMEX Gold,$10/tick (100oz) → $100/pt
+SI=F,0.005,25.0,COMEX Silver,$25/tick (5000oz) → $5000/pt
+K2=F,0.05,10.0,KRX KOSPI200 선물,원화 tick가치·환율에 따라 실제 USD는 다름. 백테 순위용 근사(실계좌는 브로커 스펙으로 덮어쓰기)
+US100_CF,0.25,5.0,NAS100 CFD(나스닥100 근사),브로커·계약 크기별 상이. Capital.com 등 NQ와 유사 가정
+BTC-USD,0.01,0.01,Bitcoin spot(1코인),가격 1pt=$1 PnL (1 BTC 기준)
+ETH-USD,0.01,0.01,Ethereum spot(1코인),동일
+SOL-USD,0.01,0.01,SOL spot(1코인),거래소 최소호가가 다르면 tick_size만 수정
+XRP-USD,0.0001,0.0001,XRP spot(1코인),동일
+BNB-USD,0.01,0.01,BNB spot(1코인),동일
+EURUSD=X,0.0001,10.0,FX spot/CFD(표준랏 근사),$10/0.0001(1pip)=표준랏 근사·실제 랏/브로커에 맞게 dollars_per_tick 조정
+AAPL,0.01,0.01,미국주식 1주,1주·USD
+TSLA,0.01,0.01,미국주식 1주,동일
+NVDA,0.01,0.01,미국주식 1주,동일
+ETHA,0.01,0.01,ETF 1주,주식과 동일
+DX-Y.NYB,0.05,0.05,달러인덱스,지수·근사만 (^DXY)
+^N225,5.0,50.0,니케이225 지수/선물 근사,엔화·선물승수 복잡·순위용
+^HSI,1.0,10.0,항셍 지수 근사,HKD·근사
+^TNX,0.001,0.01,10년물 금리 지수,수익률%축·참고
+^IRX,0.001,0.01,단기금리 지수,참고
+^VIX,0.01,0.1,VIX 지수,변동성 지수·참고

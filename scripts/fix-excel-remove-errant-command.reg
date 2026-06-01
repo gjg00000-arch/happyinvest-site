@@ -1,0 +1,17 @@
+Windows Registry Editor Version 5.00
+
+; 잘못 추가된 값 이름 "command"(REG_MULTI_SZ)만 제거합니다.
+; (기본값) EXCEL.EXE /dde 는 유지됩니다.
+; 사용: 이 파일을 우클릭 → 병합 → UAC 허용 (관리자 권한 필요)
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Excel.Sheet.12\shell\Open\command]
+"command"=-
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Excel.Sheet.8\shell\Open\command]
+"command"=-
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Excel.CSV\shell\Open\command]
+"command"=-
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Excel.SheetMacroEnabled.12\shell\Open\command]
+"command"=-
