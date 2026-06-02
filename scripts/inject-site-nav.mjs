@@ -119,7 +119,6 @@ function renderRoot(spec) {
     a(BOARD_PROMO, "추천·홍보", act === "promo"),
     a("legal/index.html", "약관·정책", act === "legal"),
     a("head-daily-report/index.html", "본부 데일리", act === "headDaily"),
-    a("admin/index.html", "관리자", act === "admin"),
     a("integrations/index.html", "연동", act === "integrations")
   );
   lines.push("    </nav>");
@@ -165,7 +164,6 @@ function renderFlat(spec, flatDir) {
       "본부 데일리",
       act === "headDaily"
     ),
-    a(U("admin/index.html"), "관리자", act === "admin"),
     a(
       siblingIndex(flatDir, "integrations", "integrations/index.html"),
       "연동",
@@ -205,7 +203,6 @@ function renderGuide(spec) {
     a(U("boards/index.html?board=event_promo_shoutout"), "추천·홍보", false),
     a(U("legal/index.html"), "약관·정책", false),
     a(U("head-daily-report/index.html"), "본부 데일리", false),
-    a(U("admin/index.html"), "관리자", false),
     a(U("integrations/index.html"), "연동", false)
   );
   lines.push("    </nav>");
@@ -244,7 +241,6 @@ function renderLegal(spec, opt) {
     a(U("boards/index.html?board=event_promo_shoutout"), "추천·홍보", false),
     a("index.html", "약관·정책", highlightLegal),
     a(U("head-daily-report/index.html"), "본부 데일리", false),
-    a(U("admin/index.html"), "관리자", false),
     a(U("integrations/index.html"), "연동", false)
   );
   lines.push("    </nav>");
