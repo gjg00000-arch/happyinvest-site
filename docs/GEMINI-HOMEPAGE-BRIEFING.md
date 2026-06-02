@@ -11,7 +11,7 @@
 - **정적 사이트 원본 Git 루트**: `C:\Users\gjg00\자동매매\magic-indicator-site`
 - **GitHub 백업 원격**: `https://github.com/gjg00000-arch/happyinvest-site.git`
 - **배포 대상**: S3 `magicindicator-global-web-6145` + CloudFront `E2Y7ZN7QM8A91S`
-- **최근 배포 확인**: 2026-06-02 KST, CloudFront invalidation `ICPCCNBECAC2P6XXFYAUU6MFX1` 완료
+- **최근 배포 확인**: 2026-06-02 20:42 KST, CloudFront invalidation `I4YJ9FUEINA7TPKBDWU3G795S9` 완료
 - `happyinvests.com`은 공개 카피·SEO·OG·canonical 기준으로 사용하지 않습니다. 공개 기준 도메인은 `magicindicatorglobal.com` 하나입니다.
 
 ---
@@ -58,6 +58,9 @@
 - 당일 손실 합산 제어는 `strategy.closedtrades.profit` 기준이며, TradingView가 계좌 자본 대비 실시간 % 손실 한도를 직접 알 수 없다는 한계를 보완하는 회수 기반 휴식 장치입니다.
 - 손실 집계 시작점은 차트 적용 후 첫 재계산 시점의 `barstate.islast` 스냅샷 이후로 설명합니다. 과거 깊은 백테스트 종료 건을 실시간 운용 손실처럼 누적한다고 말하지 않습니다.
 - TradingView 알림은 JSON webhook을 권장하며, `magic_signal`, `license_pack`, `tickerid` 등 식별 필드를 포함할 수 있습니다.
+- 1주 무료 체험판 웹훅은 TradingView 예약어 `{{username}}`를 `"tv_id":"{{username}}"`로 포함하고, 백엔드 `one_week_free_trials` 원장에서 최초 유입 기준 7일만 허용합니다.
+- 1주 무료 체험판 Pine 배포본은 `Dodam_MagicTrading_Marketfree_1weekfree.pine`입니다. `showTrialGuide`가 켜져 있으면 차트에는 `MagicTrading 1-Week Trial Mode\n공식 정규 플랜은 홈페이지에서 확인하세요.` 고정 안내만 표시합니다.
+- Pine은 사용자별 만료일·중복 사용 여부를 계산하지 않습니다. 실제 최초 체험일, 7일 만료, 중복 사용 차단은 MongoDB `one_week_free_trials` 웹훅 원장이 정본입니다.
 - 웹훅 URL은 비공개로 취급합니다. 브로커 API 키나 민감 키를 알림 본문·Pine 스크립트에 넣지 않습니다.
 - 전략 리포트와 브로커 체결은 동일하지 않습니다. limit 체결, 틱 차트, 슬리피지, 수수료 차이를 항상 고지합니다.
 
@@ -98,5 +101,5 @@
 
 ## 8. 갱신 시점
 
-- 기준 갱신: 2026-06-02 20:30 KST
+- 기준 갱신: 2026-06-02 22:34 KST
 - 이 파일은 홈 카피, 결제 정책, 공개 내비, 배포·Git 원본 기준이 바뀔 때 함께 갱신합니다.

@@ -12,7 +12,7 @@
 - **공식 공개 도메인**: `https://magicindicatorglobal.com/`
 - **S3 버킷**: `magicindicator-global-web-6145`
 - **CloudFront 배포**: `E2Y7ZN7QM8A91S`
-- **최근 배포 무효화**: `ICPCCNBECAC2P6XXFYAUU6MFX1`, 완료 확인
+- **최근 배포 무효화**: `I4YJ9FUEINA7TPKBDWU3G795S9`, 완료 확인
 
 운영 원칙: 홈페이지 Git 작업은 `magic-indicator-site`에서만 수행합니다. 상위 폴더나 API 폴더에서 Git 커밋·푸시하지 않습니다.
 
@@ -126,6 +126,10 @@
 ## 8. 권한·체험·레거시
 
 - 권한 판별은 `users`, `free_trial_accesses`, `trial_indicator_entitlements` 병합 구조를 전제로 합니다.
+- 무인 1주 무료 체험 웹훅은 `one_week_free_trials` 컬렉션에서 `trv_id`, `mt5_account`, `mt5_server`와 최초 유입 시각을 관리합니다.
+- `tv_id` 또는 MT5 식별값이 최초 유입이면 7일 체험 원장을 만들고, 기존 식별값은 최초 시작 시각 기준 7일 초과 시 403으로 차단합니다.
+- TradingView 1주 무료 Pine은 `Dodam_MagicTrading_Marketfree_1weekfree.pine` 배포본을 기준으로 봅니다. `showTrialGuide`가 켜져 있으면 `MagicTrading 1-Week Trial Mode\n공식 정규 플랜은 홈페이지에서 확인하세요.` 고정 안내만 표시합니다.
+- Pine 차트는 체험 일차나 만료 여부를 계산하지 않습니다. 실제 7일 제한, 중복 사용 차단, 만료 감사 로그는 서버 웹훅과 `one_week_free_trials` 원장이 정본입니다.
 - `trial_indicator_entitlements`는 레거시 호환 계층입니다. 즉시 삭제하지 않고 백필·검증·롤백 계획 후 제거합니다.
 - TRV username, MT5 계좌+서버, 이메일 등 운영 확인 정보는 공개 admin URL이 아니라 내부 원장 확인 문구로 안내합니다.
 
@@ -180,7 +184,7 @@
 
 ## 13. 갱신 시점
 
-- 기준 갱신: 2026-06-02 20:30 KST
+- 기준 갱신: 2026-06-02 22:34 KST
 - 최근 반영 항목:
   - 공개 관리자 링크 제거
   - `lint:admin-links` 추가
@@ -189,3 +193,4 @@
   - Git 원본 `magic-indicator-site` 단일화
   - 결제 요청 서버 가드 기준 문서화
   - TTL, stale prepared, 레거시 권한 이관 권장 과제 반영
+  - 1주 무료 Pine 고정 안내 메시지와 백엔드 만료 정본 경계 반영

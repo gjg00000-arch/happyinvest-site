@@ -2,7 +2,8 @@
 # -*- coding: utf-8 -*-
 """
 PowerShell `deploy-s3-cloudfront.ps1` 와 동일 단계:
-  npm run verify → aws s3 sync(main) → aws s3 sync(html, cache-control) → CloudFront invalidation(선택)
+  npm run verify → aws s3 sync(main) → aws s3 sync(assets, 1y cache) →
+  aws s3 sync(html, no-cache) → CloudFront invalidation(선택)
 
 환경변수: AWS_S3_BUCKET, CLOUDFRONT_DISTRIBUTION_ID, AWS_REGION, AWS_PROFILE(선택)
 증명: 배포 전 `aws sts get-caller-identity` 로 확인하고, 실패·만료 시 `aws sso login`(SSO 프로필) 또는
@@ -204,6 +205,45 @@ def run(cmd: list[str], *, cwd: Path) -> None:
         sys.exit(r.returncode)
 
 
+def sync_s3_prefix_with_cache(
+    aws: str,
+    *,
+    root: Path,
+    source: Path,
+    target: str,
+    region: str,
+    cache_control: str,
+    include: str = "*",
+    extra_excludes: list[str] | None = None,
+    delete: bool = True,
+) -> None:
+    """Sync selected files with explicit cache metadata."""
+    cmd = [
+        aws,
+        "s3",
+        "sync",
+        str(source),
+        target,
+        "--region",
+        region,
+        "--exclude",
+        "*",
+        "--include",
+        include,
+    ]
+    for pattern in extra_excludes or []:
+        cmd.extend(["--exclude", pattern])
+    if delete:
+        cmd.append("--delete")
+    cmd.extend(
+        [
+            "--cache-control",
+            cache_control,
+        ]
+    )
+    run(cmd, cwd=root)
+
+
 def read_cf_id_file(scripts_dir: Path) -> str | None:
     p = scripts_dir / "cloudfront-distribution-id"
     if not p.is_file():
@@ -286,6 +326,12 @@ def main() -> None:
         "docs/*",
         "--exclude",
         "*.md",
+        "--exclude",
+        "server/*",
+        "--exclude",
+        "assets/*",
+        "--exclude",
+        "*.html",
     ]
 
     print(f"== aws s3 sync -> {target} (region {region})", flush=True)
@@ -304,35 +350,35 @@ def main() -> None:
     )
     run(sync_main, cwd=root)
 
-    print("== aws s3 sync (HTML only, short cache)", flush=True)
-    sync_html = [
+    print("== aws s3 sync (assets/*, 1y cache)", flush=True)
+    sync_s3_prefix_with_cache(
         aws,
-        "s3",
-        "sync",
-        str(root),
-        target,
-        "--region",
-        region,
-        "--exclude",
-        "*",
-        "--include",
-        "*.html",
-        "--exclude",
-        "node_modules/*",
-        "--exclude",
-        ".git/*",
-        "--exclude",
-        ".cursor/*",
-        "--exclude",
-        "scripts/*",
-        "--exclude",
-        "tools/*",
-        "--exclude",
-        "docs/*",
-        "--cache-control",
-        "public, max-age=0, must-revalidate, s-maxage=60",
-    ]
-    run(sync_html, cwd=root)
+        root=root,
+        source=root / "assets",
+        target=f"{target}assets/",
+        region=region,
+        cache_control="public, max-age=31536000, immutable",
+    )
+
+    print("== aws s3 sync (*.html, no-cache)", flush=True)
+    sync_s3_prefix_with_cache(
+        aws,
+        root=root,
+        source=root,
+        target=target,
+        region=region,
+        cache_control="no-cache, no-store, must-revalidate",
+        include="*.html",
+        extra_excludes=[
+            "node_modules/*",
+            ".git/*",
+            ".cursor/*",
+            "scripts/*",
+            "tools/*",
+            "docs/*",
+            "assets/*",
+        ],
+    )
 
     cf_id = (os.environ.get("CLOUDFRONT_DISTRIBUTION_ID") or "").strip() or ""
     if not cf_id:

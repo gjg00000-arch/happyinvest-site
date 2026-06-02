@@ -6,6 +6,8 @@
   "scripts": {
     "econ-cron:install": "npm install --prefix server/economic-cron",
     "econ-cron:start": "npm start --prefix server/economic-cron",
+    "oneweek:install": "npm install --prefix server/one-week-free-trial",
+    "oneweek:start": "npm start --prefix server/one-week-free-trial",
     "build:nav": "node scripts/inject-site-nav.mjs",
     "build:seo": "node scripts/generate-seo-files.mjs",
     "build:og": "node scripts/rewrite-og-absolute.mjs",
