@@ -1,85 +1,102 @@
 # Gemini용 · Magic Indicator 홈·제품 맥락 브리핑
 
-> 용도: Google Gemini(또는 유사 LLM)에 **한 번에 붙여 넣어** 카피 검토·FAQ 초안·번역·내부 요약을 맞출 때 사용하는 **단일 출처 컨텍스트**입니다.  
+> 용도: Google Gemini 또는 유사 LLM에 붙여 넣어 홈 카피, FAQ, 번역, 내부 요약의 기준 컨텍스트로 사용합니다.  
 > 법적 약관·결제 세부는 `legal/`, `billing/` 원문이 우선입니다.
 
 ---
 
-## 1. 공식 사이트
+## 1. 공식 사이트·운영 기준
 
-- **공개 홈**: `https://magicindicatorglobal.com/`
-- 정적 사이트 루트: 저장소 `magic-indicator-site/`
-- 메인 랜딩: `index.html` — 매직 차트 스크린 아래 **`ml-chart-guide`** 블록에 옵티마이징·손절·Filters·당일 손실 합산·교재형 철학(엘더 등 % 규칙 vs TV 한계) 요약
-
----
-
-## 2. 핵심 제품: MagicTrading (TradingView · Pine Strategy)
-
-- **소스 단일 코어**: `tools/magic-core-rule-strategy.pine`  
-- **마켓별 배포**: `tools/_gen-dodam-variants.py` → `Dodam_MagicTrading_*.pine` (LICENSE_FIELD만 바꿔 생성)
-- **오버레이 전략**: 중심선·상·하 밴드 + TSF 레인보우(추세 시각화), 진입은 **limit** (롱 `lower`, 숏 `upper`), **qty=1**, `pyramiding=0`
-
-### 2.1 진입
-
-- **Conservative**: 한 봉에서 밴드를 **OHLC 가로지름(straddle)** — 롱 `high > lower and low < lower`, 숏 `high > upper and low < upper` (종가 crossover만이 아님).
-- **Attack**: 반밴딩 대비 %로 밴드 **근처**에서 더 이른 진입.
-
-### 2.2 청산 순서 (같은 봉)
-
-1. 고정 손절 (`magicStop`)  
-2. 트레일 (`magicTrailStop`)  
-3. 매직 존·센터·목표 등 익절 (`magicProfitExit`)
-
-### 2.3 `canEnter` (진입 필터 한 줄)
-
-다음이 **모두** 만족할 때만 `magicBuy` / `magicSell`:
-
-- 포지션 **플랫**
-- 고정 손절 직후 **재진입 쿨다운** 끝남 (`reentryCooldownBars`, 고정 손만)
-- 진입 신호 **최소 봉 간격** 만족
-- **그 봉**에 익절/고정 스탑/트레일 조건이 켜지면 진입 불가 *(같은 봉 청산·재진입 억제)*
-- **volatile window**(입력: 「변동 큰 장 시작 구간 진입 차단」)— 개장 초 변동 시간대 차단. 홈·레이블에서는 **“volatile window”** 용어로 통일 (전체 세션 차단 아님)
-- 연패 뒤 **봉 쿨다운**
-- 선택 시 **당일 손실 청산 합산 N회** 도달 후 시그널 정지 (`SYS_DAILY_LOSS_SUM_HALT_CAP = 6`, 사용자 입력 2~6, 기본 3)
-
-### 2.4 손실 집계 (연패·당일 합산)
-
-- TV는 **계좌 자본·% 손실 한도**를 모름 → 회수 기반 **당일 손실 청산 합산**으로 강제 휴식.
-- **`strategy.closedtrades.profit`**(청산 손익) 사용. `strategy.closedtrades.netprofit()` API 없음.
-- **카운팅 시작**: 차트 적용 후 첫 재계산 끝 **`barstate.islast`**에서 `strategy.closedtrades` 스냅샷 → 그 **이전** 종료 건은 집계에서 제외 (**과거 깊은 백테만 따라가며 누적하지 않음**). 실매매 여부와 무관, **시그널 기준**.
-
-### 2.5 기술 메모
-
-- `strategy.position_size`는 **float** — 스냅 변수도 float.
-- `commission_value = 0.0` — 수수료·슬리피지는 **유저가 별도 감안**.
-- `volatileOpenPreset` 기본값은 options 배열 문자열과 **완전 일치**해야 함 (`"Auto (KR or US 종목 자동)"`).
-- `volatileMorningBlock`: 전역 줄바꿈 `switch` 할당 회피를 위해 **`fVolatileMorningBlockFromPreset()`** 함수 사용.
-
-### 2.6 웹·보안 안내 (요약)
-
-- 알림은 **JSON (webhook)** 권장 필드에 `magic_signal`, `license_pack`(마켓 식별·비밀 아님), `tickerid` 등 포함.
-- **웹훅 URL 비공개** 권장. 브로커 API 키는 알림 본문/스크립트에 넣지 않음.
+- **공개 홈 SSOT**: `https://magicindicatorglobal.com/`
+- **정적 사이트 원본 Git 루트**: `C:\Users\gjg00\자동매매\magic-indicator-site`
+- **GitHub 백업 원격**: `https://github.com/gjg00000-arch/happyinvest-site.git`
+- **배포 대상**: S3 `magicindicator-global-web-6145` + CloudFront `E2Y7ZN7QM8A91S`
+- **최근 배포 확인**: 2026-06-02 KST, CloudFront invalidation `ICPCCNBECAC2P6XXFYAUU6MFX1` 완료
+- `happyinvests.com`은 공개 카피·SEO·OG·canonical 기준으로 사용하지 않습니다. 공개 기준 도메인은 `magicindicatorglobal.com` 하나입니다.
 
 ---
 
-## 3. 고객용 문서 연결
+## 2. 홈페이지·빌드 기준
+
+- 메인 랜딩: `index.html`
+- 모바일 요약판: `m/index.html`
+- 공통 UX/i18n: `assets/site-ux.js`, `assets/home-extra-i18n.js`, `assets/guide-doc-i18n.js`
+- 홈 가격표·시장 라이선스 설명은 `assets/home-philosophy.css`의 다크모드 대비 기준을 따릅니다.
+- 리치 텍스트 에디터는 `assets/board-rte.js`의 **순수 Web Standard API** 구현입니다. `document.execCommand`, Tiptap, ProseMirror 같은 외부 에디터 의존으로 설명하지 않습니다.
+
+### 빌드/검증 명령
+
+`npm run verify`는 현재 다음 순서로 작동합니다.
+
+1. `build:nav`
+2. `build:seo`
+3. `build:og`
+4. `build:home-extra-i18n`
+5. `build:guide-doc-i18n`
+6. `lint:html`
+7. `lint:links`
+8. `lint:admin-links`
+
+`lint:admin-links`는 공개 HTML/JS 안에 `href="admin/..."`, `../admin/...`, `https://magicindicatorglobal.com/admin/...` 링크가 재노출되면 실패합니다.
+
+---
+
+## 3. 공개 내비·관리자 경로 원칙
+
+- 공개 내비게이션에는 `관리자`, `admin/index.html`, `admin/monitor.html` 링크를 넣지 않습니다.
+- `scripts/inject-site-nav.mjs`는 공개 페이지 내비에서 관리자 링크를 생성하지 않도록 정리되어 있습니다.
+- `admin/` 파일 자체는 운영 콘솔 파일일 수 있으나, 공개 사이트맵·robots·내비·고객 카피에서 노출하지 않습니다.
+- `/admin/*`의 물리 접근 통제는 정적 사이트 코드가 아니라 CloudFront/WAF 또는 별도 인증 레이어에서 처리해야 합니다.
+
+---
+
+## 4. 핵심 제품: MagicTrading
+
+- TradingView/Pine 전략과 MT5 환경을 함께 안내합니다.
+- Conservative 진입은 단순 종가 돌파가 아니라 한 봉 안에서 밴드를 OHLC가 가로지르는 straddle 방식으로 설명합니다.
+- `canEnter`는 같은 봉에서 익절·고정스탑·트레일스탑 조건이 켜지면 진입을 막아 청산 직후 재진입 왜곡을 줄이는 구조입니다.
+- 당일 손실 합산 제어는 `strategy.closedtrades.profit` 기준이며, TradingView가 계좌 자본 대비 실시간 % 손실 한도를 직접 알 수 없다는 한계를 보완하는 회수 기반 휴식 장치입니다.
+- 손실 집계 시작점은 차트 적용 후 첫 재계산 시점의 `barstate.islast` 스냅샷 이후로 설명합니다. 과거 깊은 백테스트 종료 건을 실시간 운용 손실처럼 누적한다고 말하지 않습니다.
+- TradingView 알림은 JSON webhook을 권장하며, `magic_signal`, `license_pack`, `tickerid` 등 식별 필드를 포함할 수 있습니다.
+- 웹훅 URL은 비공개로 취급합니다. 브로커 API 키나 민감 키를 알림 본문·Pine 스크립트에 넣지 않습니다.
+- 전략 리포트와 브로커 체결은 동일하지 않습니다. limit 체결, 틱 차트, 슬리피지, 수수료 차이를 항상 고지합니다.
+
+---
+
+## 5. 결제·약관·권한 운영 기준
+
+- 결제 전에는 약관 전자서명 스냅샷 `legal_acceptance_id`가 필수입니다.
+- `payment_requests`는 플랜 코드와 약관 범위를 서버에서 검증한 뒤 생성해야 합니다.
+- 회사 정책상 1개월 초과 장기 선결제, 연회원, 다월 선납형 SKU는 생성하지 않습니다.
+- 권한 판별은 `users`, `free_trial_accesses`, `trial_indicator_entitlements`를 병합해서 봅니다. `trial_indicator_entitlements`는 레거시 호환 계층입니다.
+- 가상자산·Ledger 관련 카피는 “고객 입금 신고/운영 확인” 범위로 설명합니다. 자동 Ledger 하드웨어 연동처럼 오해될 표현은 피합니다.
+
+---
+
+## 6. 고객용 주요 문서 연결
 
 | 경로 | 내용 |
 |------|------|
-| `guide/magictrading-strategy-inputs-ko.html` | Inputs, **FAQ — 신호가 안 나올 때**(canEnter, 같은 봉 청산) |
-| `index.html` — `ml-chart-guide` | 홈 카피: volatile window, 당일 합산, 적용 시점 스냅 |
-| `docs/HOMEPAGE-REVIEW-GUIDE.md` | 운영자용 사이트 점검 |
+| `index.html` | 랜딩·가격표·제품 철학·신청 플로우 |
+| `m/index.html` | 모바일 요약 대시보드 |
+| `billing/index.html` | 구독·결제·환불·송금·크립토 안내 |
+| `guide/magictrading-strategy-inputs-ko.html` | MagicTrading 입력값·FAQ |
+| `legal/index.html` | 약관·정책 허브 |
+| `docs/HOMEPAGE-REVIEW-GUIDE.md` | 운영자용 검토 체크리스트 |
+| `docs/GEMINI-MONGODB-BRIEFING.md` | MongoDB·API 데이터 관계 요약 |
 
 ---
 
-## 4. Gemini에게 맡길 때 **피해야 할 과장**
+## 7. Gemini에게 맡길 때 피해야 할 과장
 
-- `process_orders_on_close = false`를 **리페인팅 방지**와 동일시하지 말 것.
-- 전략 리포트 = **브로커 체결 재현 보장 없음**(limit·틱 차트 차이).
-- “완벽”“즉시 실전 무조건” 같은 표현은 **교육·참고** 톤에 맞게 완화.
+- “완벽”, “무조건 수익”, “브로커 체결 보장” 같은 표현은 금지합니다.
+- TradingView 백테스트를 실계좌 체결 재현으로 설명하지 않습니다.
+- `process_orders_on_close = false`를 리페인팅 방지와 동일시하지 않습니다.
+- 관리자 경로를 “숨겼으니 안전하다”고 말하지 않습니다. 접근 통제는 WAF/인증 레이어에서 별도 처리해야 합니다.
 
 ---
 
-## 5. 갱신 시점
+## 8. 갱신 시점
 
-- 이 파일은 레포 변경과 함께 수동 동기화. Pine·홈 카피·가이드 FAQ를 바꾼 뒤 **한 단락이라도 불일치**하면 여기부터 고칩니다.
+- 기준 갱신: 2026-06-02 20:30 KST
+- 이 파일은 홈 카피, 결제 정책, 공개 내비, 배포·Git 원본 기준이 바뀔 때 함께 갱신합니다.

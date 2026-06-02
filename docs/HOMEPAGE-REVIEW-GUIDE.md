@@ -1,254 +1,191 @@
 # Magic Indicator 홈페이지 검토 안내서
 
-> 목적: 전체 정보 구조·정책·기술적 전제를 한 문서에서 점검하기 위함.  
-> 이미지·캡처는 제외하고, 페이지·링크·기능 단위로 정리했다.  
-> 대상 디렉터리: 저장소 내 `magic-indicator-site/` 정적 웹 프로젝트.
+> 목적: Magic Indicator 정적 사이트의 정보 구조, 보안 노출면, 결제·약관 정책, 배포 절차를 한 문서에서 점검하기 위함입니다.  
+> 대상 디렉터리: `C:\Users\gjg00\자동매매\magic-indicator-site`
 
 ---
 
-## 1. 성격 및 배포 형태
+## 1. 단일 원본·배포 기준
 
-- **정적 HTML 사이트**다. 페이지는 `.html`, 공통 스타일은 `assets/*.css`, 클라이언트 스크립트는 페이지 하단 또는 `assets`에 인라인/연동된다.
-- **빌드 스크립트**(`package.json`):  
-  - `npm run build` → 내비 주입(`build:nav`), SEO 파일(`build:seo`), OG 절대 URL(`build:og`), HTML 린트(`lint:html`), 링크 점검(`lint:links`) 순서로 실행된다.
-- 배포 후 **도메인·API 베이스 URL**은 HTML 메타 또는 스크립트에 하드코딩된 값이 페이지마다 다를 수 있다. 검토 시 **실제 결제 도메인·API 도메인**을 각 파일의 `canonical`, `og:url`, `meta name="api-base"` 등과 교차 확인할 것을 권한다. (예: 메인에는 `magicindicatorglobal.com`, 법무·청구 페이지 일부에는 `happyinvests.com`이 등장하는 식으로 혼재될 수 있음 → 운영 기준 하나로 통일 여부 검토 필요.)
+- **Git 원본 폴더**: `C:\Users\gjg00\자동매매\magic-indicator-site`
+- **GitHub 원격**: `https://github.com/gjg00000-arch/happyinvest-site.git`
+- **공식 공개 도메인**: `https://magicindicatorglobal.com/`
+- **S3 버킷**: `magicindicator-global-web-6145`
+- **CloudFront 배포**: `E2Y7ZN7QM8A91S`
+- **최근 배포 무효화**: `ICPCCNBECAC2P6XXFYAUU6MFX1`, 완료 확인
 
----
-
-## 2. 사이트 목적 요약
-
-- 광고 문구 요지: **복잡한 분석보다 방향·구간·신호 중심**으로 차트 보조 도구와 가이드를 제공한다.
-- **TradingView(TRV,Pine)** 환경과 **MetaTrader 5** 환경을 모두 노출한다.
-- 상품 원칙(메인·가이드에 반복 등장): MT5 배포물은 `**틱(Tick) 차트 전용 .ex5`** 중심으로 설명된다. 일반 M1/M5 봉 전용 빌드를 판매·배포하지 않는다는 취지의 안내가 있다.
-- **회원 이메일**, **본인인증**, **구독·결제 채널**, **약관**, **커뮤니티(모임터)**, **관리 도구**까지 한 사이트에 묶어둔 **허브** 구조다.
+운영 원칙: 홈페이지 Git 작업은 `magic-indicator-site`에서만 수행합니다. 상위 폴더나 API 폴더에서 Git 커밋·푸시하지 않습니다.
 
 ---
 
-## 3. 전역 내비게이션(대표 메뉴 역할)
+## 2. 빌드·검증 파이프라인
 
-헤더·내비는 스크립트로 동기화될 수 있으나, 메인 기준 순서대로 기능은 다음과 같다.
+`package.json` 기준:
 
+| 명령 | 역할 |
+|------|------|
+| `npm run build:nav` | 전역 내비 주입 |
+| `npm run build:seo` | `sitemap.xml`, `robots.txt` 생성 |
+| `npm run build:og` | OG URL 절대경로 보정 |
+| `npm run build:home-extra-i18n` | 홈 추가 콘텐츠 다국어 번들 생성 |
+| `npm run build:guide-doc-i18n` | 가이드 문서 다국어 번들 생성 |
+| `npm run lint:html` | HTML 구조 검사 |
+| `npm run lint:links` | 내부 링크 검사 |
+| `npm run lint:admin-links` | 공개 HTML/JS의 관리자 링크 노출 차단 |
+| `npm run verify` | 전체 빌드·검증 |
 
-| 링크(대표)                                    | 역할                          |
-| ----------------------------------------- | --------------------------- |
-| 메인 (`index.html`)                         | 랜딩·요약·CMS 슬롯                |
-| 가이드 (`guide/index.html`)                  | 문서 허브                       |
-| 지표 사용 (`guide/usage.html`)                | 공통 사용 안내                    |
-| TRV (`guide/usage-trv.html`)              | 트레이딩뷰 상세                    |
-| MT5 (`guide/usage-mt5.html`)              | MT5 상세 · 틱 전용 원칙            |
-| 다운로드 (`downloads/index.html`)             | 배포물·설치 진입점                  |
-| SMS 시그널 (`registration/sms-addon.html` 등) | 월패키지 부가 과금 진입               |
-| 가입·등록 (`registration/index.html`)         | 가입 플로우                      |
-| 본인인증 (`verify/index.html`)                | KYC 근거 페이지                  |
-| 구독·결제 (`billing/index.html`)              | PayPal·은행송금·크립토·환불·가입 플랜 UI |
-| 이벤트 (`events/index.html`)                 | 단기 과금 이벤트                   |
-| 회원혜택 (`membership/index.html`)            | 혜택 설명                       |
-| 실전후기 (`reflection/index.html`)            | 레퍼런스                        |
-| 문의 (`contact/index.html`)                 | 티켓·인보이스 이슈                  |
-| 모임터 (`boards/index.html`)                 | 게시판·내장 기능                   |
-| 약관·정책 (`legal/index.html`)                | 법무 문서 인덱스                   |
-| 본부 데일리 (`head-daily-report/index.html`)   | 내부/운영 표면                    |
-| 관리자 (`admin/index.html`)                  | 운영 콘솔 진입                    |
-| 연동 (`integrations/index.html`)            | TRV·MT5 ID 저장·API 패턴 안내     |
-
-
-**모바일 경로**: `m/index.html` 별도 두는 구조일 수 있다(간략판).
+검토자는 배포 전 `npm run verify` 통과를 기본 조건으로 봅니다.
 
 ---
 
-## 4. 메인 페이지 특이사항
+## 3. 전역 내비게이션
 
-- 상단 배너·CI 이미지는 시각 요소지만, 접근성 `alt`는 정의되어 있다.
-- `**#cms-home-slot`**: “관리자가 저장한 HTML이 있으면 API에서 주입” 주석이 있다. 즉 일부 카피는 **백엔드/CMS 연동 스크립트**에 의존할 수 있다. 검토 시 API 미연결 상태와 연결 상태의 차이를 구분해야 한다.
-- JSON-LD `Organization`: 회사 명·alternateName·`url`이 스키마에 박혀 있다.
-- 매직라인 빠른 시작 3단계: 차트 적용 → 플랜 → 신호 확인 등 **제품 신념**(심플·실행)을 카피로 고정했다.
+공개 내비 대표 항목:
 
----
+| 링크 | 역할 |
+|------|------|
+| `index.html` | 랜딩·요약·가격표 |
+| `guide/index.html` | 가이드 허브 |
+| `guide/usage.html` | 통합 사용 안내 |
+| `guide/usage-trv.html` | TradingView 안내 |
+| `guide/usage-mt5.html` | MT5 안내 |
+| `downloads/index.html` | 배포물·설치 진입 |
+| `registration/index.html` | 가입·등록 |
+| `registration/login.html` | 로그인 |
+| `verify/index.html` | 본인인증 |
+| `billing/index.html` | 구독·결제 |
+| `events/index.html` | 이벤트 |
+| `membership/index.html` | 회원혜택 |
+| `reflection/index.html` | 실전후기 |
+| `contact/index.html` | 문의 |
+| `boards/index.html` | 모임터 |
+| `legal/index.html` | 약관·정책 |
+| `head-daily-report/index.html` | 본부 데일리 |
+| `integrations/index.html` | 연동 안내 |
 
-## 5. 가이드 허브(`guide/`)
-
-
-| 파일                                     | 내용 초점                         |
-| -------------------------------------- | ----------------------------- |
-| `index.html`                           | 전체 순서 안내 카드(PCS), 계정·인증 블록 링크 |
-| `usage.html`                           | 통합 사용 안내 진입                   |
-| `usage-trv.html`                       | TRV 전용 세부                     |
-| `usage-mt5.html`                       | MT5·틱 전용 강조                   |
-| `magictrading-strategy-inputs-ko.html` | 입력 파라미터(모드 등) 안내              |
-| `tradingview-magic-r.html`             | 특정 레퍼런스성 문구                   |
-
-
-신규 운영자는 **TRV 사용자 vs MT5 사용자**별로 받을 질문이 갈라지므로, 위 세 파일의 중복 표현 여부만 정리하면 대응 품질이 좋아진다.
-
----
-
-## 6. 가입·등록·추가 정책(`registration/`)
-
-- `index.html`: 정회원·등록 신청 진입점, 약관·동의 블록, 체험 플랜 파라미터(`?signup=1` 등 결제 페이지와 호흡 맞춤).
-- `associate.html`: 연계 가입 또는 조직 규격이 필요할 경우.
-- `sms-addon.html`: SMS 시그널 월 과금 패키지(건수 과금 선택).
-
-검토 포인트: **이벤트 환불 불가 고지**, **무료 체험 조건**(TRV ID 또는 MT5 계좌+서버) 문구와 `billing/`의 조항이 교차 검증된다.
+공개 내비에는 `admin/index.html`, `admin/monitor.html` 링크를 넣지 않습니다.
 
 ---
 
-## 7. 본인인증(`verify/`)
+## 4. 관리자 경로 보안 점검
 
-- 본 개인 정보 수집·인증 업체 연동 결과를 회원 상태와 맞물리는 페이지로 가정된다.
-- 가입 순서에서는 “가입 → 본인인증 → 결제” 단계 형태가 UI에 명시된다.
-
----
-
-## 8. 구독·결제(`billing/index.html`) — 상세
-
-이 페이지가 **외부 PG·직접 송금·크립토·환불** 등 가장 많은 카피를 가진 허브다.
-
-### 8.1 납부 채널 원칙(페이지 카피 기준 요약)
-
-1. **PayPal(카드)**: 소액·가입 계열 우선 채널. Airwallex는 “고객 직접 송금용이 아니라 PayPal 정산용”으로 반복된다.
-2. **은행 외화 직접 송금**: 글로벌 수취 계좌 + 한국 하나은행 SWIFT 등이 병기된다.
-3. **크립토**: 메이저 우선·잡코인 수동 견적·네트워크·꼼꼼한 알림 플랫폼 카피.
-4. **원화 법인(우리은행 등)**: 환율·만 원 절산·금액 꼬리표 개념.
-
-### 8.2 “월 과금 상한” 회사 정책
-
-- 카피 어딘가에 **1개월을 넘은 선결제 불가**(연 회원 형태 불가 등) 회사 규약이 존재한다. PG·판매 페이지와 모순이 없는지 별도 검토 필요.
-
-### 8.3 환불·정규·이벤트
-
-- 요청 폼(UI), 원화 반환 입력·달러 입력 구분 등이 존재한다.
-- 클라이언트가 로그인 이메일 기준 **환불 예상 계산**(API 필요) 패턴이다.
-- **정규·비즈(월)** vs **이벤트·무료·쿠폰 불가**를 법 페이지와 문자열 레벨로 맞출 것.
-
-### 8.4 SMS 시그널 월패키지
-
-- `billing/` 상단 카드처럼 “문자 과금 패키지(200건/500건…)” 카피가 있다. 과금 페이지는 `registration/sms-addon.html`과 일치해야 한다.
-
-### 8.5 현금 송금 — 동적 선택 UI (“현금 송금 계좌 선택”, `#wire-route-picker`)
-
-두 단계 콤보로 **통화별로 가능한 수취 지역만** 채워지고, 해당 조합으로 **표 테이블**이 렌더링된다는 구조가 스크립트에 구현되어 있다.
-
-- **1단계: 납부 통화 선택** (`#wire-ccy-select`) — USD·KRW·EUR·GBP·JPY·AUD·CAD·CHF·HKD·CNY·SGD·NOK·NZD·SEK 등.
-- **2단계: 수취 계좌 국가·지역 선택** (`#wire-country-select`) — 통화에 따라 재구축된다. 라벨에 은행명이 포함된 형태(예: “대한민국 — KEB Hana…”).
-
-통화별 **수취 지역 집합(스크립트 설계)**
-
-
-| 통화           | 지역 코드·의미                                                           |
-| ------------ | ------------------------------------------------------------------ |
-| KRW          | KR 만 (우리은행 법인 원화 등)                                                |
-| USD          | KR(KEB Hana SWIFT), US(Community Federal Savings Bank), SG(DBS 멀티) |
-| CAD          | CA (Digital Commerce Bank)                                         |
-| AUD          | AU (ANZ 계열 카피)                                                     |
-| HKD          | HK (Standard Chartered 카피)                                         |
-| EUR          | DE (Banking Circle IBAN), SG (DBS 동일 번호 다른 통화)                     |
-| GBP          | GB (Airwallex UK 카피), SG (DBS)                                     |
-| SGD 등 싱가 다통화 | SG 만 (계좌 1줄 세트 반복 활용: CNY CHF JPY 등)                               |
-
-
-표에 포함되는 세부항목 유형 예: 글로벌 명의 `haengbokdoam invest co ltd` 계열 문자열 vs 한국 **정식 법인명** 문자열 분리 필요 지점, SWIFT·IBAN·routing·branch code·정렬코드 등.
-
-추가로 **미국 USD** 선택 시에는 “국내 은행 해외송금 입력 예시(점선 카드)”가 붙도록 되어 있다는 점 검토 가능.
-
-컴파일/QA 체크: 실제 브라우저에서 통화 변경 시 콤보 옵션 리셋, 상단 통화 칩바(`currency-chip`)와 연동 불일치(칩 미지원 통화 선택 시 모든 칩 off) 같은 UX가 존재한다.
-
-### 8.6 하단 정적 패널
-
-- 레거시 “하나은행 외화 수취 박스” (#`aw-usd-base`) 같은 **항상 노출 카피**가 남아 있을 수 있다. 사용자가 새 동적 카드만 보라고 유도해야 할지 여부 검토 필요.
+- `admin/` 파일은 운영 콘솔 파일일 수 있으나 공개 내비·사이트맵·robots·고객 카피에 노출하지 않습니다.
+- `scripts/lint-admin-links.mjs`가 공개 HTML/JS의 `admin/` 링크를 차단합니다.
+- 보안은 “링크를 안 보여주는 것”으로 끝나지 않습니다. 실제 `/admin/*` 접근 통제는 WAF, 인증, IP allowlist 등 인프라 레이어에서 처리해야 합니다.
+- `npm run build:seo`는 `admin/*`을 sitemap에서 제외하는 방향을 유지해야 합니다.
 
 ---
 
-## 9. 약관·정책(`legal/`)
+## 5. 도메인·SEO 기준
 
-
-| 문서 성격 예시                                       |
-| ---------------------------------------------- |
-| `terms.html`: 기본 약관                            |
-| `privacy.html`: 개인정보                           |
-| `refund.html`: 환불 공식 및 PG 심사용 요약 레퍼            |
-| `plan-terms-nonrefund.html`: 환불 불가 총괄          |
-| `terms-magictrading-regular.html`: 정규 특약       |
-| `terms-magictrading-event.html`: 이벤트           |
-| `terms-magictrading-free-trial.html`: 무료 체험 특약 |
-| `access-matrix.html`: 접근권 레벨 참고표               |
-
-
-허브 `legal/index.html`에 **PG 결제 관점 한눈에** 박스가 있다. 카피 수정 시 허브 vs 본문 이중 수정 위험이 있다.
+- canonical, OG, sitemap, robots 기준 도메인은 `magicindicatorglobal.com`입니다.
+- `happyinvests.com`은 공개 도메인 SSOT가 아닙니다. 신규 카피·SEO·API 기준으로 추가하지 않습니다.
+- 검토 명령 예:
+  - `npm run verify`
+  - `rg "happyinvests\\.com|admin/index\\.html|admin/monitor\\.html" .`
 
 ---
 
-## 10. 연동 페이지(`integrations/index.html`)
+## 6. 메인·모바일 페이지 점검
 
-- TRV 사용자명 처리(@ 제거)·MT5 **계좌 번호 + 서버** 조합 라이선스 설계 근거를 설명한다.
-- 헤더 `X-User-Id` 패턴(API 사전 패턴)·모임터와 이메일 일치 같은 운영 룰이 서술되어 있다.
+### `index.html`
 
----
+- 제품 철학, 가격표, 신청 플로우, 약관·결제 진입을 함께 담은 랜딩입니다.
+- 가격표·시장 라이선스 설명은 다크모드 대비가 깨지지 않아야 합니다.
+- 운영팀 내부 원장 확인 문구는 공개 관리자 링크로 바꾸지 않습니다.
 
-## 11. 게시판·관리도구
+### `m/index.html`
 
-### 11.1 모임터(`boards/index.html`)
-
-- 쿼리 `?board=` 로 게시판 분기 패턴 존재(예 `event_promo_shoutout` 링크).
-- 인증 상태에 따라 기능이 분기될 가능성 높음(클라이언트 라우팅 포함).
-
-### 11.2 관리자(`admin/`)
-
-- `index.html`: 전역 운영.
-- `monitor.html`: 상태 모니터·특화 UI일 수 있다.
-- 접근 차단 필요(패스워드·IP·별도 레이어)—배포 시 보안 검토 대상이다.
+- 모바일 요약판입니다.
+- 빌드 호환용 숨김 `nav.site-nav` 구조가 유지되어야 합니다.
+- 다국어 빌드 후 `aria-label`, 숨김 내비, 주요 CTA가 깨지지 않는지 확인합니다.
 
 ---
 
-## 12. 기타 단일 기능 페이지
+## 7. 결제·약관 검토
 
+### 사용자 카피
 
-| 경로                             | 용도              |
-| ------------------------------ | --------------- |
-| `events/index.html`            | 한시 이벤트 요금 진입점   |
-| `membership/index.html`        | 혜택 카피           |
-| `reflection/index.html`        | 사례 카피           |
-| `contact/index.html`           | CS·토스 인보이스 링크   |
-| `downloads/index.html`         | 배포 패키지·주의 고지    |
-| `telegram-chat-id/index.html`  | 텔레그램 채널 ID 안내 등 |
-| `head-daily-report/index.html` | 내부 커뮤니케이션/리포트   |
-| `404.html`                     | 페이지 없음 처리       |
-| `m/index.html`                 | 모바일 요약판         |
+- 1개월 초과 장기 선결제, 연회원, 다월 선납형 상품을 판매 가능처럼 표현하지 않습니다.
+- 이벤트·무료·쿠폰·정규·비즈 월 과금의 환불 가능 여부를 `legal/` 원문과 맞춥니다.
+- 가상자산 결제는 “입금 신고와 운영팀 확인” 기준입니다. Ledger 하드웨어 자동 연동처럼 설명하지 않습니다.
 
+### 서버 가드
 
----
+백엔드 기준:
 
-## 13. 주요 에셋(이미지 제외 개념)
+- `legal_acceptance_id` 필수
+- 플랜 코드와 약관 scope 일치 검증
+- `unknown` 플랜 코드 거부
+- `plans` 카탈로그에 문서가 있는 경우 1개월 초과·연간·선납형 SKU 거부
 
-- `assets/common.css`: 전역 레이아웃.
-- `assets/site-ux.css`: UI 공통 패턴(toast 포함 추정)·버튼.
-- 페이지별 특화 스타일: `billing` 암호화 입금 카드류, 보드 내장 등.
-- 빌드 시 내비 주입·SEO 메타 수정 스크립트 (`scripts/`).
+프런트엔드 카피는 이 서버 정책을 우회할 수 없다는 전제로 씁니다.
 
 ---
 
-## 14. 검토 체크리스트(운영 준비)
+## 8. 권한·체험·레거시
 
-1. **도메인 단일화**: `canonical`/OG/`api-base` 문자열 교차 검사.
-2. **법적 카피 vs 결제 UI**: 무료 체험·자동 유료 불가 표현·연회비 불가·환불 수식 문자열 교차 검사.
-3. **외화 표시**: 페이지 정적 패널 vs 동적 JS 테이블이 **금액·계좌·SWIFT 불일치**를 내지 않는지 검사(CFSB·DBS 각각 업데이트 시 이중 패치 점수).
-4. **은행 카피**: 글로벌 명의 문자열 표기 차이와 한국 증빙용 법인명 표기 차이를 고객이 혼동하지 않게 순서 또는 주석 정리 검토.
-5. **링크 순회**: `npm run lint:links` 실행 후 깨진 링크 0 타깃 확인.
-6. **접근성**: 이미지 `alt`, 폼 레이블, `aria-live` 존재(결제 패널) 등 간단 패스.
+- 권한 판별은 `users`, `free_trial_accesses`, `trial_indicator_entitlements` 병합 구조를 전제로 합니다.
+- `trial_indicator_entitlements`는 레거시 호환 계층입니다. 즉시 삭제하지 않고 백필·검증·롤백 계획 후 제거합니다.
+- TRV username, MT5 계좌+서버, 이메일 등 운영 확인 정보는 공개 admin URL이 아니라 내부 원장 확인 문구로 안내합니다.
 
 ---
 
-## 15. 업데이트 이력(문서 작성 기준 포함 사항)
+## 9. 리치 텍스트 에디터
 
-- 본 안내에는 **통화별 수취 지역 콤보 + 글로벌 계좌 다건** 브랜치가 반영된 결제 패널 구조 요약을 포함하였다.
-- 실제 라우팅 번호·IBAN 변경은 원천 레지스트리와 대조해야 하며 웹 카피는 그 복제물일 뿐이다.
-
----
-
-## 16. 이 문서 활용처
-
-LLM에게 “컨텍스트로 줄 설명만” 줄 때에는 섹션 3·8·10을 우선 붙여 넣고, 법 무결성은 반드시 `legal/` 원문 교차 검증을 명시하면 재현 가능한 리뷰가 된다.
+- `assets/board-rte.js`는 순수 Web Standard API 기반입니다.
+- 마케팅·문서에서 Tiptap, ProseMirror, `document.execCommand` 기반으로 설명하지 않습니다.
+- 게시판 에디터 검토 시 `contentEditable`, `Selection`, `Range`, DOM 조작, hidden 필드 동기화 흐름을 기준으로 봅니다.
 
 ---
 
-*파일 생성 위치*: `magic-indicator-site/docs/HOMEPAGE-REVIEW-GUIDE.md`  
-*내용 근거*: 프로젝트 내 HTML 헤더·네비 구조 및 `billing` 동적 선택 스크립트 설계.
+## 10. 배포 절차
+
+권장 배포:
+
+1. `npm run verify`
+2. `npm run deploy:s3:py`
+3. CloudFront invalidation 완료 확인
+4. `git status --short --branch`
+5. `git push`
+
+정적 사이트 배포 스크립트는 S3 sync 후 HTML short cache sync, CloudFront invalidation을 수행합니다.
+
+---
+
+## 11. 운영 체크리스트
+
+- `npm run verify` 통과
+- `lint:admin-links` 통과
+- `sitemap.xml`에 `admin/*` 없음
+- 공개 HTML/JS에 `admin/index.html`, `admin/monitor.html` 링크 없음
+- 공개 도메인 문자열이 `magicindicatorglobal.com` 기준
+- `m/index.html`의 숨김 `site-nav` 유지
+- 가격표·송금 테이블 다크모드 가독성 확인
+- 결제 페이지의 1개월 상한·약관 필수 문구 확인
+- 크립토·Ledger 문구가 자동 연동으로 오해되지 않는지 확인
+- 배포 후 CloudFront invalidation 완료 확인
+- Git 작업은 `magic-indicator-site`에서만 수행
+
+---
+
+## 12. 고도화 권장 과제
+
+- **시그널 웹훅 로그 TTL**: `SIGNAL_WEBHOOK_EVENTS_TTL_DAYS=90`처럼 양수를 설정해 `signal_webhook_events` 비대화를 운영 정책에 맞게 제어합니다.
+- **Stale Prepared 알림**: `payment_requests`가 생성된 뒤 PG 웹훅 누락·지연으로 `prepared` 상태에 오래 머무는 건을 백오피스 Dead Letter 또는 stale 알림으로 끌어올리는 설계를 권장합니다.
+- **레거시 권한 이관**: `trial_indicator_entitlements`는 백필, 샘플 검증, 롤백 플랜, 읽기 병합 제거 순서로 단계 이관합니다.
+- **WAF 접근 통제**: 공개 링크 제거와 별개로 `/admin/*`는 CloudFront WAF, 인증, IP allowlist로 물리 접근 통제를 확인합니다.
+
+---
+
+## 13. 갱신 시점
+
+- 기준 갱신: 2026-06-02 20:30 KST
+- 최근 반영 항목:
+  - 공개 관리자 링크 제거
+  - `lint:admin-links` 추가
+  - 다국어 빌드 후 검증 순서 조정
+  - CloudFront 배포·무효화 확인
+  - Git 원본 `magic-indicator-site` 단일화
+  - 결제 요청 서버 가드 기준 문서화
+  - TTL, stale prepared, 레거시 권한 이관 권장 과제 반영
