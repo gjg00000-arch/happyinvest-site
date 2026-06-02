@@ -91,9 +91,10 @@ export async function ensureOneWeekFreeTrialIndexes(db) {
   await events.createIndex({ tv_id: 1, received_at: 1 }, { name: "signal_webhook_events_tv_received", sparse: true });
 
   const freeTrials = db.collection(FREE_TRIAL_ACCESSES_COLLECTION);
-  await freeTrials.createIndex({ subject_key: 1 }, { name: "free_trial_accesses_subject_key" });
+  await freeTrials.createIndex({ subject_key: 1 }, { unique: true, name: "free_trial_accesses_subject_key_unique" });
   await freeTrials.createIndex({ trv_id: 1, started_at: 1 }, { name: "free_trial_accesses_trv_started", sparse: true });
   await freeTrials.createIndex({ tv_id: 1, started_at: 1 }, { name: "free_trial_accesses_tv_started", sparse: true });
+  await freeTrials.createIndex({ expire_at: 1 }, { name: "free_trial_accesses_expire_at", sparse: true });
 }
 
 async function writeAudit(db, event) {
@@ -121,6 +122,13 @@ function startedAtFromRecord(record) {
   );
 }
 
+function expireAtFromRecord(record, startedAt) {
+  return (
+    coerceDate(record?.expire_at || record?.expires_at || record?.expired_at) ||
+    (startedAt ? new Date(startedAt.getTime() + TRIAL_MS) : null)
+  );
+}
+
 async function findExistingTrialByTvId(db, tvId) {
   const subjectKey = `trv:${tvId}`;
   const tvMatch = [
@@ -129,12 +137,6 @@ async function findExistingTrialByTvId(db, tvId) {
     { tv_id: tvId },
     { tradingview_username: tvId },
   ];
-
-  const oneWeek = await db.collection(ONE_WEEK_FREE_COLLECTION).findOne(
-    { $or: tvMatch },
-    { sort: { trial_started_at: 1, first_seen_at: 1, created_at: 1 } }
-  );
-  if (oneWeek) return { source: ONE_WEEK_FREE_COLLECTION, record: oneWeek };
 
   const freeTrial = await db.collection(FREE_TRIAL_ACCESSES_COLLECTION).findOne(
     { $or: tvMatch },
@@ -176,6 +178,7 @@ export function checkTrialWebhookEntitlement(db) {
       const now = new Date();
       const subjectKey = `trv:${tvId}`;
       let startedAt = null;
+      let expireAt = null;
       let source = ONE_WEEK_FREE_COLLECTION;
       let trialRecord = null;
 
@@ -184,9 +187,10 @@ export function checkTrialWebhookEntitlement(db) {
         source = existing.source;
         trialRecord = existing.record;
         startedAt = startedAtFromRecord(existing.record);
+        expireAt = expireAtFromRecord(existing.record, startedAt);
       } else {
-        const expiresAt = new Date(now.getTime() + TRIAL_MS);
-        const result = await db.collection(ONE_WEEK_FREE_COLLECTION).findOneAndUpdate(
+        const expireAtOnInsert = new Date(now.getTime() + TRIAL_MS);
+        const result = await db.collection(FREE_TRIAL_ACCESSES_COLLECTION).findOneAndUpdate(
           { subject_key: subjectKey },
           {
             $setOnInsert: {
@@ -197,7 +201,9 @@ export function checkTrialWebhookEntitlement(db) {
               started_at: now,
               started_at_kst: kstIso(now),
               trial_started_at: now,
-              expires_at: expiresAt,
+              expire_at: expireAtOnInsert,
+              expire_at_kst: kstIso(expireAtOnInsert),
+              expires_at: expireAtOnInsert,
               status: "active",
               source: "tradingview_webhook",
               created_at: now,
@@ -217,13 +223,46 @@ export function checkTrialWebhookEntitlement(db) {
         );
         trialRecord = result?.value || result;
         startedAt = startedAtFromRecord(trialRecord) || now;
+        expireAt = expireAtFromRecord(trialRecord, startedAt) || expireAtOnInsert;
+        source = FREE_TRIAL_ACCESSES_COLLECTION;
+
+        await db.collection(ONE_WEEK_FREE_COLLECTION).updateOne(
+          { subject_key: subjectKey },
+          {
+            $setOnInsert: {
+              subject_key: subjectKey,
+              channel: "tradingview",
+              trv_id: tvId,
+              tv_id: tvId,
+              started_at: startedAt,
+              started_at_kst: kstIso(startedAt),
+              trial_started_at: startedAt,
+              expire_at: expireAt,
+              expire_at_kst: kstIso(expireAt),
+              expires_at: expireAt,
+              status: "active",
+              source: "tradingview_webhook_mirror",
+              created_at: now,
+            },
+            $set: {
+              last_seen_at: now,
+              last_seen_at_kst: kstIso(now),
+              last_license_pack: payload.license_pack || null,
+              last_tickerid: payload.tickerid || null,
+              last_magic_signal: payload.magic_signal || null,
+              last_event: payload.event || null,
+              updated_at: now,
+            },
+          },
+          { upsert: true }
+        );
       }
 
-      if (!startedAt) {
+      if (!startedAt || !expireAt) {
         await writeAudit(db, {
           event: "trial_webhook_entitlement_rejected",
           blocked: true,
-          reason: "missing_started_at",
+          reason: "missing_started_at_or_expire_at",
           subject_key: subjectKey,
           trv_id: tvId,
           source,
@@ -232,35 +271,60 @@ export function checkTrialWebhookEntitlement(db) {
         });
         return res.status(403).json({
           ok: false,
-          error: "missing_started_at",
-          message: "무료 체험 시작 시각을 확인할 수 없어 주문 전송을 차단했습니다.",
+          error: "missing_started_at_or_expire_at",
+          message: "무료 체험 시작/만료 시각을 확인할 수 없어 주문 전송을 차단했습니다.",
         });
       }
 
-      const expiresAt = new Date(startedAt.getTime() + TRIAL_MS);
-      const expired = now.getTime() > expiresAt.getTime();
+      const expired = now.getTime() > expireAt.getTime();
 
       if (expired) {
-        await db.collection(ONE_WEEK_FREE_COLLECTION).updateOne(
-          { subject_key: subjectKey },
-          {
-            $set: {
-              subject_key: subjectKey,
-              channel: "tradingview",
-              trv_id: tvId,
-              tv_id: tvId,
-              started_at: startedAt,
-              trial_started_at: startedAt,
-              expires_at: expiresAt,
-              status: "expired",
-              blocked_at: now,
-              blocked_reason: "trial_period_expired",
-              updated_at: now,
+        await Promise.all([
+          db.collection(FREE_TRIAL_ACCESSES_COLLECTION).updateOne(
+            { subject_key: subjectKey },
+            {
+              $set: {
+                subject_key: subjectKey,
+                channel: "tradingview",
+                trv_id: tvId,
+                tv_id: tvId,
+                started_at: startedAt,
+                trial_started_at: startedAt,
+                expire_at: expireAt,
+                expire_at_kst: kstIso(expireAt),
+                expires_at: expireAt,
+                status: "expired",
+                blocked_at: now,
+                blocked_reason: "trial_period_expired",
+                updated_at: now,
+              },
+              $inc: { blocked_count: 1 },
             },
-            $inc: { blocked_count: 1 },
-          },
-          { upsert: true }
-        );
+            { upsert: true }
+          ),
+          db.collection(ONE_WEEK_FREE_COLLECTION).updateOne(
+            { subject_key: subjectKey },
+            {
+              $set: {
+                subject_key: subjectKey,
+                channel: "tradingview",
+                trv_id: tvId,
+                tv_id: tvId,
+                started_at: startedAt,
+                trial_started_at: startedAt,
+                expire_at: expireAt,
+                expire_at_kst: kstIso(expireAt),
+                expires_at: expireAt,
+                status: "expired",
+                blocked_at: now,
+                blocked_reason: "trial_period_expired",
+                updated_at: now,
+              },
+              $inc: { blocked_count: 1 },
+            },
+            { upsert: true }
+          ),
+        ]);
         await writeAudit(db, {
           event: "trial_webhook_entitlement_expired",
           blocked: true,
@@ -269,7 +333,8 @@ export function checkTrialWebhookEntitlement(db) {
           trv_id: tvId,
           source,
           started_at: startedAt,
-          expires_at: expiresAt,
+          expire_at: expireAt,
+          expires_at: expireAt,
           payload_event: payload.event || null,
           magic_signal: payload.magic_signal || null,
           ip: req.ip || req.socket?.remoteAddress || null,
@@ -289,7 +354,8 @@ export function checkTrialWebhookEntitlement(db) {
         trv_id: tvId,
         source,
         started_at: startedAt,
-        expires_at: expiresAt,
+        expire_at: expireAt,
+        expires_at: expireAt,
         payload_event: payload.event || null,
         magic_signal: payload.magic_signal || null,
         license_pack: payload.license_pack || null,
@@ -303,7 +369,8 @@ export function checkTrialWebhookEntitlement(db) {
         trv_id: tvId,
         source,
         started_at: startedAt,
-        expires_at: expiresAt,
+        expire_at: expireAt,
+        expires_at: expireAt,
         pass: true,
       };
       req.oneWeekFreeTrial = req.trialWebhookEntitlement;

@@ -988,7 +988,7 @@ if isChartLastForUi
         table.cell(info, 0, 12, "Free Trial", text_color = color.silver, text_size = size.small)
         table.cell(info, 1, 12, "Trial Mode", text_color = color.aqua, text_size = size.small)
         table.cell(info, 0, 13, "안내", text_color = color.silver, text_size = size.small)
-        table.cell(info, 1, 13, "공식 정규 플랜은 홈페이지 확인", text_color = color.aqua, text_size = size.small)
+        table.cell(info, 1, 13, TRIAL_GUIDE_TEXT, text_color = color.aqua, text_size = size.small)
     else
         table.cell(info, 0, 12, "", text_size = size.small)
         table.cell(info, 1, 12, "", text_size = size.small)

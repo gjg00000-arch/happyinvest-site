@@ -28,28 +28,37 @@ app.get("/healthz", (req, res) => {
   res.json({ ok: true, service: "one-week-free-trial-webhook" });
 });
 
+async function acceptedSignalHandler(req, res, next) {
+  try {
+    const payload = req.webhookPayload || parseWebhookPayload(req.body);
+    // 실제 MT5/브로커 체결 라우터는 checkTrialWebhookEntitlement 통과 후 이 지점 뒤에 연결합니다.
+    res.json({
+      ok: true,
+      accepted: true,
+      trial: req.trialWebhookEntitlement,
+      signal: {
+        event: payload.event || null,
+        magic_signal: payload.magic_signal || null,
+        tickerid: payload.tickerid || null,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+app.post(
+  "/api/signals/webhook",
+  express.raw({ type: "*/*", limit: "256kb" }),
+  checkTrialWebhookEntitlement(db),
+  acceptedSignalHandler
+);
+
 app.post(
   "/api/webhooks/signals/one-week-free",
   express.raw({ type: "*/*", limit: "256kb" }),
   checkTrialWebhookEntitlement(db),
-  async (req, res, next) => {
-    try {
-      const payload = req.webhookPayload || parseWebhookPayload(req.body);
-      // 실제 MT5/브로커 체결 라우터가 복구되면 이 지점 뒤에 전달합니다.
-      res.json({
-        ok: true,
-        accepted: true,
-        trial: req.trialWebhookEntitlement,
-        signal: {
-          event: payload.event || null,
-          magic_signal: payload.magic_signal || null,
-          tickerid: payload.tickerid || null,
-        },
-      });
-    } catch (err) {
-      next(err);
-    }
-  }
+  acceptedSignalHandler
 );
 
 app.post("/api/admin/one-week-free/check", express.json({ limit: "64kb" }), async (req, res, next) => {

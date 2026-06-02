@@ -126,10 +126,10 @@
 ## 8. 권한·체험·레거시
 
 - 권한 판별은 `users`, `free_trial_accesses`, `trial_indicator_entitlements` 병합 구조를 전제로 합니다.
-- 무인 1주 무료 체험 웹훅은 `one_week_free_trials` 컬렉션에서 `trv_id`, `mt5_account`, `mt5_server`와 최초 유입 시각을 관리합니다.
-- `tv_id` 또는 MT5 식별값이 최초 유입이면 7일 체험 원장을 만들고, 기존 식별값은 최초 시작 시각 기준 7일 초과 시 403으로 차단합니다.
+- 무인 1주 무료 체험 웹훅은 `POST /api/signals/webhook` 앞단의 `checkTrialWebhookEntitlement`에서 `req.body.tv_id`를 정본으로 추출합니다.
+- `free_trial_accesses` 또는 `signal_webhook_events`에 해당 `tv_id` 기록이 없으면 `free_trial_accesses`에 `started_at`/`started_at_kst`와 `expire_at`/`expire_at_kst` 원장을 만들고, 기존 식별값은 `expire_at` 초과 시 403으로 차단합니다.
 - TradingView 1주 무료 Pine은 `Dodam_MagicTrading_Marketfree_1weekfree.pine` 배포본을 기준으로 봅니다. `showTrialGuide`가 켜져 있으면 `MagicTrading 1-Week Trial Mode\n공식 정규 플랜은 홈페이지에서 확인하세요.` 고정 안내만 표시합니다.
-- Pine 차트는 체험 일차나 만료 여부를 계산하지 않습니다. 실제 7일 제한, 중복 사용 차단, 만료 감사 로그는 서버 웹훅과 `one_week_free_trials` 원장이 정본입니다.
+- Pine 차트는 체험 일차나 만료 여부를 계산하지 않습니다. 실제 7일 제한, 중복 사용 차단, 만료 감사 로그는 서버 웹훅과 `free_trial_accesses`/`signal_webhook_events`가 정본입니다.
 - `trial_indicator_entitlements`는 레거시 호환 계층입니다. 즉시 삭제하지 않고 백필·검증·롤백 계획 후 제거합니다.
 - TRV username, MT5 계좌+서버, 이메일 등 운영 확인 정보는 공개 admin URL이 아니라 내부 원장 확인 문구로 안내합니다.
 
@@ -184,7 +184,7 @@
 
 ## 13. 갱신 시점
 
-- 기준 갱신: 2026-06-02 22:34 KST
+- 기준 갱신: 2026-06-02 23:07 KST
 - 최근 반영 항목:
   - 공개 관리자 링크 제거
   - `lint:admin-links` 추가
@@ -194,3 +194,4 @@
   - 결제 요청 서버 가드 기준 문서화
   - TTL, stale prepared, 레거시 권한 이관 권장 과제 반영
   - 1주 무료 Pine 고정 안내 메시지와 백엔드 만료 정본 경계 반영
+  - `POST /api/signals/webhook` 직전 7일 체험 가드 기준 반영

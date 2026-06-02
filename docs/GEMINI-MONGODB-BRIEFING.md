@@ -30,7 +30,7 @@ MongoDB는 DB 레벨 FK가 없습니다. 모든 관계는 애플리케이션 코
 | `payment_requests` | 결제 준비·추적 원장, PG 메타와 `legal_acceptance_id` 참조 |
 | `legal_acceptances` | 약관 전자서명 스냅샷 |
 | `free_trial_accesses` | 7일 체험 등 무상 원장, `subject_key` 글로벌 유니크 |
-| `one_week_free_trials` | 무인 1주 무료 체험 웹훅 가드 원장, `trv_id`/`mt5_account`/`mt5_server`와 최초 유입 시각 관리 |
+| `one_week_free_trials` | 무인 1주 무료 체험 웹훅 보조 가드/미러 원장, `trv_id`/`mt5_account`/`mt5_server`와 최초 유입 시각 관리 |
 | `trial_indicator_entitlements` | 레거시 지표 TTL, 신규 쓰기 금지·조회 병합용 |
 | `refund_requests` | 정규·비즈 월 과금 환불 접수 |
 | `coupons` | 쿠폰 발행·교환·폐기 |
@@ -72,7 +72,7 @@ MagicTrading 권한 검증은 한 컬렉션만 보지 않습니다.
 |------|-----------|
 | `users` | 정회원·유료 플랜·지표 TTL 정본이 될 수 있음 |
 | `free_trial_accesses` | TRV/MT5 식별자 기반 무상 체험 원장 |
-| `one_week_free_trials` | 웹훅 최초 유입 기준 7일만 허용하는 무인 무료 체험 사용 이력 |
+| `one_week_free_trials` | 1주 무료 웹훅 전용 보조 가드/미러 이력 |
 | `trial_indicator_entitlements` | 과거 레거시 TTL 호환 계층 |
 | `business_seats` | B2B 좌석 권한 확장 시 참조 |
 
@@ -81,9 +81,9 @@ MagicTrading 권한 검증은 한 컬렉션만 보지 않습니다.
 
 `trial_indicator_entitlements`는 즉시 제거하면 안 됩니다. 백필, 샘플 검증, 롤백 플랜을 만든 뒤 읽기 병합 제거 순서로 이관합니다.
 
-무인 1주 무료 체험 웹훅은 `one_week_free_trials.subject_key`를 기준으로 중복 사용을 막습니다. TradingView는 Pine 웹훅의 `"tv_id":"{{username}}"` 값을 `trv:<tv_id>`로 정규화하고, MT5는 `mt5:<server>:<account>` 형식으로 식별합니다. 최초 유입 시각에서 7일을 초과하면 403으로 차단하고 `signal_webhook_events`에 감사 로그를 남깁니다.
+무인 1주 무료 체험 웹훅은 `POST /api/signals/webhook` 직전 `checkTrialWebhookEntitlement` 미들웨어에서 차단합니다. TradingView는 Pine 웹훅의 `"tv_id":"{{username}}"` 값을 `trv:<tv_id>`로 정규화합니다. 가드는 `free_trial_accesses`를 우선 원장으로 보고 `signal_webhook_events`를 감사/역추적 로그로 조회하며, 최초 유입 시각에서 7일을 초과하면 403으로 차단합니다.
 
-Pine의 `DMT_Free_1Week` 차트 안내 메시지는 `showTrialGuide`가 켜졌을 때 고정 안내 문구만 보여주는 UI 표시입니다. MongoDB 권한 정본이 아니며, 실제 만료·중복 사용 차단은 서버의 `one_week_free_trials` 문서와 감사 로그가 기준입니다.
+Pine의 `DMT_Free_1Week` 차트 안내 메시지는 `showTrialGuide`가 켜졌을 때 고정 안내 문구만 보여주는 UI 표시입니다. MongoDB 권한 정본이 아니며, 실제 만료·중복 사용 차단은 서버의 `free_trial_accesses` 문서와 `signal_webhook_events` 감사 로그가 기준입니다.
 
 ---
 
@@ -138,7 +138,7 @@ flowchart LR
 4. `users`, `free_trial_accesses`, `trial_indicator_entitlements` 중 하나만 보고 권한을 단정하면 안 됩니다.
 5. 카드 PAN·민감 결제정보는 DB 저장 설계가 아닙니다. PG 참조와 상태 원장만 유지합니다.
 6. Ledger 관련 컬렉션은 운영 원장·스냅샷 설명입니다. 고객에게 하드웨어 Ledger 자동 연동처럼 말하지 않습니다.
-7. Pine 차트는 체험 일차를 계산하지 않습니다. 실제 1주 체험 만료일은 `one_week_free_trials.trial_started_at`과 `expires_at` 기준으로 판단합니다.
+7. Pine 차트는 체험 일차를 계산하지 않습니다. 실제 1주 체험 만료일은 `free_trial_accesses.started_at`과 `expire_at` 기준으로 판단합니다. 호환 필드 `expires_at`가 함께 기록될 수 있으나 운영 기준은 `expire_at`입니다.
 
 ---
 
@@ -153,5 +153,5 @@ flowchart LR
 
 ## 8. 갱신 시점
 
-- 기준 갱신: 2026-06-02 22:34 KST
+- 기준 갱신: 2026-06-02 23:07 KST
 - 이 문서는 API 데이터 구조, 결제 가드, 권한 판별, 운영 원장 정책이 바뀔 때 함께 갱신합니다.
