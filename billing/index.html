@@ -1136,7 +1136,7 @@
         "
       >
         <strong>정규·비즈(월) 환불 요청</strong>은 <a href="#refund-h2">이 페이지의 환불 요청란</a>에서 접수합니다. (이메일·로그인·API
-        연동이 필요하며, 이벤트·쿠폰·7일 체험·리커버리는 대상이 아닙니다.) → <a href="../legal/refund.html#sec-refund-formula">산정 방식(31일·USD)</a>
+        연동이 필요하며, 이벤트·쿠폰·3개월 무료 코스·리커버리는 대상이 아닙니다.) → <a href="../legal/refund.html#sec-refund-formula">산정 방식(31일·USD)</a>
       </p>
 
       <nav class="billing-page-toc" aria-label="페이지 목차">
@@ -1684,8 +1684,8 @@
         <strong>결제 전 확인</strong> (심사·투명성)
         <ul style="margin: 0.4rem 0 0; padding-left: 1.05rem">
           <li>
-            <strong>7일(1주) 무료</strong>는
-            <a href="../legal/terms-magictrading-free-trial.html">이벤트 무료 체험</a> 기준이며,
+            <strong>3개월 무료 코스</strong>는
+            <a href="../legal/terms-magictrading-free-trial.html">이벤트 무료 코스</a> 기준이며,
             <strong>기간만료 후 자동으로 유료가 청구되지 않습니다</strong>(별도 결제·동의 시에만).
           </li>
           <li>
@@ -2646,7 +2646,7 @@
       >
         <h2 id="signup-h2">가입 플랜 결제</h2>
         <p class="lead" style="font-size: 0.95rem; margin-bottom: 0.6rem">
-          가입 단계에서 고른 MagicTrading 접근권을 활성화합니다. 7일 무료 체험은 <strong>준회원·정회원 로그인</strong> 후 이 화면에서 TradingView(TRV) 사용자명 또는 MT5 계좌 번호+서버를 넣고 완료해야 합니다.
+          가입 단계에서 고른 MagicTrading 접근권을 활성화합니다. 3개월 무료 코스는 <strong>준회원·정회원 로그인</strong> 후 이 화면에서 TradingView(TRV) 사용자명 또는 MT5 계좌 번호+서버를 넣고 완료해야 합니다.
           <strong>1개월 이벤트(marketfree)</strong>는 Whop TRV <strong>$119</strong> · Whop MT5 <strong>$129</strong> · MQL MT5 <strong>$149</strong> 기준으로
           <strong>PayPal(신용·체크 카드)</strong> 등 당시 켜진 PG와 운영 수동 대조 루트를 병행합니다.
           <strong>정규(월·USD)</strong>는 마켓 조건에 따라 <strong>market applied</strong>와 <strong>marketfree</strong> 확정가가 나뉩니다.
@@ -2655,9 +2655,16 @@
           <a href="#payment-dual">납부 채널(①~④)</a>(<a href="#wire-route-picker">글로벌 계좌</a>·<a href="#crypto-deposit">크립토</a>·<a href="#krw-corporate">원화 법인</a>) + 상담·인보이스로 진행해 주시면 됩니다.
         </p>
         <p id="signup-plan-line" class="small" style="margin: 0 0 0.55rem; color: var(--ci-brown-muted)"></p>
+        <div
+          id="active-license-lock-banner"
+          role="alert"
+          style="display: none; margin: 0 0 0.75rem; padding: 0.85rem 1rem; border-radius: 12px; border: 2px solid rgba(177, 44, 44, 0.55); background: #fff1f1; color: #7a1d1d; font-weight: 800; line-height: 1.55"
+        >
+          [안내] 회원님은 현재 활성화된 라이선스 플랜을 보유 중입니다. 중복 결제 방지를 위해 신규 결제가 제한됩니다. (현재 플랜 만료 이후 또는 해지 이후에만 재결제가 가능합니다.)
+        </div>
         <div id="signup-free-trial-wrap" style="display: none; margin-bottom: 0.75rem">
           <p class="small" style="margin: 0 0 0.45rem; color: var(--ci-brown-muted)">
-            둘 중 하나만 입력하세요. TRV 사용자명 또는 MT5 계좌 번호+서버 조건이 맞으면 7일 무료 체험이 등록됩니다.
+            둘 중 하나만 입력하세요. TRV 사용자명 또는 MT5 계좌 번호+서버 조건이 맞으면 3개월 무료 코스가 등록됩니다.
             TRV와 MT5 체험은 <strong>식별자당 각각 1회</strong>입니다.
             MT5 체험·라이선스는 브로커명 단독 기준이 아니라 입력한 <strong>계좌 번호+서버 1조합</strong> 기준으로 적용됩니다. 즉 MT5 로그인 계좌 번호와 서버명을 묶어 같은 조합인지 확인합니다.
           </p>
@@ -2689,6 +2696,14 @@
               placeholder="MT5 서버"
               autocomplete="off"
             />
+          </div>
+          <div id="signup-free-paypal-wrap" style="margin-top: 0.75rem; padding: 0.75rem; border: 1px solid rgba(111, 78, 55, 0.25); border-radius: 12px; background: rgba(255, 248, 235, 0.72)">
+            <p class="small" style="margin: 0 0 0.5rem; color: var(--ci-brown-muted)">
+              PayPal 무료 구독은 <strong>TRV ID 필수</strong>입니다. 승인 시 PayPal <code>custom_id</code>에 TRV ID와 무료 플랜 코드가 들어가며, 서버가 원장 생성 후 Invite-only 권한을 자동 추가합니다.
+            </p>
+            <button type="button" class="btn btn--ghost" id="signup-free-paypal-load">PayPal 무료 구독 버튼 열기</button>
+            <div id="signup-free-paypal-buttons" style="min-height: 40px; margin-top: 0.65rem"></div>
+            <p id="signup-free-paypal-result" class="small" role="status" style="margin: 0.5rem 0 0; color: var(--ci-brown-muted)"></p>
           </div>
         </div>
         <div id="signup-regular-tier-wrap" class="coupon-redeem-row" style="display: none; margin-bottom: 0.5rem">
@@ -2759,7 +2774,7 @@
       <section>
         <h2>상품·플랜</h2>
         <p>
-          MagicTrading 정식 접근권, 7일 무료 체험(로그인 후), Whop/MQL 1개월 이벤트, 2개월 리커버리 접근권은 <a href="../events/index.html">이벤트·요금</a> 페이지에 정리했습니다.
+          MagicTrading 정식 접근권, 3개월 무료 코스(로그인 후), Whop/MQL 1개월 이벤트, 2개월 리커버리 접근권은 <a href="../events/index.html">이벤트·요금</a> 페이지에 정리했습니다.
           구독 만료일·플랜은 결제 연동 후 DB와 동기화되는 것을 목표로 합니다.
         </p>
       </section>
@@ -2849,6 +2864,7 @@
         var signupRef = document.getElementById("signup-payment-ref");
         var signupBtn = document.getElementById("signup-complete-btn");
         var signupOut = document.getElementById("signup-result");
+        var activeLicenseLockBanner = document.getElementById("active-license-lock-banner");
         var signupRegularWrap = document.getElementById("signup-regular-tier-wrap");
         var signupRegularTier = document.getElementById("signup-regular-tier");
         var signupPlatformWrap = document.getElementById("signup-platform-wrap");
@@ -2859,8 +2875,13 @@
         var signupTrialTrId = document.getElementById("signup-trial-tr-id");
         var signupTrialMt5Login = document.getElementById("signup-trial-mt5-login");
         var signupTrialMt5Server = document.getElementById("signup-trial-mt5-server");
+        var signupFreePaypalWrap = document.getElementById("signup-free-paypal-wrap");
+        var signupFreePaypalLoad = document.getElementById("signup-free-paypal-load");
+        var signupFreePaypalButtons = document.getElementById("signup-free-paypal-buttons");
+        var signupFreePaypalResult = document.getElementById("signup-free-paypal-result");
         var signupProvider = document.getElementById("signup-provider");
         var signupPlanCode = "";
+        var signupFreePaypalSdkEl = null;
         var legalModal = document.getElementById("legal-sign-modal");
         var legalDocs = document.getElementById("legal-sign-docs");
         var legalSignatureText = document.getElementById("legal-signature-text");
@@ -2925,15 +2946,97 @@
           syncBillingLegalGate();
         });
 
+        function isFreeTrialPlan(planCode) {
+          return planCode === "event_3m_free" || planCode === "event_1w_free";
+        }
+
+        function freeTrialLicensePackForPlan(planCode) {
+          return planCode === "event_1w_free" ? "DMT_Free_1Week" : "DMT_Free_3Month";
+        }
+
+        function freeTrialPayPalPlanId(planCode) {
+          var cfg = window.MAGIC_PAYPAL_FREE_TRIAL_PLANS || {};
+          if (planCode === "event_1w_free") return cfg.oneWeek || cfg.event_1w_free || "PAYPAL_PLAN_1W_FREE";
+          return cfg.threeMonths || cfg.event_3m_free || "PAYPAL_PLAN_3M_FREE";
+        }
+
+        function freeTrialDaysForPlan(planCode) {
+          return planCode === "event_1w_free" ? 7 : 90;
+        }
+
+        function isRegularPrepayPlan(planCode) {
+          var p = String(planCode || "").toLowerCase();
+          return p === "regular_default" || p === "reg_magictrading" || p.indexOf("whop_trv_") === 0 || p.indexOf("whop_mt5_") === 0 || p.indexOf("mql_mt5_") === 0;
+        }
+
+        function isActiveOneMonthEventEntitlement(entitlement) {
+          var u = entitlement && entitlement.user ? entitlement.user : {};
+          var tier = String(u.tier_type || "").toLowerCase();
+          var plan = String(u.plan_code || "").toLowerCase();
+          return tier === "onemonthevent" || plan === "dodam_magictrading_1monthevent" || plan === "event_1m_magictrading";
+        }
+
+        function checkoutIdentityForPlan(planCode) {
+          var auth = window.MagicAuth ? MagicAuth.get() : { email: "" };
+          var tvId = "";
+          if (isFreeTrialPlan(planCode)) {
+            tvId = String((signupTrialTrId && signupTrialTrId.value) || "").trim().replace(/^@+/, "");
+          }
+          return {
+            tv_id: tvId,
+            email: auth && auth.email && auth.email !== "guest@local" ? String(auth.email).trim().toLowerCase() : "",
+          };
+        }
+
+        function setActiveLicenseCheckoutLock(locked) {
+          if (activeLicenseLockBanner) activeLicenseLockBanner.style.display = locked ? "block" : "none";
+          [signupBtn, signupFreePaypalLoad].forEach(function (el) {
+            if (el) el.disabled = !!locked;
+          });
+          if (locked && signupFreePaypalButtons) signupFreePaypalButtons.innerHTML = "";
+        }
+
+        function checkActiveLicenseBeforeCheckout(planCode) {
+          var identity = checkoutIdentityForPlan(planCode);
+          if (!identity.tv_id && !identity.email) return Promise.resolve({ locked: false, key: "anonymous" });
+          var qs = new URLSearchParams();
+          if (identity.tv_id) qs.set("tv_id", identity.tv_id);
+          if (identity.email) qs.set("email", identity.email);
+          return fetch(API + "/api/users/entitlement/status?" + qs.toString(), {
+            cache: "no-store",
+            headers: readHeaders(),
+          })
+            .then(function (r) {
+              return r.json().then(function (j) {
+                return { ok: r.ok, j: j };
+              });
+            })
+            .then(function (x) {
+              var isPrepayException = !!(x.ok && x.j && x.j.active_plan && isRegularPrepayPlan(planCode) && isActiveOneMonthEventEntitlement(x.j));
+              var locked = !!(x.ok && x.j && x.j.active_plan && !isPrepayException);
+              setActiveLicenseCheckoutLock(locked);
+              return {
+                locked: locked,
+                prepayment_allowed: isPrepayException,
+                key: planCode + "|" + (identity.tv_id || "") + "|" + (identity.email || ""),
+                status: x.j,
+              };
+            })
+            .catch(function () {
+              setActiveLicenseCheckoutLock(false);
+              return { locked: false, key: planCode + "|status_unavailable" };
+            });
+        }
+
         function legalDocsForPlan(planCode) {
           var p = String(planCode || "").toLowerCase();
           var common = [
             { title: "이용약관", href: "../legal/terms.html" },
             { title: "개인정보 처리방침", href: "../legal/privacy.html" },
           ];
-          if (p === "event_1w_free") {
+          if (isFreeTrialPlan(p)) {
             return common.concat([
-              { title: "1주(7일) 무료 지표 체험 특약", href: "../legal/terms-magictrading-free-trial.html" },
+              { title: "3개월 무료 지표 코스 특약", href: "../legal/terms-magictrading-free-trial.html" },
               { title: "환불불가 총괄", href: "../legal/plan-terms-nonrefund.html" },
             ]);
           }
@@ -2951,7 +3054,7 @@
         }
 
         function signerSubjectForPlan(planCode) {
-          if (planCode !== "event_1w_free") return "";
+          if (!isFreeTrialPlan(planCode)) return "";
           var trId = String((signupTrialTrId && signupTrialTrId.value) || "").trim();
           var mt5Login = String((signupTrialMt5Login && signupTrialMt5Login.value) || "").trim();
           var mt5Server = String((signupTrialMt5Server && signupTrialMt5Server.value) || "").trim();
@@ -3250,7 +3353,7 @@
         }
 
         function planLabel(planCode) {
-          if (planCode === "event_1w_free") return "이벤트 · 7일 무료 체험";
+          if (isFreeTrialPlan(planCode)) return "이벤트 · 3개월 무료 코스";
           if (
             planCode === "event_1m_magictrading" ||
             planCode === "event_1m_usd" ||
@@ -3264,7 +3367,7 @@
 
         function isPaidSignupPlan(planCode) {
           return !(
-            planCode === "event_1w_free" ||
+            isFreeTrialPlan(planCode) ||
             planCode === "none" ||
             !planCode
           );
@@ -3297,7 +3400,7 @@
         }
 
         function signupAmountUsd(planCode) {
-          if (planCode === "event_1w_free") return 0;
+          if (isFreeTrialPlan(planCode)) return 0;
           var choice = selectedSignupMarket(planCode);
           if (isOneMonthEventPlan(planCode)) {
             if (choice.sales_channel === "mql") return 149;
@@ -3342,6 +3445,121 @@
           }
         }
 
+        function loadSignupFreePayPalSdk(done) {
+          if (window.paypal && window.paypal.Buttons) {
+            done();
+            return;
+          }
+          if (signupFreePaypalSdkEl && signupFreePaypalSdkEl.parentNode) {
+            signupFreePaypalSdkEl.parentNode.removeChild(signupFreePaypalSdkEl);
+            signupFreePaypalSdkEl = null;
+          }
+          var clientId = window.MAGIC_PAYPAL_CLIENT_ID || "AS-afA_3MVo_w8rUyyDlOWoIksaiWuoRXkOcHt7lf0Bwio3Y4FSyYEaBz5Fa7Ka7LUSFjIVJV3NOpoHq";
+          signupFreePaypalSdkEl = document.createElement("script");
+          signupFreePaypalSdkEl.async = true;
+          signupFreePaypalSdkEl.src =
+            "https://www.paypal.com/sdk/js?client-id=" +
+            encodeURIComponent(clientId) +
+            "&vault=true&intent=subscription&components=buttons";
+          signupFreePaypalSdkEl.onload = done;
+          signupFreePaypalSdkEl.onerror = function () {
+            if (signupFreePaypalResult) signupFreePaypalResult.textContent = "PayPal SDK 로드에 실패했습니다.";
+          };
+          document.head.appendChild(signupFreePaypalSdkEl);
+        }
+
+        function renderSignupFreePayPalButtons() {
+          if (!signupFreePaypalButtons || !signupFreePaypalResult) return;
+          var planCode = signupPlanCode || "event_3m_free";
+          if (!isFreeTrialPlan(planCode)) {
+            signupFreePaypalResult.textContent = "무료 체험 플랜에서만 사용할 수 있습니다.";
+            return;
+          }
+          var tvId = String((signupTrialTrId && signupTrialTrId.value) || "").trim().replace(/^@+/, "");
+          if (!tvId) {
+            signupFreePaypalResult.textContent = "PayPal 무료 구독 전 TRV ID를 먼저 입력해 주세요.";
+            if (signupTrialTrId) signupTrialTrId.focus();
+            return;
+          }
+          checkActiveLicenseBeforeCheckout(planCode).then(function (guard) {
+            if (guard.locked) {
+              signupFreePaypalResult.textContent = "활성 라이선스가 확인되어 PayPal 무료 구독 버튼을 열지 않았습니다.";
+              return;
+            }
+            renderSignupFreePayPalButtonsUnlocked(planCode, tvId);
+          });
+        }
+
+        function renderSignupFreePayPalButtonsUnlocked(planCode, tvId) {
+          var planId = freeTrialPayPalPlanId(planCode);
+          if (!planId || /^PAYPAL_PLAN_/.test(planId)) {
+            signupFreePaypalResult.textContent = "PayPal 무료 구독 Plan ID가 설정되지 않았습니다. 운영 설정을 확인해 주세요.";
+            return;
+          }
+          signupFreePaypalButtons.innerHTML = "";
+          signupFreePaypalResult.textContent = "PayPal 무료 구독 버튼 준비 중…";
+          loadSignupFreePayPalSdk(function () {
+            if (!(window.paypal && window.paypal.Buttons)) {
+              signupFreePaypalResult.textContent = "PayPal 버튼을 초기화할 수 없습니다.";
+              return;
+            }
+            window.paypal
+              .Buttons({
+                style: { layout: "vertical", shape: "rect", label: "subscribe" },
+                createSubscription: function (data, actions) {
+                  var customId = JSON.stringify({
+                    tv_id: tvId,
+                    license_pack: freeTrialLicensePackForPlan(planCode),
+                    plan_code: planCode,
+                    trial_days: freeTrialDaysForPlan(planCode),
+                  });
+                  return actions.subscription.create({
+                    plan_id: planId,
+                    custom_id: customId,
+                  });
+                },
+                onApprove: function (data) {
+                  signupFreePaypalResult.textContent = "PayPal 무료 구독 승인 완료 · 서버 원장 동기화 중…";
+                  return fetch(API + "/api/payment/webhook", {
+                    method: "POST",
+                    headers: authHeaders(),
+                    body: JSON.stringify({
+                      provider: "paypal",
+                      source: "paypal_free_trial_subscription",
+                      event_type: "BILLING.SUBSCRIPTION.CREATED",
+                      subscription_id: data.subscriptionID || data.orderID || "",
+                      amount: 0,
+                      license_pack: freeTrialLicensePackForPlan(planCode),
+                      plan_code: planCode,
+                      plan_id: planId,
+                      tv_id: tvId,
+                      custom_id: JSON.stringify({
+                        tv_id: tvId,
+                        license_pack: freeTrialLicensePackForPlan(planCode),
+                        plan_code: planCode,
+                      }),
+                    }),
+                  })
+                    .then(function (r) {
+                      return r.json().then(function (j) {
+                        return { ok: r.ok, j: j };
+                      });
+                    })
+                    .then(function (x) {
+                      if (!x.ok) throw new Error((x.j && (x.j.error || x.j.message)) || "무료 구독 서버 동기화 실패");
+                      signupFreePaypalResult.textContent =
+                        "무료 구독 원장 동기화 완료 · 만료 " +
+                        (x.j && x.j.trial && x.j.trial.expires_at ? new Date(x.j.trial.expires_at).toLocaleString("ko-KR") : "서버 확인");
+                    });
+                },
+                onError: function (err) {
+                  signupFreePaypalResult.textContent = "PayPal 무료 구독 오류: " + ((err && err.message) || err);
+                },
+              })
+              .render("#signup-free-paypal-buttons");
+          });
+        }
+
         function initSignupCheckout() {
           if (!signupWrap) return;
           var q;
@@ -3374,7 +3592,10 @@
             signupEventNonrefundConsent.checked = false;
           }
           if (signupFreeTrialWrap) {
-            signupFreeTrialWrap.style.display = signupPlanCode === "event_1w_free" ? "block" : "none";
+            signupFreeTrialWrap.style.display = isFreeTrialPlan(signupPlanCode) ? "block" : "none";
+          }
+          if (signupFreePaypalWrap) {
+            signupFreePaypalWrap.style.display = isFreeTrialPlan(signupPlanCode) ? "block" : "none";
           }
           if (signupRef) {
             signupRef.placeholder = isPaidSignupPlan(signupPlanCode)
@@ -3721,9 +3942,27 @@
               if (signupEventNonrefundConsent) signupEventNonrefundConsent.focus();
               return;
             }
-            if (resolvedPlan === "event_1w_free" && !signerSubjectForPlan(resolvedPlan)) {
-              signupOut.textContent = "7일 무료 체험은 TRV ID 또는 MT5 계좌 번호+서버를 먼저 입력한 뒤 약관에 서명해 주세요.";
+            if (isFreeTrialPlan(resolvedPlan) && !signerSubjectForPlan(resolvedPlan)) {
+              signupOut.textContent = "3개월 무료 코스는 TRV ID 또는 MT5 계좌 번호+서버를 먼저 입력한 뒤 약관에 서명해 주세요.";
               if (signupTrialTrId) signupTrialTrId.focus();
+              return;
+            }
+            var billingGuardKey = resolvedPlan + "|" + provider + "|" + signerSubjectForPlan(resolvedPlan);
+            if (signupBtn.dataset.billingGuardKey !== billingGuardKey) {
+              signupOut.textContent = "활성 라이선스 보유 여부 확인 중…";
+              checkActiveLicenseBeforeCheckout(resolvedPlan)
+                .then(function (guard) {
+                  if (guard.locked) {
+                    signupOut.textContent =
+                      "[안내] 회원님은 현재 활성화된 라이선스 플랜을 보유 중입니다. 중복 결제 방지를 위해 신규 결제가 제한됩니다.";
+                    return;
+                  }
+                  signupBtn.dataset.billingGuardKey = billingGuardKey;
+                  signupBtn.click();
+                })
+                .catch(function (e) {
+                  signupOut.textContent = String((e && e.message) || e);
+                });
               return;
             }
             var legalGateKey = resolvedPlan + "|" + signerSubjectForPlan(resolvedPlan);
@@ -3792,6 +4031,16 @@
                 });
               return;
             }
+            if (isFreeTrialPlan(resolvedPlan) && provider === "paypal") {
+              if (!String((signupTrialTrId && signupTrialTrId.value) || "").trim()) {
+                signupOut.textContent = "PayPal 무료 구독은 TRV ID가 필수입니다. TRV ID를 먼저 입력해 주세요.";
+                if (signupTrialTrId) signupTrialTrId.focus();
+                return;
+              }
+              signupOut.textContent = "PayPal 무료 구독 버튼을 아래에 준비합니다.";
+              renderSignupFreePayPalButtons();
+              return;
+            }
             if (isPaidSignupPlan(resolvedPlan) && provider === "paypal") {
               if (isOneMonthEventPlan(resolvedPlan)) {
                 var ppMarket = selectedSignupMarket(resolvedPlan);
@@ -3849,19 +4098,19 @@
             }
             var amtUsd = signupAmountUsd(resolvedPlan);
             var trialPayload = {};
-            if (resolvedPlan === "event_1w_free") {
+            if (isFreeTrialPlan(resolvedPlan)) {
               var trId = String((signupTrialTrId && signupTrialTrId.value) || "").trim();
               var mt5Login = String((signupTrialMt5Login && signupTrialMt5Login.value) || "").trim();
               var mt5Server = String((signupTrialMt5Server && signupTrialMt5Server.value) || "").trim();
               if (!trId && !(mt5Login && mt5Server)) {
-                signupOut.textContent = "7일 무료 체험은 TRV ID 또는 MT5 계좌 번호+서버가 필요합니다.";
+                signupOut.textContent = "3개월 무료 코스는 TRV ID 또는 MT5 계좌 번호+서버가 필요합니다.";
                 if (signupTrialTrId) signupTrialTrId.focus();
                 return;
               }
               trialPayload.tr_id = trId || undefined;
               trialPayload.mt5_login = mt5Login || undefined;
               trialPayload.mt5_server = mt5Server || undefined;
-              signupOut.textContent = "7일 무료 체험 등록 중…";
+              signupOut.textContent = "3개월 무료 코스 등록 중…";
               fetch(API + "/api/payments/signup-plan/complete", {
                 method: "POST",
                 headers: authHeaders(),
@@ -3882,12 +4131,12 @@
                 })
                 .then(function (x) {
                   if (!x.ok) {
-                    signupOut.textContent = x.j.error || "7일 무료 체험 등록에 실패했습니다.";
+                    signupOut.textContent = x.j.error || "3개월 무료 코스 등록에 실패했습니다.";
                     return;
                   }
                   var j = x.j || {};
                   signupOut.textContent =
-                    "7일 무료 체험 등록 완료 · " +
+                    "3개월 무료 코스 등록 완료 · " +
                     (j.subject_type === "mt5" ? "MT5" : "TRV") +
                     " · 만료 " +
                     (j.expires_at ? new Date(j.expires_at).toLocaleString("ko-KR") : "확인 필요");
@@ -3957,6 +4206,11 @@
               .catch(function (e) {
                 signupOut.textContent = String(e.message || e);
               });
+          });
+        }
+        if (signupFreePaypalLoad) {
+          signupFreePaypalLoad.addEventListener("click", function () {
+            renderSignupFreePayPalButtons();
           });
         }
         if (refundBtn) {
@@ -4786,6 +5040,8 @@
         var cbSave = document.getElementById("pp-sdk-save-card");
         var hintEl = document.getElementById("pp-sdk-saved-hint");
         var clrBtn = document.getElementById("pp-sdk-clear-save");
+        var metaApiBase = document.querySelector('meta[name="api-base"]');
+        var API_BASE = (metaApiBase && metaApiBase.content) || "";
         var sdkEl = null;
         if (!btnLoad || !inp || !container) return;
         inp.value = PAYPAL_LIVE_CLIENT_ID;
@@ -4846,6 +5102,28 @@
           });
         }
         refreshPpSdkSavedHint();
+        function ensureNoActivePlanForLiveCheckout(checkout) {
+          var qs = new URLSearchParams();
+          if (checkout.tradingview_username) qs.set("tv_id", checkout.tradingview_username);
+          if (checkout.user_email) qs.set("email", checkout.user_email);
+          if (!qs.toString()) return Promise.resolve(true);
+          return fetch(API_BASE + "/api/users/entitlement/status?" + qs.toString(), { cache: "no-store" })
+            .then(function (r) {
+              return r.json().then(function (j) {
+                return { ok: r.ok, j: j };
+              });
+            })
+            .then(function (x) {
+              if (x.ok && x.j && x.j.active_plan) {
+                if (container) {
+                  container.innerHTML =
+                    '<div style="padding:0.85rem 1rem;border:2px solid rgba(177,44,44,.55);border-radius:12px;background:#fff1f1;color:#7a1d1d;font-weight:800;line-height:1.55">[안내] 회원님은 현재 활성화된 라이선스 플랜을 보유 중입니다. 중복 결제 방지를 위해 신규 결제가 제한됩니다. (현재 플랜 만료 이후 또는 해지 이후에만 재결제가 가능합니다.)</div>';
+                }
+                return false;
+              }
+              return true;
+            });
+        }
         function mount() {
           if (!window.paypal) return;
           container.innerHTML = "";
@@ -4952,8 +5230,9 @@
         }
         btnLoad.addEventListener("click", function () {
           var clientId = PAYPAL_LIVE_CLIENT_ID;
+          var checkout;
           try {
-            selectedPayPalCheckout();
+            checkout = selectedPayPalCheckout();
           } catch (eAmount) {
             alert(eAmount.message || String(eAmount));
             return;
@@ -4962,26 +5241,29 @@
             alert("PayPal Live Client ID가 설정되지 않았습니다.");
             return;
           }
-          if (window.paypal) {
-            mount();
-            return;
-          }
-          if (sdkEl && sdkEl.parentNode) {
-            sdkEl.parentNode.removeChild(sdkEl);
-            sdkEl = null;
-          }
-          var s = document.createElement("script");
-          s.async = true;
-          s.src =
-            "https://www.paypal.com/sdk/js?client-id=" +
-            encodeURIComponent(clientId) +
-            "&currency=USD&intent=capture&locale=ko_KR&components=buttons";
-          s.onload = mount;
-          s.onerror = function () {
-            alert("PayPal SDK 로드에 실패했습니다. Client ID·차단 확장·네트워크를 확인해 주세요.");
-          };
-          document.body.appendChild(s);
-          sdkEl = s;
+          ensureNoActivePlanForLiveCheckout(checkout).then(function (allowed) {
+            if (!allowed) return;
+            if (window.paypal) {
+              mount();
+              return;
+            }
+            if (sdkEl && sdkEl.parentNode) {
+              sdkEl.parentNode.removeChild(sdkEl);
+              sdkEl = null;
+            }
+            var s = document.createElement("script");
+            s.async = true;
+            s.src =
+              "https://www.paypal.com/sdk/js?client-id=" +
+              encodeURIComponent(clientId) +
+              "&currency=USD&intent=capture&locale=ko_KR&components=buttons";
+            s.onload = mount;
+            s.onerror = function () {
+              alert("PayPal SDK 로드에 실패했습니다. Client ID·차단 확장·네트워크를 확인해 주세요.");
+            };
+            document.body.appendChild(s);
+            sdkEl = s;
+          });
         });
       })();
     </script>

@@ -173,9 +173,17 @@
           <li>상태 확인: <code>GET …/api/webhooks/signals/health</code> (배포 환경에 따라 경로는 API README 기준)</li>
           <li>인증: <code>X-Webhook-Secret</code>, <code>Authorization: Bearer …</code>, 또는 <code>?secret=</code> — 서버 환경 변수와 동일한 값</li>
           <li>
-            차트 알림에서 <strong>“Webhook URL”</strong>에 위 URL을 넣고, 전략이 <code>alert()</code>로 JSON을 보내는 경우 메시지는
-            <code>{{strategy.order.alert_message}}</code>(또는 문서화된 TV 플레이스홀더)로 JSON이 그대로 나가게 맞춥니다. 지표 전용 플레이스홀더는
-            <code>{{message}}</code>를 씁니다.
+            3개월 무료 Pine처럼 스크립트 내부 <code>alert()</code>가 JSON을 만드는 경우, 차트 알림의 <strong>Webhook URL</strong>에 API 주소를 넣고
+            <strong>Message</strong> 칸은 기존 문구를 모두 지운 뒤 <code>{{alert_message}}</code> 한 줄만 입력합니다.
+            그래야 <code>secure_token</code>, <code>license_pack</code>, <code>tv_id</code>, <code>tickerid</code>, <code>timenow</code>가 누락되지 않습니다.
+          </li>
+          <li>
+            3개월 무료 웹훅 수신 서버는 <code>secure_token</code>과 <code>license_pack</code>을 먼저 대조하고,
+            Redis 키 <code>webhook:{tv_id}:{tickerid}</code>를 5~10초 잠가 중복 컴파일성 알림을 DB 기록 없이 <code>200 OK</code>로 드롭합니다.
+          </li>
+          <li>
+            네트워크 앞단에서는 TradingView 웹훅 IP <code>52.89.214.238</code>, <code>34.212.75.30</code>,
+            <code>54.112.49.92</code>, <code>54.112.51.100</code>만 허용하고, 프록시 뒤에서는 원본 IP가 <code>x-forwarded-for</code>로 보존되어야 합니다.
           </li>
         </ul>
         <h3 class="page-title" style="font-size: 1rem; margin: 0.85rem 0 0.35rem">Magic Core JSON 필드 (요약)</h3>

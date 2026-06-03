@@ -4,11 +4,16 @@
   "type": "module",
   "scripts": {
     "start": "node server.mjs",
-    "check": "node --check server.mjs && node --check src/oneWeekFreeTrialGuard.mjs"
+    "check": "node --check server.mjs && node --check src/oneWeekFreeTrialGuard.mjs && node --check scripts/revokeExpiredMultiChartUsers.mjs && node --check scripts/revokeExpiredEntitlements.mjs && node --check scripts/sendRenewalWarnings.mjs",
+    "revoke:expired-multichart": "node scripts/revokeExpiredMultiChartUsers.mjs",
+    "revoke:expired": "node scripts/revokeExpiredEntitlements.mjs",
+    "warn:renewal": "node scripts/sendRenewalWarnings.mjs"
   },
   "dependencies": {
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "mongodb": "^7.2.0"
+    "mongodb": "^7.2.0",
+    "nodemailer": "^8.0.10",
+    "redis": "^6.0.0"
   }
 }

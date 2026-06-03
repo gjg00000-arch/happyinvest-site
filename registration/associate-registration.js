@@ -124,7 +124,7 @@
     if (window.MagicAuth && data.user) {
       MagicAuth.saveLoginResponse(data);
     }
-    showAlert("Google 계정으로 준회원 가입/로그인되었습니다. 1주 무료 플랜은 구독·결제 페이지에서 신청할 수 있습니다.", false);
+    showAlert("Google 계정으로 준회원 가입/로그인되었습니다. 3개월 무료 코스는 구독·결제 페이지에서 신청할 수 있습니다.", false);
   }
 
   function initGooglePrefill() {
@@ -229,7 +229,7 @@
         MagicAuth.saveLoginResponse(data);
       }
       showAlert(
-        "준회원 가입이 완료되었습니다. 1주 무료(프리) 플랜은 로그인 후 구독·결제 페이지에서 TRV 또는 MT5 식별로 신청할 수 있습니다.",
+        "준회원 가입이 완료되었습니다. 3개월 무료 코스는 로그인 후 구독·결제 페이지에서 TRV 또는 MT5 식별로 신청할 수 있습니다.",
         false
       );
       form.reset();

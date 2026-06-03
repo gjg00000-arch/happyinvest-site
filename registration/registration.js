@@ -348,7 +348,7 @@
 
   function billingUrlForChoice(choice) {
     var base = "../billing/index.html?signup=1";
-    if (choice === "event_1w_free") return base + "&plan=event_1w_free";
+    if (choice === "event_3m_free" || choice === "event_1w_free") return base + "&plan=event_3m_free";
     if (choice === "regular_default") return base + "&plan=regular_default";
     return "../billing/index.html";
   }

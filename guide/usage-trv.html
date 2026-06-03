@@ -115,6 +115,13 @@
           <a href="../telegram-chat-id/index.html">텔레그램 Chat ID</a> 안내를 따릅니다. 고임팩트 경제 일정 사전 알림(운영 서버)은
           <a href="../integrations/index.html#econ-calendar-cron">Cron 웹훅</a>으로 Pine과 별도 동작합니다.
         </p>
+        <div class="terms-box" style="margin-top: 0.9rem">
+          <strong>3개월 무료 Pine 웹훅 설정</strong><br />
+          TradingView 알림 만들기(Ctrl+A)에서 Webhook URL을 운영 API로 입력하고, <strong>Message</strong> 칸에는
+          <code>{{alert_message}}</code> 한 줄만 넣어야 합니다. 그래야 Pine 내부 <code>alert(f_jsonStart(), ...)</code>가 만든
+          <code>secure_token</code>, <code>license_pack</code>, <code>tv_id</code>, <code>tickerid</code>, <code>timenow</code>
+          JSON이 그대로 서버로 전송됩니다. 서버는 Redis 키 <code>webhook:{tv_id}:{tickerid}</code>로 짧은 중복 요청을 드롭합니다.
+        </div>
       </article>
 
       <div class="terms-box" style="margin-top: 1.5rem">

@@ -57,6 +57,9 @@
     if (pathname === "/api/me/coupon-status") {
       return { ok: true, offline_mock: true, coupon_access_until: null, dodam_plan_expires_at: null };
     }
+    if (pathname === "/api/users/entitlement/status") {
+      return { ok: true, offline_mock: true, found: false, active_plan: false, already_active_plan: false };
+    }
     if (pathname === "/api/payments/refund-preview") {
       return Object.assign({}, unavailable, {
         refund_amount_usd: 0,
@@ -568,7 +571,7 @@
         '<p class="small" style="margin: -0.25rem 0 1rem; max-width: min(70rem, 100%); line-height: 1.62; color: var(--ci-brown-muted)">',
         "If you arrived via Whop ads or product links, follow this order. For pricing and legal details see ",
         '<a href="events/index.html">Events &amp; pricing</a> and ',
-        '<a href="legal/terms-magictrading-free-trial.html">7-day free trial terms</a>. ',
+        '<a href="legal/terms-magictrading-free-trial.html">3-month free course terms</a>. ',
         "<strong>Submitting the trial requires an associate-member (or higher) login.</strong>",
         "</p>",
         '<ol class="notice-list" style="max-width: min(70rem, 100%); line-height: 1.72; padding-left: 1.35rem">',
@@ -577,7 +580,7 @@
         '<li style="margin-bottom: 0.5rem"><strong>Associate signup</strong> (no SMS, minimal info) — ',
         '<a href="registration/associate.html">Associate signup (one-week unpaid trial eligibility)</a></li>',
         '<li style="margin-bottom: 0.5rem">After login, apply under ',
-        '<a href="billing/index.html?signup=1&amp;plan=event_1w_free">Billing → 7-day free trial</a>. ',
+        '<a href="billing/index.html?signup=1&amp;plan=event_3m_free">Billing → 3-month free course</a>. ',
         "Enter your <strong>TradingView (TRV) username</strong> or <strong>MT5 account + server</strong> and submit agreements and signature.",
         "</li>",
         '<li style="margin-bottom: 0.5rem">When submitted, the <strong>ledger and member profile are updated.</strong> The operations team verifies intake in the internal ledger.</li>',
@@ -779,7 +782,7 @@
         '<p class="small" style="margin: -0.25rem 0 1rem; max-width: min(70rem, 100%); line-height: 1.62; color: var(--ci-brown-muted)">',
         "Whop 広告・商品ページなどのリンクからお越しの方向けです。料金・条項は ",
         '<a href="events/index.html">イベント・料金</a> と ',
-        '<a href="legal/terms-magictrading-free-trial.html">7日間無料トライアル条項</a> ',
+        '<a href="legal/terms-magictrading-free-trial.html">3か月無料コース条項</a> ',
         'を確認してください。<strong>7日間トライアルの提出・完了には準会員以上でのログインが必要です。</strong>',
         "</p>",
         '<ol class="notice-list" style="max-width: min(70rem, 100%); line-height: 1.72; padding-left: 1.35rem">',
@@ -789,7 +792,7 @@
         '<li style="margin-bottom: 0.5rem"><strong>準会員登録</strong>（SMS なし・最小情報）— ',
         '<a href="registration/associate.html">準会員登録（1週間無料資格）</a></li>',
         '<li style="margin-bottom: 0.5rem">ログイン後、',
-        '<a href="billing/index.html?signup=1&amp;plan=event_1w_free">請求・支払い → 7日間無料トライアル</a> で申請します。',
+        '<a href="billing/index.html?signup=1&amp;plan=event_3m_free">請求・支払い → 3か月無料コース</a> で申請します。',
         '<strong>TradingView（TRV）ユーザー名</strong>または<strong>MT5口座番号＋サーバー</strong>を入力し、条項・署名まで提出します。',
         "</li>",
         '<li style="margin-bottom: 0.5rem">提出済みとなると<strong>システム台帳・会員情報に反映</strong>され、運営チームが内部台帳で受付状況を確認します。</li>',
@@ -987,7 +990,7 @@
         '<p class="small" style="margin: -0.25rem 0 1rem; max-width: min(70rem, 100%); line-height: 1.62; color: var(--ci-brown-muted)">',
         "若您通过 Whop 广告或商品链接进入，请按下列顺序操作。资费与条款见 ",
         '<a href="events/index.html">活动·资费</a> 与 ',
-        '<a href="legal/terms-magictrading-free-trial.html">7 日免费体验特别约定</a>。',
+        '<a href="legal/terms-magictrading-free-trial.html">3 个月免费课程特别约定</a>。',
         "<strong>提交并完成 7 日体验须已登录为准会员或以上。</strong>",
         "</p>",
         '<ol class="notice-list" style="max-width: min(70rem, 100%); line-height: 1.72; padding-left: 1.35rem">',
@@ -996,7 +999,7 @@
         '<li style="margin-bottom: 0.5rem"><strong>准会员注册</strong>（无需短信，最少资料）— ',
         '<a href="registration/associate.html">准会员注册（一周免费资格）</a></li>',
         '<li style="margin-bottom: 0.5rem">登录后到 ',
-        '<a href="billing/index.html?signup=1&amp;plan=event_1w_free">订阅·支付 → 7 日免费体验</a> 申请。',
+        '<a href="billing/index.html?signup=1&amp;plan=event_3m_free">订阅·支付 → 3 个月免费课程</a> 申请。',
         "填写<strong>TradingView（TRV）用户名</strong>或<strong>MT5 账号+服务器</strong>并完成条款与签名。",
         "</li>",
         '<li style="margin-bottom: 0.5rem">提交后<strong>记入系统台账与会员资料</strong>，运营团队会在内部台账中确认受理记录。</li>',
@@ -1188,7 +1191,7 @@
         '<li style="margin-bottom: 0.5rem"><strong>Registro asociado</strong> (sin SMS, datos mínimos) — ',
         '<a href="registration/associate.html">Alta asociada (trial 1 semana)</a></li>',
         '<li style="margin-bottom: 0.5rem">Tras iniciar sesión usa ',
-        '<a href="billing/index.html?signup=1&amp;plan=event_1w_free">Facturación → trial gratis 7 días</a>. ',
+        '<a href="billing/index.html?signup=1&amp;plan=event_3m_free">Facturación → curso gratis 3 meses</a>. ',
         'Indica <strong>nombre usuario TradingView</strong> o <strong>número de cuenta MT5 + servidor</strong> y firma los términos.',
         "</li>",
         '<li style="margin-bottom: 0.5rem">El envío <strong>deja huella</strong> en el libro y perfil. El equipo operativo verifica la solicitud en el libro interno.</li>',

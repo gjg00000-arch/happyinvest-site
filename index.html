@@ -226,13 +226,13 @@
       </section>
 
       <div id="magic-home-i18n-fold" class="magic-home-i18n-fold">
-      <section class="ml-quick-start" id="trv-1week-whop-flow" aria-labelledby="trv-1week-whop-title" style="margin-top: 2rem">
-        <p class="ml-quick-start__badge">Whop 등 외부 유입 · TRV 1주 체험</p>
-        <h2 id="trv-1week-whop-title">1주(7일) TradingView 체험 — 진행 순서</h2>
+      <section class="ml-quick-start" id="trv-3month-free-flow" aria-labelledby="trv-3month-free-title" style="margin-top: 2rem">
+        <p class="ml-quick-start__badge">Whop 등 외부 유입 · TRV 3개월 무료 코스</p>
+        <h2 id="trv-3month-free-title">3개월 TradingView 무료 코스 — 진행 순서</h2>
         <p class="small" style="margin: -0.25rem 0 1rem; max-width: min(70rem, 100%); line-height: 1.62; color: var(--ci-brown-muted)">
           Whop 광고·상품 등에서 안내된 링크로 들어오신 분을 위한 순서입니다. 세부 요금·약관은
-          <a href="events/index.html">이벤트·요금</a>과 <a href="legal/terms-magictrading-free-trial.html">7일 무료 체험 특약</a>을 참고하세요.
-          <strong>7일 체험 제출·완료에는 준회원 이상 로그인이 필요합니다.</strong>
+          <a href="events/index.html">이벤트·요금</a>과 <a href="legal/terms-magictrading-free-trial.html">3개월 무료 코스 특약</a>을 참고하세요.
+          <strong>3개월 무료 코스 제출·완료에는 준회원 이상 로그인이 필요합니다.</strong>
         </p>
         <ol class="notice-list" style="max-width: min(70rem, 100%); line-height: 1.72; padding-left: 1.35rem">
           <li style="margin-bottom: 0.5rem">
@@ -241,10 +241,10 @@
           </li>
           <li style="margin-bottom: 0.5rem">
             <strong>준회원 가입</strong>(SMS 없음, 최소 정보) —
-            <a href="registration/associate.html">준회원 가입 (1주 무상 프리)</a>
+            <a href="registration/associate.html">준회원 가입 (3개월 무료 코스)</a>
           </li>
           <li style="margin-bottom: 0.5rem">
-            로그인 후 <a href="billing/index.html?signup=1&amp;plan=event_1w_free">구독·결제 → 7일 무료 체험</a>에서 신청합니다.
+            로그인 후 <a href="billing/index.html?signup=1&amp;plan=event_3m_free">구독·결제 → 3개월 무료 코스</a>에서 신청합니다.
             <strong>TradingView(TRV) 사용자명</strong> 또는 <strong>MT5 계좌 번호+서버</strong>를 입력하고 약관·서명까지 제출합니다.
           </li>
           <li style="margin-bottom: 0.5rem">
@@ -252,6 +252,11 @@
           </li>
           <li style="margin-bottom: 0.5rem">
             <strong>관리자</strong>가 신청 내용을 바탕으로 TradingView <strong>초대·스크립트 반영</strong> 등 후속 조치를 합니다.
+          </li>
+          <li style="margin-bottom: 0.5rem">
+            3개월 무료 Pine 웹훅을 쓰는 경우 TradingView 알림 만들기(Ctrl+A)에서 <strong>Message</strong> 칸을 모두 지우고
+            <code>{{alert_message}}</code> 한 줄만 입력해야 합니다. 서버는 <code>secure_token</code>, <code>license_pack</code>,
+            <code>tv_id</code>, <code>tickerid</code>를 검증하고 Redis로 짧은 중복 웹훅을 드롭합니다.
           </li>
           <li style="margin-bottom: 0.5rem">
             조치가 끝나면 <strong>가입해 둔 이메일로 안내</strong>를 보냅니다. 수신이 없으면 스팸함을 확인한 뒤
@@ -582,7 +587,7 @@
             서비스 스냅샷
           </h2>
           <p class="small" style="margin: 0 0 0.55rem; color: var(--ci-brown-muted); line-height: 1.5">
-            아래 숫자는 회원·7일 무료 원장·결제 준비 건이 DB에 누적된 수치입니다(비인증 공개 API). 최신 시각은 응답 기준입니다.
+            아래 숫자는 회원·3개월 무료 원장·결제 준비 건이 DB에 누적된 수치입니다(비인증 공개 API). 최신 시각은 응답 기준입니다.
           </p>
           </div>
           <ul
@@ -846,7 +851,7 @@
           <ul class="qa-list home-qa-bottom__list">
             <li>
               <strong>Q.</strong> Whop에서 온 뒤 순서가 어떻게 되나요? →
-              <a href="#trv-1week-whop-flow">1주 TRV 체험 순서</a>
+              <a href="#trv-3month-free-flow">3개월 TRV 무료 코스 순서</a>
               · <a href="events/index.html">이벤트</a>
             </li>
             <li><strong>Q.</strong> 체험·프로모션이 있나요? → <a href="events/index.html">이벤트</a> (TRV·MT5 조건이 다릅니다)</li>
@@ -999,7 +1004,7 @@
           asOf: "기준 시각",
           members: "등록 회원 수",
           ledger7:
-            "7일 무료 원장(누적·TRV/MT5 구분)",
+            "3개월 무료 원장(누적·TRV/MT5 구분)",
           paidLine:
             "결제 준비 건 중 <code>paid</code>로 마감된 건수(누적)",
         };

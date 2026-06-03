@@ -1,0 +1,221 @@
+//@version=5
+// Dodam Triple Momentum Panel — 3개월 무료 코스 웹훅/안내판 (DMT_Free_3Month)
+// MY_PVT + TSF Transition + ER Net Power를 한 보조지표 패널 안에 3단 정규화 표시.
+indicator(
+     title = "Dodam Triple Momentum Panel 3Month Free",
+     shorttitle = "DODAM_3M_FREE",
+     overlay = false,
+     explicit_plot_zorder = true,
+     max_labels_count = 500,
+     max_lines_count = 500
+     )
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 공통 표시 설정
+// ─────────────────────────────────────────────────────────────────────────────
+grpCommon = "공통"
+normLen = input.int(100, "정규화 기준봉", minval = 20, maxval = 500, group = grpCommon)
+showStatePanel = input.bool(true, "통합 상태 요약", group = grpCommon)
+showZoneLabels = input.bool(true, "구역명 라벨 표시", group = grpCommon)
+showTrialGuide = input.bool(true, "3개월 무료 코스 안내 표시", group = "3개월 무료 코스")
+sendOnStart = input.bool(true, "3개월 코스 시작 웹훅 발송", group = "3개월 무료 코스")
+
+colBullStrong = input.color(color.rgb(0, 229, 168), "상승 강화 색", group = "색상")
+colBullWeak = input.color(color.rgb(75, 210, 180), "상승 둔화 색", group = "색상")
+colBearStrong = input.color(color.rgb(255, 59, 59), "하락 강화 색", group = "색상")
+colBearWeak = input.color(color.rgb(255, 128, 128), "하락 둔화 색", group = "색상")
+colSignal = input.color(color.rgb(255, 224, 64), "기준선 색", group = "색상")
+zeroTransp = input.int(28, "구역 기준선 투명도", minval = 0, maxval = 80, group = "색상")
+
+PVT_BASE = 220.0
+TSF_BASE = 0.0
+ER_BASE = -220.0
+PANEL_AMP = 90.0
+LICENSE_FIELD = "DMT_Free_3Month"
+HOME_URL = "https://magicindicatorglobal.com/"
+EVENT_URL = "https://magicindicatorglobal.com/events/index.html"
+MS_WEEK = 7 * 24 * 60 * 60 * 1000
+MS_THREE_MONTHS = 90 * 24 * 60 * 60 * 1000
+COURSE_GUIDE_BASE = "Dodam Triple Momentum · 3개월 무료 코스\n공식 홈페이지: " + HOME_URL
+COURSE_EVENT_TEXT = "3개월 무료 코스 월요일 안내\n홈페이지: " + HOME_URL + "\n이벤트 페이지: " + EVENT_URL
+var int courseLocalStartTime = na
+if barstate.isfirst
+    courseLocalStartTime := timenow
+courseElapsedMs = not na(courseLocalStartTime) ? timenow - courseLocalStartTime : 0
+courseWeek = math.max(0, int(math.floor(courseElapsedMs / MS_WEEK)))
+courseInThreeMonths = courseElapsedMs >= 0 and courseElapsedMs <= MS_THREE_MONTHS
+courseIsMonday = dayofweek(time) == dayofweek.monday
+courseGuideDue = courseInThreeMonths and courseWeek >= 1 and courseIsMonday
+courseGuideText = courseGuideDue ? COURSE_EVENT_TEXT + "\n" + str.tostring(courseWeek) + "주차 월요일 안내입니다." : COURSE_GUIDE_BASE
+
+f_clip(float x, float lo, float hi) =>
+    math.max(lo, math.min(hi, x))
+
+f_norm(float x, int len) =>
+    st = ta.stdev(x, len)
+    raw = st > 0.0 ? x / st * 30.0 : 0.0
+    f_clip(raw, -PANEL_AMP, PANEL_AMP)
+
+f_hist_color(bool isBull, bool isExpanding) =>
+    isBull ? color.new(isExpanding ? colBullStrong : colBullWeak, isExpanding ? 18 : 54) : color.new(isExpanding ? colBearStrong : colBearWeak, isExpanding ? 18 : 54)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 1단: MY_PVT
+// ─────────────────────────────────────────────────────────────────────────────
+grpPvt = "1단 · PVT"
+pvtSignal = input.int(10, "PVT Signal", minval = 1, group = grpPvt)
+pvtMaKind = input.string("지수", "PVT 이평종류", options = ["지수", "단순", "가중"], group = grpPvt)
+showPvtRange = input.bool(false, "PVT H/L 표시", group = grpPvt)
+pvtRangePeriod = input.int(10, "PVT H/L 기간", minval = 2, group = grpPvt)
+
+chg = (bar_index > 0 and not na(close[1]) and close[1] != 0) ? (close - close[1]) / close[1] * nz(volume, 0) : 0.0
+pvt = ta.cum(chg)
+
+pvtMa = pvtMaKind == "지수" ? ta.ema(pvt, pvtSignal) : pvtMaKind == "단순" ? ta.sma(pvt, pvtSignal) : ta.wma(pvt, pvtSignal)
+pvtDiff = pvt - pvtMa
+pvtNorm = f_norm(pvtDiff, normLen)
+pvtLine = PVT_BASE + pvtNorm
+pvtBaseLine = PVT_BASE
+pvtAbove = pvt >= pvtMa
+pvtSlopeUp = pvt >= nz(pvt[1], pvt)
+pvtSignalSlopeUp = pvtMa >= nz(pvtMa[1], pvtMa)
+pvtStrong = (pvtAbove and pvtSlopeUp and pvtSignalSlopeUp) or (not pvtAbove and not pvtSlopeUp and not pvtSignalSlopeUp)
+pvtColor = pvtAbove ? color.new(pvtStrong ? colBullStrong : colBullWeak, 0) : color.new(pvtStrong ? colBearStrong : colBearWeak, 0)
+pvtFillColor = pvtAbove ? color.new(colBullStrong, pvtStrong ? 66 : 78) : color.new(colBearStrong, pvtStrong ? 66 : 78)
+pvtHi = PVT_BASE + f_norm(ta.highest(pvt, pvtRangePeriod) - pvtMa, normLen)
+pvtLo = PVT_BASE + f_norm(ta.lowest(pvt, pvtRangePeriod) - pvtMa, normLen)
+
+pPvt = plot(pvtLine, title = "PVT 정규화", color = pvtColor, linewidth = 2)
+pPvtMid = plot(pvtBaseLine, title = "PVT 기준", color = colSignal, linewidth = 2)
+plot(showPvtRange ? pvtHi : na, title = "PVT H", color = color.new(colBullStrong, 35), linewidth = 1)
+plot(showPvtRange ? pvtLo : na, title = "PVT L", color = color.new(colBearStrong, 35), linewidth = 1)
+fill(pPvt, pPvtMid, title = "PVT 채움", color = pvtFillColor)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 2단: TSF Transition
+// ─────────────────────────────────────────────────────────────────────────────
+grpTsf = "2단 · TSF Transition"
+tsfPeriod = input.int(12, "TSF 기간", minval = 2, group = grpTsf)
+tsfBarStyle = input.string("columns", "TSF 막대", options = ["columns", "histogram"], group = grpTsf)
+
+lr0 = ta.linreg(close, tsfPeriod, 0)
+lr1 = ta.linreg(close, tsfPeriod, 1)
+slope = lr0 - lr1
+a = lr0 + slope
+
+var float lastUpA = na
+var float lastDnA = na
+if not na(a[1])
+    if a > a[1]
+        lastUpA := a
+    if a < a[1]
+        lastDnA := a
+
+tsfD = na(lastUpA) or na(lastDnA) ? na : (lastUpA - lastDnA)
+tsfHistRaw = na(a[1]) or na(tsfD) ? na : (a[1] >= a ? -tsfD : tsfD)
+tsfNorm = f_norm(tsfHistRaw, normLen)
+tsfPlotValue = TSF_BASE + tsfNorm
+tsfAbs = math.abs(nz(tsfNorm, 0.0))
+tsfAbsPrev = math.abs(nz(tsfNorm[1], 0.0))
+tsfExpanding = tsfAbs >= tsfAbsPrev
+tsfBull = tsfNorm >= 0
+tsfColor = na(tsfNorm) ? color.new(color.gray, 92) : f_hist_color(tsfBull, tsfExpanding)
+plot(tsfPlotValue, title = "TSF Transition 정규화", style = tsfBarStyle == "histogram" ? plot.style_histogram : plot.style_columns, color = tsfColor, linewidth = 1, histbase = TSF_BASE)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 3단: ER Net Power
+// ─────────────────────────────────────────────────────────────────────────────
+grpEr = "3단 · ER Net Power"
+erPeriod = input.int(13, "ER EMA 기간", minval = 1, group = grpEr)
+
+erEma = ta.ema(close, erPeriod)
+netPower = (high - erEma) - math.abs(low - erEma)
+erNorm = f_norm(netPower, normLen)
+erPlotValue = ER_BASE + erNorm
+erAbs = math.abs(nz(erNorm, 0.0))
+erAbsPrev = math.abs(nz(erNorm[1], 0.0))
+erExpanding = erAbs >= erAbsPrev
+erBull = erNorm >= 0
+erColor = f_hist_color(erBull, erExpanding)
+plot(erPlotValue, title = "ER Net Power 정규화", style = plot.style_columns, color = erColor, histbase = ER_BASE)
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 구역 기준선·통합 상태
+// ─────────────────────────────────────────────────────────────────────────────
+hline(PVT_BASE, "PVT 기준선", color = color.new(color.white, zeroTransp), linestyle = hline.style_solid)
+hline(TSF_BASE, "TSF 0선", color = color.new(color.white, zeroTransp), linestyle = hline.style_solid)
+hline(ER_BASE, "ER 0선", color = color.new(color.white, zeroTransp), linestyle = hline.style_solid)
+hline(PVT_BASE + PANEL_AMP, "PVT 상단", color = color.new(color.gray, 88), linestyle = hline.style_dotted)
+hline(PVT_BASE - PANEL_AMP, "PVT 하단", color = color.new(color.gray, 88), linestyle = hline.style_dotted)
+hline(TSF_BASE + PANEL_AMP, "TSF 상단", color = color.new(color.gray, 88), linestyle = hline.style_dotted)
+hline(TSF_BASE - PANEL_AMP, "TSF 하단", color = color.new(color.gray, 88), linestyle = hline.style_dotted)
+hline(ER_BASE + PANEL_AMP, "ER 상단", color = color.new(color.gray, 88), linestyle = hline.style_dotted)
+hline(ER_BASE - PANEL_AMP, "ER 하단", color = color.new(color.gray, 88), linestyle = hline.style_dotted)
+
+var table zoneTbl = table.new(position.bottom_left, 1, 3, border_width = 0, frame_color = color.new(color.black, 100), bgcolor = color.new(color.black, 100))
+if barstate.islast and showZoneLabels
+    table.cell(zoneTbl, 0, 0, "PVT · Price Volume Trend", text_color = color.new(colBullStrong, 0), text_size = size.small, bgcolor = color.new(color.black, 100))
+    table.cell(zoneTbl, 0, 1, "TSF Transition · Linear Regression", text_color = color.new(colSignal, 0), text_size = size.small, bgcolor = color.new(color.black, 100))
+    table.cell(zoneTbl, 0, 2, "ER Net Power · Elder-Ray", text_color = color.new(colBearStrong, 0), text_size = size.small, bgcolor = color.new(color.black, 100))
+if barstate.islast and not showZoneLabels
+    table.clear(zoneTbl, 0, 0, 0, 2)
+
+bullScore = (pvtAbove ? 1 : 0) + (tsfBull ? 1 : 0) + (erBull ? 1 : 0)
+strongScore = (pvtStrong ? 1 : 0) + (tsfExpanding ? 1 : 0) + (erExpanding ? 1 : 0)
+overallText = bullScore == 3 ? "LONG OK" : bullScore == 2 ? "LONG 우세" : bullScore == 1 ? "WAIT" : "SHORT 경고"
+overallBg = bullScore >= 2 ? color.new(colBullStrong, bullScore == 3 ? 0 : 35) : bullScore == 1 ? color.new(color.gray, 35) : color.new(colBearStrong, 0)
+
+var table stateTbl = table.new(position.top_right, 2, 5, border_width = 1, frame_color = color.new(color.white, 72), bgcolor = color.new(color.black, 12))
+if barstate.islast and showStatePanel
+    table.cell(stateTbl, 0, 0, "통합", text_color = color.white, text_size = size.small, bgcolor = color.new(color.black, 15))
+    table.cell(stateTbl, 1, 0, overallText + " · " + str.tostring(bullScore) + "/3", text_color = color.white, text_size = size.small, bgcolor = overallBg)
+    table.cell(stateTbl, 0, 1, "PVT", text_color = color.white, text_size = size.small, bgcolor = color.new(color.black, 20))
+    table.cell(stateTbl, 1, 1, pvtAbove ? pvtStrong ? "LONG OK" : "LONG 약화" : pvtStrong ? "SHORT 경고" : "SHORT 약화", text_color = color.white, text_size = size.small, bgcolor = pvtAbove ? color.new(colBullStrong, pvtStrong ? 0 : 42) : color.new(colBearStrong, pvtStrong ? 0 : 42))
+    table.cell(stateTbl, 0, 2, "TSF", text_color = color.white, text_size = size.small, bgcolor = color.new(color.black, 20))
+    table.cell(stateTbl, 1, 2, tsfBull ? tsfExpanding ? "LONG OK" : "LONG 약화" : tsfExpanding ? "SHORT 경고" : "SHORT 약화", text_color = color.white, text_size = size.small, bgcolor = tsfBull ? color.new(colBullStrong, tsfExpanding ? 0 : 42) : color.new(colBearStrong, tsfExpanding ? 0 : 42))
+    table.cell(stateTbl, 0, 3, "ER", text_color = color.white, text_size = size.small, bgcolor = color.new(color.black, 20))
+    table.cell(stateTbl, 1, 3, erBull ? erExpanding ? "BUY 우위" : "BUY 약화" : erExpanding ? "SELL 우위" : "SELL 약화", text_color = color.white, text_size = size.small, bgcolor = erBull ? color.new(colBullStrong, erExpanding ? 0 : 42) : color.new(colBearStrong, erExpanding ? 0 : 42))
+    table.cell(stateTbl, 0, 4, "강도", text_color = color.white, text_size = size.small, bgcolor = color.new(color.black, 20))
+    table.cell(stateTbl, 1, 4, str.tostring(strongScore) + "/3", text_color = color.white, text_size = size.small, bgcolor = color.new(color.black, 10))
+if barstate.islast and not showStatePanel
+    table.clear(stateTbl, 0, 0, 1, 4)
+
+var table trialTbl = table.new(position.bottom_right, 2, 3, border_width = 1, frame_color = color.new(color.white, 72), bgcolor = color.new(color.black, 12))
+var label trialGuideLabel = na
+if barstate.islast and showTrialGuide and courseGuideDue
+    table.cell(trialTbl, 0, 0, "3개월 무료", text_color = color.white, text_size = size.small, bgcolor = color.new(color.black, 15))
+    table.cell(trialTbl, 1, 0, str.tostring(courseWeek) + "주차 월요일", text_color = color.aqua, text_size = size.small, bgcolor = color.new(color.black, 15))
+    table.cell(trialTbl, 0, 1, "홈페이지", text_color = color.white, text_size = size.small, bgcolor = color.new(color.black, 20))
+    table.cell(trialTbl, 1, 1, HOME_URL, text_color = color.aqua, text_size = size.small, bgcolor = color.new(color.black, 20))
+    table.cell(trialTbl, 0, 2, "이벤트", text_color = color.white, text_size = size.small, bgcolor = color.new(color.black, 20))
+    table.cell(trialTbl, 1, 2, EVENT_URL, text_color = color.orange, text_size = size.small, bgcolor = color.new(color.black, 20))
+    if na(trialGuideLabel)
+        trialGuideLabel := label.new(bar_index, PVT_BASE + PANEL_AMP, courseGuideText, style = label.style_label_down, textcolor = color.white, color = color.new(color.orange, 5), size = size.normal)
+    else
+        label.set_xy(trialGuideLabel, bar_index, PVT_BASE + PANEL_AMP)
+        label.set_text(trialGuideLabel, courseGuideText)
+        label.set_textcolor(trialGuideLabel, color.white)
+        label.set_color(trialGuideLabel, color.new(color.orange, 5))
+if barstate.islast and (not showTrialGuide or not courseGuideDue)
+    table.clear(trialTbl, 0, 0, 1, 2)
+    if not na(trialGuideLabel)
+        label.delete(trialGuideLabel)
+        trialGuideLabel := na
+
+// 웹훅 시작 알림(선택)
+jsonEsc(string x) =>
+    str.replace_all(str.replace_all(x, "\\", "\\\\"), "\"", "\\\"")
+closeNumJson() =>
+    na(close) ? "null" : str.tostring(close, format.mintick)
+licenseJsonFrag() =>
+    ',"license_pack":"' + jsonEsc(LICENSE_FIELD) + '","tickerid":"' + jsonEsc(syminfo.tickerid) + '","bar_index":' + str.tostring(bar_index) + ',"tv_id":"{{username}}"'
+tfStr = timeframe.period
+f_jsonStart() =>
+    string msg = "Dodam Triple Momentum 3Month Free online " + syminfo.ticker + " " + tfStr
+    '{"event":"dodam_triple_momentum_online","kind":"indicator_start","indicator":"Dodam_Triple_Momentum","course":"3month_free","ticker":"' + jsonEsc(syminfo.ticker) + '","exchange":"' + jsonEsc(syminfo.prefix) + '","tf":"' + jsonEsc(tfStr) + '","close":' + closeNumJson() + ',"bar_time":' + str.tostring(time) + ',"text":"' + jsonEsc(msg) + '"' + licenseJsonFrag() + '}'
+varip bool _startSent = false
+if barstate.isfirst
+    _startSent := false
+if sendOnStart and barstate.isconfirmed and barstate.isrealtime and not _startSent
+    alert(f_jsonStart(), alert.freq_once_per_bar_close)
+    _startSent := true
