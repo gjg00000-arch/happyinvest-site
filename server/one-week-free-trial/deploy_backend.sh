@@ -8,6 +8,8 @@ DEPLOY_USER="${DEPLOY_USER:-}"
 DEPLOY_PATH="${DEPLOY_PATH:-}"
 PM2_APP_NAME="${PM2_APP_NAME:-$SERVICE_NAME}"
 SYSTEMD_SERVICE="${SYSTEMD_SERVICE:-}"
+INSTALL_RENEWAL_WARNING_CRON="${INSTALL_RENEWAL_WARNING_CRON:-false}"
+RENEWAL_WARNING_CRON_TIME="${RENEWAL_WARNING_CRON_TIME:-0 9 * * *}"
 
 cd "$APP_DIR"
 
@@ -34,6 +36,11 @@ rsync -az --delete \
 
 echo "[deploy] installing production dependencies and checking syntax"
 ssh "$REMOTE" "cd '${DEPLOY_PATH}' && npm ci --omit=dev && npm run check"
+
+if [[ "${INSTALL_RENEWAL_WARNING_CRON}" == "true" ]]; then
+  echo "[deploy] installing renewal warning cron: ${RENEWAL_WARNING_CRON_TIME}"
+  ssh "$REMOTE" "tmp_cron=\$(mktemp) && crontab -l 2>/dev/null | grep -v 'npm run warn:renewal' > \$tmp_cron || true && printf '%s cd %s && npm run warn:renewal >> renewal-warnings.log 2>&1\n' '${RENEWAL_WARNING_CRON_TIME}' '${DEPLOY_PATH}' >> \$tmp_cron && crontab \$tmp_cron && rm -f \$tmp_cron"
+fi
 
 if [[ -n "$SYSTEMD_SERVICE" ]]; then
   echo "[deploy] reloading systemd service: ${SYSTEMD_SERVICE}"

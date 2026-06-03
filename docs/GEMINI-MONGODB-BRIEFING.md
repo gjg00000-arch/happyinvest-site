@@ -25,12 +25,12 @@ MongoDB는 DB 레벨 FK가 없습니다. 모든 관계는 애플리케이션 코
 
 | 컬렉션 | 역할 |
 |--------|------|
-| `users` | 회원 원장, 이메일 중심 식별자, Dodam 플랜·지표 TTL·OTP·쿠폰·문자패키지 |
+| `users` | 회원 단일 원장, `tv_id`, `license_pack`, `status`, `expires_at`, `paypal_subscription_id`, `backendRegularPrepaidConfirmed` 정본 |
 | `plans` | MagicTrading SKU 카탈로그, `plan_sku` 기준 |
 | `payment_requests` | 결제 준비·추적 원장, PG 메타와 `legal_acceptance_id` 참조 |
 | `legal_acceptances` | 약관 전자서명 스냅샷 |
-| `free_trial_accesses` | 3개월 무료 코스 등 무상 원장, `subject_key` 글로벌 유니크 |
-| `one_week_free_trials` | 무인 무료 코스 웹훅 보조 가드/미러 원장, `trv_id`/`mt5_account`/`mt5_server`와 최초 유입 시각 관리 |
+| `free_trial_accesses` | 레거시 무료 원장. 런타임 신규 쓰기/조회 금지, `scripts/migrateFreeTrialsToUsers.mjs`로 `users` 이관 |
+| `one_week_free_trials` | 레거시 무료 웹훅 미러. 런타임 신규 쓰기/조회 금지, `users` 이관 후 폐기 대상 |
 | `trial_indicator_entitlements` | 레거시 지표 TTL, 신규 쓰기 금지·조회 병합용 |
 | `refund_requests` | 정규·비즈 월 과금 환불 접수 |
 | `coupons` | 쿠폰 발행·교환·폐기 |
@@ -41,6 +41,17 @@ MongoDB는 DB 레벨 FK가 없습니다. 모든 관계는 애플리케이션 코
 | `ledger_accounts` / `ledger_portfolio_snapshots` | 관리자용 Ledger 주소 원장·포트폴리오 스냅샷 |
 | `site_visitors` / `site_visit_days` | 익명 방문 집계 |
 | `board_read_days` / `board_readers` | 게시판 조회 집계 |
+
+### 2026-06-03 17:51 KST 단일 원장·Invite-only 결제/권한 최종 싱크
+
+- 최종 라이선스 생애주기 정본은 `users` 단일 도큐먼트입니다. 필수 운영 필드는 `username`, `tv_id`, `license_pack`, `status`, `expires_at`, `paypal_subscription_id`, `backendRegularPrepaidConfirmed`입니다.
+- PayPal 0원 구독 생성(`BILLING.SUBSCRIPTION.CREATED` 또는 `subscription.created`)은 `applyFreeTrialSignup`으로 들어와 `users`에 무료 플랜 원장을 upsert하고, 즉시 TradingView Invite-only 5종 Add User API를 호출합니다.
+- 무료 Pine 웹훅 가드는 더 이상 `free_trial_accesses`나 `one_week_free_trials`에 신규 원장을 만들지 않습니다. `users`에 활성 `tv_id + license_pack + expires_at`가 없으면 403으로 차단합니다.
+- 정회원 1달 이벤트 사용자가 정규 상위 플랜 `Dodam_MagicTrading_MultiChart_Fixed`를 선결제하면 `ALREADY_ACTIVE_PLAN` 차단 예외로 처리합니다.
+- 선결제 성공 시 `users.expires_at`는 `기존 이벤트 expires_at + 30일 + 보너스 1일`로 가산합니다.
+- 동시에 `users.backendRegularPrepaidConfirmed = true`, `users.backend_regular_prepaid_confirmed = true`를 기록해 Pine의 선결제 완료 UI와 운영툴이 같은 상태를 읽을 수 있게 합니다.
+- 기존 `users.paypal_subscription_id`가 있으면 PayPal Subscriptions cancel API를 호출하고, 결과를 `paypal_cancel_result`, `paypal_billing_status`로 남깁니다.
+- 선결제 완료 알림은 문자/카카오 웹훅, 이메일 웹훅, SMTP, MT5 푸시를 함께 사용합니다.
 
 ---
 
@@ -60,30 +71,28 @@ MongoDB는 DB 레벨 FK가 없습니다. 모든 관계는 애플리케이션 코
 
 ### 정책 문구
 
-회사 정책상 1개월 초과 장기 선결제, 연회원, 다월 선납형 상품은 `payment_requests` 생성 대상이 아닙니다.
+회사 정책상 연회원·다월 선납형 SKU는 생성하지 않습니다. 단, 1개월 이벤트 플랜의 잔여일 보호 목적의 정규 플랜 선결제는 예외이며, 새 SKU가 아니라 기존 이벤트 잔여일에 정규 플랜 30일과 보너스 1일을 가산하는 원장 연장 처리입니다.
 
 ---
 
 ## 4. 권한 판별 구조
 
-MagicTrading 권한 검증은 한 컬렉션만 보지 않습니다.
+MagicTrading 권한 검증의 정본은 `users` 단일 원장입니다.
 
 | 소스 | 사용 이유 |
 |------|-----------|
-| `users` | 정회원·유료 플랜·지표 TTL 정본이 될 수 있음 |
-| `free_trial_accesses` | TRV/MT5 식별자 기반 무상 체험 원장 |
-| `one_week_free_trials` | 무료 코스 웹훅 전용 보조 가드/미러 이력 |
-| `trial_indicator_entitlements` | 과거 레거시 TTL 호환 계층 |
+| `users` | 준회원 무료 체험, 1달 이벤트, 정규 다중차트, 영구제공 플랜의 단일 정본 |
+| `free_trial_accesses` / `one_week_free_trials` | 과거 무료 체험 원장. 마이그레이션 입력으로만 사용 |
+| `trial_indicator_entitlements` | 과거 레거시 TTL 호환 계층. 신규 무료/유료 판단 정본 아님 |
 | `business_seats` | B2B 좌석 권한 확장 시 참조 |
 
-`POST /api/entitlement/magictrading/verify` 계열 로직은 이메일과 subject key를 함께 보며, 만료일·활성 상태를 병합해 최종 권한을 판단합니다.
-`indicator_on_user_doc: true` 패턴에서는 지표 TTL 정본이 `users` 문서로 이동할 수 있으므로, 백오피스나 LLM이 `users` 단일 컬렉션 또는 체험 원장 단일 컬렉션만 보고 권한을 확정하면 안 됩니다.
+`POST /api/signals/webhook` 앞단의 `checkTrialWebhookEntitlement`는 `license_pack`별로 `users`에서 `tv_id`, `status`, `expires_at`, `active_charts_limit`, `current_registered_tickers`, `permanent_access`를 확인합니다.
 
-`trial_indicator_entitlements`는 즉시 제거하면 안 됩니다. 백필, 샘플 검증, 롤백 플랜을 만든 뒤 읽기 병합 제거 순서로 이관합니다.
+무료 플랜도 PayPal 0원 결제 성공 후 `users`에 생성된 원장을 기준으로만 통과합니다. `users`에 없는 무료 Pine 웹훅은 자동 가입으로 처리하지 않고 차단합니다.
 
-무인 3개월 무료 코스 웹훅은 `POST /api/signals/webhook` 직전 `checkTrialWebhookEntitlement` 미들웨어에서 차단합니다. TradingView는 Pine 웹훅의 `"tv_id":"{{username}}"` 값을 `trv:<tv_id>`로 정규화합니다. 가드는 `free_trial_accesses`를 우선 원장으로 보고 `signal_webhook_events`를 감사/역추적 로그로 조회하며, 최초 유입 시각에서 90일을 초과하면 403으로 차단합니다.
+무인 3개월/1주 무료 코스 웹훅은 `POST /api/signals/webhook` 직전 `checkTrialWebhookEntitlement` 미들웨어에서 차단합니다. TradingView는 Pine 웹훅의 `"tv_id":"{{username}}"` 값을 `trv:<tv_id>`로 정규화합니다. 가드는 `users.license_pack`이 Pine의 `LICENSE_FIELD`와 일치하고 `users.status === "active"`이며 `users.expires_at`이 남아 있을 때만 통과시킵니다.
 
-Pine의 `DMT_Free_3Month` 차트 안내 메시지는 홈페이지와 이벤트 페이지를 보여주는 UI 표시입니다. MongoDB 권한 정본이 아니며, 실제 만료·중복 사용 차단은 서버의 `free_trial_accesses` 문서와 `signal_webhook_events` 감사 로그가 기준입니다.
+Pine의 차트 안내 메시지는 UI 표시입니다. MongoDB 권한 정본이 아니며, 실제 만료·중복 사용 차단은 서버의 `users` 문서와 `signal_webhook_events` 감사 로그가 기준입니다.
 
 ---
 
@@ -100,9 +109,9 @@ flowchart LR
   end
 
   subgraph identity [Identity And Entitlement]
-    users["users.email"]
-    freeTrial["free_trial_accesses.subject_key"]
-    oneWeek["one_week_free_trials.subject_key"]
+    users["users.tv_id + license_pack"]
+    freeTrial["legacy free_trial_accesses"]
+    oneWeek["legacy one_week_free_trials"]
     legacyEnt["trial_indicator_entitlements"]
     seats["business_seats"]
   end
@@ -119,8 +128,8 @@ flowchart LR
   paymentRequests -->|"paid settlement"| users
   users --> refunds
   users --> coupons
-  freeTrial -->|"optional user_email"| users
-  oneWeek -.->|"webhook guard"| users
+  freeTrial -.->|"migrate:free-trials-to-users"| users
+  oneWeek -.->|"migrate:free-trials-to-users"| users
   legacyEnt -.->|"read merge"| users
   seats -.->|"B2B entitlement"| users
   signals -.-> users
@@ -135,23 +144,24 @@ flowchart LR
 1. 컬렉션 이름이 비슷해도 MongoDB가 자동 JOIN/FK 검증을 하지 않습니다.
 2. `payment_requests.legal_acceptance_id`는 선택 필드가 아니라 결제 요청 무결성의 필수 참조입니다.
 3. `plans` 카탈로그가 있어도 프런트엔드 요청 SKU를 그대로 믿으면 안 됩니다.
-4. `users`, `free_trial_accesses`, `trial_indicator_entitlements` 중 하나만 보고 권한을 단정하면 안 됩니다.
+4. 현재 운영 권한 정본은 `users`입니다. `free_trial_accesses`, `one_week_free_trials`는 이관용 레거시로만 설명해야 합니다.
 5. 카드 PAN·민감 결제정보는 DB 저장 설계가 아닙니다. PG 참조와 상태 원장만 유지합니다.
 6. Ledger 관련 컬렉션은 운영 원장·스냅샷 설명입니다. 고객에게 하드웨어 Ledger 자동 연동처럼 말하지 않습니다.
-7. Pine 차트의 주간 홈페이지/이벤트 안내는 UI 표시용입니다. 실제 3개월 무료 코스 만료일은 `free_trial_accesses.started_at`과 `expire_at` 기준으로 판단합니다. 호환 필드 `expires_at`가 함께 기록될 수 있으나 운영 기준은 `expire_at`입니다.
+7. Pine 차트의 홈페이지/이벤트 안내는 UI 표시용입니다. 실제 무료/유료 만료일은 `users.expires_at` 기준으로 판단합니다.
 
 ---
 
 ## 7. 보류·운영 과제
 
-- `trial_indicator_entitlements` 이관: 백필 → 샘플 검증 → 롤백 계획 → 읽기 병합 제거 순서 권장
+- 레거시 무료 원장 이관: 운영 전 `npm run migrate:free-trials-to-users`를 1회 실행해 `free_trial_accesses`와 `one_week_free_trials`의 남은 데이터를 `users`로 병합합니다.
 - `prepared`/웹훅 지연: 결제 요청 생성 후 PG 웹훅이 지연·탈락해 `prepared` 상태가 오래 남는 케이스에 대해 PG 책임 경계와 백오피스 알림 정책 확정 후 Dead Letter 또는 stale prepared 알림 설계
 - `signal_webhook_events` TTL: 데이터 비대화를 막으려면 환경 변수 `SIGNAL_WEBHOOK_EVENTS_TTL_DAYS=90` 같은 양수를 설정해 TTL 인덱스를 운영
-- 결제 가드 배포: API 프로세스 재기동 후 `node --check server.js` 및 실제 결제 준비 API 400 응답 케이스 확인
+- 결제 가드 배포: API 프로세스 재기동 후 `npm run check`, `/api/payment/bank-approve`, `/api/payment/crypto-verify`, `/api/payments/prepare-checkout`, `/api/payments/paypal/create-order`의 활성 플랜 차단/선결제 예외 응답 확인
+- 갱신 경고 크론: 운영 서버에서 `INSTALL_RENEWAL_WARNING_CRON=true`로 `deploy_backend.sh`를 실행하면 매일 09:00 `npm run warn:renewal`이 crontab에 설치됩니다.
 
 ---
 
 ## 8. 갱신 시점
 
-- 기준 갱신: 2026-06-03 13:47 KST
+- 기준 갱신: 2026-06-03 17:51 KST
 - 이 문서는 API 데이터 구조, 결제 가드, 권한 판별, 운영 원장 정책이 바뀔 때 함께 갱신합니다.

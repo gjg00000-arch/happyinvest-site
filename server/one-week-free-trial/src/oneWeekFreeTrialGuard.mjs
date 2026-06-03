@@ -5,19 +5,15 @@ const THREE_MONTHS_MS = 90 * 24 * 60 * 60 * 1000;
 const TRIAL_MS = THREE_MONTHS_MS;
 const MS_ONE_DAY = 24 * 60 * 60 * 1000;
 
-export const ONE_WEEK_FREE_COLLECTION = "one_week_free_trials";
-export const FREE_TRIAL_ACCESSES_COLLECTION = "free_trial_accesses";
 export const SIGNAL_WEBHOOK_EVENTS_COLLECTION = "signal_webhook_events";
 export const USERS_COLLECTION = "users";
 const MS_30_DAYS = 30 * 24 * 60 * 60 * 1000;
 const ONE_WEEK_LICENSE_PACKS = new Set([
   "dmt_free_3month",
-  "marketfree_3monthfree",
   "dmt_free_1week",
-  "marketfree_1weekfree",
 ]);
-const ONE_WEEK_DURATION_LICENSE_PACKS = new Set(["dmt_free_1week", "marketfree_1weekfree"]);
-const THREE_MONTH_DURATION_LICENSE_PACKS = new Set(["dmt_free_3month", "marketfree_3monthfree"]);
+const ONE_WEEK_DURATION_LICENSE_PACKS = new Set(["dmt_free_1week"]);
+const THREE_MONTH_DURATION_LICENSE_PACKS = new Set(["dmt_free_3month"]);
 const ONE_MONTH_EVENT_LICENSE_PACKS = new Set(["dodam_magictrading_1monthevent"]);
 const MULTICHART_FIXED_LICENSE_PACKS = new Set(["dodam_magictrading_multichart_fixed"]);
 const PERMANENT_LICENSE_PACKS = new Set(["dodam_triple_momentum_panel_permanent"]);
@@ -48,6 +44,10 @@ const TRADINGVIEW_INVITE_ADD_URL = process.env.TRADINGVIEW_INVITE_ADD_URL || "";
 const TRADINGVIEW_INVITE_TOKEN = process.env.TRADINGVIEW_INVITE_TOKEN || process.env.TRADINGVIEW_INVITE_REVOKE_TOKEN || "";
 const TRADINGVIEW_INVITE_SCRIPT_ID =
   process.env.TRADINGVIEW_INVITE_SCRIPT_ID || "Dodam_MagicTrading_MultiChart_Fixed";
+const TRADINGVIEW_INVITE_SCRIPT_IDS = String(process.env.TRADINGVIEW_INVITE_SCRIPT_IDS || TRADINGVIEW_INVITE_SCRIPT_ID)
+  .split(",")
+  .map((scriptId) => scriptId.trim())
+  .filter(Boolean);
 const TRADINGVIEW_WEBHOOK_IPS = new Set(
   String(
     process.env.TRADINGVIEW_WEBHOOK_IP_ALLOWLIST ||
@@ -482,7 +482,7 @@ function userIsActiveOneMonthEvent(user = {}, now = new Date()) {
   if (!userIsActive(user)) return false;
   const expiresAt = coerceDate(user.expires_at || user.expire_at);
   if (!expiresAt || expiresAt.getTime() <= now.getTime()) return false;
-  const values = normalizedValues(user.tier_type, user.plan_code, user.plan_sku, user.last_license_pack);
+  const values = normalizedValues(user.tier_type, user.plan_code, user.plan_sku, user.license_pack, user.last_license_pack);
   return values.some((value) =>
     ["onemonthevent", "dodam_magictrading_1monthevent", "event_1m_magictrading"].includes(value)
   );
@@ -510,6 +510,8 @@ export async function getUserEntitlementStatus(db, identity = {}) {
       expires_at: user.expires_at || user.expire_at || null,
       permanent_access: user.permanent_access === true,
       paypal_billing_status: user.paypal_billing_status || null,
+      backendRegularPrepaidConfirmed: user.backendRegularPrepaidConfirmed === true,
+      backend_regular_prepaid_confirmed: user.backend_regular_prepaid_confirmed === true,
     },
   };
 }
@@ -1071,11 +1073,16 @@ export async function applyPaidPlanFromWebhook(db, payload = {}, provider = "unk
         subject_key: subjectKey,
         ...(fields.tvId ? { trv_id: fields.tvId, tv_id: fields.tvId, tradingview_username: fields.tvId } : {}),
         ...(fields.email ? { email: fields.email } : {}),
+        username: fields.tvId || fields.email || subjectKey,
         tier_type: "OneMonthEvent",
+        license_pack: "Dodam_MagicTrading_1MonthEvent",
+        last_license_pack: "Dodam_MagicTrading_1MonthEvent",
         plan_code: "Dodam_MagicTrading_1MonthEvent",
         plan_sku: "Dodam_MagicTrading_1MonthEvent",
         status: "active",
         expires_at: expiresAt,
+        backendRegularPrepaidConfirmed: false,
+        backend_regular_prepaid_confirmed: false,
         paid_at: now,
         payment_provider: provider,
         payment_amount: fields.amount || null,
@@ -1107,6 +1114,7 @@ export async function applyPaidPlanFromWebhook(db, payload = {}, provider = "unk
         subject_key: subjectKey,
         ...(fields.tvId ? { trv_id: fields.tvId, tv_id: fields.tvId, tradingview_username: fields.tvId } : {}),
         ...(fields.email ? { email: fields.email } : {}),
+        username: fields.tvId || fields.email || subjectKey,
         license_pack: "Dodam_MagicTrading_MultiChart_Fixed",
         last_license_pack: "Dodam_MagicTrading_MultiChart_Fixed",
         plan_code: "Dodam_MagicTrading_MultiChart_Fixed",
@@ -1114,12 +1122,17 @@ export async function applyPaidPlanFromWebhook(db, payload = {}, provider = "unk
         regular_prepay_from_event: isRegularPrepayFromEvent,
         ...(isRegularPrepayFromEvent
           ? {
+              backendRegularPrepaidConfirmed: true,
+              backend_regular_prepaid_confirmed: true,
               previous_event_expires_at: previousExpiresAt,
               regular_prepay_bonus_days: 1,
               regular_prepay_extension_days: 31,
               regular_prepay_applied_at: now,
             }
-          : {}),
+          : {
+              backendRegularPrepaidConfirmed: false,
+              backend_regular_prepaid_confirmed: false,
+            }),
         ...(prepayPaypalCancelResult ? { paypal_cancel_result: prepayPaypalCancelResult } : {}),
         payment_provider: provider,
         payment_amount: fields.amount || billing.monthly_usd,
@@ -1310,31 +1323,7 @@ export async function applyFreeTrialSignup(db, payload = {}, reqMeta = {}) {
   const trialPlanLabel = freeTrialPlanLabelForPayload(payload);
   const expireAt = new Date(now.getTime() + trialMs);
 
-  const result = await db.collection(FREE_TRIAL_ACCESSES_COLLECTION).findOneAndUpdate(
-    { subject_key: identity.subject_key },
-    {
-      $setOnInsert: {
-        ...identity,
-        started_at: now,
-        started_at_kst: kstIso(now),
-        trial_started_at: now,
-        expire_at: expireAt,
-        expire_at_kst: kstIso(expireAt),
-        expires_at: expireAt,
-        status: "active",
-        source: "homepage_free_trial_signup",
-        created_at: now,
-      },
-      $set: {
-        last_license_pack: payload.license_pack || null,
-        trial_plan_label: trialPlanLabel,
-        updated_at: now,
-      },
-    },
-    { upsert: true, returnDocument: "after" }
-  );
-  const record = result?.value || result;
-  await db.collection(USERS_COLLECTION).updateOne(
+  const result = await db.collection(USERS_COLLECTION).findOneAndUpdate(
     {
       $or: [
         { trv_id: identity.trv_id },
@@ -1344,12 +1333,18 @@ export async function applyFreeTrialSignup(db, payload = {}, reqMeta = {}) {
     },
     {
       $set: {
+        username: payload.username || payload.name || identity.trv_id,
         subject_key: identity.subject_key,
         trv_id: identity.trv_id,
         tv_id: identity.trv_id,
         tradingview_username: identity.trv_id,
+        ...(payload.email ? { email: cleanEmail(payload.email) || payload.email } : {}),
         membership_type: "associate",
         tier_type: "FreeTrialAssociate",
+        license_pack: payload.license_pack || null,
+        plan_code: payload.license_pack || null,
+        plan_sku: payload.license_pack || null,
+        last_license_pack: payload.license_pack || null,
         status: "active",
         free_trial_license_pack: payload.license_pack || null,
         free_trial_plan_label: trialPlanLabel,
@@ -1361,16 +1356,24 @@ export async function applyFreeTrialSignup(db, payload = {}, reqMeta = {}) {
               paypal_billing_status: "active",
             }
           : {}),
+        backendRegularPrepaidConfirmed: false,
+        backend_regular_prepaid_confirmed: false,
+        started_at: now,
+        started_at_kst: kstIso(now),
+        trial_started_at: now,
         expires_at: expireAt,
+        expire_at: expireAt,
+        expire_at_kst: kstIso(expireAt),
         updated_at: now,
       },
       $setOnInsert: {
         created_at: now,
       },
     },
-    { upsert: true, collation: { locale: "en", strength: 2 } }
+    { upsert: true, returnDocument: "after", collation: { locale: "en", strength: 2 } }
   );
-  const inviteAddResult = await triggerInviteOnlyAccess("add", record, {
+  const user = result?.value || result;
+  const inviteAddResult = await triggerInviteOnlyAccess("add", user, {
     tvId: identity.trv_id,
     reason: `free_trial_${trialPlanLabel}_signup`,
   });
@@ -1391,6 +1394,15 @@ export async function applyFreeTrialSignup(db, payload = {}, reqMeta = {}) {
   return {
     ok: true,
     status: 200,
+    user: {
+      username: user?.username || identity.trv_id,
+      tv_id: identity.trv_id,
+      license_pack: payload.license_pack || null,
+      status: "active",
+      expires_at: expireAt,
+      paypal_subscription_id: payload.paypal_subscription_id || payload.subscription_id || null,
+      backendRegularPrepaidConfirmed: false,
+    },
     trial: {
       subject_key: identity.subject_key,
       trv_id: identity.trv_id,
@@ -1469,32 +1481,19 @@ export async function resetMultiChartFixedSession(db, { tv_id, tvId, tradingview
 }
 
 export async function ensureOneWeekFreeTrialIndexes(db) {
-  const trials = db.collection(ONE_WEEK_FREE_COLLECTION);
-  await trials.createIndex({ subject_key: 1 }, { unique: true, name: "one_week_free_trials_subject_key_unique" });
-  await trials.createIndex({ trv_id: 1 }, { name: "one_week_free_trials_trv_id", sparse: true });
-  await trials.createIndex(
-    { mt5_server: 1, mt5_account: 1 },
-    { name: "one_week_free_trials_mt5_identity", sparse: true }
-  );
-  await trials.createIndex({ expires_at: 1 }, { name: "one_week_free_trials_expires_at" });
-  await trials.createIndex({ status: 1, last_seen_at: -1 }, { name: "one_week_free_trials_status_last_seen" });
-
   const events = db.collection(SIGNAL_WEBHOOK_EVENTS_COLLECTION);
   await events.createIndex({ received_at: -1 }, { name: "signal_webhook_events_received_at" });
   await events.createIndex({ subject_key: 1, received_at: -1 }, { name: "signal_webhook_events_subject_received" });
   await events.createIndex({ trv_id: 1, received_at: 1 }, { name: "signal_webhook_events_trv_received" });
   await events.createIndex({ tv_id: 1, received_at: 1 }, { name: "signal_webhook_events_tv_received", sparse: true });
 
-  const freeTrials = db.collection(FREE_TRIAL_ACCESSES_COLLECTION);
-  await freeTrials.createIndex({ subject_key: 1 }, { unique: true, name: "free_trial_accesses_subject_key_unique" });
-  await freeTrials.createIndex({ trv_id: 1, started_at: 1 }, { name: "free_trial_accesses_trv_started", sparse: true });
-  await freeTrials.createIndex({ tv_id: 1, started_at: 1 }, { name: "free_trial_accesses_tv_started", sparse: true });
-  await freeTrials.createIndex({ expire_at: 1 }, { name: "free_trial_accesses_expire_at", sparse: true });
-
   const users = db.collection(USERS_COLLECTION);
+  await users.createIndex({ subject_key: 1 }, { name: "users_subject_key", sparse: true });
   await users.createIndex({ trv_id: 1 }, { name: "users_trv_id", sparse: true });
   await users.createIndex({ tv_id: 1 }, { name: "users_tv_id", sparse: true });
   await users.createIndex({ tradingview_username: 1 }, { name: "users_tradingview_username", sparse: true });
+  await users.createIndex({ license_pack: 1, status: 1, expires_at: 1 }, { name: "users_license_status_expires" });
+  await users.createIndex({ paypal_subscription_id: 1 }, { name: "users_paypal_subscription_id", sparse: true });
   await users.createIndex(
     { trv_id: 1 },
     { name: "users_trv_id_ci", sparse: true, collation: { locale: "en", strength: 2 } }
@@ -1633,13 +1632,26 @@ async function sendRegularPrepayUpgradeAlert(user, { tvId, newExpiresAt, previou
 
 async function triggerInviteOnlyAccess(action, user, { tvId, reason }) {
   const url = action === "add" ? TRADINGVIEW_INVITE_ADD_URL : TRADINGVIEW_INVITE_REVOKE_URL;
-  return postJson(url, TRADINGVIEW_INVITE_TOKEN, {
-    action: action === "add" ? "add_invite_only_access" : "delete_invite_only_access",
-    script_id: TRADINGVIEW_INVITE_SCRIPT_ID,
+  const scriptIds = TRADINGVIEW_INVITE_SCRIPT_IDS.length ? TRADINGVIEW_INVITE_SCRIPT_IDS : [TRADINGVIEW_INVITE_SCRIPT_ID];
+  const results = [];
+  for (const scriptId of scriptIds) {
+    results.push(
+      await postJson(url, TRADINGVIEW_INVITE_TOKEN, {
+        action: action === "add" ? "add_invite_only_access" : "delete_invite_only_access",
+        script_id: scriptId,
+        tv_id: tvId,
+        user_id: String(user?._id || ""),
+        reason,
+      })
+    );
+  }
+  return {
+    ok: results.every((result) => result.ok),
+    action,
     tv_id: tvId,
-    user_id: String(user?._id || ""),
-    reason,
-  });
+    script_ids: scriptIds,
+    results,
+  };
 }
 
 function coerceDate(value) {
@@ -1674,17 +1686,14 @@ async function findExistingTrialByTvId(db, tvId) {
     { tradingview_username: tvId },
   ];
 
-  const freeTrial = await db.collection(FREE_TRIAL_ACCESSES_COLLECTION).findOne(
-    { $or: tvMatch },
-    { sort: { started_at: 1, trial_started_at: 1, created_at: 1 } }
+  const user = await db.collection(USERS_COLLECTION).findOne(
+    {
+      $or: tvMatch,
+      license_pack: { $in: ["DMT_Free_1Week", "DMT_Free_3Month"] },
+    },
+    { collation: { locale: "en", strength: 2 } }
   );
-  if (freeTrial) return { source: FREE_TRIAL_ACCESSES_COLLECTION, record: freeTrial };
-
-  const signalEvent = await db.collection(SIGNAL_WEBHOOK_EVENTS_COLLECTION).findOne(
-    { $or: tvMatch },
-    { sort: { received_at: 1, created_at: 1 } }
-  );
-  if (signalEvent) return { source: SIGNAL_WEBHOOK_EVENTS_COLLECTION, record: signalEvent };
+  if (user) return { source: USERS_COLLECTION, record: user };
 
   return null;
 }
@@ -1819,85 +1828,50 @@ export function checkTrialWebhookEntitlement(db) {
       const subjectKey = `trv:${tvId}`;
       const trialMs = freeTrialDurationMsForPayload(payload);
       const trialPlanLabel = freeTrialPlanLabelForPayload(payload);
-      let startedAt = null;
-      let expireAt = null;
-      let source = ONE_WEEK_FREE_COLLECTION;
-      let trialRecord = null;
-
       const existing = await findExistingTrialByTvId(db, tvId);
-      if (existing) {
-        source = existing.source;
-        trialRecord = existing.record;
-        startedAt = startedAtFromRecord(existing.record);
-        expireAt = expireAtFromRecord(existing.record, startedAt, trialMs);
-      } else {
-        const expireAtOnInsert = new Date(now.getTime() + trialMs);
-        const result = await db.collection(FREE_TRIAL_ACCESSES_COLLECTION).findOneAndUpdate(
-          { subject_key: subjectKey },
-          {
-            $setOnInsert: {
-              subject_key: subjectKey,
-              channel: "tradingview",
-              trv_id: tvId,
-              tv_id: tvId,
-              started_at: now,
-              started_at_kst: kstIso(now),
-              trial_started_at: now,
-              expire_at: expireAtOnInsert,
-              expire_at_kst: kstIso(expireAtOnInsert),
-              expires_at: expireAtOnInsert,
-              status: "active",
-              source: "tradingview_webhook",
-              created_at: now,
-            },
-            $set: {
-              last_seen_at: now,
-              last_seen_at_kst: kstIso(now),
-              last_license_pack: payload.license_pack || null,
-              last_tickerid: payload.tickerid || null,
-              last_magic_signal: payload.magic_signal || null,
-              last_event: payload.event || null,
-              updated_at: now,
-            },
-            $inc: { webhook_seen_count: 1 },
-          },
-          { upsert: true, returnDocument: "after" }
-        );
-        trialRecord = result?.value || result;
-        startedAt = startedAtFromRecord(trialRecord) || now;
-        expireAt = expireAtFromRecord(trialRecord, startedAt, trialMs) || expireAtOnInsert;
-        source = FREE_TRIAL_ACCESSES_COLLECTION;
+      const trialRecord = existing?.record || null;
+      const source = USERS_COLLECTION;
+      const startedAt = startedAtFromRecord(trialRecord);
+      const expireAt = expireAtFromRecord(trialRecord, startedAt, trialMs);
+      const requestedLicensePack = String(payload.license_pack || "").trim().toLowerCase();
+      const ledgerLicensePack = String(trialRecord?.license_pack || trialRecord?.last_license_pack || "").trim().toLowerCase();
 
-        await db.collection(ONE_WEEK_FREE_COLLECTION).updateOne(
-          { subject_key: subjectKey },
-          {
-            $setOnInsert: {
-              subject_key: subjectKey,
-              channel: "tradingview",
-              trv_id: tvId,
-              tv_id: tvId,
-              started_at: startedAt,
-              started_at_kst: kstIso(startedAt),
-              trial_started_at: startedAt,
-              expire_at: expireAt,
-              expire_at_kst: kstIso(expireAt),
-              expires_at: expireAt,
-              status: "active",
-              source: "tradingview_webhook_mirror",
-              created_at: now,
-            },
-            $set: {
-              last_seen_at: now,
-              last_seen_at_kst: kstIso(now),
-              last_license_pack: payload.license_pack || null,
-              last_tickerid: payload.tickerid || null,
-              last_magic_signal: payload.magic_signal || null,
-              last_event: payload.event || null,
-              updated_at: now,
-            },
-          },
-          { upsert: true }
-        );
+      if (!trialRecord) {
+        await writeAudit(db, {
+          event: "trial_webhook_entitlement_rejected",
+          blocked: true,
+          reason: "free_trial_user_not_found_in_users",
+          subject_key: subjectKey,
+          trv_id: tvId,
+          license_pack: payload.license_pack || null,
+          ip: req.ip || req.socket?.remoteAddress || null,
+          user_agent: req.headers["user-agent"] || null,
+        });
+        return res.status(403).json({
+          ok: false,
+          error: "free_trial_user_not_found",
+          message: "PayPal 0원 결제 인증이 완료된 users 원장을 찾을 수 없어 무료 지표 접근을 차단했습니다.",
+        });
+      }
+
+      if (!userIsActive(trialRecord) || ledgerLicensePack !== requestedLicensePack) {
+        await writeAudit(db, {
+          event: "trial_webhook_entitlement_rejected",
+          blocked: true,
+          reason: !userIsActive(trialRecord) ? "free_trial_user_not_active" : "free_trial_license_pack_mismatch",
+          subject_key: subjectKey,
+          trv_id: tvId,
+          source,
+          ledger_license_pack: trialRecord.license_pack || trialRecord.last_license_pack || null,
+          payload_license_pack: payload.license_pack || null,
+          ip: req.ip || req.socket?.remoteAddress || null,
+          user_agent: req.headers["user-agent"] || null,
+        });
+        return res.status(403).json({
+          ok: false,
+          error: !userIsActive(trialRecord) ? "free_trial_user_not_active" : "free_trial_license_pack_mismatch",
+          message: "무료 지표 접근권이 활성 상태가 아니거나 요청 라이선스와 users 원장이 일치하지 않습니다.",
+        });
       }
 
       if (!startedAt || !expireAt) {
@@ -1921,52 +1895,25 @@ export function checkTrialWebhookEntitlement(db) {
       const expired = now.getTime() > expireAt.getTime();
 
       if (expired) {
-        await Promise.all([
-          db.collection(FREE_TRIAL_ACCESSES_COLLECTION).updateOne(
-            { subject_key: subjectKey },
-            {
-              $set: {
-                subject_key: subjectKey,
-                channel: "tradingview",
-                trv_id: tvId,
-                tv_id: tvId,
-                started_at: startedAt,
-                trial_started_at: startedAt,
-                expire_at: expireAt,
-                expire_at_kst: kstIso(expireAt),
-                expires_at: expireAt,
-                status: "expired",
-                blocked_at: now,
-                blocked_reason: "trial_period_expired",
-                updated_at: now,
-              },
-              $inc: { blocked_count: 1 },
+        const inviteDeleteResult = await triggerInviteOnlyAccess("delete", trialRecord, {
+          tvId,
+          reason: "free_trial_period_expired",
+        });
+        await db.collection(USERS_COLLECTION).updateOne(
+          { _id: trialRecord._id },
+          {
+            $set: {
+              status: "expired",
+              expired_at: now,
+              expired_at_kst: kstIso(now),
+              blocked_at: now,
+              blocked_reason: "trial_period_expired",
+              invite_revoke_result: inviteDeleteResult,
+              updated_at: now,
             },
-            { upsert: true }
-          ),
-          db.collection(ONE_WEEK_FREE_COLLECTION).updateOne(
-            { subject_key: subjectKey },
-            {
-              $set: {
-                subject_key: subjectKey,
-                channel: "tradingview",
-                trv_id: tvId,
-                tv_id: tvId,
-                started_at: startedAt,
-                trial_started_at: startedAt,
-                expire_at: expireAt,
-                expire_at_kst: kstIso(expireAt),
-                expires_at: expireAt,
-                status: "expired",
-                blocked_at: now,
-                blocked_reason: "trial_period_expired",
-                updated_at: now,
-              },
-              $inc: { blocked_count: 1 },
-            },
-            { upsert: true }
-          ),
-        ]);
+            $inc: { blocked_count: 1 },
+          }
+        );
         await writeAudit(db, {
           event: "trial_webhook_entitlement_expired",
           blocked: true,
@@ -1979,6 +1926,7 @@ export function checkTrialWebhookEntitlement(db) {
           expires_at: expireAt,
           payload_event: payload.event || null,
           magic_signal: payload.magic_signal || null,
+          invite_delete_result: inviteDeleteResult,
           ip: req.ip || req.socket?.remoteAddress || null,
           user_agent: req.headers["user-agent"] || null,
         });
@@ -1988,6 +1936,22 @@ export function checkTrialWebhookEntitlement(db) {
           message: `무료 체험 ${trialPlanLabel}이 만료되어 브로커 주문 전송을 차단했습니다.`,
         });
       }
+
+      await db.collection(USERS_COLLECTION).updateOne(
+        { _id: trialRecord._id },
+        {
+          $set: {
+            last_seen_at: now,
+            last_seen_at_kst: kstIso(now),
+            last_license_pack: payload.license_pack || null,
+            last_tickerid: payload.tickerid || null,
+            last_magic_signal: payload.magic_signal || null,
+            last_event: payload.event || null,
+            updated_at: now,
+          },
+          $inc: { webhook_seen_count: 1 },
+        }
+      );
 
       await writeAudit(db, {
         event: "trial_webhook_entitlement_accepted",
@@ -2063,23 +2027,51 @@ export async function checkOneWeekFreeTrial(db, payload, reqMeta = {}) {
   }
 
   const expiresAtOnInsert = new Date(now.getTime() + trialMs);
-  const trials = db.collection(ONE_WEEK_FREE_COLLECTION);
-  const result = await trials.findOneAndUpdate(
-    { subject_key: identity.subject_key },
+  const users = db.collection(USERS_COLLECTION);
+  const result = await users.findOneAndUpdate(
+    {
+      $or: [
+        { subject_key: identity.subject_key },
+        { trv_id: identity.trv_id },
+        { tv_id: identity.trv_id },
+        { tradingview_username: identity.trv_id },
+      ],
+    },
     {
       $setOnInsert: {
-        ...identity,
+        username: payload.username || payload.name || identity.trv_id,
+        subject_key: identity.subject_key,
+        trv_id: identity.trv_id,
+        tv_id: identity.trv_id,
+        tradingview_username: identity.trv_id,
+        ...(payload.email ? { email: cleanEmail(payload.email) || payload.email } : {}),
+        membership_type: "associate",
+        tier_type: "FreeTrialAssociate",
+        license_pack: payload.license_pack || null,
+        plan_code: payload.license_pack || null,
+        plan_sku: payload.license_pack || null,
+        backendRegularPrepaidConfirmed: false,
+        backend_regular_prepaid_confirmed: false,
         first_seen_at: now,
+        started_at: now,
+        started_at_kst: kstIso(now),
         trial_started_at: now,
+        expire_at: expiresAtOnInsert,
+        expire_at_kst: kstIso(expiresAtOnInsert),
         expires_at: expiresAtOnInsert,
         status: "active",
-        source: "webhook_1weekfree",
+        source: "users_unified_free_trial",
         created_at: now,
       },
       $set: {
+        license_pack: payload.license_pack || null,
+        plan_code: payload.license_pack || null,
+        plan_sku: payload.license_pack || null,
         last_seen_at: now,
         last_seen_at_kst: kstIso(now),
         last_license_pack: payload.license_pack || null,
+        free_trial_license_pack: payload.license_pack || null,
+        free_trial_plan_label: trialPlanLabel,
         last_tickerid: payload.tickerid || null,
         last_magic_signal: payload.magic_signal || null,
         last_event: payload.event || null,
@@ -2087,19 +2079,19 @@ export async function checkOneWeekFreeTrial(db, payload, reqMeta = {}) {
       },
       $inc: { webhook_seen_count: 1 },
     },
-    { upsert: true, returnDocument: "after" }
+    { upsert: true, returnDocument: "after", collation: { locale: "en", strength: 2 } }
   );
 
   const trial = result?.value || result;
   if (!trial) {
-    throw new Error("one_week_free_trial_upsert_failed");
+    throw new Error("free_trial_user_upsert_failed");
   }
   const startedAt = new Date(trial.trial_started_at || trial.first_seen_at || now);
   const hardExpiresAt = new Date(startedAt.getTime() + trialMs);
   const expired = now.getTime() > hardExpiresAt.getTime();
 
   if (expired) {
-    await trials.updateOne(
+    await users.updateOne(
       { _id: trial._id },
       {
         $set: {

@@ -3,7 +3,6 @@ import { MongoClient } from "mongodb";
 
 const MONGODB_URI = process.env.MONGODB_URI;
 const MONGODB_DB = process.env.MONGODB_DB || "magic_indicator";
-const FREE_TRIAL_ACCESSES_COLLECTION = "free_trial_accesses";
 const USERS_COLLECTION = "users";
 const SIGNAL_WEBHOOK_EVENTS_COLLECTION = "signal_webhook_events";
 const LICENSE_ALERT_WEBHOOK_URL = process.env.LICENSE_ALERT_WEBHOOK_URL || "";
@@ -130,8 +129,7 @@ async function sendWarning(db, doc, { planKind, daysLeft, markerField }) {
       updated_at: now,
     },
   };
-  const collectionName = planKind === "one_week_free" ? FREE_TRIAL_ACCESSES_COLLECTION : USERS_COLLECTION;
-  await db.collection(collectionName).updateOne({ _id: doc._id }, update);
+  await db.collection(USERS_COLLECTION).updateOne({ _id: doc._id }, update);
   await writeAudit(db, {
     event: "renewal_warning_sent",
     blocked: false,
@@ -153,15 +151,12 @@ async function main() {
     const now = new Date();
 
     const oneWeekRows = await db
-      .collection(FREE_TRIAL_ACCESSES_COLLECTION)
+      .collection(USERS_COLLECTION)
       .find({
         status: "active",
-        last_license_pack: "DMT_Free_1Week",
+        license_pack: "DMT_Free_1Week",
         renewal_warning_5d_sent_at: { $exists: false },
-        $or: [
-          { expire_at: { $gt: new Date(now.getTime() + DAY_MS), $lte: new Date(now.getTime() + 2 * DAY_MS) } },
-          { expires_at: { $gt: new Date(now.getTime() + DAY_MS), $lte: new Date(now.getTime() + 2 * DAY_MS) } },
-        ],
+        expires_at: { $gt: new Date(now.getTime() + DAY_MS), $lte: new Date(now.getTime() + 2 * DAY_MS) },
       })
       .limit(SCAN_LIMIT)
       .toArray();
@@ -170,7 +165,7 @@ async function main() {
       .collection(USERS_COLLECTION)
       .find({
         status: "active",
-        tier_type: "OneMonthEvent",
+        license_pack: "Dodam_MagicTrading_1MonthEvent",
         renewal_warning_1m_3d_sent_at: { $exists: false },
         expires_at: { $gt: new Date(now.getTime() + 2 * DAY_MS), $lte: new Date(now.getTime() + 3 * DAY_MS) },
       })

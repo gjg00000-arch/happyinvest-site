@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "start": "node server.mjs",
-    "check": "node --check server.mjs && node --check src/oneWeekFreeTrialGuard.mjs && node --check scripts/revokeExpiredMultiChartUsers.mjs && node --check scripts/revokeExpiredEntitlements.mjs && node --check scripts/sendRenewalWarnings.mjs",
+    "check": "node --check server.mjs && node --check src/oneWeekFreeTrialGuard.mjs && node --check scripts/revokeExpiredMultiChartUsers.mjs && node --check scripts/revokeExpiredEntitlements.mjs && node --check scripts/sendRenewalWarnings.mjs && node --check scripts/migrateFreeTrialsToUsers.mjs",
+    "migrate:free-trials-to-users": "node scripts/migrateFreeTrialsToUsers.mjs",
     "revoke:expired-multichart": "node scripts/revokeExpiredMultiChartUsers.mjs",
     "revoke:expired": "node scripts/revokeExpiredEntitlements.mjs",
     "warn:renewal": "node scripts/sendRenewalWarnings.mjs"

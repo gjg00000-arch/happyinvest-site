@@ -11,7 +11,7 @@
 - **정적 사이트 원본 Git 루트**: `C:\Users\gjg00\자동매매\magic-indicator-site`
 - **GitHub 백업 원격**: `https://github.com/gjg00000-arch/happyinvest-site.git`
 - **배포 대상**: S3 `magicindicator-global-web-6145` + CloudFront `E2Y7ZN7QM8A91S`
-- **최근 배포 확인**: 2026-06-02 20:42 KST, CloudFront invalidation `I4YJ9FUEINA7TPKBDWU3G795S9` 완료
+- **최근 배포 확인**: 2026-06-03 17:51 KST 기준, `users` 단일 원장·Invite-only 5종 Pine 연동 최종 배포 준비 완료
 - `happyinvests.com`은 공개 카피·SEO·OG·canonical 기준으로 사용하지 않습니다. 공개 기준 도메인은 `magicindicatorglobal.com` 하나입니다.
 
 ---
@@ -58,12 +58,22 @@
 - 당일 손실 합산 제어는 `strategy.closedtrades.profit` 기준이며, TradingView가 계좌 자본 대비 실시간 % 손실 한도를 직접 알 수 없다는 한계를 보완하는 회수 기반 휴식 장치입니다.
 - 손실 집계 시작점은 차트 적용 후 첫 재계산 시점의 `barstate.islast` 스냅샷 이후로 설명합니다. 과거 깊은 백테스트 종료 건을 실시간 운용 손실처럼 누적한다고 말하지 않습니다.
 - TradingView 알림은 JSON webhook을 권장하며, `magic_signal`, `license_pack`, `tickerid` 등 식별 필드를 포함할 수 있습니다.
-- 3개월 무료 코스 웹훅은 TradingView 예약어 `{{username}}`를 `"tv_id":"{{username}}"`로 포함하고, 백엔드 `POST /api/signals/webhook` 앞단의 `checkTrialWebhookEntitlement`가 `free_trial_accesses`와 `signal_webhook_events` 기준으로 최초 유입 90일만 허용합니다. 신규 `tv_id`는 `started_at`/`expire_at` 원장으로 등록하고, 기존 `tv_id`는 `expire_at` 초과 시 403으로 주문 연동을 차단합니다.
-- 3개월 무료 코스 Pine 배포본은 `Dodam_MagicTrading_Marketfree_1weekfree.pine`과 `Dodam_Triple_Momentum_Panel.pine`입니다. 두 파일 모두 `license_pack`에 `DMT_Free_3Month`를 싣고 `tv_id:"{{username}}"`를 웹훅 JSON에 포함합니다.
-- 트리플모멘텀 패널은 3개월 무료 코스 기간 안에서 적용 후 1주차부터 매주 월요일에만 홈페이지 `https://magicindicatorglobal.com/` 및 이벤트 페이지 `https://magicindicatorglobal.com/events/index.html` 안내를 표시합니다.
-- Pine은 사용자별 실제 만료일·중복 사용 여부를 확정하지 않습니다. 실제 최초 체험일, 90일 만료, 중복 사용 차단은 MongoDB `free_trial_accesses` 원장과 `signal_webhook_events` 감사 로그가 정본입니다.
+- 무료/유료 Pine 5종 웹훅은 TradingView 예약어 `{{username}}`를 `"tv_id":"{{username}}"`로 포함하고, `license_pack`, `ledger:"users"`, `invite_only:true`, `protected_source:true`, `tickerid`, `timenow`를 함께 보냅니다.
+- 백엔드 `POST /api/signals/webhook` 앞단의 `checkTrialWebhookEntitlement`는 무료 체험도 더 이상 별도 무료 이벤트 컬렉션에 신규 생성하지 않습니다. PayPal 0원 결제 또는 홈페이지 가입 웹훅으로 `users` 단일 원장에 생성된 `tv_id + license_pack + expires_at + status`가 정본입니다.
+- 3개월 무료 코스 Pine 배포본은 `Dodam Triple Momentum Panel [3Months Free]`이며 `license_pack`은 `DMT_Free_3Month`입니다. 1주 무료 코스 Pine 배포본은 `Dodam MagicTrading Strategy [1Week Free]`이며 `license_pack`은 `DMT_Free_1Week`입니다.
+- Pine은 사용자별 실제 만료일·중복 사용 여부를 확정하지 않습니다. 실제 최초 체험일, 7일/90일 만료, 중복 사용 차단, Invite-only Add/Delete는 MongoDB `users` 원장과 `signal_webhook_events` 감사 로그가 정본입니다.
 - 웹훅 URL은 비공개로 취급합니다. 브로커 API 키나 민감 키를 알림 본문·Pine 스크립트에 넣지 않습니다.
 - 전략 리포트와 브로커 체결은 동일하지 않습니다. limit 체결, 틱 차트, 슬리피지, 수수료 차이를 항상 고지합니다.
+
+### 2026-06-03 17:51 KST Invite-only Pine 5종·단일 원장 최종 싱크
+
+1. `Dodam Triple Momentum Panel [3Months Free]` / `DODAM 3M FREE`
+2. `Dodam MagicTrading Strategy [1Week Free]` / `DODAM 1W FREE`
+3. `Dodam MagicTrading Strategy [1Month Event]` / `DODAM 1M EVENT`
+4. `Dodam MagicTrading Strategy [Regular]` / `DODAM REGULAR`
+5. `Dodam Triple Momentum Panel [Permanent]` / `DODAM PERM`
+
+표시용 `title`·`shorttitle`은 글로벌 마케팅 이름으로 정리했지만, 백엔드 매칭용 `LICENSE_FIELD` 값은 바꾸지 않습니다. `DMT_Free_1Week`, `DMT_Free_3Month`, `Dodam_MagicTrading_1MonthEvent`, `Dodam_MagicTrading_MultiChart_Fixed`, `Dodam_Triple_Momentum_Panel_Permanent`가 서버 검증 정본입니다. 5종 모두 TradingView 배포 규격은 **Invite-only + Protected Source**이며, 웹훅 JSON에 `ledger:"users"` 메타를 포함합니다.
 
 ---
 
@@ -72,8 +82,12 @@
 - 결제 전에는 약관 전자서명 스냅샷 `legal_acceptance_id`가 필수입니다.
 - `payment_requests`는 플랜 코드와 약관 범위를 서버에서 검증한 뒤 생성해야 합니다.
 - 회사 정책상 1개월 초과 장기 선결제, 연회원, 다월 선납형 SKU는 생성하지 않습니다.
-- 권한 판별은 `users`, `free_trial_accesses`, `trial_indicator_entitlements`를 병합해서 봅니다. `trial_indicator_entitlements`는 레거시 호환 계층입니다.
+- 권한 판별은 `users` 단일 원장을 정본으로 봅니다. 무료 체험 전용 컬렉션은 런타임 신규 쓰기/조회 대상이 아니며, 기존 데이터는 `npm run migrate:free-trials-to-users`로 `users`에 이관합니다.
 - 가상자산·Ledger 관련 카피는 “고객 입금 신고/운영 확인” 범위로 설명합니다. 자동 Ledger 하드웨어 연동처럼 오해될 표현은 피합니다.
+- 이벤트 기간 중 1개월 이벤트 사용자가 정규 상위 플랜을 선결제하면 중복 결제로 차단하지 않고, `users.expires_at = 기존 expires_at + 30일 + 보너스 1일`로 가산합니다.
+- 선결제 성공 시 기존 `paypal_subscription_id`가 있으면 PayPal Subscriptions cancel API를 호출해 자동 결제 스케줄을 파기합니다.
+- 선결제 완료 후에는 문자/카카오, 이메일 웹훅, SMTP, MT5 푸시로 `Dodam MagicTrading Strategy [Regular]` 전환 안내를 발송합니다.
+- PayPal 0원 구독 생성(`BILLING.SUBSCRIPTION.CREATED`)은 `users` 문서에 `tv_id`, `license_pack`, `status`, `expires_at`, `paypal_subscription_id`, `backendRegularPrepaidConfirmed:false`를 저장하고, 저장 직후 TradingView Invite-only 5종 권한 Add User를 자동 호출합니다.
 
 ---
 
@@ -102,5 +116,5 @@
 
 ## 8. 갱신 시점
 
-- 기준 갱신: 2026-06-03 13:47 KST
+- 기준 갱신: 2026-06-03 17:51 KST
 - 이 파일은 홈 카피, 결제 정책, 공개 내비, 배포·Git 원본 기준이 바뀔 때 함께 갱신합니다.
