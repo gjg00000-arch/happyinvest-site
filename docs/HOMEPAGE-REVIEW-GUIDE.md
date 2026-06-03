@@ -123,15 +123,15 @@
 
 ---
 
-## 8. 권한·체험·레거시
+## 8. 권한·체험·Invite-only 최종 원장
 
-- 권한 판별은 `users`, `free_trial_accesses`, `trial_indicator_entitlements` 병합 구조를 전제로 합니다.
-- 무인 3개월 무료 코스 웹훅은 `POST /api/signals/webhook` 앞단의 `checkTrialWebhookEntitlement`에서 `req.body.tv_id`를 정본으로 추출합니다.
-- `free_trial_accesses` 또는 `signal_webhook_events`에 해당 `tv_id` 기록이 없으면 `free_trial_accesses`에 `started_at`/`started_at_kst`와 `expire_at`/`expire_at_kst` 원장을 만들고, 기존 식별값은 90일 기준 `expire_at` 초과 시 403으로 차단합니다.
-- TradingView 3개월 무료 Pine은 `Dodam_MagicTrading_Marketfree_1weekfree.pine`과 `Dodam_Triple_Momentum_Panel.pine` 배포본을 기준으로 봅니다. 두 파일은 `DMT_Free_3Month`와 `tv_id:"{{username}}"`를 웹훅 JSON에 포함합니다.
-- 트리플모멘텀 패널은 3개월 무료 코스 기간 안에서 적용 후 1주차부터 매주 월요일에만 홈페이지와 이벤트 페이지 안내를 표시합니다. 실제 만료·중복 사용 차단은 서버 웹훅과 `free_trial_accesses`/`signal_webhook_events`가 정본입니다.
-- `trial_indicator_entitlements`는 레거시 호환 계층입니다. 즉시 삭제하지 않고 백필·검증·롤백 계획 후 제거합니다.
-- TRV username, MT5 계좌+서버, 이메일 등 운영 확인 정보는 공개 admin URL이 아니라 내부 원장 확인 문구로 안내합니다.
+- 권한 판별은 `users` 단일 원장 구조를 전제로 합니다. 무료 체험도 PayPal 0원 구독 승인 후 `users.license_pack`, `users.status`, `users.expires_at`, `users.paypal_subscription_id`에 기록된 값만 정본으로 인정합니다.
+- 무인 3개월/1주 무료 코스 웹훅은 `POST /api/signals/webhook` 앞단의 `checkTrialWebhookEntitlement`에서 `req.body.tv_id`를 정본으로 추출합니다.
+- `users`에 해당 `tv_id`와 Pine의 `license_pack`이 일치하는 활성 원장이 없으면 서버는 무료 원장을 새로 만들지 않고 403으로 차단합니다. `free_trial_accesses`와 `one_week_free_trials`는 신규 쓰기 금지 레거시이며, 마이그레이션 입력으로만 남깁니다.
+- TradingView 3개월 무료 Pine 최종 배포명은 `Dodam Triple Momentum Panel [3Months Free]`이고 식별 키는 `DMT_Free_3Month`입니다. 1주 무료 Pine 최종 배포명은 `Dodam MagicTrading Strategy [1Week Free]`이고 식별 키는 `DMT_Free_1Week`입니다.
+- 차트 안내는 요일 제한 방식이 아닙니다. 체험판 5일차 및 이벤트 만료 3일 전 조건에 도달하면 차트 대시보드와 푸시 채널에 고대비 경고 배너가 수동 결제 우회 가이드와 함께 상시 노출됩니다.
+- MagicTrading 3종 Pine의 `tg_id` 입력값은 `POST /api/signals/webhook`의 `relayTelegramSignal` 미들웨어에서만 사용합니다. 이 릴레이는 `checkTrialWebhookEntitlement(db)`와 Redis 5초 디바운싱 통과 후 실행되며, `tg_id` 또는 `TELEGRAM_BOT_TOKEN`이 없으면 텔레그램만 skip하고 메인 웹훅 흐름은 유지합니다.
+- TRV username, MT5 계좌+서버, 이메일 등 운영 확인 정보는 공개 admin URL이 아니라 내부 `users` 원장 확인 문구로 안내합니다.
 
 ---
 
@@ -184,7 +184,7 @@
 
 ## 13. 갱신 시점
 
-- 기준 갱신: 2026-06-03 13:47 KST
+- 기준 갱신: 2026-06-03 18:41 KST
 - 최근 반영 항목:
   - 공개 관리자 링크 제거
   - `lint:admin-links` 추가
@@ -195,3 +195,4 @@
   - TTL, stale prepared, 레거시 권한 이관 권장 과제 반영
   - 3개월 무료 Pine 코스 안내 메시지와 백엔드 만료 정본 경계 반영
   - `POST /api/signals/webhook` 직전 90일 무료 코스 가드 기준 반영
+  - MagicTrading 3종 `tg_id` 기반 Telegram Bot API Markdown 릴레이 기준 반영

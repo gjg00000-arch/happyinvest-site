@@ -6,11 +6,11 @@
 
 | No | Pine 파일 | 플랜 | `license_pack` | 토큰 | 게시 방식 |
 |---:|---|---|---|---|---|
-| 1 | `1.Dodam_Triple_Momentum_Panel_3MonthsFree.pine` | 3개월 무료 체험판 | `DMT_Free_3Month` | `dmt_free_auth_9823f71a` | Public 또는 제한 배포 |
-| 2 | `2.Dodam_MagicTrading_1WeekFree.pine` | 1주일 무료 체험판 | `DMT_Free_1Week` | `dmt_free_auth_9823f71a` | Public |
-| 3 | `3.Dodam_MagicTrading_1MonthEvent.pine` | 1달 유료 이벤트 | `Dodam_MagicTrading_1MonthEvent` | `dmt_free_auth_9823f71a` | Invite-only |
-| 4 | `4.Dodam_MagicTrading_Regular.pine` | 정규 다중차트 종량제 | `Dodam_MagicTrading_MultiChart_Fixed` | `dmt_free_auth_9823f71a` | Invite-only |
-| 5 | `5.Dodam_Triple_Momentum_Panel_Penmanant.pine` | 정규 시작자 영구제공 | `Dodam_Triple_Momentum_Panel_Permanent` | `dmt_permanent_auth_7712a` | Invite-only |
+| 1 | `Dodam Triple Momentum Panel [3Months Free].pine` | 3개월 무료 체험판 | `DMT_Free_3Month` | `dmt_free_auth_9823f71a` | Invite-only + Protected |
+| 2 | `Dodam MagicTrading Strategy [1Week Free].pine` | 1주일 무료 체험판 | `DMT_Free_1Week` | `dmt_free_auth_9823f71a` | Invite-only + Protected |
+| 3 | `Dodam MagicTrading Strategy [1Month Event].pine` | 1달 유료 이벤트 | `Dodam_MagicTrading_1MonthEvent` | `dmt_free_auth_9823f71a` | Invite-only + Protected |
+| 4 | `Dodam MagicTrading Strategy [Regular].pine` | 정규 다중차트 종량제 | `Dodam_MagicTrading_MultiChart_Fixed` | `dmt_free_auth_9823f71a` | Invite-only + Protected |
+| 5 | `Dodam Triple Momentum Panel [Permanent].pine` | 정규 시작자 영구제공 | `Dodam_Triple_Momentum_Panel_Permanent` | `dmt_permanent_auth_7712a` | Invite-only + Protected |
 
 TradingView Alert의 Message 칸은 모든 빌드에서 `{{alert_message}}`를 사용합니다.
 
@@ -46,17 +46,19 @@ POST /api/free-trial/apply
 ### No. 1: 3개월 무료 체험판
 
 - `license_pack`: `DMT_Free_3Month`
-- 원장: `free_trial_accesses`, `one_week_free_trials`, `signal_webhook_events`
-- 기간: 최초 유입 기준 90일
-- 홈페이지 무료 신청 시 `/api/free-trial/apply`가 원장을 만들고 Invite-only Add를 호출합니다.
+- 원장: `users`, 감사 로그: `signal_webhook_events`
+- 기간: PayPal 0원 구독 승인으로 생성된 `users.expires_at` 기준 90일
+- 홈페이지 무료 신청 및 PayPal 0원 승인 시 `/api/free-trial/apply` 또는 PayPal 웹훅이 `users` 원장을 만들고 Invite-only Add를 호출합니다.
+- TradingView 웹훅만으로 무료 원장을 신규 생성하지 않습니다.
 - 만료 시: `403 trial_period_expired`
 
 ### No. 2: 1주일 무료 체험판
 
 - `license_pack`: `DMT_Free_1Week`
-- 원장: `free_trial_accesses`, `one_week_free_trials`, `signal_webhook_events`
-- 기간: 최초 유입 기준 7일
-- 홈페이지 무료 신청 시 `/api/free-trial/apply`가 원장을 만들고 Invite-only Add를 호출합니다.
+- 원장: `users`, 감사 로그: `signal_webhook_events`
+- 기간: PayPal 0원 구독 승인으로 생성된 `users.expires_at` 기준 7일
+- 홈페이지 무료 신청 및 PayPal 0원 승인 시 `/api/free-trial/apply` 또는 PayPal 웹훅이 `users` 원장을 만들고 Invite-only Add를 호출합니다.
+- TradingView 웹훅만으로 무료 원장을 신규 생성하지 않습니다.
 - 만료 시: `403 trial_period_expired`
 
 ### No. 3: 1달 이벤트
@@ -197,8 +199,8 @@ DEPLOY_HOST=your-host DEPLOY_USER=ubuntu DEPLOY_PATH=/opt/magic-one-week-free-tr
 
 운영 검증:
 
-- `DMT_Free_3Month`가 최초 유입 기준 90일 만료인지 확인
-- `DMT_Free_1Week`가 최초 유입 기준 7일 만료인지 확인
+- `DMT_Free_3Month`가 `users.license_pack`과 `users.expires_at` 기준 90일 만료인지 확인
+- `DMT_Free_1Week`가 `users.license_pack`과 `users.expires_at` 기준 7일 만료인지 확인
 - `Dodam_MagicTrading_1MonthEvent`가 `users.status: active`와 `expires_at`를 요구하는지 확인
 - `Dodam_MagicTrading_MultiChart_Fixed`가 `current_registered_tickers` 한도를 초과하면 `halted`로 전환하는지 확인
 - 한도 초과 시 알림 웹훅과 Invite-only Delete가 감사 로그에 남는지 확인

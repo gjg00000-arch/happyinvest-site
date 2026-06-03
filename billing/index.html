@@ -1275,9 +1275,9 @@
                     <option value="event_1m_magictrading" data-amount="129">1개월 이벤트 · Whop MT5 · USD 129</option>
                     <option value="event_1m_magictrading" data-amount="149">1개월 이벤트 · MQL MT5 · USD 149</option>
                     <option value="reg_magictrading" data-amount="5499">정규 · Whop TRV applied · USD 5,499</option>
-                    <option value="reg_magictrading" data-amount="7999">정규 · Whop TRV marketfree · USD 7,999</option>
+                    <option value="reg_magictrading" data-amount="7999">정규 · Whop TRV premium fixed · USD 7,999</option>
                     <option value="reg_magictrading" data-amount="5999">정규 · Whop MT5 applied · USD 5,999</option>
-                    <option value="reg_magictrading" data-amount="8499">정규 · Whop MT5 marketfree · USD 8,499</option>
+                    <option value="reg_magictrading" data-amount="8499">정규 · Whop MT5 premium fixed · USD 8,499</option>
                     <option value="reg_magictrading" data-amount="6999">정규 · MQL MT5 applied · USD 6,999</option>
                     <option value="custom" data-amount="100">직접 입력 금액</option>
                   </select>
@@ -1894,7 +1894,7 @@
           </p>
           <div class="crypto-price-pick-groups" role="group" aria-label="이벤트·정규 요금 USD">
             <div>
-              <span class="crypto-price-pick-group-title">1달 이벤트 (marketfree)</span>
+              <span class="crypto-price-pick-group-title">1달 이벤트 (Invite-only)</span>
               <div class="crypto-price-pick-row">
                 <button type="button" class="crypto-price-pick-btn" data-crypto-usd="119" aria-pressed="false">Whop · TRV · $119</button>
                 <button type="button" class="crypto-price-pick-btn" data-crypto-usd="129" aria-pressed="false">Whop · MT5 · $129</button>
@@ -1905,9 +1905,9 @@
               <span class="crypto-price-pick-group-title">정규 월 구독 (USD)</span>
               <div class="crypto-price-pick-row">
                 <button type="button" class="crypto-price-pick-btn" data-crypto-usd="5499" aria-pressed="false">Whop TRV · applied · $5,499</button>
-                <button type="button" class="crypto-price-pick-btn" data-crypto-usd="7999" aria-pressed="false">Whop TRV · marketfree · $7,999</button>
+                <button type="button" class="crypto-price-pick-btn" data-crypto-usd="7999" aria-pressed="false">Whop TRV · premium fixed · $7,999</button>
                 <button type="button" class="crypto-price-pick-btn" data-crypto-usd="5999" aria-pressed="false">Whop MT5 · applied · $5,999</button>
-                <button type="button" class="crypto-price-pick-btn" data-crypto-usd="8499" aria-pressed="false">Whop MT5 · marketfree · $8,499</button>
+                <button type="button" class="crypto-price-pick-btn" data-crypto-usd="8499" aria-pressed="false">Whop MT5 · premium fixed · $8,499</button>
                 <button type="button" class="crypto-price-pick-btn" data-crypto-usd="6999" aria-pressed="false">MQL MT5 · applied · $6,999</button>
               </div>
             </div>
@@ -2647,9 +2647,9 @@
         <h2 id="signup-h2">가입 플랜 결제</h2>
         <p class="lead" style="font-size: 0.95rem; margin-bottom: 0.6rem">
           가입 단계에서 고른 MagicTrading 접근권을 활성화합니다. 3개월 무료 코스는 <strong>준회원·정회원 로그인</strong> 후 이 화면에서 TradingView(TRV) 사용자명 또는 MT5 계좌 번호+서버를 넣고 완료해야 합니다.
-          <strong>1개월 이벤트(marketfree)</strong>는 Whop TRV <strong>$119</strong> · Whop MT5 <strong>$129</strong> · MQL MT5 <strong>$149</strong> 기준으로
+          <strong>1개월 이벤트(Invite-only)</strong>는 Whop TRV <strong>$119</strong> · Whop MT5 <strong>$129</strong> · MQL MT5 <strong>$149</strong> 기준으로
           <strong>PayPal(신용·체크 카드)</strong> 등 당시 켜진 PG와 운영 수동 대조 루트를 병행합니다.
-          <strong>정규(월·USD)</strong>는 마켓 조건에 따라 <strong>market applied</strong>와 <strong>marketfree</strong> 확정가가 나뉩니다.
+          <strong>정규(월·USD)</strong>는 마켓 조건에 따라 <strong>market applied</strong>와 <strong>premium fixed</strong> 확정가가 나뉩니다.
           Whop TRV <strong>$5,499 / $7,999</strong>, Whop MT5 <strong>$5,999 / $8,499</strong>, MQL MT5 <strong>$6,999</strong>(applied)이며,
           부가 옵션 <strong>MagicLine 24/7 클라우드 케어(MT5)</strong>는 Whop <strong>$2,999</strong> · MQL <strong>$3,499</strong>/월(별도)입니다.
           <a href="#payment-dual">납부 채널(①~④)</a>(<a href="#wire-route-picker">글로벌 계좌</a>·<a href="#crypto-deposit">크립토</a>·<a href="#krw-corporate">원화 법인</a>) + 상담·인보이스로 진행해 주시면 됩니다.
@@ -2710,9 +2710,9 @@
           <label for="signup-regular-tier" style="min-width: 9rem; font-size: 0.9rem">정규 접근권</label>
           <select id="signup-regular-tier" class="coupon-redeem-input" style="max-width: 28rem">
             <option value="whop_trv_mkt" selected>Whop · TRV 정규 (market applied) · USD 5,499 / month</option>
-            <option value="whop_trv_free">Whop · TRV 정규 (marketfree) · USD 7,999 / month</option>
+            <option value="whop_trv_free">Whop · TRV 정규 (premium fixed) · USD 7,999 / month</option>
             <option value="whop_mt5_mkt">Whop · MT5 정규 (market applied) · USD 5,999 / month</option>
-            <option value="whop_mt5_free">Whop · MT5 정규 (marketfree) · USD 8,499 / month</option>
+            <option value="whop_mt5_free">Whop · MT5 정규 (premium fixed) · USD 8,499 / month</option>
             <option value="mql_mt5_mkt">MQL · MT5 정규 (market applied) · USD 6,999 / month</option>
           </select>
         </div>

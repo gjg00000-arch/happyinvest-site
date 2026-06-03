@@ -188,7 +188,7 @@
         </ul>
         <h3 class="page-title" style="font-size: 1rem; margin: 0.85rem 0 0.35rem">Magic Core JSON 필드 (요약)</h3>
         <p class="small" style="margin: 0 0 0.5rem; color: var(--ci-brown-muted)">
-          <code>tools/Dodam_MagicTrading_Marketfree.pine</code> 등은 아래와 같이 <code>magic_signal</code>·<code>licenseJsonFrag</code>(<code>tickerid</code>,
+          <code>Dodam MagicTrading Strategy [Regular]</code> 등 최종 Invite-only Pine 5종은 아래와 같이 <code>magic_signal</code>·<code>licenseJsonFrag</code>(<code>tickerid</code>,
           <code>instrument_type</code>, <code>pos_state</code> 등)를 포함합니다. 구형 <code>entry_kind</code>·<code>limit_ml</code> 전용 파서는 갱신이 필요합니다.
         </p>
         <div style="overflow-x: auto; margin: 0.35rem 0 0.65rem">
@@ -203,7 +203,7 @@
               <tr><td style="padding: 0.3rem 0.5rem 0.3rem 0; vertical-align: top"><code>event</code></td><td style="padding: 0.3rem"><code>magic_core_buy</code> · <code>magic_core_sell</code> · <code>magic_core_exit</code> · <code>magic_core_stop</code> · <code>magic_core_rb_online</code> 등</td></tr>
               <tr><td style="padding: 0.3rem 0.5rem 0.3rem 0; vertical-align: top"><code>magic_signal</code></td><td style="padding: 0.3rem"><code>buy</code> · <code>sell</code> · <code>exit</code> · <code>stop_fixed</code> · <code>stop_trail</code> · <code>rainbow_online</code></td></tr>
               <tr><td style="padding: 0.3rem 0.5rem 0.3rem 0; vertical-align: top"><code>side</code></td><td style="padding: 0.3rem">진입·청산 의미 (<code>long</code> / <code>short</code> / <code>flat</code>)</td></tr>
-              <tr><td style="padding: 0.3rem 0.5rem 0.3rem 0; vertical-align: top"><code>band_edge</code> · <code>entry_anchor</code></td><td style="padding: 0.3rem">리밋 밴드(ML/MH) — Marketfree는 스트래들 진입</td></tr>
+              <tr><td style="padding: 0.3rem 0.5rem 0.3rem 0; vertical-align: top"><code>band_edge</code> · <code>entry_anchor</code></td><td style="padding: 0.3rem">리밋 밴드(ML/MH) — Invite-only 빌드는 스트래들 진입</td></tr>
               <tr><td style="padding: 0.3rem 0.5rem 0.3rem 0; vertical-align: top"><code>magic_line</code> · <code>exit_anchor</code></td><td style="padding: 0.3rem">익절 종료 시 중심선 기준</td></tr>
               <tr><td style="padding: 0.3rem 0.5rem 0.3rem 0; vertical-align: top"><code>stop_price</code></td><td style="padding: 0.3rem">고정·트레일 스탑 JSON</td></tr>
               <tr><td style="padding: 0.3rem 0.5rem 0.3rem 0; vertical-align: top"><code>license_pack</code> · <code>tickerid</code></td><td style="padding: 0.3rem">라이선스·심볼 해상도</td></tr>
@@ -280,7 +280,7 @@
 
         <h3 class="page-title" style="font-size: 1rem; margin: 0.5rem 0 0.35rem">TRV Pine과의 관계</h3>
         <p class="small" style="margin: 0; color: var(--ci-brown-muted)">
-          <code>Dodam_MagicTrading_Marketfree.pine</code> 등의 <strong>진입 필터</strong>(장마감·타임존·손실 쿨다운)은 차트 안에서만 동작합니다. 본 Cron 서비스는
+          <code>Dodam MagicTrading Strategy [Regular]</code> 등 최종 Pine의 <strong>진입 필터</strong>(장마감·타임존·손실 쿨다운)은 차트 안에서만 동작합니다. 본 Cron 서비스는
           <strong>텔레그램 일정 안내</strong>용이며 Pine과 HTTP로 직결되지 않습니다.
         </p>
       </section>

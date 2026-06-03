@@ -83,4 +83,4 @@ WantedBy=multi-user.target
 
 ## 8. TRV Pine과의 관계
 
-차트 전략(`Dodam_MagicTrading_Marketfree.pine` 등)의 **세션·손실 쿨다운**은 TV 안에서 동작합니다. 본 서비스는 **텔레그램 일정 안내**용이며, Pine과 HTTP로 직접 연동하지 않습니다.
+차트 전략(`Dodam MagicTrading Strategy [Regular]` 등 최종 Invite-only Pine 5종)의 **세션·손실 쿨다운**은 TV 안에서 동작합니다. 본 서비스는 **텔레그램 일정 안내**용이며, Pine과 HTTP로 직접 연동하지 않습니다.

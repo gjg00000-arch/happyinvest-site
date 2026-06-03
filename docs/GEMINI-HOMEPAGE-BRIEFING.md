@@ -11,7 +11,7 @@
 - **정적 사이트 원본 Git 루트**: `C:\Users\gjg00\자동매매\magic-indicator-site`
 - **GitHub 백업 원격**: `https://github.com/gjg00000-arch/happyinvest-site.git`
 - **배포 대상**: S3 `magicindicator-global-web-6145` + CloudFront `E2Y7ZN7QM8A91S`
-- **최근 배포 확인**: 2026-06-03 17:51 KST 기준, `users` 단일 원장·Invite-only 5종 Pine 연동 최종 배포 준비 완료
+- **최근 배포 확인**: 2026-06-03 18:41 KST 기준, `users` 단일 원장·Invite-only 5종 Pine·Telegram `tg_id` 릴레이 연동 최종 배포 준비 완료
 - `happyinvests.com`은 공개 카피·SEO·OG·canonical 기준으로 사용하지 않습니다. 공개 기준 도메인은 `magicindicatorglobal.com` 하나입니다.
 
 ---
@@ -57,8 +57,8 @@
 - `canEnter`는 같은 봉에서 익절·고정스탑·트레일스탑 조건이 켜지면 진입을 막아 청산 직후 재진입 왜곡을 줄이는 구조입니다.
 - 당일 손실 합산 제어는 `strategy.closedtrades.profit` 기준이며, TradingView가 계좌 자본 대비 실시간 % 손실 한도를 직접 알 수 없다는 한계를 보완하는 회수 기반 휴식 장치입니다.
 - 손실 집계 시작점은 차트 적용 후 첫 재계산 시점의 `barstate.islast` 스냅샷 이후로 설명합니다. 과거 깊은 백테스트 종료 건을 실시간 운용 손실처럼 누적한다고 말하지 않습니다.
-- TradingView 알림은 JSON webhook을 권장하며, `magic_signal`, `license_pack`, `tickerid` 등 식별 필드를 포함할 수 있습니다.
-- 무료/유료 Pine 5종 웹훅은 TradingView 예약어 `{{username}}`를 `"tv_id":"{{username}}"`로 포함하고, `license_pack`, `ledger:"users"`, `invite_only:true`, `protected_source:true`, `tickerid`, `timenow`를 함께 보냅니다.
+- TradingView 알림은 JSON webhook을 권장하며, `magic_signal`, `license_pack`, `tickerid`, `tg_id` 등 식별 필드를 포함할 수 있습니다.
+- 무료/유료 Pine 5종 웹훅은 TradingView 예약어 `{{username}}`를 `"tv_id":"{{username}}"`로 포함하고, `license_pack`, `ledger:"users"`, `invite_only:true`, `protected_source:true`, `tickerid`, `timenow`를 함께 보냅니다. MagicTrading 3종은 사용자 입력값 `tg_id`도 함께 보내며, 백엔드는 권한 가드 통과 직후 Telegram Bot API로 BUY/SELL/청산 Markdown 알림을 릴레이합니다.
 - 백엔드 `POST /api/signals/webhook` 앞단의 `checkTrialWebhookEntitlement`는 무료 체험도 더 이상 별도 무료 이벤트 컬렉션에 신규 생성하지 않습니다. PayPal 0원 결제 또는 홈페이지 가입 웹훅으로 `users` 단일 원장에 생성된 `tv_id + license_pack + expires_at + status`가 정본입니다.
 - 3개월 무료 코스 Pine 배포본은 `Dodam Triple Momentum Panel [3Months Free]`이며 `license_pack`은 `DMT_Free_3Month`입니다. 1주 무료 코스 Pine 배포본은 `Dodam MagicTrading Strategy [1Week Free]`이며 `license_pack`은 `DMT_Free_1Week`입니다.
 - Pine은 사용자별 실제 만료일·중복 사용 여부를 확정하지 않습니다. 실제 최초 체험일, 7일/90일 만료, 중복 사용 차단, Invite-only Add/Delete는 MongoDB `users` 원장과 `signal_webhook_events` 감사 로그가 정본입니다.
@@ -88,6 +88,7 @@
 - 선결제 성공 시 기존 `paypal_subscription_id`가 있으면 PayPal Subscriptions cancel API를 호출해 자동 결제 스케줄을 파기합니다.
 - 선결제 완료 후에는 문자/카카오, 이메일 웹훅, SMTP, MT5 푸시로 `Dodam MagicTrading Strategy [Regular]` 전환 안내를 발송합니다.
 - PayPal 0원 구독 생성(`BILLING.SUBSCRIPTION.CREATED`)은 `users` 문서에 `tv_id`, `license_pack`, `status`, `expires_at`, `paypal_subscription_id`, `backendRegularPrepaidConfirmed:false`를 저장하고, 저장 직후 TradingView Invite-only 5종 권한 Add User를 자동 호출합니다.
+- 실시간 시그널 텔레그램 릴레이는 `POST /api/signals/webhook`에서 `checkTrialWebhookEntitlement(db)`와 Redis 5초 디바운싱 통과 후 실행됩니다. `TELEGRAM_BOT_TOKEN` 또는 `DODAM_TELEGRAM_BOT_TOKEN`이 없거나 `tg_id`가 비어 있으면 텔레그램만 skip하고 메인 웹훅 정산망은 계속 진행합니다.
 
 ---
 
@@ -116,5 +117,5 @@
 
 ## 8. 갱신 시점
 
-- 기준 갱신: 2026-06-03 17:51 KST
+- 기준 갱신: 2026-06-03 18:41 KST
 - 이 파일은 홈 카피, 결제 정책, 공개 내비, 배포·Git 원본 기준이 바뀔 때 함께 갱신합니다.

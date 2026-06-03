@@ -47,6 +47,8 @@ MongoDB는 DB 레벨 FK가 없습니다. 모든 관계는 애플리케이션 코
 - 최종 라이선스 생애주기 정본은 `users` 단일 도큐먼트입니다. 필수 운영 필드는 `username`, `tv_id`, `license_pack`, `status`, `expires_at`, `paypal_subscription_id`, `backendRegularPrepaidConfirmed`입니다.
 - PayPal 0원 구독 생성(`BILLING.SUBSCRIPTION.CREATED` 또는 `subscription.created`)은 `applyFreeTrialSignup`으로 들어와 `users`에 무료 플랜 원장을 upsert하고, 즉시 TradingView Invite-only 5종 Add User API를 호출합니다.
 - 무료 Pine 웹훅 가드는 더 이상 `free_trial_accesses`나 `one_week_free_trials`에 신규 원장을 만들지 않습니다. `users`에 활성 `tv_id + license_pack + expires_at`가 없으면 403으로 차단합니다.
+- MagicTrading 3종 Pine은 `tg_id`를 웹훅에 포함할 수 있습니다. `POST /api/signals/webhook`은 `checkTrialWebhookEntitlement(db)` 및 Redis 5초 디바운싱 통과 직후 `relayTelegramSignal` 미들웨어를 실행해 BUY/SELL/EXIT/STOP 신호를 Telegram Bot API Markdown 메시지로 릴레이합니다.
+- `tg_id`가 비어 있거나 숫자가 아니거나 `TELEGRAM_BOT_TOKEN`/`DODAM_TELEGRAM_BOT_TOKEN`이 없으면 텔레그램 발송만 skip하고, `users.status`, `users.expires_at`, 브로커/MT5 후속 웹훅 흐름은 계속 진행합니다.
 - 정회원 1달 이벤트 사용자가 정규 상위 플랜 `Dodam_MagicTrading_MultiChart_Fixed`를 선결제하면 `ALREADY_ACTIVE_PLAN` 차단 예외로 처리합니다.
 - 선결제 성공 시 `users.expires_at`는 `기존 이벤트 expires_at + 30일 + 보너스 1일`로 가산합니다.
 - 동시에 `users.backendRegularPrepaidConfirmed = true`, `users.backend_regular_prepaid_confirmed = true`를 기록해 Pine의 선결제 완료 UI와 운영툴이 같은 상태를 읽을 수 있게 합니다.
@@ -86,7 +88,7 @@ MagicTrading 권한 검증의 정본은 `users` 단일 원장입니다.
 | `trial_indicator_entitlements` | 과거 레거시 TTL 호환 계층. 신규 무료/유료 판단 정본 아님 |
 | `business_seats` | B2B 좌석 권한 확장 시 참조 |
 
-`POST /api/signals/webhook` 앞단의 `checkTrialWebhookEntitlement`는 `license_pack`별로 `users`에서 `tv_id`, `status`, `expires_at`, `active_charts_limit`, `current_registered_tickers`, `permanent_access`를 확인합니다.
+`POST /api/signals/webhook` 앞단의 `checkTrialWebhookEntitlement`는 `license_pack`별로 `users`에서 `tv_id`, `status`, `expires_at`, `active_charts_limit`, `current_registered_tickers`, `permanent_access`를 확인합니다. 이 가드를 통과한 요청만 `relayTelegramSignal`로 넘어가므로 텔레그램 릴레이는 권한·만료 검증을 우회하지 않습니다.
 
 무료 플랜도 PayPal 0원 결제 성공 후 `users`에 생성된 원장을 기준으로만 통과합니다. `users`에 없는 무료 Pine 웹훅은 자동 가입으로 처리하지 않고 차단합니다.
 
@@ -163,5 +165,5 @@ flowchart LR
 
 ## 8. 갱신 시점
 
-- 기준 갱신: 2026-06-03 17:51 KST
+- 기준 갱신: 2026-06-03 18:41 KST
 - 이 문서는 API 데이터 구조, 결제 가드, 권한 판별, 운영 원장 정책이 바뀔 때 함께 갱신합니다.
