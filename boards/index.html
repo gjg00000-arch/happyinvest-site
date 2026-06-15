@@ -589,7 +589,7 @@
         function uploadBoardImage(file) {
           var fd = new FormData();
           fd.append("file", file);
-          return fetch(API + "/api/upload", { method: "POST", body: fd })
+          return fetch(API + "/api/upload", { method: "POST", headers: authGetHeaders(), body: fd })
             .then(function (r) {
               return r.json().then(function (j) {
                 return { ok: r.ok, j: j };

@@ -643,15 +643,26 @@
 
     saveBtn.addEventListener("click", function () {
       MagicAuth.set(emailIn.value, roleIn.value);
-      load();
+      var chain = Promise.resolve();
+      if (MagicAuth.ensureFreshToken) chain = MagicAuth.ensureFreshToken(API);
+      if (MagicAuth.syncSessionProfile) {
+        chain = chain.then(function () {
+          return MagicAuth.syncSessionProfile(API);
+        });
+      }
+      chain
+        .then(function () {
+          syncAuthFromStorage();
+          load();
+        })
+        .catch(function () {
+          load();
+        });
     });
 
     function userHeaders() {
       MagicAuth.set(emailIn.value, roleIn.value);
-      var hDict = {
-        "X-User-Id": MagicAuth.get().email,
-        "X-User-Role": MagicAuth.get().role,
-      };
+      var hDict = Object.assign({}, MagicAuth.headers());
       if (window.HappyUX && HappyUX.getVisitorId) hDict["X-Visitor-Id"] = HappyUX.getVisitorId();
       return hDict;
     }
@@ -673,7 +684,7 @@
     function uploadImage(file) {
       var fd = new FormData();
       fd.append("file", file);
-      return fetch(API + "/api/upload", { method: "POST", body: fd })
+      return fetch(API + "/api/upload", { method: "POST", headers: userHeaders(), body: fd })
         .then(function (r) {
           return r.json().then(function (j) {
             return { ok: r.ok, j: j };
@@ -1081,6 +1092,17 @@
         alert(t("alertTitleBodyRequired"));
         return;
       }
+      if (!MagicAuth.getToken || !MagicAuth.getToken()) {
+        alert("로그인이 필요합니다. 상단 메뉴의 로그인 또는 가입·등록에서 Google 로그인 후 다시 시도해 주세요.");
+        return;
+      }
+      var subBtn = compose.querySelector(".magic-submit");
+      var prevLabel = subBtn ? subBtn.textContent : "";
+      if (subBtn) {
+        subBtn.disabled = true;
+        subBtn.textContent = "보내는 중…";
+      }
+      function sendPost() {
       fetch(API + "/api/posts", {
         method: "POST",
         headers: postHeaders(),
@@ -1100,7 +1122,28 @@
           if (rteCtl && typeof rteCtl.reset === "function") rteCtl.reset();
           else bodyTa.value = "";
           load();
+        })
+        .catch(function (e) {
+          alert("올리기 실패: " + (e.message || e));
+        })
+        .finally(function () {
+          if (subBtn) {
+            subBtn.disabled = false;
+            subBtn.textContent = prevLabel || "올리기";
+          }
         });
+      }
+      if (MagicAuth.ensureFreshToken) {
+        MagicAuth.ensureFreshToken(API).then(sendPost).catch(function (e) {
+          alert("로그인 갱신 실패: " + (e.message || e));
+          if (subBtn) {
+            subBtn.disabled = false;
+            subBtn.textContent = prevLabel || "올리기";
+          }
+        });
+      } else {
+        sendPost();
+      }
     });
 
     load();
