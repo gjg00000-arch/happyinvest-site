@@ -21,8 +21,8 @@ param(
     [ValidateSet('guest', 'free', 'trial', 'sub', 'vip', 'admin')]
     [string]$Role = 'admin',
     [string]$ApiBase = 'https://magicindicatorglobal.com',
-    [string]$AdminEmail = $env:MAGIC_ADMIN_EMAIL,
-    [string]$AdminPassword = $env:MAGIC_ADMIN_PASSWORD
+    [string]$AdminEmail = $(if ($env:MAGIC_ADMIN_EMAIL) { $env:MAGIC_ADMIN_EMAIL } else { 'gjg00000@gmail.com' }),
+    [string]$AdminPassword = $(if ($PSBoundParameters.ContainsKey('AdminPassword')) { $AdminPassword } elseif ($env:MAGIC_ADMIN_PASSWORD) { $env:MAGIC_ADMIN_PASSWORD } else { '' })
 )
 
 Set-StrictMode -Version Latest
@@ -31,6 +31,8 @@ $ErrorActionPreference = 'Stop'
 if (-not $AdminEmail -or -not $AdminPassword) {
     Write-Error 'MAGIC_ADMIN_EMAIL / MAGIC_ADMIN_PASSWORD 환경 변수 또는 -AdminEmail/-AdminPassword 가 필요합니다.'
 }
+
+Write-Host '참고: API 서버에 user-attach 버그가 있으면(관리자 JWT가 /api/admin/* 에서 401) VPS에서 scripts/vps-promote-user-role.sh 로 MongoDB role을 직접 변경하세요.' -ForegroundColor DarkYellow
 
 $base = $ApiBase.TrimEnd('/')
 $loginBody = @{ email = $AdminEmail; password = $AdminPassword } | ConvertTo-Json -Compress
